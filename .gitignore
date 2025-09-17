@@ -1,0 +1,16 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node modules (if you ever use npm packages later)
+node_modules/
+
+# Logs
+*.log
+
+# Build output (if you add a build process in future)
+dist/
+build/
+
+# Environment variables (if you add API keys later)
+.env
