@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Express Delivery Services - Live Tracker</title>
-
-<!-- CSS -->
+<title>EXPRESS DELIVERY SERVICES - Live Tracker</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -13,45 +11,57 @@
 
 <!-- Sidebar -->
 <div class="sidebar">
-    <div class="bubble" onclick="navigate('home')">🏠 Home</div>
-    <div class="bubble" onclick="navigate('support')">💬 Support</div>
-    <div class="bubble" onclick="navigate('contact')">📞 Contact Us</div>
-    <div class="bubble" onclick="navigate('tracking')">📦 Tracking Service</div>
+  <div class="bubble" onclick="navigate('home')">🏠 Home</div>
+  <div class="bubble" onclick="navigate('support')">💬 Support</div>
+  <div class="bubble" onclick="navigate('contact')">📞 Contact Us</div>
+  <div class="bubble" onclick="navigate('tracking')">📦 Tracking Service</div>
 </div>
 
 <!-- Header -->
 <header>
-    <h1>Express Delivery Services</h1>
-    <div id="languageSwitcher">
-        <img src="flags/us.png" onclick="changeLanguage('en')" alt="English">
-        <img src="flags/es.png" onclick="changeLanguage('es')" alt="Spanish">
-        <img src="flags/fr.png" onclick="changeLanguage('fr')" alt="French">
-    </div>
+  <h1>EXPRESS DELIVERY SERVICES</h1>
+  <div id="languageSwitcher">
+    <img src="flags/us.png" onclick="changeLanguage('en')" alt="English">
+    <img src="flags/es.png" onclick="changeLanguage('es')" alt="Spanish">
+    <img src="flags/fr.png" onclick="changeLanguage('fr')" alt="French">
+    <img src="flags/de.png" onclick="changeLanguage('de')" alt="German">
+  </div>
 </header>
 
 <main>
-    <!-- Tracking Input -->
-    <div class="tracking-container" id="trackingInputSection">
-        <input type="text" id="trackingInput" placeholder="Enter Tracking Number">
-        <button id="trackBtn">Track Package</button>
-    </div>
+  <!-- Tracking Input -->
+  <div class="tracking-container" id="trackingInputSection">
+    <input type="text" id="trackingInput" placeholder="Enter Tracking Number">
+    <button id="trackBtn">Track Package</button>
+  </div>
 
-    <!-- Live Tracking Result -->
-    <div id="trackingResult"></div>
+  <!-- Live Tracking Result -->
+  <div id="trackingResult"></div>
 
-    <!-- Live Map -->
-    <div id="map"></div>
+  <!-- Live Map -->
+  <div id="map"></div>
 
-    <!-- Customer Reviews -->
-    <section id="customerReviews">
-        <h2>What Our Customers Say</h2>
-        <div class="review active"><div class="customerName">John Doe</div>Fast and reliable service!</div>
-        <div class="review"><div class="customerName">Jane Smith</div>Package arrived on time!</div>
-        <div class="review"><div class="customerName">Alice Brown</div>Great tracking system.</div>
-        <div class="review"><div class="customerName">Bob White</div>Professional staff.</div>
-        <div class="review"><div class="customerName">Charlie Green</div>Highly recommended!</div>
-    </section>
+  <!-- Customer Reviews -->
+  <section id="customerReviews">
+    <h2>What Our Customers Say</h2>
+    <div class="review active"><div class="customerName">John Doe</div>Fast and reliable service!</div>
+    <div class="review"><div class="customerName">Jane Smith</div>Package arrived on time!</div>
+    <div class="review"><div class="customerName">Alice Brown</div>Great tracking system.</div>
+    <div class="review"><div class="customerName">Bob White</div>Professional staff.</div>
+    <div class="review"><div class="customerName">Charlie Green</div>Highly recommended!</div>
+  </section>
 </main>
+
+<!-- Live Chat Bubble -->
+<div class="chat-bubble" id="chatBubble" onclick="openChat()">
+  💬 Chat with Us
+</div>
+<div class="chat-box" id="chatBox">
+  <div class="chat-header">Live Chat <span onclick="closeChat()" style="float:right;cursor:pointer;">✖</span></div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <input type="text" id="chatInput" placeholder="Type a message...">
+  <button onclick="sendMessage()">Send</button>
+</div>
 
 <!-- JS -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -61,5 +71,6 @@
 <script src="vehicles.js"></script>
 <script src="reviews.js"></script>
 <script src="script.js"></script>
+<script src="chat.js"></script>
 </body>
 </html>
