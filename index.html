@@ -10,7 +10,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #87CEEB; /* Changed to sky blue background */
+            background-color: #87CEEB; /* Sky blue background */
             color: #333;
             scroll-behavior: smooth;
         }
@@ -31,13 +31,32 @@
             align-items: center;
             gap: 10px;
         }
-        .header-content h1 {
-            margin: 0;
-            font-size: 24px;
+        .eds-logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #FFD700; /* Gold-like color for EDS */
+            position: relative;
+            display: inline-block;
+        }
+        .eds-logo span:nth-child(1) {
+            color: #FF4500; /* Orange-red for "E" */
+        }
+        .eds-logo span:nth-child(2) {
+            color: #FFD700; /* Gold for "D" */
+        }
+        .eds-logo span:nth-child(3) {
+            color: #00CED1; /* Dark turquoise for "S" */
+        }
+        .eds-logo::after {
+            content: "🚚 ✈️";
+            font-size: 20px;
+            margin-left: 5px;
+            vertical-align: middle;
         }
         .logo img {
             max-width: 200px;
             height: auto;
+            display: none; /* Hide the default logo image for now */
         }
         .logo-selector {
             position: absolute;
@@ -548,7 +567,9 @@
             </select>
         </div>
         <div class="header-content">
-            <h1>EDS 🚚 ✈️</h1>
+            <div class="eds-logo">
+                <span>E</span><span>D</span><span>S</span>
+            </div>
             <div class="logo">
                 <img src="eds-logo.png" alt="EDS Logo" id="logoImg" onerror="this.src='https://via.placeholder.com/200?text=Logo+Not+Found';">
             </div>
