@@ -10,18 +10,27 @@
 </head>
 <body>
 
-<div class="menu-bubble" onclick="toggleSidebar()">
-  <i class="fa fa-bars"></i>
-</div>
-
+<!-- Compact Sidebar -->
 <div class="sidebar">
   <h2>EXPRESS DELIVERY SERVICES</h2>
-  <a href="#" onclick="scrollToSection('home')"><i class="fa fa-home"></i> Home</a>
-  <a href="#" onclick="scrollToSection('tracking')"><i class="fa fa-shipping-fast"></i> Shipping & Tracking</a>
-  <a href="#" onclick="scrollToSection('contact')"><i class="fa fa-envelope"></i> Contact Us</a>
-  <span>Phone: +1 205-973-3572</span>
-  <a href="#" onclick="scrollToSection('support')"><i class="fa fa-headset"></i> Support</a>
-  <span>Email: Expressdeliveryservice0016@gmail.com</span>
+  <button class="sidebar-main" onclick="toggleSidebarOption('shipping')"><i class="fa fa-shipping-fast"></i> Shipping & Tracking</button>
+  <div class="sidebar-options" id="shipping">
+    <a href="#" onclick="scrollToSection('tracking')">Tracking Package</a>
+    <a href="#" onclick="scrollToSection('map')">Live Map</a>
+  </div>
+
+  <button class="sidebar-main" onclick="toggleSidebarOption('support')"><i class="fa fa-headset"></i> Support</button>
+  <div class="sidebar-options" id="support">
+    <span>Email: Expressdeliveryservice0016@gmail.com</span>
+    <a href="#" onclick="toggleChat()">Live Chat</a>
+  </div>
+
+  <button class="sidebar-main" onclick="toggleSidebarOption('contact')"><i class="fa fa-envelope"></i> Contact</button>
+  <div class="sidebar-options" id="contact">
+    <span>Phone: +1 205-973-3572</span>
+    <span>HQ: 47-00 Northern Blvd, Long Island City, NY 11101, USA</span>
+  </div>
+
   <div class="language-switcher">
     <label for="languageSelect" style="color:#fff;">Language:</label>
     <select id="languageSelect" onchange="changeLanguage()">
@@ -34,8 +43,10 @@
   </div>
 </div>
 
-<div class="main-content" id="home">
-  <h1>Track Your Package</h1>
+<!-- Main Content -->
+<div class="main-content">
+
+  <h1 id="homeHeading">Track Your Package</h1>
 
   <!-- Tracking Section -->
   <div class="tracking-section" id="tracking">
@@ -63,6 +74,7 @@
 
   <!-- Customer Reviews -->
   <div class="review-section">
+    <h3>Customer Reviews</h3>
     <div class="review-text" id="reviewText"></div>
     <div class="review-author" id="reviewAuthor"></div>
   </div>
