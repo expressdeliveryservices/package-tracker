@@ -1,111 +1,54 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Express Delivery Service</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f8f8f8; color: #333; }
-    header { background: #003366; color: #fff; text-align: center; padding: 20px; }
-    .section { padding: 40px 20px; text-align: center; }
-    h2 { color: #003366; }
-    .tracking-box { margin: 20px auto; padding: 20px; border: 2px solid #003366; border-radius: 10px; background: #fff; max-width: 400px; }
-    input[type="text"] { padding: 10px; width: 70%; margin-right: 5px; border: 1px solid #ccc; border-radius: 5px; }
-    button { padding: 10px 15px; background: #003366; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
-    button:hover { background: #0055aa; }
-    .testimonial { background: #fff; border: 1px solid #ddd; border-radius: 10px; padding: 20px; margin: 15px auto; max-width: 600px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    .stars { color: gold; font-size: 1.2em; }
-    footer { background: #003366; color: #fff; text-align: center; padding: 20px; margin-top: 30px; }
-  </style>
+  <title>Express Delivery Services - Live Tracking</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header>
+    <h1>🚚 Express Delivery Services</h1>
+    <p class="description">Fast, reliable, and secure delivery with real-time tracking.</p>
+    <p class="extended-description">Track your packages worldwide. From pick-up to delivery, stay updated every step.</p>
+  </header>
 
-<header>
-  <h1>Express Delivery Service</h1>
-  <p>Your trusted partner in fast and reliable logistics</p>
-</header>
-
-<section class="section">
-  <h2>Track Your Package</h2>
-  <p>Enter your tracking number to see live status updates.</p>
-  <div class="tracking-box">
-    <input type="text" id="trackingNumber" placeholder="Enter Tracking Number">
+  <!-- Tracking -->
+  <section id="tracking">
+    <h2>📦 Track Your Package</h2>
+    <input type="text" id="trackingInput" placeholder="Enter Tracking Number">
     <button onclick="trackPackage()">Track</button>
-    <p id="trackingResult"></p>
-  </div>
-</section>
+    <div id="result"></div>
+  </section>
 
-<section class="section">
-  <h2>Live Support</h2>
-  <p>📞 +234 915 767 7711</p>
-  <p>📧 Expressdeliveryservice0016@gmail.com</p>
-  <p>Our agents are <span id="supportStatus">online</span></p>
-</section>
+  <!-- Testimonials -->
+  <section id="testimonials">
+    <h2>⭐ Customer Testimonials</h2>
+    <p>What customers say about us</p>
+    <div id="reviews"></div>
+  </section>
 
-<section class="section">
-  <h2>Our Testimonials</h2>
-  <div id="testimonials"></div>
-</section>
+  <!-- Contact -->
+  <footer>
+    <h2>📞 Contact Us</h2>
+    <p>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></p>
+    <p>Phone: <a href="tel:+2349157677711">+234 915 767 7711</a></p>
+    <p>© 2025 Express Delivery Services. All Rights Reserved.</p>
+  </footer>
 
-<footer>
-  <p>© 2025 Express Delivery Service. All Rights Reserved.</p>
-</footer>
+  <!-- Live Chat Bot -->
+  <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+      s1.async=true;
+      s1.src='https://embed.tawk.to/YOUR_TAWKTO_ID/1';
+      s1.charset='UTF-8';
+      s1.setAttribute('crossorigin','*');
+      s0.parentNode.insertBefore(s1,s0);
+    })();
+  </script>
 
-<script>
-  // Live Tracking Simulation
-  function trackPackage() {
-    const trackingNumber = document.getElementById("trackingNumber").value;
-    const result = document.getElementById("trackingResult");
-    if (trackingNumber.trim() === "") {
-      result.textContent = "❌ Please enter a valid tracking number.";
-    } else {
-      let steps = ["We have your package ✅", "On the way 🚚", "Out for delivery 📦", "Delivered to destination 🏡"];
-      let i = 0;
-      result.textContent = steps[i];
-      let interval = setInterval(() => {
-        i++;
-        if (i < steps.length) {
-          result.textContent = steps[i];
-        } else {
-          clearInterval(interval);
-        }
-      }, 2000);
-    }
-  }
-
-  // Auto-updating Support Status
-  function updateSupportStatus() {
-    let status = document.getElementById("supportStatus");
-    let online = Math.random() > 0.2; // 80% chance online
-    status.textContent = online ? "online 🟢" : "offline 🔴";
-  }
-  setInterval(updateSupportStatus, 5000);
-  updateSupportStatus();
-
-  // Rotating Testimonials
-  const testimonials = [
-    "Fast and reliable delivery. Highly recommend! - Emily Johnson",
-    "My package arrived earlier than expected. Great service! - James Carter",
-    "Excellent customer support and tracking updates. - Sophia Martinez",
-    "Very professional service. Smooth experience. - Daniel Lee",
-    "Delivery was quick and easy to track. - Olivia Brown",
-    "Friendly support team and reliable updates. - Michael Smith",
-    "They kept me updated until delivery. Impressive! - Isabella Taylor",
-    "Affordable rates and top-notch service. - David Wilson",
-    "I’m very satisfied with the timely delivery. - Amelia Davis",
-    "Great company! Will definitely use again. - Benjamin Clark"
-  ];
-
-  let tIndex = 0;
-  function rotateTestimonials() {
-    const container = document.getElementById("testimonials");
-    container.innerHTML = `<div class="testimonial"><p>"${testimonials[tIndex]}"</p><div class="stars">★★★★★</div></div>`;
-    tIndex = (tIndex + 1) % testimonials.length;
-  }
-  setInterval(rotateTestimonials, 4000);
-  rotateTestimonials();
-</script>
-
+  <script src="script.js"></script>
 </body>
 </html>
