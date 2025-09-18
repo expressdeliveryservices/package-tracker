@@ -1,76 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EXPRESS DELIVERY SERVICES - Live Tracker</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EXPRESS DELIVERY SERVICES - Track Your Package</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* Reset & general */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { background: url('https://images.unsplash.com/photo-1606851091700-01a6c73c8ff3') no-repeat center center fixed; background-size: cover; }
+    
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      left: 0; top: 0;
+      width: 250px; height: 100%;
+      background-color: rgba(0,0,0,0.85);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      transition: 0.3s;
+    }
+    .sidebar h2 { margin-bottom: 20px; }
+    .sidebar a {
+      color: #fff; text-decoration: none; margin: 10px 0;
+      display: flex; align-items: center;
+      transition: 0.3s;
+    }
+    .sidebar a:hover { color: #ffcc00; }
+    .sidebar a i { margin-right: 10px; }
+
+    /* Main content */
+    .main-content {
+      margin-left: 270px;
+      padding: 50px;
+      color: #fff;
+      text-align: center;
+    }
+
+    .main-content h1 { font-size: 3em; margin-bottom: 20px; text-shadow: 2px 2px 5px #000; }
+    .tracking-input {
+      display: flex; justify-content: center; margin-top: 30px;
+    }
+    .tracking-input input {
+      padding: 15px; font-size: 1em; width: 300px; border: none; border-radius: 5px 0 0 5px;
+    }
+    .tracking-input button {
+      padding: 15px 25px; font-size: 1em; border: none; border-radius: 0 5px 5px 0; background-color: #ffcc00; cursor: pointer;
+      transition: 0.3s;
+    }
+    .tracking-input button:hover { background-color: #e6b800; }
+
+    /* Chat bubble */
+    .chat-bubble {
+      position: fixed; bottom: 20px; right: 20px;
+      width: 60px; height: 60px; border-radius: 50%;
+      background-color: #ffcc00; display: flex; justify-content: center; align-items: center;
+      cursor: pointer; font-size: 1.5em;
+    }
+
+    /* Language selector */
+    .language-selector {
+      margin-top: 20px; text-align: center;
+    }
+    .language-selector select {
+      padding: 10px; font-size: 1em; border-radius: 5px; border: none;
+    }
+  </style>
 </head>
 <body>
 
-<!-- Sidebar -->
-<div class="sidebar">
-  <div class="bubble" onclick="navigate('home')">🏠 Home</div>
-  <div class="bubble" onclick="navigate('support')">💬 Support</div>
-  <div class="bubble" onclick="navigate('contact')">📞 Contact Us</div>
-  <div class="bubble" onclick="navigate('tracking')">📦 Tracking Service</div>
-</div>
-
-<!-- Header -->
-<header>
-  <h1>EXPRESS DELIVERY SERVICES</h1>
-  <div id="languageSwitcher">
-    <img src="flags/us.png" onclick="changeLanguage('en')" alt="English">
-    <img src="flags/es.png" onclick="changeLanguage('es')" alt="Spanish">
-    <img src="flags/fr.png" onclick="changeLanguage('fr')" alt="French">
-    <img src="flags/de.png" onclick="changeLanguage('de')" alt="German">
-  </div>
-</header>
-
-<main>
-  <!-- Tracking Input -->
-  <div class="tracking-container" id="trackingInputSection">
-    <input type="text" id="trackingInput" placeholder="Enter Tracking Number">
-    <button id="trackBtn">Track Package</button>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>EXPRESS DELIVERY SERVICES</h2>
+    <a href="#"><i class="fa fa-home"></i>Home</a>
+    <a href="#"><i class="fa fa-shipping-fast"></i>FedEx Services</a>
+    <a href="#"><i class="fa fa-envelope"></i>Contact Us</a>
+    <a href="#"><i class="fa fa-headset"></i>Support</a>
   </div>
 
-  <!-- Live Tracking Result -->
-  <div id="trackingResult"></div>
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1>Track Your Package</h1>
+    <div class="tracking-input">
+      <input type="text" id="trackingNumber" placeholder="Enter your tracking number">
+      <button onclick="trackPackage()">Track</button>
+    </div>
 
-  <!-- Live Map -->
-  <div id="map"></div>
+    <div id="trackingResult" style="margin-top: 30px; font-size: 1.2em;"></div>
 
-  <!-- Customer Reviews -->
-  <section id="customerReviews">
-    <h2>What Our Customers Say</h2>
-    <div class="review active"><div class="customerName">John Doe</div>Fast and reliable service!</div>
-    <div class="review"><div class="customerName">Jane Smith</div>Package arrived on time!</div>
-    <div class="review"><div class="customerName">Alice Brown</div>Great tracking system.</div>
-    <div class="review"><div class="customerName">Bob White</div>Professional staff.</div>
-    <div class="review"><div class="customerName">Charlie Green</div>Highly recommended!</div>
-  </section>
-</main>
+    <div class="language-selector">
+      <label for="language">Select Language: </label>
+      <select id="language" onchange="changeLanguage()">
+        <option value="en">English</option>
+        <option value="fr">French</option>
+        <option value="es">Spanish</option>
+        <option value="de">German</option>
+      </select>
+    </div>
+  </div>
 
-<!-- Live Chat Bubble -->
-<div class="chat-bubble" id="chatBubble" onclick="openChat()">
-  💬 Chat with Us
-</div>
-<div class="chat-box" id="chatBox">
-  <div class="chat-header">Live Chat <span onclick="closeChat()" style="float:right;cursor:pointer;">✖</span></div>
-  <div class="chat-messages" id="chatMessages"></div>
-  <input type="text" id="chatInput" placeholder="Type a message...">
-  <button onclick="sendMessage()">Send</button>
-</div>
+  <!-- Live Chat Bubble -->
+  <div class="chat-bubble" onclick="openChat()">
+    <i class="fa fa-comments"></i>
+  </div>
 
-<!-- JS -->
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="package.js"></script>
-<script src="db.js"></script>
-<script src="tracking.js"></script>
-<script src="vehicles.js"></script>
-<script src="reviews.js"></script>
-<script src="script.js"></script>
-<script src="chat.js"></script>
+  <script>
+    // Mock package tracking
+    function trackPackage() {
+      const trackingNum = document.getElementById('trackingNumber').value;
+      const resultDiv = document.getElementById('trackingResult');
+      if(!trackingNum) {
+        resultDiv.innerHTML = '<span style="color: #ff6666;">Please enter a tracking number!</span>';
+        return;
+      }
+      // Here you can call a real API if available
+      resultDiv.innerHTML = `Tracking Number <strong>${trackingNum}</strong> is in transit. Estimated delivery: 3 days. 🚚✈️`;
+    }
+
+    // Mock chat popup
+    function openChat() {
+      alert("Live Chat is coming soon! You can integrate with Tawk.to or other live chat APIs.");
+    }
+
+    // Language change simulation
+    function changeLanguage() {
+      const lang = document.getElementById('language').value;
+      alert("Language switched to " + lang);
+    }
+  </script>
+
 </body>
 </html>
