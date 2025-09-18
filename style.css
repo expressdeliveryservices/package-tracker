@@ -1,16 +1,13 @@
-/* General Reset */
+/* Body & background */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   color: #fff;
   text-align: center;
-
-  /* Background image with trucks, containers, people packing goods */
   background: url("images/delivery-bg.jpg") no-repeat center center fixed;
   background-size: cover;
+  position: relative;
 }
-
-/* Overlay to make text readable */
 body::before {
   content: "";
   position: fixed;
@@ -18,80 +15,55 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.5); /* semi-transparent dark overlay */
+  background: rgba(0,0,0,0.5);
   z-index: -1;
 }
 
 /* Header */
-header {
-  padding: 40px 20px 20px 20px;
-}
+header { padding: 40px 20px 20px 20px; }
+header .logo { max-width: 120px; margin-bottom: 10px; }
+header .description { max-width: 700px; margin: 10px auto; color: #ddd; }
+header .extended-description { max-width: 700px; margin: 10px auto; color: #ccc; font-style: italic; }
 
-header .logo {
-  max-width: 120px;
-  margin-bottom: 10px;
-}
-
-header .description {
-  max-width: 700px;
-  margin: 10px auto 0;
-  font-size: 1.1rem;
-  line-height: 1.5;
-  color: #ddd;
-}
-
-/* Section Styling */
+/* Sections */
 .tracking, .countries, .contact {
-  background: rgba(0, 0, 0, 0.6); /* slightly darker overlay */
+  background: rgba(0,0,0,0.6);
   margin: 20px auto;
   padding: 20px;
   border-radius: 10px;
   max-width: 600px;
 }
 
+/* Buttons & inputs */
+input[type="text"] { padding:10px; width:70%; border:none; border-radius:5px; margin-right:10px; }
+button { padding:10px 20px; border:none; background:#ff9900; color:#000; font-weight:bold; border-radius:5px; cursor:pointer; }
+button:hover { background:#e68a00; }
+.chat-btn { display:inline-block; margin-top:10px; padding:10px 15px; background:#ff9900; color:#000; border-radius:5px; text-decoration:none; }
+.chat-btn:hover { background:#e68a00; }
+
 /* Footer */
-footer {
-  background: rgba(0, 0, 0, 0.8);
-  padding: 10px;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-}
+footer { background: rgba(0,0,0,0.8); padding:10px; position:fixed; bottom:0; width:100%; }
 
-/* Form Elements */
-input[type="text"] {
-  padding: 10px;
-  width: 70%;
-  border: none;
-  border-radius: 5px;
-  margin-right: 10px;
-}
+/* Floating Quick Menu */
+.quick-menu { position:fixed; bottom:20px; right:20px; z-index:1000; }
+#menu-toggle { background:#ff9900; border:none; border-radius:50%; padding:15px; font-size:24px; cursor:pointer; color:#000; box-shadow:0 4px 6px rgba(0,0,0,0.3); }
+#menu-content { display:none; position:absolute; bottom:60px; right:0; background:rgba(0,0,0,0.9); color:#fff; width:280px; border-radius:10px; padding:15px; box-shadow:0 4px 8px rgba(0,0,0,0.4); max-height:80vh; overflow-y:auto; }
+#menu-content ul { list-style:none; padding:0; margin:0 0 15px 0; }
+#menu-content ul li { margin:10px 0; }
+#menu-content ul li a { color:#fff; text-decoration:none; font-weight:bold; }
+#menu-content ul li a:hover { color:#ff9900; }
 
-button {
-  padding: 10px 20px;
-  border: none;
-  background-color: #ff9900;
-  color: #000;
-  font-weight: bold;
-  border-radius: 5px;
-  cursor: pointer;
-}
+/* Reviews Slider */
+.reviews-slider { position:relative; overflow:hidden; height:60px; margin-bottom:15px; }
+.review { display:none; font-size:0.9rem; text-align:left; }
+.review.active { display:block; }
+.reviews-slider .prev, .reviews-slider .next { position:absolute; top:50%; transform:translateY(-50%); background:none; border:none; font-size:18px; color:#ff9900; cursor:pointer; }
+.reviews-slider .prev { left:0; }
+.reviews-slider .next { right:0; }
 
-button:hover {
-  background-color: #e68a00;
-}
+/* Business Info */
+.business-info h3 { margin:10px 0 5px 0; font-size:0.95rem; color:#ff9900; }
+.business-info p { font-size:0.85rem; margin:0 0 10px 0; line-height:1.3; color:#ddd; }
 
-/* Live chat button */
-.chat-btn {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 10px 15px;
-  background-color: #ff9900;
-  color: #000;
-  text-decoration: none;
-  border-radius: 5px;
-}
-
-.chat-btn:hover {
-  background-color: #e68a00;
-}
+/* Extended descriptions */
+.extended-description { font-size:1rem; color:#ccc; max-width:
