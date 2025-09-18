@@ -3,16 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Package Tracker</title>
+  <title>Express Delivery Services - Package Tracker</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>📦 Track Your Package</h1>
+
+  <!-- Header section with logo + company name -->
+  <header>
+    <img src="logo.png" alt="Express Delivery Services Logo" class="logo">
+    <h1>Express Delivery Services</h1>
+  </header>
+
+  <!-- Main section -->
+  <h2>📦 Track Your Package</h2>
   <form id="tracking-form">
     <input type="text" id="tracking-id" placeholder="Enter Tracking Number" required>
     <button type="submit">Track</button>
   </form>
   <div id="result"></div>
+
   <script src="script.js"></script>
 </body>
 </html>
