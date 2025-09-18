@@ -96,9 +96,9 @@
         }
         .tracking-section {
             background-image: 
-                url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c'), /* Delivery truck */
-                url('https://images.unsplash.com/photo-1581094795159-43d864f837e3'), /* Packages */
-                url('https://images.unsplash.com/photo-1601128534300-3a82f3e8f616'); /* Logistics warehouse */
+                url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c'), 
+                url('https://images.unsplash.com/photo-1581094795159-43d864f837e3'), 
+                url('https://images.unsplash.com/photo-1601128534300-3a82f3e8f616');
             background-size: cover, auto, auto;
             background-position: left, center, right;
             background-repeat: no-repeat, repeat-x, no-repeat;
@@ -142,13 +142,6 @@
             z-index: 1;
             position: relative;
         }
-        .delivery-speed {
-            padding: 10px;
-            font-size: 16px;
-            margin: 10px 0;
-            z-index: 1;
-            position: relative;
-        }
         .newsletter-section {
             margin-top: 20px;
             padding: 20px;
@@ -182,18 +175,23 @@
         .language-selector {
             position: absolute;
             top: 20px;
-            right: 60px; /* Adjusted to avoid overlap with hamburger */
+            right: 60px;
             z-index: 1;
         }
-        .language-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-        .language-dropdown select {
-            padding: 5px;
+        .language-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
             font-size: 14px;
         }
-        .language-dropdown ul {
+        .language-button:hover {
+            background-color: #0056b3;
+        }
+        .language-menu {
+            display: none;
             position: absolute;
             top: 100%;
             right: 0;
@@ -201,30 +199,29 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             list-style: none;
-            padding: 0;
+            padding: 10px;
             margin: 0;
             max-height: 300px;
             overflow-y: auto;
             min-width: 150px;
-            display: none;
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        .language-dropdown:hover ul {
+        .language-menu.active {
             display: block;
         }
-        .language-dropdown li {
-            padding: 10px;
+        .language-menu li {
+            padding: 5px 10px;
             cursor: pointer;
             display: flex;
             align-items: center;
         }
-        .language-dropdown li:hover {
+        .language-menu li:hover {
             background-color: #f0f0f0;
         }
         .flag {
             margin-right: 8px;
-            font-size: 20px;
+            font-size: 16px;
         }
         .chat-bubble {
             position: fixed;
@@ -421,7 +418,7 @@
         }
         .ready-to-ship {
             text-align: center;
-            background-image: url('https://images.unsplash.com/photo-1552484894-33b636c88502'); /* Ship with containers on ocean */
+            background-image: url('https://images.unsplash.com/photo-1552484894-33b636c88502');
             background-size: cover;
             background-position: center;
             color: white;
@@ -460,7 +457,7 @@
         }
         .become-partners {
             text-align: center;
-            background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c'); /* Delivery truck background */
+            background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c');
             background-size: cover;
             background-position: center;
             color: white;
@@ -479,6 +476,19 @@
             position: relative;
             z-index: 1;
         }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            position: relative;
+        }
+        footer img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+        }
         @keyframes blink {
             0%, 50% { opacity: 1; }
             51%, 100% { opacity: 0.3; }
@@ -495,7 +505,6 @@
                 right: 60px;
             }
             .nav-menu {
-                display: none;
                 top: 60px;
                 right: 20px;
                 width: 200px;
@@ -516,31 +525,112 @@
             </select>
         </div>
         <div class="logo">
-            <img src="eds-logo.png" alt="EDS Logo" id="logoImg">
+            <img src="eds-logo.png" alt="EDS Logo" id="logoImg" onerror="this.src='https://via.placeholder.com/200?text=Logo+Not+Found';">
         </div>
         <div class="hamburger" onclick="toggleMenu()">☰</div>
     </header>
     <div class="language-selector">
-        <div class="language-dropdown">
-            <select id="language" onchange="changeLanguage()">
-                <option value="en">🇺🇸 English</option>
-                <option value="es">🇪🇸 Spanish</option>
-                <option value="fr">🇫🇷 French</option>
-                <option value="de">🇩🇪 German</option>
-                <option value="it">🇮🇹 Italian</option>
-                <option value="pt">🇵🇹 Portuguese</option>
-                <option value="zh">🇨🇳 Chinese</option>
-                <option value="ja">🇯🇵 Japanese</option>
-                <option value="ko">🇰🇷 Korean</option>
-                <option value="ar">🇸🇦 Arabic</option>
-                <option value="ru">🇷🇺 Russian</option>
-                <option value="hi">🇮🇳 Hindi</option>
-                <option value="en-GB">🇬🇧 English (UK)</option>
-            </select>
-            <ul id="language-list">
-                <!-- Languages populated by JavaScript -->
-            </ul>
-        </div>
+        <button class="language-button" onclick="toggleLanguageMenu()">Change Language</button>
+        <ul class="language-menu" id="language-menu">
+            <li data-lang="en" onclick="changeLanguage('en')">🇺🇸 English</li>
+            <li data-lang="es" onclick="changeLanguage('es')">🇪🇸 Spanish</li>
+            <li data-lang="fr" onclick="changeLanguage('fr')">🇫🇷 French</li>
+            <li data-lang="de" onclick="changeLanguage('de')">🇩🇪 German</li>
+            <li data-lang="it" onclick="changeLanguage('it')">🇮🇹 Italian</li>
+            <li data-lang="pt" onclick="changeLanguage('pt')">🇵🇹 Portuguese</li>
+            <li data-lang="zh" onclick="changeLanguage('zh')">🇨🇳 Chinese (Simplified)</li>
+            <li data-lang="ja" onclick="changeLanguage('ja')">🇯🇵 Japanese</li>
+            <li data-lang="ko" onclick="changeLanguage('ko')">🇰🇷 Korean</li>
+            <li data-lang="ar" onclick="changeLanguage('ar')">🇸🇦 Arabic</li>
+            <li data-lang="ru" onclick="changeLanguage('ru')">🇷🇺 Russian</li>
+            <li data-lang="hi" onclick="changeLanguage('hi')">🇮🇳 Hindi</li>
+            <li data-lang="en-GB" onclick="changeLanguage('en-GB')">🇬🇧 English (UK)</li>
+            <li data-lang="bn" onclick="changeLanguage('bn')">🇧🇩 Bengali</li>
+            <li data-lang="pa" onclick="changeLanguage('pa')">🇮🇳 Punjabi</li>
+            <li data-lang="te" onclick="changeLanguage('te')">🇮🇳 Telugu</li>
+            <li data-lang="ta" onclick="changeLanguage('ta')">🇮🇳 Tamil</li>
+            <li data-lang="mr" onclick="changeLanguage('mr')">🇮🇳 Marathi</li>
+            <li data-lang="ur" onclick="changeLanguage('ur')">🇵🇰 Urdu</li>
+            <li data-lang="tr" onclick="changeLanguage('tr')">🇹🇷 Turkish</li>
+            <li data-lang="vi" onclick="changeLanguage('vi')">🇻🇳 Vietnamese</li>
+            <li data-lang="th" onclick="changeLanguage('th')">🇹🇭 Thai</li>
+            <li data-lang="el" onclick="changeLanguage('el')">🇬🇷 Greek</li>
+            <li data-lang="nl" onclick="changeLanguage('nl')">🇳🇱 Dutch</li>
+            <li data-lang="sv" onclick="changeLanguage('sv')">🇸🇪 Swedish</li>
+            <li data-lang="da" onclick="changeLanguage('da')">🇩🇰 Danish</li>
+            <li data-lang="fi" onclick="changeLanguage('fi')">🇫🇮 Finnish</li>
+            <li data-lang="no" onclick="changeLanguage('no')">🇳🇴 Norwegian</li>
+            <li data-lang="pl" onclick="changeLanguage('pl')">🇵🇱 Polish</li>
+            <li data-lang="cs" onclick="changeLanguage('cs')">🇨🇿 Czech</li>
+            <li data-lang="hu" onclick="changeLanguage('hu')">🇭🇺 Hungarian</li>
+            <li data-lang="ro" onclick="changeLanguage('ro')">🇷🇴 Romanian</li>
+            <li data-lang="sk" onclick="changeLanguage('sk')">🇸🇰 Slovak</li>
+            <li data-lang="bg" onclick="changeLanguage('bg')">🇧🇬 Bulgarian</li>
+            <li data-lang="hr" onclick="changeLanguage('hr')">🇭🇷 Croatian</li>
+            <li data-lang="sr" onclick="changeLanguage('sr')">🇷🇸 Serbian</li>
+            <li data-lang="sl" onclick="changeLanguage('sl')">🇸🇮 Slovenian</li>
+            <li data-lang="et" onclick="changeLanguage('et')">🇪🇪 Estonian</li>
+            <li data-lang="lt" onclick="changeLanguage('lt')">🇱🇹 Lithuanian</li>
+            <li data-lang="lv" onclick="changeLanguage('lv')">🇱🇻 Latvian</li>
+            <li data-lang="mt" onclick="changeLanguage('mt')">🇲🇹 Maltese</li>
+            <li data-lang="ga" onclick="changeLanguage('ga')">🇮🇪 Irish</li>
+            <li data-lang="cy" onclick="changeLanguage('cy')">🇬🇧 Welsh</li>
+            <li data-lang="gd" onclick="changeLanguage('gd')">🇬🇧 Scottish Gaelic</li>
+            <li data-lang="he" onclick="changeLanguage('he')">🇮🇱 Hebrew</li>
+            <li data-lang="fa" onclick="changeLanguage('fa')">🇮🇷 Persian</li>
+            <li data-lang="ps" onclick="changeLanguage('ps')">🇦🇫 Pashto</li>
+            <li data-lang="uz" onclick="changeLanguage('uz')">🇺🇿 Uzbek</li>
+            <li data-lang="kk" onclick="changeLanguage('kk')">🇰🇿 Kazakh</li>
+            <li data-lang="ky" onclick="changeLanguage('ky')">🇰🇬 Kyrgyz</li>
+            <li data-lang="tk" onclick="changeLanguage('tk')">🇹🇲 Turkmen</li>
+            <li data-lang="mn" onclick="changeLanguage('mn')">🇲🇳 Mongolian</li>
+            <li data-lang="km" onclick="changeLanguage('km')">🇰🇭 Khmer</li>
+            <li data-lang="lo" onclick="changeLanguage('lo')">🇱🇦 Lao</li>
+            <li data-lang="my" onclick="changeLanguage('my')">🇲🇲 Burmese</li>
+            <li data-lang="id" onclick="changeLanguage('id')">🇮🇩 Indonesian</li>
+            <li data-lang="ms" onclick="changeLanguage('ms')">🇲🇾 Malay</li>
+            <li data-lang="tl" onclick="changeLanguage('tl')">🇵🇭 Tagalog</li>
+            <li data-lang="ceb" onclick="changeLanguage('ceb')">🇵🇭 Cebuano</li>
+            <li data-lang="sw" onclick="changeLanguage('sw')">🇹🇿 Swahili</li>
+            <li data-lang="ha" onclick="changeLanguage('ha')">🇳🇬 Hausa</li>
+            <li data-lang="yo" onclick="changeLanguage('yo')">🇳🇬 Yoruba</li>
+            <li data-lang="ig" onclick="changeLanguage('ig')">🇳🇬 Igbo</li>
+            <li data-lang="am" onclick="changeLanguage('am')">🇪🇹 Amharic</li>
+            <li data-lang="so" onclick="changeLanguage('so')">🇸🇴 Somali</li>
+            <li data-lang="zu" onclick="changeLanguage('zu')">🇿🇦 Zulu</li>
+            <li data-lang="xh" onclick="changeLanguage('xh')">🇿🇦 Xhosa</li>
+            <li data-lang="af" onclick="changeLanguage('af')">🇿🇦 Afrikaans</li>
+            <li data-lang="ne" onclick="changeLanguage('ne')">🇳🇵 Nepali</li>
+            <li data-lang="si" onclick="changeLanguage('si')">🇱🇰 Sinhala</li>
+            <li data-lang="km" onclick="changeLanguage('km')">🇰🇭 Khmer</li>
+            <li data-lang="ti" onclick="changeLanguage('ti')">🇪🇹 Tigrinya</li>
+            <li data-lang="om" onclick="changeLanguage('om')">🇪🇹 Oromo</li>
+            <li data-lang="sm" onclick="changeLanguage('sm')">🇼🇸 Samoan</li>
+            <li data-lang="to" onclick="changeLanguage('to')">🇹🇴 Tongan</li>
+            <li data-lang="mg" onclick="changeLanguage('mg')">🇲🇬 Malagasy</li>
+            <li data-lang="ny" onclick="changeLanguage('ny')">🇲🇼 Chichewa</li>
+            <li data-lang="sn" onclick="changeLanguage('sn')">🇿🇼 Shona</li>
+            <li data-lang="st" onclick="changeLanguage('st')">🇱🇸 Sotho</li>
+            <li data-lang="ts" onclick="changeLanguage('ts')">🇿🇦 Tsonga</li>
+            <li data-lang="ve" onclick="changeLanguage('ve')">🇿🇦 Venda</li>
+            <li data-lang="nr" onclick="changeLanguage('nr')">🇿🇦 Ndebele</li>
+            <li data-lang="ss" onclick="changeLanguage('ss')">🇸🇿 Swati</li>
+            <li data-lang="qu" onclick="changeLanguage('qu')">🇵🇪 Quechua</li>
+            <li data-lang="ay" onclick="changeLanguage('ay')">🇧🇴 Aymara</li>
+            <li data-lang="gn" onclick="changeLanguage('gn')">🇵🇾 Guarani</li>
+            <li data-lang="eu" onclick="changeLanguage('eu')">🇪🇸 Basque</li>
+            <li data-lang="ca" onclick="changeLanguage('ca')">🇪🇸 Catalan</li>
+            <li data-lang="gl" onclick="changeLanguage('gl')">🇪🇸 Galician</li>
+            <li data-lang="oc" onclick="changeLanguage('oc')">🇫🇷 Occitan</li>
+            <li data-lang="br" onclick="changeLanguage('br')">🇫🇷 Breton</li>
+            <li data-lang="ku" onclick="changeLanguage('ku')">🇹🇷 Kurdish</li>
+            <li data-lang="az" onclick="changeLanguage('az')">🇦🇿 Azerbaijani</li>
+            <li data-lang="hy" onclick="changeLanguage('hy')">🇦🇲 Armenian</li>
+            <li data-lang="ka" onclick="changeLanguage('ka')">🇬🇪 Georgian</li>
+            <li data-lang="sq" onclick="changeLanguage('sq')">🇦🇱 Albanian</li>
+            <li data-lang="mk" onclick="changeLanguage('mk')">🇲🇰 Macedonian</li>
+            <li data-lang="bs" onclick="changeLanguage('bs')">🇧🇦 Bosnian</li>
+        </ul>
     </div>
     <div class="nav-menu" id="nav-menu">
         <ul>
@@ -614,7 +704,7 @@
             <div class="hours">
                 <div class="day">Mon-Sat: 7 AM - 5 PM</div>
                 <div class="day">Sunday: 9 AM - 3 PM</div>
-                <div class="closed-now blinking">Closed Now 🔴</div>
+                <div class="open-now blinking">Open Now 🟢</div>
             </div>
             <p>Location: 300 Kansas Ave NW, New Jersey, United States</p>
             <div class="global-offices">
@@ -730,6 +820,10 @@
             <button onclick="sendMessage()">Send</button>
         </div>
     </div>
+    <footer>
+        <p>©2025. Express Delivery Services All Rights Reserved. Logistics Company.</p>
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" alt="Logistics Image" onerror="this.src='https://via.placeholder.com/800x200?text=Logistics+Image+Not+Found';">
+    </footer>
 
     <script>
         function trackPackage() {
@@ -752,10 +846,14 @@
             document.getElementById('logoImg').src = select.value;
         }
 
-        function changeLanguage() {
-            const select = document.getElementById('language');
-            const lang = select.value;
+        function toggleLanguageMenu() {
+            const menu = document.getElementById('language-menu');
+            menu.classList.toggle('active');
+        }
+
+        function changeLanguage(lang) {
             console.log(`Switched to ${lang}`);
+            document.getElementById('language-menu').classList.remove('active');
         }
 
         function toggleChat() {
@@ -798,7 +896,6 @@
             navMenu.classList.toggle('active');
         }
 
-        // Auto-scroll reviews
         let slideIndex = 0;
         const reviewsTrack = document.getElementById('reviews-track');
         const totalSlides = reviewsTrack.children.length;
