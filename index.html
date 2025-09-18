@@ -1,207 +1,111 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Express Delivery Services - Package Tracker</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Express Delivery Service</title>
   <style>
-    /* Testimonials slider */
-    .testimonial-slider {
-      max-width: 700px;
-      margin: 0 auto;
-      position: relative;
-      overflow: hidden;
-    }
-    .slides {
-      display: flex;
-      transition: transform 0.5s ease-in-out;
-    }
-    .testimonial-card {
-      min-width: 100%;
-      padding: 25px;
-      background: #fff;
-      text-align: center;
-      border: 1px solid #eee;
-      border-radius: 12px;
-      box-shadow: 0px 3px 8px rgba(0,0,0,0.1);
-    }
-    .testimonial-card img {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      margin-top: 10px;
-      object-fit: cover;
-    }
-    .testimonial-slider button {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: #4D148C;
-      color: #fff;
-      border: none;
-      padding: 8px 12px;
-      cursor: pointer;
-      border-radius: 50%;
-    }
-    .prev { left: 10px; }
-    .next { right: 10px; }
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f8f8f8; color: #333; }
+    header { background: #003366; color: #fff; text-align: center; padding: 20px; }
+    .section { padding: 40px 20px; text-align: center; }
+    h2 { color: #003366; }
+    .tracking-box { margin: 20px auto; padding: 20px; border: 2px solid #003366; border-radius: 10px; background: #fff; max-width: 400px; }
+    input[type="text"] { padding: 10px; width: 70%; margin-right: 5px; border: 1px solid #ccc; border-radius: 5px; }
+    button { padding: 10px 15px; background: #003366; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #0055aa; }
+    .testimonial { background: #fff; border: 1px solid #ddd; border-radius: 10px; padding: 20px; margin: 15px auto; max-width: 600px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .stars { color: gold; font-size: 1.2em; }
+    footer { background: #003366; color: #fff; text-align: center; padding: 20px; margin-top: 30px; }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
-  <header id="home">
-    <h1>Express Delivery Services</h1>
-    <p>Fast, reliable, and secure delivery. Track your packages, explore global shipping, and get support anytime.</p>
-  </header>
+<header>
+  <h1>Express Delivery Service</h1>
+  <p>Your trusted partner in fast and reliable logistics</p>
+</header>
 
-  <!-- Tracking Section -->
-  <section id="tracking" class="tracking">
-    <h2>📦 Track Your Package</h2>
-    <p>Enter your tracking number to see real-time updates on your shipment.</p>
-    <form id="tracking-form">
-      <input type="text" id="tracking-id" placeholder="Enter Tracking Number" required>
-      <button type="submit">Track</button>
-    </form>
-    <div id="result"></div>
-  </section>
+<section class="section">
+  <h2>Track Your Package</h2>
+  <p>Enter your tracking number to see live status updates.</p>
+  <div class="tracking-box">
+    <input type="text" id="trackingNumber" placeholder="Enter Tracking Number">
+    <button onclick="trackPackage()">Track</button>
+    <p id="trackingResult"></p>
+  </div>
+</section>
 
-  <!-- Live Support -->
-  <section id="support" style="text-align:center; margin:40px 0;">
-    <h2>💬 Live Support</h2>
-    <p>Need help? Our team is here for you 24/7.</p>
-    <p><strong>Phone:</strong> <a href="tel:+2349157677711">+234 915 767 7711</a></p>
-    <p><strong>Email:</strong> <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></p>
-  </section>
+<section class="section">
+  <h2>Live Support</h2>
+  <p>📞 +234 915 767 7711</p>
+  <p>📧 Expressdeliveryservice0016@gmail.com</p>
+  <p>Our agents are <span id="supportStatus">online</span></p>
+</section>
 
-  <!-- Testimonials Section -->
-  <section class="testimonials" id="testimonials">
-    <h2 style="text-align:center; font-size:26px; margin-bottom:10px; color:#4D148C;">
-      OUR TESTIMONIAL
-    </h2>
-    <p style="text-align:center; font-size:16px; margin-bottom:30px; color:#555;">
-      What customers say about us <br>
-      Don't just take our word for it. Hear what our satisfied customers have to say about their experiences with us.
-    </p>
+<section class="section">
+  <h2>Our Testimonials</h2>
+  <div id="testimonials"></div>
+</section>
 
-    <div class="testimonial-slider">
-      <div class="slides">
-        <!-- 10 Testimonials -->
-        <div class="testimonial-card">
-          <div style="font-size:40px; color:red;">❝</div>
-          <p>Express Delivery made my shipment stress-free. Package arrived earlier than expected!</p>
-          <div style="color:gold;">★★★★★</div>
-          <img src="images/customer1.jpg">
-          <h4>Emily Johnson</h4>
-          <p style="font-size:13px; color:#777;">New York, USA</p>
-        </div>
+<footer>
+  <p>© 2025 Express Delivery Service. All Rights Reserved.</p>
+</footer>
 
-        <div class="testimonial-card">
-          <div style="font-size:40px; color:red;">❝</div>
-          <p>Fast delivery and reliable tracking updates. I could follow my package step by step.</p>
-          <div style="color:gold;">★★★★★</div>
-          <img src="images/customer2.jpg">
-          <h4>David Smith</h4>
-          <p style="font-size:13px; color:#777;">London, UK</p>
-        </div>
-
-        <div class="testimonial-card">
-          <div style="font-size:40px; color:red;">❝</div>
-          <p>I ship overseas often, and this company never disappoints. Professional service!</p>
-          <div style="color:gold;">★★★★★</div>
-          <img src="images/customer3.jpg">
-          <h4>Maria Lopez</h4>
-          <p style="font-size:13px; color:#777;">Madrid, Spain</p>
-        </div>
-
-        <div class="testimonial-card">
-          <div style="font-size:40px; color:red;">❝</div>
-          <p>The live support team was very helpful. They answered all my questions instantly.</p>
-          <div style="color:gold;">★★★★★</div>
-          <img src="images/customer4.jpg">
-          <h4>James Wilson</h4>
-          <p style="font-size:13px; color:#777;">Toronto, Canada</p>
-        </div>
-
-        <div class="testimonial-card">
-          <div style="font-size:40px; color:red;">❝</div>
-          <p>Secure packaging and smooth customs clearance. Truly international standard service.</p>
-          <div style="color:gold;">★★★★★</div>
-          <img src="images/customer5.jpg">
-          <h4>Sarah Chen</h4>
-          <p style="font-size:13px; color:#777;">Hong Kong</p>
-        </div>
-
-        <div class="testimonial-card">
-          <div style="font-size:40px; color:red;">❝</div>
-          <p>I’ve been using them for my business logistics — they are trustworthy and fast.</p>
-          <div style="color:gold;">★★★★★</div>
-          <img src="images/customer6.jpg">
-          <h4>Michael Brown</h4>
-          <p style="font-size:13px; color:#777;">Chicago, USA</p>
-        </div>
-
-        <div class="testimonial-card">
-          <div style="font-size:40px; color:red;">❝</div>
-          <p>Even during peak season, my parcels arrived on time. Impressed!</p>
-          <div style="color:gold;">★★★★★</div>
-          <img src="images/customer7.jpg">
-          <h4>Aisha Mohammed</h4>
-          <p style="font-size:13px; color:#777;">Dubai, UAE</p>
-        </div>
-
-        <div class="testimonial-card">
-          <div style="font-size:40px; color:red;">❝</div>
-          <p>Best courier company I’ve dealt with. Great tracking and great staff.</p>
-          <div style="color:gold;">★★★★★</div>
-          <img src="images/customer8.jpg">
-          <h4>Lucas Rossi</h4>
-          <p style="font-size:13px; color:#777;">Rome, Italy</p>
-        </div>
-
-        <div class="testimonial-card">
-          <div style="font-size:40px; color:red;">❝</div>
-          <p>Affordable rates and premium service. I recommend them to everyone.</p>
-          <div style="color:gold;">★★★★★</div>
-          <img src="images/customer9.jpg">
-          <h4>Sophia Martinez</h4>
-          <p style="font-size:13px; color:#777;">Mexico City</p>
-        </div>
-
-        <div class="testimonial-card">
-          <div style="font-size:40px; color:red;">❝</div>
-          <p>From pickup to delivery, everything was smooth. Absolutely reliable.</p>
-          <div style="color:gold;">★★★★★</div>
-          <img src="images/customer10.jpg">
-          <h4>Daniel Lee</h4>
-          <p style="font-size:13px; color:#777;">Seoul, South Korea</p>
-        </div>
-      </div>
-
-      <!-- Slider Buttons -->
-      <button class="prev">&#10094;</button>
-      <button class="next">&#10095;</button>
-    </div>
-  </section>
-
-  <script>
-    // Simple testimonial slider
-    const slides = document.querySelector('.slides');
-    const prev = document.querySelector('.prev');
-    const next = document.querySelector('.next');
-    let index = 0;
-
-    function showSlide(i) {
-      const total = document.querySelectorAll('.testimonial-card').length;
-      if (i >= total) index = 0;
-      else if (i < 0) index = total - 1;
-      else index = i;
-      slides.style.transform = `translateX(${-index * 100}%)`;
+<script>
+  // Live Tracking Simulation
+  function trackPackage() {
+    const trackingNumber = document.getElementById("trackingNumber").value;
+    const result = document.getElementById("trackingResult");
+    if (trackingNumber.trim() === "") {
+      result.textContent = "❌ Please enter a valid tracking number.";
+    } else {
+      let steps = ["We have your package ✅", "On the way 🚚", "Out for delivery 📦", "Delivered to destination 🏡"];
+      let i = 0;
+      result.textContent = steps[i];
+      let interval = setInterval(() => {
+        i++;
+        if (i < steps.length) {
+          result.textContent = steps[i];
+        } else {
+          clearInterval(interval);
+        }
+      }, 2000);
     }
+  }
 
-    next.addEventListener('click', () => showSlide(index + 1));
-    prev.addEventListener('click', () => showSlide(index - 1));
-  </script>
+  // Auto-updating Support Status
+  function updateSupportStatus() {
+    let status = document.getElementById("supportStatus");
+    let online = Math.random() > 0.2; // 80% chance online
+    status.textContent = online ? "online 🟢" : "offline 🔴";
+  }
+  setInterval(updateSupportStatus, 5000);
+  updateSupportStatus();
+
+  // Rotating Testimonials
+  const testimonials = [
+    "Fast and reliable delivery. Highly recommend! - Emily Johnson",
+    "My package arrived earlier than expected. Great service! - James Carter",
+    "Excellent customer support and tracking updates. - Sophia Martinez",
+    "Very professional service. Smooth experience. - Daniel Lee",
+    "Delivery was quick and easy to track. - Olivia Brown",
+    "Friendly support team and reliable updates. - Michael Smith",
+    "They kept me updated until delivery. Impressive! - Isabella Taylor",
+    "Affordable rates and top-notch service. - David Wilson",
+    "I’m very satisfied with the timely delivery. - Amelia Davis",
+    "Great company! Will definitely use again. - Benjamin Clark"
+  ];
+
+  let tIndex = 0;
+  function rotateTestimonials() {
+    const container = document.getElementById("testimonials");
+    container.innerHTML = `<div class="testimonial"><p>"${testimonials[tIndex]}"</p><div class="stars">★★★★★</div></div>`;
+    tIndex = (tIndex + 1) % testimonials.length;
+  }
+  setInterval(rotateTestimonials, 4000);
+  rotateTestimonials();
+</script>
+
 </body>
 </html>
