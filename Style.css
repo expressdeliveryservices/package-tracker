@@ -1,54 +1,200 @@
-/* General Styles */
-body { margin:0; font-family: 'Segoe UI', sans-serif; background:#f0f4f7; color:#333; }
-header.header { display:flex; justify-content:space-between; align-items:center; padding:20px 40px; background:#1E90FF; color:#fff; }
-header .logo { font-size:1.8em; font-weight:bold; }
-header .header-actions button, header select { margin-left:10px; padding:8px 12px; border:none; border-radius:5px; cursor:pointer; }
-header .header-actions button { background:#FFCC00; color:#000; font-weight:bold; }
-header .header-actions button:hover { background:#e6b800; }
+/* ==========================================================================
+   Express Delivery Services - Updated Colors & Backgrounds
+   ========================================================================== */
 
-.hero { text-align:center; padding:60px 20px; background:linear-gradient(to right,#1E90FF,#63b3ff); color:#fff; }
-.hero h1 { font-size:2.2em; margin-bottom:30px; }
-.tracking-box { display:flex; justify-content:center; flex-wrap:wrap; gap:10px; }
-.tracking-box input { padding:15px; width:300px; border-radius:5px; border:none; font-size:1em; }
-.tracking-box button { padding:15px 25px; border-radius:5px; border:none; background:#FFCC00; font-weight:bold; cursor:pointer; }
-.tracking-box button:hover { background:#e6b800; }
-.delivery-status { margin-top:10px; font-weight:bold; }
-.tracking-result { margin-top:5px; }
+/* General Body */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to bottom, #f0f4f7 0%, #e6f0fa 100%);
+    color: #333;
+}
 
-#map-section { padding:50px 20px; text-align:center; }
-#map { height:500px; width:90%; max-width:1200px; margin:auto; border-radius:10px; box-shadow:0 0 15px rgba(0,0,0,0.2); }
+/* Header */
+header.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: linear-gradient(90deg, #1E90FF, #63b3ff);
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
 
-.newsletter { background:#1E90FF; color:#fff; padding:50px 20px; text-align:center; }
-.newsletter input { padding:12px; width:300px; border-radius:5px; border:none; margin-right:10px; }
-.newsletter button { padding:12px 20px; border-radius:5px; border:none; background:#FFCC00; font-weight:bold; cursor:pointer; }
-.newsletter button:hover { background:#e6b800; }
-#newsletterMsg { margin-top:10px; font-weight:bold; }
+header .logo {
+    font-size: 1.8em;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
 
-.reviews { padding:50px 20px; text-align:center; }
-.review-box { background:#fff; padding:20px; max-width:600px; margin:auto; border-radius:10px; box-shadow:0 0 15px rgba(0,0,0,0.15); }
-.review-box #reviewText { font-size:1.1em; }
-.review-box #reviewAuthor { margin-top:10px; font-weight:bold; color:#1E90FF; }
+header .header-actions button,
+header select {
+    margin-left: 10px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
 
-.extended-description { padding:50px 20px; background:#f9f9f9; text-align:center; }
-.extended-description p { max-width:800px; margin:auto; font-size:1em; line-height:1.6; }
+header .header-actions button {
+    background: #FFCC00;
+    color: #000;
+    transition: background 0.3s;
+}
 
-/* Live Chat */
-.chat-button { position:fixed; bottom:20px; right:20px; background:#FFCC00; width:60px; height:60px; border-radius:50%; display:flex; justify-content:center; align-items:center; font-size:1.5em; cursor:pointer; box-shadow:0 0 10px rgba(0,0,0,0.3);}
-.chat-box { position:fixed; bottom:90px; right:20px; width:300px; max-height:400px; background:#fff; border-radius:10px; box-shadow:0 0 15px rgba(0,0,0,0.3); display:none; flex-direction:column;}
-.chat-header { background:#1E90FF; color:#fff; padding:10px; border-radius:10px 10px 0 0; text-align:center; font-weight:bold;}
-.chat-messages { flex:1; padding:10px; overflow-y:auto; display:flex; flex-direction:column; gap:5px; }
-.chat-input { display:flex; }
-.chat-input input { flex:1; padding:10px; border:none; border-top:1px solid #ccc; border-radius:0 0 0 10px; }
-.chat-input button { padding:10px; border:none; border-radius:0 0 10px 0; background:#FFCC00; cursor:pointer; }
-.chat-message { padding:8px 10px; border-radius:10px; max-width:80%; }
-.user-msg { background:#FFCC00; align-self:flex-end; color:#000; }
-.bot-msg { background:#f1f1f1; align-self:flex-start; color:#000; }
+header .header-actions button:hover {
+    background: #e6b800;
+}
 
-/* Pop-Ups */
-.popup { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:1000; }
-.popup-content { background:#fff; padding:20px; border-radius:10px; max-width:400px; width:90%; text-align:center; box-shadow:0 0 15px rgba(0,0,0,0.3); position:relative; }
-.popup-content .close { position:absolute; top:10px; right:15px; font-size:1.5em; cursor:pointer; }
-.popup-content input { padding:10px; width:80%; margin-bottom:10px; border-radius:5px; border:1px solid #ccc; }
-.popup-content button { padding:10px 20px; border:none; border-radius:5px; background:#FFCC00; font-weight:bold; cursor:pointer; }
-.popup-content button:hover { background:#e6b800; }
-#supportReviews, #contactReviews { margin-top:15px; max-height:120px; overflow-y:auto; text-align:left; }
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: 60px 20px;
+    background: url('assets/delivery-bg.jpg') no-repeat center center;
+    background-size: cover;
+    color: #fff;
+    position: relative;
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    top:0; left:0; width:100%; height:100%;
+    background: rgba(30, 144, 255, 0.6); /* Overlay for readability */
+    z-index: 1;
+}
+
+.hero h1 {
+    font-size: 2.4em;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 2;
+}
+
+.tracking-box {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    position: relative;
+    z-index: 2;
+}
+
+.tracking-box input {
+    padding: 15px;
+    width: 300px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1em;
+}
+
+.tracking-box button {
+    padding: 15px 25px;
+    border-radius: 8px;
+    border: none;
+    background: #FFCC00;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.tracking-box button:hover {
+    background: #e6b800;
+}
+
+/* Map Section */
+#map-section {
+    padding: 50px 20px;
+    text-align: center;
+    background: #f0f4f7 url('assets/world-map-bg.png') no-repeat center center;
+    background-size: cover;
+}
+
+#map {
+    height: 500px;
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    border: 2px solid #1E90FF;
+}
+
+/* Newsletter */
+.newsletter {
+    background: linear-gradient(to right, #1E90FF, #63b3ff);
+    color: #fff;
+    padding: 50px 20px;
+    text-align: center;
+    position: relative;
+}
+
+.newsletter input {
+    padding: 12px;
+    width: 300px;
+    border-radius: 8px;
+    border: none;
+    margin-right: 10px;
+}
+
+.newsletter button {
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: none;
+    background: #FFCC00;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.newsletter button:hover {
+    background: #e6b800;
+}
+
+/* Customer Reviews */
+.reviews {
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.review-box {
+    background: #fff url('assets/package-bg.png') no-repeat right bottom;
+    background-size: 80px 80px;
+    padding: 25px;
+    max-width: 600px;
+    margin: auto;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.15);
+}
+
+.review-box #reviewText {
+    font-size: 1.1em;
+}
+
+.review-box #reviewAuthor {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #1E90FF;
+}
+
+/* Live Chat & Popups */
+.chat-button, .popup-content button {
+    background: #FFCC00;
+    transition: background 0.3s;
+}
+.chat-button:hover, .popup-content button:hover { background: #e6b800; }
+
+/* Optional extended description section */
+.extended-description {
+    padding: 50px 20px;
+    background: #f9f9f9 url('assets/boxes-bg.png') no-repeat top right;
+    background-size: 120px 120px;
+    text-align: center;
+}
+.extended-description p {
+    max-width: 800px;
+    margin: auto;
+    font-size: 1em;
+    line-height: 1.6;
+}
