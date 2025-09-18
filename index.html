@@ -6,7 +6,7 @@
 <title>Express Delivery Services</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <style>
-body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f4f9; color:#333; overflow-x:hidden; scroll-behavior: smooth; }
+body { font-family: Arial, sans-serif; margin:0; padding:0; scroll-behavior:smooth; background:#f4f4f9; color:#333; }
 header { background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("https://i.ibb.co/qJ1bF4L/delivery-truck.jpg") no-repeat center/cover; color:white; padding:100px 20px; text-align:center; }
 header .logo { display:flex; align-items:center; justify-content:center; font-size:32px; font-weight:bold; }
 header .logo img { width:50px; height:50px; margin-right:10px; }
@@ -42,6 +42,8 @@ footer { background:#004080; color:white; padding:30px 20px; text-align:center; 
 #send-btn { width:25%; padding:5px; background:#004080; color:white; border:none; cursor:pointer; }
 #services ul { list-style:none; padding:0; }
 #services li { background:#fff; margin:10px 0; padding:15px; border-left:5px solid #004080; border-radius:5px; font-size:16px; }
+.blink { animation: blink 1s infinite; }
+@keyframes blink { 0%{opacity:1}50%{opacity:0}100%{opacity:1} }
 </style>
 </head>
 <body>
@@ -51,7 +53,7 @@ footer { background:#004080; color:white; padding:30px 20px; text-align:center; 
     <img src="https://i.ibb.co/QFvZ5sM/delivery-icon.png" alt="Logo">
     Express Delivery Services
   </div>
-  <p>Fast, reliable, and secure deliveries across the globe. Track your packages in real time and stay updated with our advanced logistics system.</p>
+  <p>Fast, reliable, and secure deliveries across the globe. Track your packages in real time.</p>
 </header>
 
 <div class="menu">
@@ -62,7 +64,7 @@ footer { background:#004080; color:white; padding:30px 20px; text-align:center; 
     <li><a href="#counters">📊 Stats</a></li>
     <li><a href="#track">🔍 Track</a></li>
     <li><a href="#reviews">🌟 Reviews</a></li>
-    <li><a href="#global">✈️ Global Shipping</a></li>
+    <li><a href="#global">✈️ Global</a></li>
     <li><a href="#faq">❓ FAQ</a></li>
     <li><a href="#newsletter">📬 Subscribe</a></li>
   </ul>
@@ -70,37 +72,22 @@ footer { background:#004080; color:white; padding:30px 20px; text-align:center; 
 
 <section id="about">
 <h2>About Us</h2>
-<p>
-Express Delivery Services has been providing top-notch courier solutions for over a decade
+<p>Express Delivery Services has been providing top-notch courier solutions for over a decade...
 <span id="dots">...</span>
 <span id="more-text" style="display:none;">
-Whether by road 🚚 or by air ✈️, we ensure your parcels reach their destination safely and on time.
-Our global network spans over 100 countries, equipped with real-time tracking, advanced logistics,
-and dedicated customer support available 24/7. We cater to businesses and individuals alike,
-offering reliable shipping solutions for every need.
-<br><br>
-<strong>Optional Extended Description:</strong>
-<ul>
-<li>✅ Secure packaging and handling for all items.</li>
-<li>✅ Express and same-day delivery options for urgent shipments.</li>
-<li>✅ Business logistics support for bulk orders and corporate clients.</li>
-<li>✅ Environmentally friendly delivery initiatives with eco-friendly vehicles.</li>
-<li>✅ Integration with mobile apps and online dashboards for seamless tracking.</li>
-<li>✅ Personalized customer service to ensure satisfaction.</li>
-</ul>
-</span>
-</p>
+Whether by road 🚚 or air ✈️, we ensure your parcels arrive safely and on time. Our network spans 100+ countries with real-time tracking, business solutions, and 24/7 support.
+</span></p>
 <button id="read-more-btn">Read more</button>
 </section>
 
 <section id="services">
 <h2>Our Services 🚚 ✈️</h2>
 <ul>
-<li>📦 Same-Day Delivery – Quick local drop-offs.</li>
-<li>🌍 International Shipping – Reliable worldwide connections.</li>
-<li>🕒 Real-Time Tracking – Know exactly where your package is.</li>
-<li>💼 Business Logistics – Customized solutions for companies.</li>
-<li>📱 24/7 Customer Support – Always here to help you.</li>
+<li>📦 Same-Day Delivery</li>
+<li>🌍 International Shipping</li>
+<li>🕒 Real-Time Tracking</li>
+<li>💼 Business Logistics</li>
+<li>📱 24/7 Customer Support</li>
 </ul>
 </section>
 
@@ -126,19 +113,18 @@ offering reliable shipping solutions for every need.
 
 <section id="global">
 <h2>Global Reach 🌍</h2>
-<p>Live package movements and office locations of Express Delivery Services:</p>
 <div id="world-map"></div>
 </section>
 
 <section id="faq">
-<h2>❓ Frequently Asked Questions</h2>
+<h2>❓ FAQ</h2>
 <div class="faq-item">How long does delivery take?<div class="faq-answer">Delivery typically takes 2-5 business days depending on location.</div></div>
 <div class="faq-item">Do you offer international shipping?<div class="faq-answer">Yes, we ship to over 100 countries worldwide.</div></div>
-<div class="faq-item">Can I track my package?<div class="faq-answer">Absolutely, real-time tracking is available for every shipment.</div></div>
+<div class="faq-item">Can I track my package?<div class="faq-answer">Yes, real-time tracking is available for every shipment.</div></div>
 </section>
 
 <section id="newsletter">
-<h2>📬 Subscribe for Updates & Promotions</h2>
+<h2>📬 Subscribe for Updates</h2>
 <input type="email" placeholder="Enter your email">
 <button type="submit">Subscribe</button>
 </section>
@@ -154,27 +140,30 @@ offering reliable shipping solutions for every need.
 </div>
 
 <footer>
-<p>🚚 Express Delivery Services © 2025. Fast. Reliable. Global.</p>
+<p>🚚 Express Delivery Services © 2025</p>
 </footer>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
-// Read more toggle
-document.getElementById("read-more-btn").addEventListener("click", function(){
-const moreText = document.getElementById("more-text");
-const dots = document.getElementById("dots");
-const btn = document.getElementById("read-more-btn");
-if(moreText.style.display==="none"){moreText.style.display="inline";dots.style.display="none";btn.textContent="Read less";}
-else{moreText.style.display="none";dots.style.display="inline";btn.textContent="Read more";}
+// Menu toggle
+document.getElementById('menu-toggle').addEventListener('click', () => {
+  const menu = document.getElementById('menu-options');
+  menu.style.display = menu.style.display==='block'?'none':'block';
 });
 
-// Counters
-const counters = [{id:"packages",end:12000},{id:"customers",end:8500},{id:"countries",end:100}];
-counters.forEach(c=>{
-let count=0;const el=document.getElementById(c.id);const interval=setInterval(()=>{
-count+=Math.ceil(c.end/200);if(count>=c.end){count=c.end;clearInterval(interval);}
-el.innerHTML=el.innerHTML.split('<br>')[0]+"<br>"+count;},20);});
+// Chat toggle
+document.getElementById('chat-toggle').addEventListener('click', ()=>{
+  const chatBox=document.getElementById('chat-box');
+  chatBox.style.display = chatBox.style.display==='block'?'none':'block';
+});
+document.getElementById('send-btn').addEventListener('click',()=>{
+  const input=document.getElementById('chat-input');
+  if(input.value.trim()!==""){
+    const p=document.createElement('p'); p.textContent="You: "+input.value;
+    document.getElementById('chat-messages').appendChild(p);
+    input.value=""; document.getElementById('chat-messages').scrollTop=document.getElementById('chat-messages').scrollHeight;
+  }
+});
 
-// Reviews carousel
-const reviews=[
-"⭐️⭐️⭐️⭐️
+// Read more
+document.getElementById("read-more-btn").addEventListener("
