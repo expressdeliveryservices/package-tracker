@@ -9,17 +9,24 @@
 <body>
 
   <!-- Header -->
-  <header>
+  <header id="home">
     <img src="images/logo.png" alt="Express Delivery Services Logo" class="logo">
     <h1>Express Delivery Services</h1>
     <p class="description">
       Fast, reliable, and secure delivery. Track your packages, explore global shipping, and get support anytime.
     </p>
+    <p class="extended-description">
+      Whether you’re shipping locally or internationally, we ensure your parcels are handled with care. Our advanced tracking system keeps you updated every step of the way.
+    </p>
   </header>
 
   <!-- Tracking Section -->
-  <section class="tracking">
+  <section id="tracking" class="tracking">
     <h2>📦 Track Your Package</h2>
+    <p class="description">Enter your tracking number below to see real-time updates on your shipment.</p>
+    <p class="extended-description">
+      Our system provides detailed information, including estimated delivery time, current location, and any delays to keep you fully informed.
+    </p>
     <form id="tracking-form">
       <input type="text" id="tracking-id" placeholder="Enter Tracking Number" required>
       <button type="submit">Track</button>
@@ -28,18 +35,23 @@
   </section>
 
   <!-- Countries Served -->
-  <section class="countries">
+  <section id="services" class="countries">
     <h2>🌍 We Deliver Worldwide</h2>
-    <p>Currently serving: USA, UK, Canada, Europe, Asia, and Africa.</p>
+    <p class="description">Currently serving: USA, UK, Canada, Europe, Asia, and Africa.</p>
+    <p class="extended-description">
+      Our global network ensures fast delivery to over 100 countries. We partner with local couriers to guarantee safe and timely arrival of your parcels.
+    </p>
   </section>
 
   <!-- Contact Us -->
-  <section class="contact">
+  <section id="contact" class="contact">
     <h2>📞 Contact Us</h2>
+    <p class="description">Reach out via email or phone for any questions or assistance.</p>
+    <p class="extended-description">
+      Our customer support team is available 24/7. Whether it’s a question about tracking, delivery options, or claims, we are here to help.
+    </p>
     <p>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></p>
     <p>Phone: <a href="tel:+2349157677711">+234 915 767 7711</a></p>
-
-    <!-- Live Chat Button -->
     <div class="live-chat">
       <a href="mailto:Expressdeliveryservice0016@gmail.com" class="chat-btn">💬 Live Chat (Email)</a>
     </div>
@@ -49,6 +61,43 @@
   <footer>
     <p>© 2025 Express Delivery Services. All rights reserved.</p>
   </footer>
+
+  <!-- Floating Quick Menu -->
+  <div class="quick-menu">
+    <button id="menu-toggle">☰</button>
+    <div id="menu-content" class="menu-content">
+      <!-- Navigation Links -->
+      <ul>
+        <li><a href="#home">🏠 Home</a></li>
+        <li><a href="#about">ℹ️ About</a></li>
+        <li><a href="#services">🛠️ Services</a></li>
+        <li><a href="#tracking">📦 Track Package</a></li>
+        <li><a href="#contact">📞 Contact Us</a></li>
+        <li><a href="#reviews">⭐ Reviews</a></li>
+      </ul>
+
+      <!-- Customer Reviews Slider -->
+      <div class="reviews-slider">
+        <div class="review active">"Fast delivery! Highly recommended." – Jane D.</div>
+        <div class="review">"My package arrived in perfect condition." – Mark S.</div>
+        <div class="review">"Excellent tracking and customer service." – Priya K.</div>
+        <button class="prev">&#10094;</button>
+        <button class="next">&#10095;</button>
+      </div>
+
+      <!-- Business Info -->
+      <div class="business-info">
+        <h3>WORKING HOURS</h3>
+        <p>Mon-Sat: 7AM-5PM<br>Sunday: 9AM-3PM</p>
+
+        <h3>OUR LOCATION</h3>
+        <p>330 W 38th St #1607, New York, NY 10018, United States</p>
+
+        <h3>GLOBAL OFFICE</h3>
+        <p>Corporate Courier New York Inc.</p>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
