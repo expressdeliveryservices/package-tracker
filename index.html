@@ -4,55 +4,67 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Express Delivery Services - Live Tracker</title>
-<link rel="stylesheet" href="style.css">
+
+<!-- CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Sidebar with 3 Bubbles -->
-    <div class="sidebar">
-        <div class="bubble" onclick="navigate('home')">🏠 Home</div>
-        <div class="bubble" onclick="navigate('support')">💬 Support</div>
-        <div class="bubble" onclick="navigate('contact')">📞 Contact Us</div>
-        <div class="bubble" onclick="navigate('tracking')">📦 Tracking Service</div>
+
+<!-- Sidebar 3-bubble navigation -->
+<div class="sidebar">
+    <div class="bubble" onclick="navigate('home')">🏠 Home</div>
+    <div class="bubble" onclick="navigate('support')">💬 Support</div>
+    <div class="bubble" onclick="navigate('contact')">📞 Contact Us</div>
+    <div class="bubble" onclick="navigate('tracking')">📦 Tracking Service</div>
+</div>
+
+<!-- Header -->
+<header>
+    <h1>Express Delivery Services</h1>
+    <div id="languageSwitcher">
+        <img src="flags/us.png" onclick="changeLanguage('en')" alt="English" title="English">
+        <img src="flags/es.png" onclick="changeLanguage('es')" alt="Spanish" title="Spanish">
+        <img src="flags/fr.png" onclick="changeLanguage('fr')" alt="French" title="French">
+    </div>
+</header>
+
+<main>
+    <!-- Tracking Input -->
+    <div class="tracking-container" id="trackingInputSection">
+        <input type="text" id="trackingInput" placeholder="Enter Tracking Number">
+        <button id="trackBtn">Track Package</button>
     </div>
 
-    <!-- Header and Language Switcher -->
-    <header>
-        <h1>Express Delivery Services</h1>
-        <div id="languageSwitcher">
-            <img src="flags/us.png" onclick="changeLanguage('en')" alt="English" title="English">
-            <img src="flags/es.png" onclick="changeLanguage('es')" alt="Spanish" title="Spanish">
-            <img src="flags/fr.png" onclick="changeLanguage('fr')" alt="French" title="French">
-        </div>
-    </header>
+    <!-- Live Tracking Result -->
+    <div id="trackingResult">
+        <div class="status active">🟢 WE HAVE YOUR PACKAGE</div>
+        <div class="status pending">🔴 ON THE WAY</div>
+        <div class="status pending">🔴 OUT FOR DELIVERY</div>
+        <div class="status pending">🔴 TO NEW YORK, USA</div>
+    </div>
 
-    <main>
-        <!-- Tracking Input -->
-        <div class="tracking-container">
-            <input type="text" id="trackingInput" placeholder="Enter Tracking Number">
-            <button id="trackBtn">Track Package</button>
-        </div>
+    <!-- Live Map -->
+    <div id="map" style="height:600px; margin:20px;"></div>
 
-        <!-- Package Status -->
-        <div id="trackingResult"></div>
+    <!-- Customer Reviews -->
+    <section id="customerReviews">
+        <h2>What Our Customers Say</h2>
+        <div class="review active"><div class="customerName">John Doe</div>Fast and reliable service!</div>
+        <div class="review"><div class="customerName">Jane Smith</div>Package arrived on time!</div>
+        <div class="review"><div class="customerName">Alice Brown</div>Great tracking system.</div>
+        <div class="review"><div class="customerName">Bob White</div>Professional staff.</div>
+        <div class="review"><div class="customerName">Charlie Green</div>Highly recommended!</div>
+    </section>
+</main>
 
-        <!-- Live Map -->
-        <div id="map" style="height: 600px;"></div>
-
-        <!-- Customer Reviews Slideshow -->
-        <section id="customerReviews">
-            <h2>What Our Customers Say</h2>
-            <div id="reviewsContainer"></div>
-        </section>
-    </main>
-
-    <!-- Scripts -->
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="package.js"></script>
-    <script src="db.js"></script>
-    <script src="tracking.js"></script>
-    <script src="vehicles.js"></script>
-    <script src="reviews.js"></script>
-    <script src="script.js"></script>
+<!-- JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="package.js"></script>
+<script src="db.js"></script>
+<script src="tracking.js"></script>
+<script src="vehicles.js"></script>
+<script src="reviews.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
