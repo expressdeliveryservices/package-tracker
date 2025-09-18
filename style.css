@@ -1,22 +1,97 @@
+/* General Reset */
 body {
+  margin: 0;
   font-family: Arial, sans-serif;
+  color: #fff;
   text-align: center;
-  background: #f9f9f9;
-  padding: 50px;
+
+  /* Background image with trucks, containers, people packing goods */
+  background: url("images/delivery-bg.jpg") no-repeat center center fixed;
+  background-size: cover;
 }
 
-h1 {
-  color: #333;
+/* Overlay to make text readable */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5); /* semi-transparent dark overlay */
+  z-index: -1;
 }
 
-input, button {
+/* Header */
+header {
+  padding: 40px 20px 20px 20px;
+}
+
+header .logo {
+  max-width: 120px;
+  margin-bottom: 10px;
+}
+
+header .description {
+  max-width: 700px;
+  margin: 10px auto 0;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: #ddd;
+}
+
+/* Section Styling */
+.tracking, .countries, .contact {
+  background: rgba(0, 0, 0, 0.6); /* slightly darker overlay */
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 600px;
+}
+
+/* Footer */
+footer {
+  background: rgba(0, 0, 0, 0.8);
   padding: 10px;
-  margin: 5px;
-  font-size: 1em;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 
-#result {
-  margin-top: 20px;
+/* Form Elements */
+input[type="text"] {
+  padding: 10px;
+  width: 70%;
+  border: none;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #ff9900;
+  color: #000;
   font-weight: bold;
-  color: #0066cc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #e68a00;
+}
+
+/* Live chat button */
+.chat-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 15px;
+  background-color: #ff9900;
+  color: #000;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.chat-btn:hover {
+  background-color: #e68a00;
 }
