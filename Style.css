@@ -1,0 +1,21 @@
+body { font-family: Arial, sans-serif; margin: 0; }
+header { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background-color: #004080; color: #fff; }
+header h1 { margin: 0; font-size: 24px; }
+#languageSwitcher img { width: 30px; margin-left: 5px; cursor: pointer; }
+
+.sidebar { position: fixed; left: 10px; top: 100px; display: flex; flex-direction: column; gap: 10px; }
+.bubble { background-color: #004080; color: white; padding: 10px; border-radius: 50px; cursor: pointer; text-align: center; font-weight: bold; }
+
+.tracking-container { margin: 20px; display: flex; gap: 10px; justify-content: center; }
+#trackingInput { padding: 10px; width: 300px; font-size: 16px; }
+#trackBtn { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+
+#trackingResult { margin: 20px auto; width: 90%; max-width: 500px; font-size: 18px; }
+#customerReviews { margin: 40px auto; padding: 20px; background-color: #f7f7f7; border-radius: 10px; width: 90%; max-width: 600px; }
+#customerReviews h2 { text-align: center; margin-bottom: 20px; }
+#reviewsContainer { min-height: 80px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+
+.review { background: #fff; border-radius: 8px; padding: 10px 15px; margin-bottom: 10px; box-shadow: 0px 2px 5px rgba(0,0,0,0.1); width: 100%; text-align: center; }
+.review .customerName { font-weight: bold; margin-bottom: 5px; }
+.review .customerComment { font-style: italic; color: #555; }
+.review .rating { margin-top: 5px; color: #f5a623; }
