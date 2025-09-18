@@ -14,9 +14,10 @@
 <header class="header">
   <div class="logo">EXPRESS DELIVERY SERVICES</div>
   <div class="header-actions">
-    <button onclick="toggleChat()"><i class="fa fa-comments"></i> Live Chat</button>
-    <button onclick="openSupport()">Support</button>
-    <button onclick="openContact()">Contact Us</button>
+    <button onclick="scrollToSection('hero')"><i class="fa fa-box"></i> Tracking</button>
+    <button onclick="openSupport()"><i class="fa fa-headset"></i> Support</button>
+    <button onclick="openContact()"><i class="fa fa-phone"></i> Contact Us</button>
+    <button onclick="scrollToSection('reviews')"><i class="fa fa-star"></i> Reviews</button>
     <select id="languageSelect" onchange="changeLanguage()">
       <option value="en" selected>EN</option>
       <option value="es">ES</option>
@@ -28,7 +29,7 @@
 </header>
 
 <!-- Hero / Tracking Input -->
-<section class="hero">
+<section class="hero" id="hero">
   <h1>Live Package Tracking</h1>
   <div class="tracking-box">
     <input type="text" id="trackingNumber" placeholder="Enter your tracking number">
@@ -38,14 +39,14 @@
   </div>
 </section>
 
-<!-- Live Map -->
+<!-- Map Section -->
 <section id="map-section">
   <h2>Real-Time Package Map</h2>
   <div id="map"></div>
 </section>
 
 <!-- Newsletter -->
-<section class="newsletter">
+<section class="newsletter" id="newsletter">
   <h2>Subscribe to Our Newsletter</h2>
   <input type="email" id="newsletterEmail" placeholder="Your email">
   <button onclick="subscribeNewsletter()">Subscribe</button>
@@ -53,7 +54,7 @@
 </section>
 
 <!-- Customer Reviews -->
-<section class="reviews">
+<section class="reviews" id="reviews">
   <h2>Customer Feedback</h2>
   <div class="review-box">
     <div id="reviewText"></div>
@@ -61,10 +62,12 @@
   </div>
 </section>
 
-<!-- Optional Extended Description -->
+<!-- Extended Description -->
 <section class="extended-description">
   <h2>About Express Delivery Services</h2>
-  <p>Express Delivery Services provides real-time package tracking across the globe. With interactive maps, live status updates, support pop-ups, and customer reviews, users can monitor their packages seamlessly from dispatch to delivery. Our live chat ensures quick responses and our newsletter keeps you updated on delivery tips and promotions.</p>
+  <p>
+    Express Delivery Services provides real-time tracking for your packages with interactive maps, animated trucks, support and contact pop-ups, customer reviews, newsletter subscription, and multi-language support.
+  </p>
 </section>
 
 <!-- Live Chat -->
