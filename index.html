@@ -3,82 +3,69 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Express Delivery Services</title>
+<title>Express Delivery Services - Live Package Tracking</title>
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
 
-<!-- Compact Sidebar -->
-<div class="sidebar">
-  <h2>EXPRESS DELIVERY SERVICES</h2>
-  <button class="sidebar-main" onclick="toggleSidebarOption('shipping')"><i class="fa fa-shipping-fast"></i> Shipping & Tracking</button>
-  <div class="sidebar-options" id="shipping">
-    <a href="#" onclick="scrollToSection('tracking')">Tracking Package</a>
-    <a href="#" onclick="scrollToSection('map')">Live Map</a>
-  </div>
-
-  <button class="sidebar-main" onclick="toggleSidebarOption('support')"><i class="fa fa-headset"></i> Support</button>
-  <div class="sidebar-options" id="support">
-    <span>Email: Expressdeliveryservice0016@gmail.com</span>
-    <a href="#" onclick="toggleChat()">Live Chat</a>
-  </div>
-
-  <button class="sidebar-main" onclick="toggleSidebarOption('contact')"><i class="fa fa-envelope"></i> Contact</button>
-  <div class="sidebar-options" id="contact">
-    <span>Phone: +1 205-973-3572</span>
-    <span>HQ: 47-00 Northern Blvd, Long Island City, NY 11101, USA</span>
-  </div>
-
-  <div class="language-switcher">
-    <label for="languageSelect" style="color:#fff;">Language:</label>
+<!-- Header -->
+<header class="header">
+  <div class="logo">EXPRESS DELIVERY SERVICES</div>
+  <div class="header-actions">
+    <button onclick="toggleChat()"><i class="fa fa-comments"></i> Live Chat</button>
+    <button onclick="openSupport()">Support</button>
+    <button onclick="openContact()">Contact Us</button>
     <select id="languageSelect" onchange="changeLanguage()">
-      <option value="en" selected>English</option>
-      <option value="es">Spanish</option>
-      <option value="fr">French</option>
-      <option value="de">German</option>
-      <option value="pt">Portuguese</option>
+      <option value="en" selected>EN</option>
+      <option value="es">ES</option>
+      <option value="fr">FR</option>
+      <option value="de">DE</option>
+      <option value="pt">PT</option>
     </select>
   </div>
-</div>
+</header>
 
-<!-- Main Content -->
-<div class="main-content">
-
-  <h1 id="homeHeading">Track Your Package</h1>
-
-  <!-- Tracking Section -->
-  <div class="tracking-section" id="tracking">
-    <div class="tracking-input">
-      <input type="text" id="trackingNumber" placeholder="Enter your tracking number">
-      <button onclick="trackPackage()">Track</button>
-    </div>
-    <div class="delivery-box">
-      <h3>EXPRESS DELIVERY SERVICES</h3>
-      <div>Status: <span id="statusIndicator">🔴 Not Found</span></div>
-      <div id="trackingResult"></div>
-    </div>
+<!-- Hero / Tracking Input -->
+<section class="hero">
+  <h1>Live Package Tracking</h1>
+  <div class="tracking-box">
+    <input type="text" id="trackingNumber" placeholder="Enter your tracking number">
+    <button onclick="trackPackage()">Track</button>
+    <div class="delivery-status" id="statusIndicator"></div>
+    <div class="tracking-result" id="trackingResult"></div>
   </div>
+</section>
 
-  <!-- Map Section -->
+<!-- Live Map -->
+<section id="map-section">
+  <h2>Real-Time Package Map</h2>
   <div id="map"></div>
+</section>
 
-  <!-- Newsletter -->
-  <div class="newsletter">
-    <h3>Subscribe to Our Newsletter</h3>
-    <input type="email" id="newsletterEmail" placeholder="Enter your email">
-    <button onclick="subscribeNewsletter()">Subscribe</button>
-    <div id="newsletterMsg"></div>
-  </div>
+<!-- Newsletter -->
+<section class="newsletter">
+  <h2>Subscribe to Our Newsletter</h2>
+  <input type="email" id="newsletterEmail" placeholder="Your email">
+  <button onclick="subscribeNewsletter()">Subscribe</button>
+  <div id="newsletterMsg"></div>
+</section>
 
-  <!-- Customer Reviews -->
-  <div class="review-section">
-    <h3>Customer Reviews</h3>
-    <div class="review-text" id="reviewText"></div>
-    <div class="review-author" id="reviewAuthor"></div>
+<!-- Customer Reviews -->
+<section class="reviews">
+  <h2>Customer Feedback</h2>
+  <div class="review-box">
+    <div id="reviewText"></div>
+    <div id="reviewAuthor"></div>
   </div>
-</div>
+</section>
+
+<!-- Optional Extended Description -->
+<section class="extended-description">
+  <h2>About Express Delivery Services</h2>
+  <p>Express Delivery Services provides real-time package tracking across the globe. With interactive maps, live status updates, support pop-ups, and customer reviews, users can monitor their packages seamlessly from dispatch to delivery. Our live chat ensures quick responses and our newsletter keeps you updated on delivery tips and promotions.</p>
+</section>
 
 <!-- Live Chat -->
 <div class="chat-button" onclick="toggleChat()"><i class="fa fa-comments"></i></div>
@@ -88,6 +75,34 @@
   <div class="chat-input">
     <input type="text" id="chatInput" placeholder="Type your message...">
     <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
+
+<!-- Support Pop-Up -->
+<div class="popup" id="supportPopup">
+  <div class="popup-content">
+    <span class="close" onclick="closePopup('supportPopup')">&times;</span>
+    <h3>Support</h3>
+    <p>Send us a message and we’ll get back to you shortly!</p>
+    <input type="text" id="supportInput" placeholder="Type your message...">
+    <button onclick="sendSupport()">Send</button>
+    <div id="supportMsg"></div>
+    <h4>Customer Reviews</h4>
+    <div id="supportReviews"></div>
+  </div>
+</div>
+
+<!-- Contact Us Pop-Up -->
+<div class="popup" id="contactPopup">
+  <div class="popup-content">
+    <span class="close" onclick="closePopup('contactPopup')">&times;</span>
+    <h3>Contact Us</h3>
+    <p>Call or message us: +1 205-973-3572</p>
+    <input type="text" id="contactInput" placeholder="Type your message...">
+    <button onclick="sendContact()">Send</button>
+    <div id="contactMsg"></div>
+    <h4>Customer Reviews</h4>
+    <div id="contactReviews"></div>
   </div>
 </div>
 
