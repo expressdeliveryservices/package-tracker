@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Express Delivery Services - Live Tracking</title>
-  <link rel="stylesheet" href="style.css">
   <style>
     /* General Reset */
     body {
@@ -24,11 +23,16 @@
       font-size: 28px;
       font-weight: bold;
     }
-    .site-description {
+    .site-description, .extended-description {
       max-width: 700px;
       margin: 10px auto 0;
       font-size: 16px;
       line-height: 1.5;
+    }
+    .extended-description {
+      font-size: 14px;
+      color: #ddd;
+      margin-top: 10px;
     }
 
     /* Live Blinking Indicator */
@@ -84,13 +88,17 @@
       padding: 20px;
       background: #f9f9f9;
       border-radius: 10px;
+      text-align: center;
     }
-    .review-list p {
+    #review-display p {
       background: #fff;
       border-left: 5px solid #004080;
       padding: 10px;
-      margin: 10px 0;
+      margin: 10px auto;
       border-radius: 5px;
+      display: inline-block;
+      max-width: 500px;
+      font-style: italic;
     }
 
     /* Contact Section */
@@ -189,6 +197,162 @@
   </style>
 </head>
 <body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      🚚 Express Delivery Services 
+      <span class="live-indicator">● LIVE</span>
+    </div>
+    <p class="site-description">
+      At Express Delivery Services, we specialize in fast, reliable, and secure package deliveries. 
+      Whether it's local or international, our real-time tracking system keeps you updated on 
+      every step of your shipment’s journey.
+    </p>
+    <p class="extended-description">
+      Extended Description: With years of experience and a global courier network, our company 
+      offers reliable logistics solutions to individuals and businesses alike. From urgent same-day 
+      deliveries to international freight, we tailor our services to your needs.
+    </p>
+  </header>
+
+  <!-- Tracking Section -->
+  <section id="tracking">
+    <h2>📦 Track Your Package <span class="live-indicator">● LIVE</span></h2>
+    <form id="tracking-form">
+      <input type="text" id="tracking-id" placeholder="Enter Tracking Number" required>
+      <button type="submit">Track</button>
+    </form>
+    <div id="result"></div>
+    <p class="extended-description">
+      Extended Description: Our live tracking provides not just delivery status but 
+      also estimated time of arrival, package history, and stop points along the route. 
+      Stay informed about your delivery at every step.
+    </p>
+  </section>
+
+  <!-- Customer Reviews -->
+  <section id="reviews">
+    <h2>🌟 What Our Customers Say</h2>
+    <div id="review-display"></div>
+    <p class="extended-description">
+      Extended Description: Every review is from a verified customer who trusted us with 
+      their deliveries. We value your feedback as it helps us improve and maintain our 
+      commitment to excellence.
+    </p>
+  </section>
+
+  <!-- Contact Us -->
+  <section id="contact">
+    <h2>📞 Contact Us</h2>
+    <p>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></p>
+    <p>Phone: <a href="tel:+2349157677711">+234 915 767 7711</a></p>
+    <p class="extended-description">
+      Extended Description: Our dedicated support team is available 24/7 to handle your 
+      inquiries, complaints, or suggestions. You can reach us by email, phone, or live chat.
+    </p>
+  </section>
+
+  <!-- Live Chat Popup -->
+  <div class="chat-container">
+    <button id="chat-toggle">💬</button>
+    <div id="chat-box">
+      <h3>Live Chat Support</h3>
+      <div id="chat-messages"></div>
+      <input type="text" id="chat-input" placeholder="Type a message...">
+      <button id="send-btn">Send</button>
+      <p class="extended-description">
+        Extended Description: Chat live with our support team. Get help with tracking numbers, 
+        delivery issues, or service questions in real time.
+      </p>
+    </div>
+  </div>
+
+  <!-- Hamburger Menu -->
+  <div class="menu">
+    <button id="menu-toggle">☰</button>
+    <ul id="menu-options">
+      <li><a href="#tracking">📦 Track Package</a></li>
+      <li><a href="#reviews">🌟 Customer Reviews</a></li>
+      <li><a href="#contact">📞 Contact Us</a></li>
+      <li><a href="#chat">💬 Live Chat</a></li>
+    </ul>
+  </div>
+
+  <!-- Script -->
+  <script>
+    // Toggle Menu
+    document.getElementById('menu-toggle').addEventListener('click', () => {
+      const menu = document.getElementById('menu-options');
+      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // Chat
+    document.getElementById('chat-toggle').addEventListener('click', () => {
+      const chatBox = document.getElementById('chat-box');
+      chatBox.style.display = chatBox.style.display === 'block' ? 'none' : 'block';
+    });
+
+    document.getElementById('send-btn').addEventListener('click', () => {
+      const input = document.getElementById('chat-input');
+      const messages = document.getElementById('chat-messages');
+      if (input.value.trim() !== "") {
+        const msg = document.createElement('p');
+        msg.textContent = "You: " + input.value;
+        messages.appendChild(msg);
+        input.value = "";
+        messages.scrollTop = messages.scrollHeight;
+      }
+    });
+
+    // Tracking Form
+    document.getElementById('tracking-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const trackingId = document.getElementById('tracking-id').value;
+      const result = document.getElementById('result');
+      result.style.display = 'block';
+      result.innerHTML = `
+        WE HAVE YOUR PACKAGE<br>
+        <span class="live-indicator">● LIVE</span><br>
+        ON THE WAY<br>
+        OUT FOR DELIVERY<br>
+        Destination: New York, NY<br>
+        Date: ${new Date().toLocaleDateString()}<br>
+        Time: ${new Date().toLocaleTimeString()}
+      `;
+    });
+
+    // Customer reviews array
+    const reviews = [
+      "⭐️⭐️⭐️⭐️⭐️ 'Best delivery service I’ve ever used!' – John A.",
+      "⭐️⭐️⭐️⭐️⭐️ 'Fast and reliable, highly recommend!' – Sarah W.",
+      "⭐️⭐️⭐️⭐️ 'My package arrived on time and in great condition.' – Michael K.",
+      "⭐️⭐️⭐️⭐️⭐️ 'Excellent customer support, very helpful!' – Grace T.",
+      "⭐️⭐️⭐️⭐️⭐️ 'Tracking updates were super accurate.' – David L.",
+      "⭐️⭐️⭐️⭐️ 'Affordable and trustworthy.' – Maria P.",
+      "⭐️⭐️⭐️⭐️⭐️ 'Best choice for international shipping.' – Kevin R.",
+      "⭐️⭐️⭐️⭐️⭐️ 'Smooth process from start to finish.' – Fatima S.",
+      "⭐️⭐️⭐️⭐️⭐️ 'Delivery was quicker than expected.' – James C.",
+      "⭐️⭐️⭐️⭐️⭐️ 'I’ll definitely use Express Delivery again!' – Anita B."
+    ];
+
+    let currentReview = 0;
+    const reviewDisplay = document.getElementById("review-display");
+
+    function showReview() {
+      reviewDisplay.innerHTML = `<p>${reviews[currentReview]}</p>`;
+      currentReview = (currentReview + 1) % reviews.length; // Loop back
+    }
+
+    // Show first review immediately
+    showReview();
+
+    // Rotate every 4 seconds
+    setInterval(showReview, 4000);
+  </script>
+
+</body>
+</html>
 
   <!-- Header -->
   <header>
