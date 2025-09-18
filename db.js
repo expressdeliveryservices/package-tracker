@@ -1,16 +1,11 @@
-const mongoose = require("mongoose");
-
-const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/expressDelivery", {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
-    console.log("✅ MongoDB connected...");
-  } catch (err) {
-    console.error("❌ MongoDB connection failed", err);
-    process.exit(1);
-  }
+const trackingDB = {
+  "EXP123": { status: "In Transit", location: "New York" },
+  "EXP456": { status: "Delivered", location: "Los Angeles" },
 };
 
-module.exports = connectDB;
+const subscribers = [];
+
+module.exports = {
+  getTracking: async (number) => trackingDB[number],
+  addSubscriber: async (email) => subscribers.push(email),
+};
