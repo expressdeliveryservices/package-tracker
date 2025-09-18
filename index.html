@@ -10,7 +10,7 @@
 
 <style>
 body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f4f9; color:#333; }
-header { background:url('assets/delivery-truck.jpg') no-repeat center/cover; color:white; text-align:center; padding:60px 20px; }
+header { background:url('https://i.ibb.co/qJ1bF4L/delivery-truck.jpg') no-repeat center/cover; color:white; text-align:center; padding:60px 20px; }
 header .logo { font-size:32px; font-weight:bold; background:rgba(0,0,0,0.6); display:inline-block; padding:10px 20px; border-radius:8px; }
 header p { max-width:700px; margin:10px auto; font-size:16px; line-height:1.5; background:rgba(0,0,0,0.6); padding:10px; border-radius:5px; }
 
@@ -18,7 +18,7 @@ section { padding:40px 20px; max-width:900px; margin:auto; }
 #services ul { list-style:none; padding:0; }
 #services li { background:#fff; margin:10px 0; padding:10px; border-left:5px solid #004080; border-radius:5px; }
 
-#reviews { background:url('assets/airplane.png') no-repeat center/cover; border-radius:10px; text-align:center; color:white; padding:60px 20px; }
+#reviews { background:#004080; border-radius:10px; text-align:center; color:white; padding:60px 20px; }
 #review-display p { background:rgba(0,0,0,0.6); border-left:5px solid #ffd700; padding:10px; margin:10px auto; border-radius:5px; display:inline-block; max-width:600px; font-style:italic; color:#fff; }
 
 .menu { position:fixed; top:20px; right:20px; }
@@ -85,8 +85,11 @@ footer { background:#004080; color:white; padding:20px; text-align:center; }
 </section>
 
 <section id="extended-description">
-  <h2 id="ext-title">📖 Extended Description</h2>
-  <p id="ext-content">Loading...</p>
+  <h2>📖 Extended Description</h2>
+  <p id="ext-content">
+Express Delivery Services is committed to excellence in every shipment. 
+We provide secure packaging, express & same-day delivery, international shipping, business logistics, eco-friendly options, real-time tracking, mobile app integration, customer support 24/7, insurance & safety, and flexible delivery options.
+  </p>
 </section>
 
 <section id="tracking-section">
@@ -141,18 +144,76 @@ footer { background:#004080; color:white; padding:20px; text-align:center; }
 </footer>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="tracking.js"></script>
-<script src="script.js"></script>
-
 <script>
-// Map
-const map = L.map('world-map').setView([40.7128, -74.0060], 3);
+// 3-bubble menu
+document.getElementById('menu-toggle').addEventListener('click', ()=>{
+  const menu=document.getElementById('menu-options');
+  menu.style.display=(menu.style.display==='block')?'none':'block';
+});
+
+// Chat popup
+document.getElementById('chat-toggle').addEventListener('click', ()=>{
+  const chat=document.getElementById('chat-box');
+  chat.style.display=(chat.style.display==='block')?'none':'block';
+});
+document.getElementById('send-btn').addEventListener('click', ()=>{
+  const input=document.getElementById('chat-input');
+  if(input.value.trim()!==""){
+    const msg=document.createElement('p');
+    msg.textContent="You: "+input.value;
+    document.getElementById('chat-messages').appendChild(msg);
+    input.value="";
+  }
+});
+
+// Tracking simulation
+document.getElementById('track-btn').addEventListener('click', ()=>{
+  const num=document.getElementById('tracking-input').value;
+  document.getElementById('tracking-result').textContent=
+    num ? "Tracking "+num+": Package is in transit. Estimated delivery in 2 days." : "Enter a valid tracking number.";
+});
+
+// Reviews rotation
+const reviews=[
+  "⭐️⭐️⭐️⭐️⭐️ 'Best delivery service ever!' – John A.",
+  "⭐️⭐️⭐️⭐️⭐️ 'Fast and reliable!' – Sarah W.",
+  "⭐️⭐️⭐️⭐️ 'Package arrived on time.' – Michael K.",
+  "⭐️⭐️⭐️⭐️⭐️ 'Excellent customer support!' – Grace T.",
+  "⭐️⭐️⭐️⭐️⭐️ 'Smooth process from start to finish.' – Fatima S."
+];
+let currentReview=0;
+function showReview(){
+  document.getElementById('review-display').innerHTML="<p>"+reviews[currentReview]+"</p>";
+  currentReview=(currentReview+1)%reviews.length;
+}
+showReview();
+setInterval(showReview,5000);
+
+// Newsletter simulation
+document.getElementById('subscribe-btn').addEventListener('click',()=>{
+  const email=document.getElementById('newsletter-email').value;
+  if(email.trim()!==""){
+    document.getElementById('newsletter-result').textContent="Subscribed successfully with "+email+"!";
+    document.getElementById('newsletter-email').value="";
+  } else alert("Enter a valid email!");
+});
+
+// Counters animation
+function animateCounter(id,target){
+  let count=0; const step=Math.ceil(target/100);
+  const interval=setInterval(()=>{
+    count+=step;
+    if(count>=target){ count=target; clearInterval(interval); }
+    document.getElementById(id).textContent=count;
+  },30);
+}
+window.addEventListener('load',()=>{
+  animateCounter('packages',12500);
+  animateCounter('customers',8500);
+  animateCounter('countries',120);
+});
+
+// Leaflet map with moving vehicle and airplane
+const map=L.map('world-map').setView([40.7128,-74.0060],3);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
-
-const hq = L.marker([40.7061,-74.0092]).addTo(map)
-  .bindPopup("<b>Express Delivery Services HQ</b><br>55 Water St #28, New York, NY 10041, USA").openPopup();
-
-const vehicle = L.marker([40.7,-74.0]).addTo(map).bindPopup("Delivery Truck 🚚");
-let vehicleLat=40.7,vehicleLng=-74.0;
-
-const airplane = L.marker([41.0,-73.5],{icon:L.icon({iconUrl
+const hq=L.marker([40.7061,-74.0092]).add
