@@ -6,7 +6,7 @@
 <title>Express Delivery Services</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <style>
-body { font-family: Arial, sans-serif; margin:0; padding:0; scroll-behavior:smooth; background:#f4f4f9; color:#333; }
+body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f4f9; scroll-behavior:smooth; }
 header { background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("https://i.ibb.co/qJ1bF4L/delivery-truck.jpg") no-repeat center/cover; color:white; padding:100px 20px; text-align:center; }
 header .logo { display:flex; align-items:center; justify-content:center; font-size:32px; font-weight:bold; }
 header .logo img { width:50px; height:50px; margin-right:10px; }
@@ -44,30 +44,30 @@ footer { background:#004080; color:white; padding:30px 20px; text-align:center; 
 #services li { background:#fff; margin:10px 0; padding:15px; border-left:5px solid #004080; border-radius:5px; font-size:16px; }
 .blink { animation: blink 1s infinite; }
 @keyframes blink { 0%{opacity:1}50%{opacity:0}100%{opacity:1} }
+.newsletter-articles article { background:#fff; padding:15px; border-radius:8px; margin:10px 0; border-left:5px solid #004080; }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">
-    <img src="https://i.ibb.co/QFvZ5sM/delivery-icon.png" alt="Logo">
-    Express Delivery Services
-  </div>
-  <p>Fast, reliable, and secure deliveries across the globe. Track your packages in real time.</p>
+<div class="logo">
+<img src="https://i.ibb.co/QFvZ5sM/delivery-icon.png" alt="Logo"> Express Delivery Services
+</div>
+<p>Fast, reliable, and secure deliveries across the globe. Track your packages in real time.</p>
 </header>
 
 <div class="menu">
-  <button id="menu-toggle">☰</button>
-  <ul id="menu-options">
-    <li><a href="#about">ℹ️ About</a></li>
-    <li><a href="#services">🚚 Services</a></li>
-    <li><a href="#counters">📊 Stats</a></li>
-    <li><a href="#track">🔍 Track</a></li>
-    <li><a href="#reviews">🌟 Reviews</a></li>
-    <li><a href="#global">✈️ Global</a></li>
-    <li><a href="#faq">❓ FAQ</a></li>
-    <li><a href="#newsletter">📬 Subscribe</a></li>
-  </ul>
+<button id="menu-toggle">☰</button>
+<ul id="menu-options">
+<li><a href="#about">ℹ️ About</a></li>
+<li><a href="#services">🚚 Services</a></li>
+<li><a href="#counters">📊 Stats</a></li>
+<li><a href="#track">🔍 Track</a></li>
+<li><a href="#reviews">🌟 Reviews</a></li>
+<li><a href="#global">✈️ Global</a></li>
+<li><a href="#faq">❓ FAQ</a></li>
+<li><a href="#newsletter">📬 Newsletter</a></li>
+</ul>
 </div>
 
 <section id="about">
@@ -75,7 +75,8 @@ footer { background:#004080; color:white; padding:30px 20px; text-align:center; 
 <p>Express Delivery Services has been providing top-notch courier solutions for over a decade...
 <span id="dots">...</span>
 <span id="more-text" style="display:none;">
-Whether by road 🚚 or air ✈️, we ensure your parcels arrive safely and on time. Our network spans 100+ countries with real-time tracking, business solutions, and 24/7 support.
+Whether by road 🚚 or air ✈️, we ensure your parcels reach their destination safely and on time.  
+Our global network spans over 100 countries, equipped with real-time tracking, advanced logistics, and 24/7 customer support.
 </span></p>
 <button id="read-more-btn">Read more</button>
 </section>
@@ -124,9 +125,26 @@ Whether by road 🚚 or air ✈️, we ensure your parcels arrive safely and on 
 </section>
 
 <section id="newsletter">
-<h2>📬 Subscribe for Updates</h2>
-<input type="email" placeholder="Enter your email">
-<button type="submit">Subscribe</button>
+<h2>📬 Delivery & Shipping News</h2>
+<p>Stay updated with the latest news, tips, and updates from Express Delivery Services.</p>
+<div class="newsletter-articles">
+<article>
+<h3>New Express Routes Across North America</h3>
+<p>We’ve expanded our express delivery routes to cover more cities in the US and Canada, ensuring faster parcel delivery.</p>
+</article>
+<article>
+<h3>International Shipping Made Easier</h3>
+<p>Shipping internationally is now simpler with updated customs clearance and tracking tools.</p>
+</article>
+<article>
+<h3>Tips for Secure Packaging</h3>
+<p>Learn the best ways to package fragile and valuable items to ensure they arrive safely at their destination.</p>
+</article>
+</div>
+<h3>Subscribe for More Updates</h3>
+<input type="email" id="newsletter-email" placeholder="Enter your email">
+<button id="subscribe-btn">Subscribe</button>
+<p id="subscribe-result" style="font-weight:bold; margin-top:10px;"></p>
 </section>
 
 <div class="chat-container">
@@ -145,25 +163,57 @@ Whether by road 🚚 or air ✈️, we ensure your parcels arrive safely and on 
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
-// Menu toggle
-document.getElementById('menu-toggle').addEventListener('click', () => {
-  const menu = document.getElementById('menu-options');
-  menu.style.display = menu.style.display==='block'?'none':'block';
+// Read more toggle
+document.getElementById("read-more-btn").addEventListener("click", function() {
+let dots=document.getElementById("dots"), more=document.getElementById("more-text");
+if(more.style.display==="none"){more.style.display="inline";dots.style.display="none";this.textContent="Read less";}
+else{more.style.display="none";dots.style.display="inline";this.textContent="Read more";}
 });
 
-// Chat toggle
+// Menu toggle
+document.getElementById('menu-toggle').addEventListener('click', ()=>{
+const menu=document.getElementById('menu-options');
+menu.style.display=menu.style.display==='block'?'none':'block';
+});
+
+// Chat
 document.getElementById('chat-toggle').addEventListener('click', ()=>{
-  const chatBox=document.getElementById('chat-box');
-  chatBox.style.display = chatBox.style.display==='block'?'none':'block';
+const chatBox=document.getElementById('chat-box');
+chatBox.style.display=chatBox.style.display==='block'?'none':'block';
 });
 document.getElementById('send-btn').addEventListener('click',()=>{
-  const input=document.getElementById('chat-input');
-  if(input.value.trim()!==""){
-    const p=document.createElement('p'); p.textContent="You: "+input.value;
-    document.getElementById('chat-messages').appendChild(p);
-    input.value=""; document.getElementById('chat-messages').scrollTop=document.getElementById('chat-messages').scrollHeight;
-  }
+const input=document.getElementById('chat-input');
+if(input.value.trim()!==""){
+const p=document.createElement('p'); p.textContent="You: "+input.value;
+document.getElementById('chat-messages').appendChild(p); input.value="";
+document.getElementById('chat-messages').scrollTop=document.getElementById('chat-messages').scrollHeight;
+}
 });
 
-// Read more
-document.getElementById("read-more-btn").addEventListener("
+// Counters animation
+function animateCounter(id,target){
+let count=0;const el=document.getElementById(id);
+let interval=setInterval(()=>{if(count>=target){clearInterval(interval);} else{count+=Math.ceil(target/100);el.innerHTML=el.innerHTML.split("<br>")[0]+"<br>"+count;}},30);
+}
+animateCounter("packages",12500);
+animateCounter("customers",4800);
+animateCounter("countries",95);
+
+// Customer reviews
+const reviews=["⭐️⭐️⭐️⭐️⭐️ 'Best delivery service ever!' – John A.","⭐️⭐️⭐️⭐️⭐️ 'Fast and reliable!' – Sarah W.","⭐️⭐️⭐️⭐️ 'Package arrived on time.' – Michael K","⭐️⭐️⭐️⭐️⭐️ 'Excellent support!' – Grace T"];
+let currentReview=0; const reviewDisplay=document.getElementById("review-display");
+function showReview(){reviewDisplay.innerHTML=`<p>${reviews[currentReview]}</p>`;currentReview=(currentReview+1)%reviews.length;}
+showReview();setInterval(showReview,5000);
+
+// Tracking simulation
+document.getElementById('track-btn').addEventListener('click',()=>{
+let val=document.getElementById('tracking-input').value.trim();
+document.getElementById('tracking-result').textContent=val?`Tracking ${val}: Your package is on its way!`:"Please enter a tracking number.";
+});
+
+// Newsletter subscription
+document.getElementById('subscribe-btn').addEventListener('click',()=>{
+let email=document.getElementById('newsletter-email').value.trim();
+const res=document.getElementById('subscribe-result');
+if(!email){res.textContent="Please enter a valid email.";res.style.color="red";}
+else{res.textContent="Thank you! You are subscribed.";res.style.color="green";
