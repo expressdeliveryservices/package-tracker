@@ -6,73 +6,40 @@
 <title>Express Delivery Services</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <style>
-body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f4f9; color:#333; overflow-x:hidden; }
-
-/* Header / Hero */
-header {
-  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("https://i.ibb.co/qJ1bF4L/delivery-truck.jpg") no-repeat center/cover;
-  color:white; padding:100px 20px; text-align:center; position:relative; overflow:hidden;
-}
-header .logo {
-  display:flex; align-items:center; justify-content:center; font-size:32px; font-weight:bold;
-}
+body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f4f9; color:#333; overflow-x:hidden; scroll-behavior: smooth; }
+header { background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("https://i.ibb.co/qJ1bF4L/delivery-truck.jpg") no-repeat center/cover; color:white; padding:100px 20px; text-align:center; }
+header .logo { display:flex; align-items:center; justify-content:center; font-size:32px; font-weight:bold; }
 header .logo img { width:50px; height:50px; margin-right:10px; }
 header p { max-width:800px; margin:20px auto; font-size:18px; line-height:1.6; }
-
-/* Sections */
 section { padding:60px 20px; max-width:1000px; margin:auto; }
 h2 { text-align:center; margin-bottom:30px; }
-
-/* Extended Description */
 #read-more-btn { background:#004080; color:white; border:none; padding:8px 12px; margin-top:10px; cursor:pointer; border-radius:5px; font-size:14px; }
 #read-more-btn:hover { background:#0066cc; }
-
-/* Counters */
 .counter-container { display:flex; justify-content:space-around; margin-top:30px; text-align:center; flex-wrap:wrap; }
-.counter { background:#004080; color:white; padding:20px; border-radius:10px; width:180px; font-size:18px; margin:10px; }
-
-/* Reviews */
+.counter { background:#004080; color:white; padding:20px; border-radius:10px; width:180px; font-size:18px; margin:10px; transition: all 0.5s; }
 #reviews { background:#004080; border-radius:10px; text-align:center; color:white; padding:60px 20px; }
 #review-display p { background: rgba(255,255,255,0.2); padding:15px; margin:10px auto; border-radius:5px; display:inline-block; max-width:700px; font-style:italic; color:#fff; transition: opacity 0.5s; }
-
-/* Map */
 #world-map { height:500px; width:100%; margin-top:20px; border-radius:10px; border:2px solid #004080; }
-
-/* Live indicator */
-.live-indicator { font-weight:bold; font-size:20px; margin-left:5px; }
-
-/* Track */
 #track input { padding:10px; width:300px; margin-right:10px; }
 #track button { padding:10px 15px; background:#004080; color:white; border:none; cursor:pointer; border-radius:5px; }
 #tracking-result { margin-top:10px; font-weight:bold; }
-
-/* FAQ */
-.faq-item { background:#fff; border-radius:5px; margin:10px 0; padding:10px; border-left:5px solid #004080; cursor:pointer; }
+.faq-item { background:#fff; border-radius:5px; margin:10px 0; padding:10px; border-left:5px solid #004080; cursor:pointer; transition:0.3s; }
+.faq-item:hover { background:#e6f0ff; }
 .faq-answer { display:none; margin-top:10px; }
-
-/* Newsletter */
 #newsletter input[type="email"] { padding:10px; width:300px; margin-right:10px; }
 #newsletter button { padding:10px 15px; background:#004080; color:white; border:none; cursor:pointer; border-radius:5px; }
-
-/* Footer */
 footer { background:#004080; color:white; padding:30px 20px; text-align:center; }
-
-/* Menu 3-bubble */
 .menu { position:fixed; top:20px; right:20px; z-index:9999; }
 #menu-toggle { font-size:22px; background:#004080; color:white; border:none; padding:10px 15px; cursor:pointer; border-radius:5px; }
 #menu-options { list-style:none; margin:0; padding:10px; background:white; border:1px solid #ccc; border-radius:5px; position:absolute; top:40px; right:0; display:none; }
 #menu-options li { margin:10px 0; }
 #menu-options a { text-decoration:none; color:#004080; font-weight:bold; }
-
-/* Chat Popup */
 .chat-container { position:fixed; bottom:20px; right:20px; z-index:9999; }
 #chat-toggle { padding:10px 15px; background:#004080; color:white; border:none; border-radius:50%; font-size:18px; cursor:pointer; }
 #chat-box { position:absolute; bottom:50px; right:0; width:300px; background:white; border:1px solid #ccc; border-radius:10px; padding:10px; display:none; }
 #chat-messages { height:120px; overflow-y:auto; border:1px solid #eee; margin-bottom:10px; padding:5px; }
 #chat-input { width:70%; padding:5px; }
 #send-btn { width:25%; padding:5px; background:#004080; color:white; border:none; cursor:pointer; }
-
-/* Services Section */
 #services ul { list-style:none; padding:0; }
 #services li { background:#fff; margin:10px 0; padding:15px; border-left:5px solid #004080; border-radius:5px; font-size:16px; }
 </style>
@@ -87,7 +54,6 @@ footer { background:#004080; color:white; padding:30px 20px; text-align:center; 
   <p>Fast, reliable, and secure deliveries across the globe. Track your packages in real time and stay updated with our advanced logistics system.</p>
 </header>
 
-<!-- 3-Bubble Menu -->
 <div class="menu">
   <button id="menu-toggle">☰</button>
   <ul id="menu-options">
@@ -102,23 +68,31 @@ footer { background:#004080; color:white; padding:30px 20px; text-align:center; 
   </ul>
 </div>
 
-<!-- About Section -->
 <section id="about">
-  <h2>About Us</h2>
-  <p>
-    Express Delivery Services has been providing top-notch courier solutions for over a decade
-    <span id="dots">...</span>
-    <span id="more-text" style="display:none;">
-      Whether by road 🚚 or by air ✈️, we ensure your parcels reach their destination safely and on time.
-      Our global network spans over 100 countries, equipped with real-time tracking, advanced logistics,
-      and dedicated customer support available 24/7. We cater to businesses and individuals alike,
-      offering reliable shipping solutions for every need.
-    </span>
-  </p>
-  <button id="read-more-btn">Read more</button>
+<h2>About Us</h2>
+<p>
+Express Delivery Services has been providing top-notch courier solutions for over a decade
+<span id="dots">...</span>
+<span id="more-text" style="display:none;">
+Whether by road 🚚 or by air ✈️, we ensure your parcels reach their destination safely and on time.
+Our global network spans over 100 countries, equipped with real-time tracking, advanced logistics,
+and dedicated customer support available 24/7. We cater to businesses and individuals alike,
+offering reliable shipping solutions for every need.
+<br><br>
+<strong>Optional Extended Description:</strong>
+<ul>
+<li>✅ Secure packaging and handling for all items.</li>
+<li>✅ Express and same-day delivery options for urgent shipments.</li>
+<li>✅ Business logistics support for bulk orders and corporate clients.</li>
+<li>✅ Environmentally friendly delivery initiatives with eco-friendly vehicles.</li>
+<li>✅ Integration with mobile apps and online dashboards for seamless tracking.</li>
+<li>✅ Personalized customer service to ensure satisfaction.</li>
+</ul>
+</span>
+</p>
+<button id="read-more-btn">Read more</button>
 </section>
 
-<!-- Services Section -->
 <section id="services">
 <h2>Our Services 🚚 ✈️</h2>
 <ul>
@@ -130,7 +104,6 @@ footer { background:#004080; color:white; padding:30px 20px; text-align:center; 
 </ul>
 </section>
 
-<!-- Counters -->
 <section id="counters">
 <div class="counter-container">
 <div class="counter" id="packages">Packages Delivered<br>0</div>
@@ -139,7 +112,6 @@ footer { background:#004080; color:white; padding:30px 20px; text-align:center; 
 </div>
 </section>
 
-<!-- Track Your Package -->
 <section id="track">
 <h2>🔍 Track Your Package</h2>
 <input type="text" id="tracking-input" placeholder="Enter tracking number">
@@ -147,20 +119,17 @@ footer { background:#004080; color:white; padding:30px 20px; text-align:center; 
 <p id="tracking-result"></p>
 </section>
 
-<!-- Reviews -->
 <section id="reviews">
 <h2>🌟 Customer Reviews</h2>
 <div id="review-display"></div>
 </section>
 
-<!-- Global Map -->
 <section id="global">
 <h2>Global Reach 🌍</h2>
 <p>Live package movements and office locations of Express Delivery Services:</p>
 <div id="world-map"></div>
 </section>
 
-<!-- FAQ -->
 <section id="faq">
 <h2>❓ Frequently Asked Questions</h2>
 <div class="faq-item">How long does delivery take?<div class="faq-answer">Delivery typically takes 2-5 business days depending on location.</div></div>
@@ -168,14 +137,12 @@ footer { background:#004080; color:white; padding:30px 20px; text-align:center; 
 <div class="faq-item">Can I track my package?<div class="faq-answer">Absolutely, real-time tracking is available for every shipment.</div></div>
 </section>
 
-<!-- Newsletter -->
 <section id="newsletter">
 <h2>📬 Subscribe for Updates & Promotions</h2>
 <input type="email" placeholder="Enter your email">
 <button type="submit">Subscribe</button>
 </section>
 
-<!-- Live Chat -->
 <div class="chat-container">
 <button id="chat-toggle">💬</button>
 <div id="chat-box">
@@ -193,20 +160,21 @@ footer { background:#004080; color:white; padding:30px 20px; text-align:center; 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
 // Read more toggle
-document.getElementById("read-more-btn").addEventListener("click", function() {
-  const moreText = document.getElementById("more-text");
-  const dots = document.getElementById("dots");
-  const btn = document.getElementById("read-more-btn");
-  if (moreText.style.display === "none") { moreText.style.display = "inline"; dots.style.display = "none"; btn.textContent = "Read less"; }
-  else { moreText.style.display = "none"; dots.style.display = "inline"; btn.textContent = "Read more"; }
+document.getElementById("read-more-btn").addEventListener("click", function(){
+const moreText = document.getElementById("more-text");
+const dots = document.getElementById("dots");
+const btn = document.getElementById("read-more-btn");
+if(moreText.style.display==="none"){moreText.style.display="inline";dots.style.display="none";btn.textContent="Read less";}
+else{moreText.style.display="none";dots.style.display="inline";btn.textContent="Read more";}
 });
 
 // Counters
 const counters = [{id:"packages",end:12000},{id:"customers",end:8500},{id:"countries",end:100}];
-counters.forEach(c=>{let count=0; const el=document.getElementById(c.id); const interval=setInterval(()=>{count+=Math.ceil(c.end/200); if(count>=c.end){count=c.end; clearInterval(interval);} el.innerHTML=el.innerHTML.split('<br>')[0]+"<br>"+count;},20);});
-
-// FAQ toggle
-document.querySelectorAll('.faq-item').forEach(item=>{item.addEventListener('click',()=>{const answer=item.querySelector('.faq-answer'); answer.style.display=answer.style.display==='block'?'none':'block';});});
+counters.forEach(c=>{
+let count=0;const el=document.getElementById(c.id);const interval=setInterval(()=>{
+count+=Math.ceil(c.end/200);if(count>=c.end){count=c.end;clearInterval(interval);}
+el.innerHTML=el.innerHTML.split('<br>')[0]+"<br>"+count;},20);});
 
 // Reviews carousel
-const reviews = ["⭐️⭐️⭐️⭐️⭐️ 'Best delivery service I
+const reviews=[
+"⭐️⭐️⭐️⭐️
