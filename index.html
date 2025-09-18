@@ -10,6 +10,7 @@
 
 <style>
 body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f4f9; color:#333; overflow-x:hidden; }
+
 /* Header */
 header {
   background: url("https://i.ibb.co/qJ1bF4L/delivery-truck.jpg") no-repeat center/cover;
@@ -47,6 +48,11 @@ section { padding:40px 20px; max-width:900px; margin:auto; }
 
 /* Map */
 #world-map { height:500px; width:100%; margin-top:20px; border-radius:10px; }
+
+/* Tracking */
+#track input { padding:8px; width:250px; }
+#track button { padding:8px 12px; background:#004080; color:white; border:none; cursor:pointer; border-radius:5px; }
+#tracking-result { margin-top:10px; font-weight:bold; }
 
 /* Chat */
 .chat-container { position: fixed; bottom:20px; right:20px; }
@@ -114,6 +120,15 @@ footer { background:#004080; color:white; padding:20px; text-align:center; posit
   </div>
 </section>
 
+<!-- Track Your Package -->
+<section id="track">
+  <h2>🔍 Track Your Package</h2>
+  <p>Enter your tracking number below to see the latest status of your shipment.</p>
+  <input type="text" id="tracking-input" placeholder="Enter tracking number">
+  <button id="track-btn">Track</button>
+  <p id="tracking-result"></p>
+</section>
+
 <!-- Reviews -->
 <section id="reviews">
   <h2>🌟 What Our Customers Say</h2>
@@ -132,8 +147,8 @@ footer { background:#004080; color:white; padding:20px; text-align:center; posit
 <section id="newsletter">
   <h2>📬 Subscribe for Updates & Promotions</h2>
   <form>
-    <input type="email" placeholder="Enter your email" required style="padding:8px; width:250px;">
-    <button type="submit" style="padding:8px 12px; background:#004080; color:white; border:none; cursor:pointer;">Subscribe</button>
+    <input type="email" placeholder="Enter your email" required>
+    <button type="submit">Subscribe</button>
   </form>
 </section>
 
@@ -165,126 +180,4 @@ footer { background:#004080; color:white; padding:20px; text-align:center; posit
 <!-- Menu -->
 <div class="menu">
   <button id="menu-toggle">☰</button>
-  <ul id="menu-options">
-    <li><a href="#about">ℹ️ About</a></li>
-    <li><a href="#services">🚚 Services</a></li>
-    <li><a href="#reviews">🌟 Reviews</a></li>
-    <li><a href="#faq">❓ FAQ</a></li>
-    <li><a href="#global">✈️ Global Shipping</a></li>
-    <li><a href="#newsletter">📬 Newsletter</a></li>
-    <li><a href="#contact">📞 Contact</a></li>
-  </ul>
-</div>
-
-<!-- Footer -->
-<footer>
-  <p>🚚 Express Delivery Services © 2025. Fast. Reliable. Global.</p>
-</footer>
-
-<!-- Scripts -->
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script>
-// Extended Description
-document.getElementById("read-more-btn").addEventListener("click", function() {
-  const moreText = document.getElementById("more-text");
-  const dots = document.getElementById("dots");
-  const btn = document.getElementById("read-more-btn");
-  if (moreText.style.display === "none") { moreText.style.display="inline"; dots.style.display="none"; btn.textContent="Read less"; }
-  else { moreText.style.display="none"; dots.style.display="inline"; btn.textContent="Read more"; }
-});
-
-// Reviews Carousel
-const reviews = [
-  "⭐️⭐️⭐️⭐️⭐️ 'Best delivery service I’ve ever used!' – John A.",
-  "⭐️⭐️⭐️⭐️⭐️ 'Fast and reliable, highly recommend!' – Sarah W.",
-  "⭐️⭐️⭐️⭐ 'My package arrived on time and in great condition.' – Michael K.",
-  "⭐️⭐️⭐️⭐️⭐️ 'Excellent customer support, very helpful!' – Grace T."
-];
-let currentReview = 0;
-const reviewDisplay = document.getElementById("review-display");
-function showReview() { reviewDisplay.innerHTML=`<p>${reviews[currentReview]}</p>`; currentReview=(currentReview+1)%reviews.length; }
-showReview(); setInterval(showReview,4000);
-
-// Chat toggle
-document.getElementById('chat-toggle').addEventListener('click',()=>{const chatBox=document.getElementById('chat-box'); chatBox.style.display=chatBox.style.display==='block'?'none':'block';});
-document.getElementById('send-btn').addEventListener('click',()=>{const input=document.getElementById('chat-input'); const messages=document.getElementById('chat-messages'); if(input.value.trim()!==""){const msg=document.createElement('p'); msg.textContent="You: "+input.value; messages.appendChild(msg); input.value=""; messages.scrollTop=messages.scrollHeight;}});
-
-// Menu toggle
-document.getElementById('menu-toggle').addEventListener('click',()=>{const menu=document.getElementById('menu-options'); menu.style.display=menu.style.display==='block'?'none':'block';});
-
-// Counters
-const counters = [{id:"packages",end:12000},{id:"customers",end:8500},{id:"countries",end:100}];
-counters.forEach(c=>{let count=0; const el=document.getElementById(c.id); const interval=setInterval(()=>{count+=Math.ceil(c.end/200); if(count>=c.end){count=c.end; clearInterval(interval);} el.innerHTML=el.innerHTML.split('<br>')[0]+"<br>"+count;},20);});
-
-// FAQ toggle
-document.querySelectorAll('.faq-item').forEach(item=>{item.addEventListener('click',()=>{const answer=item.querySelector('.faq-answer'); answer.style.display=answer.style.display==='block'?'none':'block';});});
-
-// Leaflet Map with Animated Trucks
-const map = L.map('world-map').setView([39.8283,-98.5795],3);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18, attribution:'© OpenStreetMap'}).addTo(map);
-
-// HQ
-const hqMarker = L.marker([40.7128,-74.0060]).addTo(map);
-hqMarker.bindPopup("<b>Express Delivery Services HQ</b><br>New York, USA").openPopup();
-
-// Global offices
-const globalLocations = [
-  [51.5074,-0.1278,"London, UK"],
-  [48.8566,2.3522,"Paris, France"],
-  [35.6895,139.6917,"Tokyo, Japan"],
-  [-33.8688,151.2093,"Sydney, Australia"],
-  [28.6139,77.2090,"New Delhi, India"]
-];
-globalLocations.forEach(loc => { L.marker([loc[0], loc[1]]).addTo(map).bindPopup("<b>Express Delivery Services</b><br>"+loc[2]); });
-
-// Truck Icon
-const truckIcon = L.icon({ iconUrl:'https://i.ibb.co/TM4d2qS/truck.png', iconSize:[30,30] });
-
-// Animate trucks along routes
-function createCurve(start,end){
-  const control = [(start[0]+end[0])/2 + 10, (start[1]+end[1])/2 + 10];
-  const curvePoints = [];
-  const steps = 200;
-  for(let t=0; t<=1; t+=1/steps){
-    const lat = (1-t)**2*start[0] + 2*(1-t)*t*control[0] + t**2*end[0];
-    const lng = (1-t)**2*start[1] + 2*(1-t)*t*control[1] + t**2*end[1];
-    curvePoints.push([lat,lng]);
-  }
-  return curvePoints;
-}
-
-globalLocations.forEach(loc => {
-  const start = [40.7128,-74.0060];
-  const end = [loc[0],loc[1]];
-  const curve = createCurve(start,end);
-  L.polyline(curve,{color:'green',weight:2,opacity:0.5}).addTo(map);
-
-  for(let i=0;i<2;i++){
-    const marker = L.marker(start,{icon:truckIcon}).addTo(map);
-    let progress = Math.random();
-    const speed = 0.001 + Math.random()*0.002;
-    function animate(){
-      progress += speed;
-      if(progress>1) progress=0;
-      const t = progress;
-      const lat = (1-t)**2*start[0] + 2*(1-t)*t*((start[0]+end[0])/2 +10) + t**2*end[0];
-      const lng = (1-t)**2*start[1] + 2*(1-t)*t*((start[1]+end[1])/2 +10) + t**2*end[1];
-      marker.setLatLng([lat,lng]);
-      requestAnimationFrame(animate);
-    }
-    animate();
-  }
-});
-
-// Animate header vehicles
-function animateVehicles(){
-  const truck=document.getElementById('truck1'); const plane=document.getElementById('plane1');
-  let truckX=parseInt(truck.style.left); let planeX=parseInt(plane.style.left);
-  truckX+=2; if(truckX>window.innerWidth){truckX=-50;} truck.style.left=truckX+'px';
-  planeX+=3; if(planeX>window.innerWidth){planeX=-50;} plane.style.left=planeX+'px';
-  requestAnimationFrame(animateVehicles);
-}
-animateVehicles();
-</script>
-</body>
-</html>
+  <ul id="menu
