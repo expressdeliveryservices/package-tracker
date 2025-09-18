@@ -5,50 +5,304 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Express Delivery Services - Live Tracking</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* General Reset */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f9;
+      color: #333;
+    }
+    header {
+      background: #004080;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    header .logo {
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .site-description {
+      max-width: 700px;
+      margin: 10px auto 0;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    /* Live Blinking Indicator */
+    .live-indicator {
+      font-size: 14px;
+      font-weight: bold;
+      margin-left: 10px;
+      color: red;
+      animation: blink 1s infinite;
+    }
+    @keyframes blink {
+      0% { color: red; }
+      50% { color: green; }
+      100% { color: red; }
+    }
+
+    /* Tracking Section */
+    #tracking {
+      text-align: center;
+      padding: 30px;
+      background: white;
+      margin: 20px;
+      border-radius: 10px;
+    }
+    #tracking input {
+      padding: 10px;
+      width: 250px;
+      margin-right: 10px;
+    }
+    #tracking button {
+      padding: 10px 20px;
+      background: #004080;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    #tracking button:hover {
+      background: #003366;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 16px;
+      background: #eaf4ff;
+      padding: 15px;
+      border-radius: 5px;
+      display: none;
+    }
+
+    /* Reviews */
+    #reviews {
+      margin: 30px;
+      padding: 20px;
+      background: #f9f9f9;
+      border-radius: 10px;
+    }
+    .review-list p {
+      background: #fff;
+      border-left: 5px solid #004080;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+    }
+
+    /* Contact Section */
+    #contact {
+      background: #004080;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    #contact a {
+      color: #ffd700;
+      text-decoration: none;
+    }
+
+    /* Chat */
+    .chat-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+    }
+    #chat-toggle {
+      padding: 10px 15px;
+      background: #004080;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    #chat-box {
+      position: absolute;
+      bottom: 50px;
+      right: 0;
+      width: 250px;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 10px;
+      display: none;
+    }
+    #chat-messages {
+      height: 100px;
+      overflow-y: auto;
+      border: 1px solid #eee;
+      margin-bottom: 10px;
+      padding: 5px;
+    }
+    #chat-input {
+      width: 70%;
+      padding: 5px;
+    }
+    #send-btn {
+      width: 25%;
+      padding: 5px;
+      background: #004080;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Hamburger Menu */
+    .menu {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+    }
+    #menu-toggle {
+      font-size: 22px;
+      background: #004080;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    #menu-options {
+      list-style: none;
+      margin: 0;
+      padding: 10px;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      position: absolute;
+      top: 40px;
+      right: 0;
+      display: none;
+    }
+    #menu-options li {
+      margin: 10px 0;
+    }
+    #menu-options a {
+      text-decoration: none;
+      color: #004080;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
+
+  <!-- Header -->
   <header>
-    <h1>🚚 Express Delivery Services</h1>
-    <p class="description">Fast, reliable, and secure delivery with real-time tracking.</p>
-    <p class="extended-description">Track your packages worldwide. From pick-up to delivery, stay updated every step.</p>
+    <div class="logo">
+      🚚 Express Delivery Services 
+      <span class="live-indicator">● LIVE</span>
+    </div>
+    <p class="site-description">
+      At Express Delivery Services, we specialize in fast, reliable, and secure package deliveries. 
+      Whether it's local or international, our real-time tracking system keeps you updated on 
+      every step of your shipment’s journey. With 24/7 live support, trusted logistics, and thousands 
+      of satisfied customers, we make sure your package is always in safe hands.
+    </p>
   </header>
 
-  <!-- Tracking -->
+  <!-- Tracking Section -->
   <section id="tracking">
-    <h2>📦 Track Your Package</h2>
-    <input type="text" id="trackingInput" placeholder="Enter Tracking Number">
-    <button onclick="trackPackage()">Track</button>
+    <h2>📦 Track Your Package <span class="live-indicator">● LIVE</span></h2>
+    <form id="tracking-form">
+      <input type="text" id="tracking-id" placeholder="Enter Tracking Number" required>
+      <button type="submit">Track</button>
+    </form>
     <div id="result"></div>
   </section>
 
-  <!-- Testimonials -->
-  <section id="testimonials">
-    <h2>⭐ Customer Testimonials</h2>
-    <p>What customers say about us</p>
-    <div id="reviews"></div>
+  <!-- Customer Reviews -->
+  <section id="reviews">
+    <h2>🌟 What Our Customers Say</h2>
+    <div class="review-list">
+      <p>⭐️⭐️⭐️⭐️⭐️ "Best delivery service I’ve ever used!" – John A.</p>
+      <p>⭐️⭐️⭐️⭐️⭐️ "Fast and reliable, highly recommend!" – Sarah W.</p>
+      <p>⭐️⭐️⭐️⭐️ "My package arrived on time and in great condition." – Michael K.</p>
+      <p>⭐️⭐️⭐️⭐️⭐️ "Excellent customer support, very helpful!" – Grace T.</p>
+      <p>⭐️⭐️⭐️⭐️⭐️ "Tracking updates were super accurate." – David L.</p>
+      <p>⭐️⭐️⭐️⭐️ "Affordable and trustworthy." – Maria P.</p>
+      <p>⭐️⭐️⭐️⭐️⭐️ "Best choice for international shipping." – Kevin R.</p>
+      <p>⭐️⭐️⭐️⭐️⭐️ "Smooth process from start to finish." – Fatima S.</p>
+      <p>⭐️⭐️⭐️⭐️⭐️ "Delivery was quicker than expected." – James C.</p>
+      <p>⭐️⭐️⭐️⭐️⭐️ "I’ll definitely use Express Delivery again!" – Anita B.</p>
+    </div>
   </section>
 
-  <!-- Contact -->
-  <footer>
+  <!-- Contact Us -->
+  <section id="contact">
     <h2>📞 Contact Us</h2>
     <p>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></p>
     <p>Phone: <a href="tel:+2349157677711">+234 915 767 7711</a></p>
-    <p>© 2025 Express Delivery Services. All Rights Reserved.</p>
-  </footer>
+  </section>
 
-  <!-- Live Chat Bot -->
-  <script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-      s1.async=true;
-      s1.src='https://embed.tawk.to/YOUR_TAWKTO_ID/1';
-      s1.charset='UTF-8';
-      s1.setAttribute('crossorigin','*');
-      s0.parentNode.insertBefore(s1,s0);
-    })();
+  <!-- Live Chat Popup -->
+  <div class="chat-container">
+    <button id="chat-toggle">💬</button>
+    <div id="chat-box">
+      <h3>Live Chat Support</h3>
+      <div id="chat-messages"></div>
+      <input type="text" id="chat-input" placeholder="Type a message...">
+      <button id="send-btn">Send</button>
+    </div>
+  </div>
+
+  <!-- Hamburger Menu -->
+  <div class="menu">
+    <button id="menu-toggle">☰</button>
+    <ul id="menu-options">
+      <li><a href="#tracking">📦 Track Package</a></li>
+      <li><a href="#reviews">🌟 Customer Reviews</a></li>
+      <li><a href="#contact">📞 Contact Us</a></li>
+      <li><a href="#chat">💬 Live Chat</a></li>
+    </ul>
+  </div>
+
+  <!-- Script -->
+  <script>
+    // Toggle Menu
+    document.getElementById('menu-toggle').addEventListener('click', () => {
+      const menu = document.getElementById('menu-options');
+      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // Chat
+    document.getElementById('chat-toggle').addEventListener('click', () => {
+      const chatBox = document.getElementById('chat-box');
+      chatBox.style.display = chatBox.style.display === 'block' ? 'none' : 'block';
+    });
+
+    document.getElementById('send-btn').addEventListener('click', () => {
+      const input = document.getElementById('chat-input');
+      const messages = document.getElementById('chat-messages');
+      if (input.value.trim() !== "") {
+        const msg = document.createElement('p');
+        msg.textContent = "You: " + input.value;
+        messages.appendChild(msg);
+        input.value = "";
+        messages.scrollTop = messages.scrollHeight;
+      }
+    });
+
+    // Tracking Form
+    document.getElementById('tracking-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const trackingId = document.getElementById('tracking-id').value;
+      const result = document.getElementById('result');
+      result.style.display = 'block';
+      result.innerHTML = `
+        WE HAVE YOUR PACKAGE<br>
+        <span class="live-indicator">● LIVE</span><br>
+        ON THE WAY<br>
+        OUT FOR DELIVERY<br>
+        Destination: New York, NY<br>
+        Date: ${new Date().toLocaleDateString()}<br>
+        Time: ${new Date().toLocaleTimeString()}
+      `;
+    });
   </script>
 
-  <script src="script.js"></script>
 </body>
 </html>
