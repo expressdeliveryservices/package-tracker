@@ -54,9 +54,9 @@
             text-align: center;
             padding: 50px 0;
             background-image: 
-                url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c'),
-                url('https://images.unsplash.com/photo-1592987233056-7f5e7e0f2e8e'),
-                url('https://images.unsplash.com/photo-1503376780353-7e6692767b70');
+                url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c'), /* Delivery truck */
+                url('https://images.unsplash.com/photo-1581094795159-43d864f837e3'), /* Packages */
+                url('https://images.unsplash.com/photo-1601128534300-3a82f3e8f616'); /* Logistics warehouse */
             background-size: cover, auto, auto;
             background-position: left, center, right;
             background-repeat: no-repeat, repeat-x, no-repeat;
@@ -99,6 +99,36 @@
             color: #333;
             z-index: 1;
             position: relative;
+        }
+        .newsletter-section {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .newsletter-input {
+            width: 250px;
+            padding: 10px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        .newsletter-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .newsletter-button:hover {
+            background-color: #0056b3;
+        }
+        #newsletter-result {
+            margin-top: 10px;
+            color: #28a745;
         }
         .language-selector {
             position: absolute;
@@ -202,7 +232,7 @@
             border: none;
             cursor: pointer;
         }
-        #support-info, #contact-info, #locations-info {
+        #support-info, #contact-info, #locations-info, #about-us-info {
             display: none;
             padding: 20px;
             background-color: #fff;
@@ -314,6 +344,7 @@
                 <li><a href="#locations" onclick="showSection('locations')">Locations</a></li>
                 <li><a href="#support" onclick="showSection('support')">Support</a></li>
                 <li><a href="#contact" onclick="showSection('contact')">Contact Us</a></li>
+                <li><a href="#about-us" onclick="showSection('about-us')">About Us</a></li>
             </ul>
         </div>
         <div class="main-content">
@@ -327,6 +358,13 @@
                     <h3 id="about-title">About EXPRESS DELIVERY SERVICES</h3>
                     <p id="about-text">Welcome to EXPRESS DELIVERY SERVICES, your trusted partner in global logistics. With over a decade of experience, we specialise in delivering packages swiftly and securely to your doorstep. Our state-of-the-art tracking system allows you to monitor your shipments in real-time, while our dedicated team ensures every package is handled with care. From ground transportation to air freight, we offer a comprehensive range of services tailored to meet your needs. Our headquarters in New York serves as the hub of our operations, supported by a network spanning multiple continents.</p>
                     <p id="sustainability-text">Our commitment to sustainability includes eco-friendly packaging and optimised delivery routes to reduce our carbon footprint. Whether you're a business sending bulk orders or an individual shipping a personal item, we provide personalised solutions with competitive rates. Join thousands of satisfied customers who rely on us for their delivery needs, and experience the difference of a service that prioritises speed, reliability, and customer satisfaction.</p>
+                </div>
+                <div class="newsletter-section">
+                    <h3 id="newsletter-title">Subscribe to Our Newsletter</h3>
+                    <p id="newsletter-desc">Stay updated with the latest delivery news and offers!</p>
+                    <input type="email" id="newsletter-email" class="newsletter-input" placeholder="Enter your email">
+                    <button class="newsletter-button" onclick="subscribeNewsletter()">Subscribe</button>
+                    <div id="newsletter-result"></div>
                 </div>
             </div>
             <div id="locations-info">
@@ -377,6 +415,11 @@
                         <button class="nav-btn next" onclick="changeSlide(1)">&#10095;</button>
                     </div>
                 </div>
+            </div>
+            <div id="about-us-info">
+                <h2 id="about-us-title">About Us</h2>
+                <p id="about-us-text">EXPRESS DELIVERY SERVICES was founded in 2015 with a mission to revolutionise global logistics. Based in New York, we pride ourselves on our commitment to speed, reliability, and customer satisfaction. Our team of over 500 professionals operates a vast network across North America, Europe, and Asia, ensuring your packages reach their destination on time. We leverage cutting-edge technology and sustainable practices to provide world-class delivery solutions for businesses and individuals alike.</p>
+                <p id="mission-text">Our mission is to connect the world through efficient and eco-friendly delivery services. With a focus on innovation, we continuously improve our processes to meet the evolving needs of our customers. Join us on our journey to make delivery faster, greener, and more reliable.</p>
             </div>
         </div>
     </div>
@@ -440,7 +483,12 @@
                 review2_author: "- Sarah K.",
                 review3_text: "On-time delivery every time. Awesome!",
                 review3_author: "- Mike R.",
-                reviews_title: "Customer Reviews"
+                reviews_title: "Customer Reviews",
+                newsletter_title: "Subscribe to Our Newsletter",
+                newsletter_desc: "Stay updated with the latest delivery news and offers!",
+                about_us_title: "About Us",
+                about_us_text: "EXPRESS DELIVERY SERVICES was founded in 2015 with a mission to revolutionise global logistics. Based in New York, we pride ourselves on our commitment to speed, reliability, and customer satisfaction. Our team of over 500 professionals operates a vast network across North America, Europe, and Asia, ensuring your packages reach their destination on time. We leverage cutting-edge technology and sustainable practices to provide world-class delivery solutions for businesses and individuals alike.",
+                mission_text: "Our mission is to connect the world through efficient and eco-friendly delivery services. With a focus on innovation, we continuously improve our processes to meet the evolving needs of our customers. Join us on our journey to make delivery faster, greener, and more reliable."
             },
             'en-GB': {
                 track_title: "Track Your Parcel",
@@ -473,7 +521,12 @@
                 review2_author: "- Sarah K.",
                 review3_text: "On-time delivery every time. Brilliant!",
                 review3_author: "- Mike R.",
-                reviews_title: "Customer Reviews"
+                reviews_title: "Customer Reviews",
+                newsletter_title: "Subscribe to Our Newsletter",
+                newsletter_desc: "Stay updated with the latest delivery news and offers!",
+                about_us_title: "About Us",
+                about_us_text: "EXPRESS DELIVERY SERVICES was founded in 2015 with a mission to revolutionise global logistics. Based in New York, we pride ourselves on our commitment to speed, reliability, and customer satisfaction. Our team of over 500 professionals operates a vast network across North America, Europe, and Asia, ensuring your parcels reach their destination on time. We leverage cutting-edge technology and sustainable practices to provide world-class delivery solutions for businesses and individuals alike.",
+                mission_text: "Our mission is to connect the world through efficient and eco-friendly delivery services. With a focus on innovation, we continuously improve our processes to meet the evolving needs of our customers. Join us on our journey to make delivery faster, greener, and more reliable."
             },
             es: {
                 track_title: "Rastrea tu paquete",
@@ -506,7 +559,12 @@
                 review2_author: "- Sara K.",
                 review3_text: "Entrega a tiempo siempre. ¡Genial!",
                 review3_author: "- Miguel R.",
-                reviews_title: "Reseñas de clientes"
+                reviews_title: "Reseñas de clientes",
+                newsletter_title: "Suscríbete a nuestro boletín",
+                newsletter_desc: "¡Mantente actualizado con las últimas noticias y ofertas de entrega!",
+                about_us_title: "Sobre nosotros",
+                about_us_text: "EXPRESS DELIVERY SERVICES fue fundada en 2015 con la misión de revolucionar la logística global. Con sede en Nueva York, nos enorgullecemos de nuestro compromiso con la velocidad, la confiabilidad y la satisfacción del cliente. Nuestro equipo de más de 500 profesionales opera una vasta red en América del Norte, Europa y Asia, asegurando que tus paquetes lleguen a tiempo. Utilizamos tecnología de punta y prácticas sostenibles para ofrecer soluciones de entrega de clase mundial tanto para empresas como para individuos.",
+                mission_text: "Nuestra misión es conectar el mundo a través de servicios de entrega eficientes y ecológicos. Con un enfoque en la innovación, mejoramos continuamente nuestros procesos para satisfacer las necesidades cambiantes de nuestros clientes. Únete a nosotros en nuestro viaje para hacer las entregas más rápidas, verdes y confiables."
             },
             fr: {
                 track_title: "Suivi de votre colis",
@@ -539,7 +597,12 @@
                 review2_author: "- Sarah K.",
                 review3_text: "Livraison à l'heure à chaque fois. Super !",
                 review3_author: "- Michel R.",
-                reviews_title: "Avis des clients"
+                reviews_title: "Avis des clients",
+                newsletter_title: "Abonnez-vous à notre newsletter",
+                newsletter_desc: "Restez informé des dernières nouvelles et offres de livraison !",
+                about_us_title: "À propos de nous",
+                about_us_text: "EXPRESS DELIVERY SERVICES a été fondé en 2015 avec pour mission de révolutionner la logistique mondiale. Basés à New York, nous sommes fiers de notre engagement envers la rapidité, la fiabilité et la satisfaction client. Notre équipe de plus de 500 professionnels opère un vaste réseau en Amérique du Nord, en Europe et en Asie, assurant que vos colis arrivent à destination à temps. Nous utilisons des technologies de pointe et des pratiques durables pour offrir des solutions de livraison de classe mondiale aux entreprises et aux particuliers.",
+                mission_text: "Notre mission est de connecter le monde grâce à des services de livraison efficaces et écologiques. Avec un accent sur l'innovation, nous améliorons continuellement nos processus pour répondre aux besoins évolutifs de nos clients. Rejoignez-nous dans notre voyage pour rendre les livraisons plus rapides, plus vertes et plus fiables."
             }
             // Add more languages as needed
         };
@@ -606,6 +669,11 @@
             document.getElementById('review2-author').textContent = t.review2_author;
             document.getElementById('review3-text').textContent = t.review3_text;
             document.getElementById('review3-author').textContent = t.review3_author;
+            document.getElementById('newsletter-title').textContent = t.newsletter_title;
+            document.getElementById('newsletter-desc').textContent = t.newsletter_desc;
+            document.getElementById('about-us-title').textContent = t.about_us_title;
+            document.getElementById('about-us-text').textContent = t.about_us_text;
+            document.getElementById('mission-text').textContent = t.mission_text;
 
             // Update HTML lang attribute
             document.documentElement.lang = lang;
@@ -617,6 +685,18 @@
                 document.getElementById('tracking-result').textContent = `Tracking ${trackingNumber}: Package is on its way! Estimated delivery: Tomorrow.`;
             } else {
                 alert('Please enter a tracking number.');
+            }
+        }
+
+        function subscribeNewsletter() {
+            const email = document.getElementById('newsletter-email').value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email && emailRegex.test(email)) {
+                document.getElementById('newsletter-result').textContent = 'Thank you for subscribing!';
+                document.getElementById('newsletter-email').value = '';
+            } else {
+                document.getElementById('newsletter-result').textContent = 'Please enter a valid email address.';
+                document.getElementById('newsletter-result').style.color = '#dc3545';
             }
         }
 
@@ -643,7 +723,7 @@
         }
 
         function showSection(section) {
-            const sections = ['track', 'locations-info', 'support-info', 'contact-info'];
+            const sections = ['track', 'locations-info', 'support-info', 'contact-info', 'about-us-info'];
             sections.forEach(s => {
                 document.getElementById(s).style.display = s === section ? 'block' : 'none';
             });
@@ -653,6 +733,8 @@
                 document.getElementById('support-info').style.display = 'block';
             } else if (section === 'contact') {
                 document.getElementById('contact-info').style.display = 'block';
+            } else if (section === 'about-us') {
+                document.getElementById('about-us-info').style.display = 'block';
             }
         }
 
