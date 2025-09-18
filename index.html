@@ -3,102 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Express Delivery Services - Shipping & Tracking Delivery</title>
+<title>Express Delivery Services</title>
+<link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<style>
-body { margin:0; font-family: Arial,sans-serif; }
-.menu-bubble {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  width:50px;
-  height:50px;
-  background:#ffcc00;
-  border-radius:50%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  cursor:pointer;
-  z-index:1001;
-  box-shadow:0 0 10px rgba(0,0,0,0.3);
-  font-size:1.5em;
-}
-.sidebar {
-  position: fixed;
-  left:-270px; /* hidden by default */
-  top:0;
-  width:250px;
-  height:100%;
-  background:#111;
-  color:#fff;
-  padding:20px;
-  display:flex;
-  flex-direction:column;
-  transition: left 0.3s ease;
-  z-index:1000;
-}
-.sidebar.active { left:0; }
-.sidebar h2 { text-align:center; margin-bottom:20px; }
-.sidebar a { color:#fff; text-decoration:none; margin:10px 0; display:flex; align-items:center; }
-.sidebar a i { margin-right:10px; }
-.sidebar a:hover { color:#ffcc00; }
-.sidebar span { margin-top:10px; font-size:0.9em; line-height:1.4em; }
-.language-switcher { margin-top:20px; }
-.language-switcher select { width:100%; padding:5px; border-radius:5px; border:none; }
-
-.main-content { margin-left:0; padding:30px; }
-.main-content h1 { text-align:center; margin-bottom:20px; }
-
-.tracking-section { display:flex; flex-wrap:wrap; justify-content:center; gap:20px; margin-bottom:40px; }
-.tracking-input input { padding:15px; font-size:1em; width:300px; border-radius:5px 0 0 5px; border:1px solid #ccc; }
-.tracking-input button { padding:15px 25px; border-radius:0 5px 5px 0; border:none; background:#ffcc00; cursor:pointer; }
-.tracking-input button:hover { background:#e6b800; }
-
-.delivery-box { background:#fff; color:#333; padding:20px; border-radius:10px; min-width:250px; box-shadow:0 0 10px rgba(0,0,0,0.3); }
-.delivery-box h3 { margin-bottom:10px; }
-.status-indicator { font-size:1.2em; margin-bottom:10px; }
-
-#map { width:100%; height:500px; margin-bottom:40px; border-radius:10px; }
-
-.newsletter { background:#111; color:#fff; padding:20px; border-radius:10px; text-align:center; margin-bottom:40px; }
-.newsletter input { padding:10px; width:250px; border-radius:5px; border:none; margin-right:10px; }
-.newsletter button { padding:10px 15px; border:none; border-radius:5px; background:#ffcc00; cursor:pointer; }
-.newsletter button:hover { background:#e6b800; }
-
-.review-section { margin-bottom:40px; text-align:center; }
-.review-text { display:inline-block; padding:20px; background:#fff; border-radius:10px; min-width:300px; box-shadow:0 0 10px rgba(0,0,0,0.2); }
-.review-author { margin-top:10px; font-weight:bold; }
-
-/* Live Chat */
-.chat-button { position: fixed; bottom:20px; right:20px; background:#ffcc00; width:60px; height:60px; border-radius:50%; cursor:pointer; display:flex; justify-content:center; align-items:center; font-size:1.5em; box-shadow:0 0 10px rgba(0,0,0,0.3); }
-.chat-box { position: fixed; bottom:90px; right:20px; width:300px; max-height:400px; background:#fff; border-radius:10px; box-shadow:0 0 15px rgba(0,0,0,0.3); display:none; flex-direction:column; }
-.chat-header { background:#ffcc00; padding:10px; border-radius:10px 10px 0 0; font-weight:bold; text-align:center; }
-.chat-messages { flex:1; padding:10px; overflow-y:auto; display:flex; flex-direction:column; gap:5px; }
-.chat-input { display:flex; }
-.chat-input input { flex:1; padding:10px; border:none; border-top:1px solid #ccc; border-radius:0 0 0 10px; }
-.chat-input button { padding:10px; background:#ffcc00; border:none; border-radius:0 0 10px 0; cursor:pointer; }
-.chat-message { padding:8px 10px; border-radius:10px; max-width:80%; }
-.user-msg { background:#ffcc00; align-self:flex-end; color:#000; }
-.bot-msg { background:#f1f1f1; align-self:flex-start; color:#000; }
-</style>
 </head>
 <body>
 
-<!-- Menu Bubble -->
 <div class="menu-bubble" onclick="toggleSidebar()">
   <i class="fa fa-bars"></i>
 </div>
 
-<!-- Sidebar -->
 <div class="sidebar">
   <h2>EXPRESS DELIVERY SERVICES</h2>
-  <a href="#" id="homeLink"><i class="fa fa-home"></i>Home</a>
-  <a href="#" id="shippingLink"><i class="fa fa-shipping-fast"></i>Shipping & Tracking Delivery</a>
-  <a href="#" id="contactLink"><i class="fa fa-envelope"></i>Contact Us</a>
-  <span id="contactPhone">Contact Phone:<br>+1 205-973-3572</span>
-  <a href="#" id="supportLink"><i class="fa fa-headset"></i>Support</a>
-  <span id="supportEmail">Support Email:<br>Expressdeliveryservice0016@gmail.com</span>
+  <a href="#" onclick="scrollToSection('home')"><i class="fa fa-home"></i> Home</a>
+  <a href="#" onclick="scrollToSection('tracking')"><i class="fa fa-shipping-fast"></i> Shipping & Tracking</a>
+  <a href="#" onclick="scrollToSection('contact')"><i class="fa fa-envelope"></i> Contact Us</a>
+  <span>Phone: +1 205-973-3572</span>
+  <a href="#" onclick="scrollToSection('support')"><i class="fa fa-headset"></i> Support</a>
+  <span>Email: Expressdeliveryservice0016@gmail.com</span>
   <div class="language-switcher">
     <label for="languageSelect" style="color:#fff;">Language:</label>
     <select id="languageSelect" onchange="changeLanguage()">
@@ -111,28 +34,34 @@ body { margin:0; font-family: Arial,sans-serif; }
   </div>
 </div>
 
-<div class="main-content">
+<div class="main-content" id="home">
   <h1>Track Your Package</h1>
-  <div class="tracking-section">
+
+  <!-- Tracking Section -->
+  <div class="tracking-section" id="tracking">
     <div class="tracking-input">
       <input type="text" id="trackingNumber" placeholder="Enter your tracking number">
       <button onclick="trackPackage()">Track</button>
     </div>
     <div class="delivery-box">
       <h3>EXPRESS DELIVERY SERVICES</h3>
-      <div class="status-indicator">Status: <span id="statusIndicator">🔴 Not Found</span></div>
+      <div>Status: <span id="statusIndicator">🔴 Not Found</span></div>
       <div id="trackingResult"></div>
     </div>
   </div>
 
+  <!-- Map Section -->
   <div id="map"></div>
 
+  <!-- Newsletter -->
   <div class="newsletter">
-    <h3 id="newsletterHeader">Subscribe to Our Newsletter</h3>
-    <input type="email" placeholder="Enter your email">
-    <button>Subscribe</button>
+    <h3>Subscribe to Our Newsletter</h3>
+    <input type="email" id="newsletterEmail" placeholder="Enter your email">
+    <button onclick="subscribeNewsletter()">Subscribe</button>
+    <div id="newsletterMsg"></div>
   </div>
 
+  <!-- Customer Reviews -->
   <div class="review-section">
     <div class="review-text" id="reviewText"></div>
     <div class="review-author" id="reviewAuthor"></div>
@@ -151,16 +80,6 @@ body { margin:0; font-family: Arial,sans-serif; }
 </div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script>
-// Sidebar toggle
-function toggleSidebar(){
-  document.querySelector('.sidebar').classList.toggle('active');
-}
-
-// Tracking
-function trackPackage() {
-    const trackingNum = document.getElementById('trackingNumber').value;
-    const resultDiv = document.getElementById('trackingResult');
-    const statusIndicator = document.getElementById('statusIndicator');
-    if(!trackingNum) {
-        resultDiv
+<script src="script.js"></script>
+</body>
+</html>
