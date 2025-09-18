@@ -10,7 +10,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #87CEEB; /* Changed to sky blue background */
             color: #333;
             scroll-behavior: smooth;
         }
@@ -25,6 +25,15 @@
             display: flex;
             justify-content: center;
             align-items: center;
+        }
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header-content h1 {
+            margin: 0;
+            font-size: 24px;
         }
         .logo img {
             max-width: 200px;
@@ -131,6 +140,11 @@
             color: #333;
             transition: border-color 0.3s;
         }
+        .tracking-input::placeholder {
+            text-transform: uppercase;
+            font-size: 12px;
+            color: #888;
+        }
         .tracking-input:focus {
             border-color: #007bff;
             outline: none;
@@ -145,6 +159,7 @@
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             transition: background-color 0.3s;
+            text-transform: uppercase;
         }
         .tracking-button:hover {
             background-color: #218838;
@@ -532,8 +547,11 @@
                 <option value="eds-classic.png">Classic Logo</option>
             </select>
         </div>
-        <div class="logo">
-            <img src="eds-logo.png" alt="EDS Logo" id="logoImg" onerror="this.src='https://via.placeholder.com/200?text=Logo+Not+Found';">
+        <div class="header-content">
+            <h1>EDS 🚚 ✈️</h1>
+            <div class="logo">
+                <img src="eds-logo.png" alt="EDS Logo" id="logoImg" onerror="this.src='https://via.placeholder.com/200?text=Logo+Not+Found';">
+            </div>
         </div>
         <div class="hamburger" onclick="toggleMenu()">☰</div>
         <div class="language-selector">
@@ -559,84 +577,6 @@
                 <li data-lang="mr" onclick="changeLanguage('mr')">🇮🇳 Marathi</li>
                 <li data-lang="ur" onclick="changeLanguage('ur')">🇵🇰 Urdu</li>
                 <li data-lang="tr" onclick="changeLanguage('tr')">🇹🇷 Turkish</li>
-                <li data-lang="vi" onclick="changeLanguage('vi')">🇻🇳 Vietnamese</li>
-                <li data-lang="th" onclick="changeLanguage('th')">🇹🇭 Thai</li>
-                <li data-lang="el" onclick="changeLanguage('el')">🇬🇷 Greek</li>
-                <li data-lang="nl" onclick="changeLanguage('nl')">🇳🇱 Dutch</li>
-                <li data-lang="sv" onclick="changeLanguage('sv')">🇸🇪 Swedish</li>
-                <li data-lang="da" onclick="changeLanguage('da')">🇩🇰 Danish</li>
-                <li data-lang="fi" onclick="changeLanguage('fi')">🇫🇮 Finnish</li>
-                <li data-lang="no" onclick="changeLanguage('no')">🇳🇴 Norwegian</li>
-                <li data-lang="pl" onclick="changeLanguage('pl')">🇵🇱 Polish</li>
-                <li data-lang="cs" onclick="changeLanguage('cs')">🇨🇿 Czech</li>
-                <li data-lang="hu" onclick="changeLanguage('hu')">🇭🇺 Hungarian</li>
-                <li data-lang="ro" onclick="changeLanguage('ro')">🇷🇴 Romanian</li>
-                <li data-lang="sk" onclick="changeLanguage('sk')">🇸🇰 Slovak</li>
-                <li data-lang="bg" onclick="changeLanguage('bg')">🇧🇬 Bulgarian</li>
-                <li data-lang="hr" onclick="changeLanguage('hr')">🇭🇷 Croatian</li>
-                <li data-lang="sr" onclick="changeLanguage('sr')">🇷🇸 Serbian</li>
-                <li data-lang="sl" onclick="changeLanguage('sl')">🇸🇮 Slovenian</li>
-                <li data-lang="et" onclick="changeLanguage('et')">🇪🇪 Estonian</li>
-                <li data-lang="lt" onclick="changeLanguage('lt')">🇱🇹 Lithuanian</li>
-                <li data-lang="lv" onclick="changeLanguage('lv')">🇱🇻 Latvian</li>
-                <li data-lang="mt" onclick="changeLanguage('mt')">🇲🇹 Maltese</li>
-                <li data-lang="ga" onclick="changeLanguage('ga')">🇮🇪 Irish</li>
-                <li data-lang="cy" onclick="changeLanguage('cy')">🇬🇧 Welsh</li>
-                <li data-lang="gd" onclick="changeLanguage('gd')">🇬🇧 Scottish Gaelic</li>
-                <li data-lang="he" onclick="changeLanguage('he')">🇮🇱 Hebrew</li>
-                <li data-lang="fa" onclick="changeLanguage('fa')">🇮🇷 Persian</li>
-                <li data-lang="ps" onclick="changeLanguage('ps')">🇦🇫 Pashto</li>
-                <li data-lang="uz" onclick="changeLanguage('uz')">🇺🇿 Uzbek</li>
-                <li data-lang="kk" onclick="changeLanguage('kk')">🇰🇿 Kazakh</li>
-                <li data-lang="ky" onclick="changeLanguage('ky')">🇰🇬 Kyrgyz</li>
-                <li data-lang="tk" onclick="changeLanguage('tk')">🇹🇲 Turkmen</li>
-                <li data-lang="mn" onclick="changeLanguage('mn')">🇲🇳 Mongolian</li>
-                <li data-lang="km" onclick="changeLanguage('km')">🇰🇭 Khmer</li>
-                <li data-lang="lo" onclick="changeLanguage('lo')">🇱🇦 Lao</li>
-                <li data-lang="my" onclick="changeLanguage('my')">🇲🇲 Burmese</li>
-                <li data-lang="id" onclick="changeLanguage('id')">🇮🇩 Indonesian</li>
-                <li data-lang="ms" onclick="changeLanguage('ms')">🇲🇾 Malay</li>
-                <li data-lang="tl" onclick="changeLanguage('tl')">🇵🇭 Tagalog</li>
-                <li data-lang="ceb" onclick="changeLanguage('ceb')">🇵🇭 Cebuano</li>
-                <li data-lang="sw" onclick="changeLanguage('sw')">🇹🇿 Swahili</li>
-                <li data-lang="ha" onclick="changeLanguage('ha')">🇳🇬 Hausa</li>
-                <li data-lang="yo" onclick="changeLanguage('yo')">🇳🇬 Yoruba</li>
-                <li data-lang="ig" onclick="changeLanguage('ig')">🇳🇬 Igbo</li>
-                <li data-lang="am" onclick="changeLanguage('am')">🇪🇹 Amharic</li>
-                <li data-lang="so" onclick="changeLanguage('so')">🇸🇴 Somali</li>
-                <li data-lang="zu" onclick="changeLanguage('zu')">🇿🇦 Zulu</li>
-                <li data-lang="xh" onclick="changeLanguage('xh')">🇿🇦 Xhosa</li>
-                <li data-lang="af" onclick="changeLanguage('af')">🇿🇦 Afrikaans</li>
-                <li data-lang="ne" onclick="changeLanguage('ne')">🇳🇵 Nepali</li>
-                <li data-lang="si" onclick="changeLanguage('si')">🇱🇰 Sinhala</li>
-                <li data-lang="km" onclick="changeLanguage('km')">🇰🇭 Khmer</li>
-                <li data-lang="ti" onclick="changeLanguage('ti')">🇪🇹 Tigrinya</li>
-                <li data-lang="om" onclick="changeLanguage('om')">🇪🇹 Oromo</li>
-                <li data-lang="sm" onclick="changeLanguage('sm')">🇼🇸 Samoan</li>
-                <li data-lang="to" onclick="changeLanguage('to')">🇹🇴 Tongan</li>
-                <li data-lang="mg" onclick="changeLanguage('mg')">🇲🇬 Malagasy</li>
-                <li data-lang="ny" onclick="changeLanguage('ny')">🇲🇼 Chichewa</li>
-                <li data-lang="sn" onclick="changeLanguage('sn')">🇿🇼 Shona</li>
-                <li data-lang="st" onclick="changeLanguage('st')">🇱🇸 Sotho</li>
-                <li data-lang="ts" onclick="changeLanguage('ts')">🇿🇦 Tsonga</li>
-                <li data-lang="ve" onclick="changeLanguage('ve')">🇿🇦 Venda</li>
-                <li data-lang="nr" onclick="changeLanguage('nr')">🇿🇦 Ndebele</li>
-                <li data-lang="ss" onclick="changeLanguage('ss')">🇸🇿 Swati</li>
-                <li data-lang="qu" onclick="changeLanguage('qu')">🇵🇪 Quechua</li>
-                <li data-lang="ay" onclick="changeLanguage('ay')">🇧🇴 Aymara</li>
-                <li data-lang="gn" onclick="changeLanguage('gn')">🇵🇾 Guarani</li>
-                <li data-lang="eu" onclick="changeLanguage('eu')">🇪🇸 Basque</li>
-                <li data-lang="ca" onclick="changeLanguage('ca')">🇪🇸 Catalan</li>
-                <li data-lang="gl" onclick="changeLanguage('gl')">🇪🇸 Galician</li>
-                <li data-lang="oc" onclick="changeLanguage('oc')">🇫🇷 Occitan</li>
-                <li data-lang="br" onclick="changeLanguage('br')">🇫🇷 Breton</li>
-                <li data-lang="ku" onclick="changeLanguage('ku')">🇹🇷 Kurdish</li>
-                <li data-lang="az" onclick="changeLanguage('az')">🇦🇿 Azerbaijani</li>
-                <li data-lang="hy" onclick="changeLanguage('hy')">🇦🇲 Armenian</li>
-                <li data-lang="ka" onclick="changeLanguage('ka')">🇬🇪 Georgian</li>
-                <li data-lang="sq" onclick="changeLanguage('sq')">🇦🇱 Albanian</li>
-                <li data-lang="mk" onclick="changeLanguage('mk')">🇲🇰 Macedonian</li>
-                <li data-lang="bs" onclick="changeLanguage('bs')">🇧🇦 Bosnian</li>
             </ul>
         </div>
     </header>
@@ -661,8 +601,8 @@
         <div id="track" class="section tracking-section">
             <h1>Track Your Package</h1>
             <div class="tracking-container">
-                <input type="text" id="tracking-number" class="tracking-input" placeholder="Enter tracking number (e.g., EDS123456789)">
-                <button class="tracking-button" onclick="trackPackage()">Track</button>
+                <input type="text" id="tracking-number" class="tracking-input" placeholder="TRACKING ID">
+                <button class="tracking-button" onclick="trackPackage()">TRACK</button>
             </div>
             <div id="tracking-result"></div>
             <div class="newsletter-section">
@@ -834,12 +774,47 @@
     <script>
         function trackPackage() {
             const trackingNumber = document.getElementById('tracking-number').value;
-            document.getElementById('tracking-result').innerText = trackingNumber ? `Tracking ${trackingNumber}...` : 'Please enter a tracking number.';
+            if (trackingNumber) {
+                document.getElementById('tracking-result').innerText = `Tracking package ${trackingNumber}`;
+                // Simulate package status based on tracking number (example logic)
+                const status = getPackageStatus(trackingNumber);
+                setTimeout(() => {
+                    document.getElementById('tracking-result').innerHTML = `Tracking package ${trackingNumber}<br>${status}`;
+                }, 1000);
+            } else {
+                document.getElementById('tracking-result').innerText = 'Please enter a tracking number.';
+            }
+        }
+
+        function getPackageStatus(trackingNumber) {
+            // Simple logic based on tracking number (for demo purposes)
+            const num = parseInt(trackingNumber.replace(/\D/g, '')) || 0;
+            if (num % 4 === 0) return 'WE HAVE YOUR PACKAGE';
+            if (num % 4 === 1) return 'ON THE WAY';
+            if (num % 4 === 2) return 'OUT FOR DELIVERY';
+            return 'TO the location';
         }
 
         function subscribeNewsletter() {
             const email = document.getElementById('newsletter-email').value;
-            document.getElementById('newsletter-result').innerText = email ? 'Thank you for subscribing!' : 'Please enter a valid email.';
+            if (email) {
+                // Placeholder for email sending (requires backend implementation)
+                document.getElementById('newsletter-result').innerText = 'Subscription successful! Check your email for confirmation.';
+                // Simulate sending to Expressdeliveryservice0016@gmail.com
+                console.log(`Sending subscription email: ${email} to Expressdeliveryservice0016@gmail.com`);
+                // To implement real email sending, use a backend service (e.g., Node.js with Nodemailer)
+                // Example backend call (uncomment and set up server):
+                // fetch('your-backend-endpoint', {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify({ email: email, to: 'Expressdeliveryservice0016@gmail.com' })
+                // })
+                // .then(response => response.json())
+                // .then(data => console.log(data))
+                // .catch(error => console.error('Error:', error));
+            } else {
+                document.getElementById('newsletter-result').innerText = 'Please enter a valid email.';
+            }
         }
 
         function changeLogo() {
