@@ -75,8 +75,7 @@ footer { background:#004080; color:white; padding:30px 20px; text-align:center; 
 <p>Express Delivery Services has been providing top-notch courier solutions for over a decade...
 <span id="dots">...</span>
 <span id="more-text" style="display:none;">
-Whether by road 🚚 or air ✈️, we ensure your parcels reach their destination safely and on time.  
-Our global network spans over 100 countries, equipped with real-time tracking, advanced logistics, and 24/7 customer support.
+Whether by road 🚚 or air ✈️, we ensure your parcels reach their destination safely and on time. Our global network spans over 100 countries with real-time tracking and 24/7 support.
 </span></p>
 <button id="read-more-btn">Read more</button>
 </section>
@@ -163,13 +162,6 @@ Our global network spans over 100 countries, equipped with real-time tracking, a
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
-// Read more toggle
-document.getElementById("read-more-btn").addEventListener("click", function() {
-let dots=document.getElementById("dots"), more=document.getElementById("more-text");
-if(more.style.display==="none"){more.style.display="inline";dots.style.display="none";this.textContent="Read less";}
-else{more.style.display="none";dots.style.display="inline";this.textContent="Read more";}
-});
-
 // Menu toggle
 document.getElementById('menu-toggle').addEventListener('click', ()=>{
 const menu=document.getElementById('menu-options');
@@ -190,30 +182,6 @@ document.getElementById('chat-messages').scrollTop=document.getElementById('chat
 }
 });
 
-// Counters animation
-function animateCounter(id,target){
-let count=0;const el=document.getElementById(id);
-let interval=setInterval(()=>{if(count>=target){clearInterval(interval);} else{count+=Math.ceil(target/100);el.innerHTML=el.innerHTML.split("<br>")[0]+"<br>"+count;}},30);
-}
-animateCounter("packages",12500);
-animateCounter("customers",4800);
-animateCounter("countries",95);
-
-// Customer reviews
-const reviews=["⭐️⭐️⭐️⭐️⭐️ 'Best delivery service ever!' – John A.","⭐️⭐️⭐️⭐️⭐️ 'Fast and reliable!' – Sarah W.","⭐️⭐️⭐️⭐️ 'Package arrived on time.' – Michael K","⭐️⭐️⭐️⭐️⭐️ 'Excellent support!' – Grace T"];
-let currentReview=0; const reviewDisplay=document.getElementById("review-display");
-function showReview(){reviewDisplay.innerHTML=`<p>${reviews[currentReview]}</p>`;currentReview=(currentReview+1)%reviews.length;}
-showReview();setInterval(showReview,5000);
-
-// Tracking simulation
-document.getElementById('track-btn').addEventListener('click',()=>{
-let val=document.getElementById('tracking-input').value.trim();
-document.getElementById('tracking-result').textContent=val?`Tracking ${val}: Your package is on its way!`:"Please enter a tracking number.";
-});
-
-// Newsletter subscription
-document.getElementById('subscribe-btn').addEventListener('click',()=>{
-let email=document.getElementById('newsletter-email').value.trim();
-const res=document.getElementById('subscribe-result');
-if(!email){res.textContent="Please enter a valid email.";res.style.color="red";}
-else{res.textContent="Thank you! You are subscribed.";res.style.color="green";
+// Read more toggle
+document.getElementById("read-more-btn").addEventListener("click", function(){
+let dots=document.getElementBy
