@@ -1,20 +1,27 @@
-async function trackPackage() {
-  const num = document.getElementById("trackingInput").value;
-  const res = await fetch(`https://your-backend-url.onrender.com/api/track/${num}`);
-  if (res.status === 404) {
-    document.getElementById("result").innerHTML = "<p>Tracking number not found</p>";
-    return;
-  }
-  const pkg = await res.json();
-  renderTracking(pkg);
-}
+document.getElementById("tracking-form").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const trackingId = document.getElementById("tracking-id").value;
 
-function renderTracking(pkg) {
-  let html = `<h3>Tracking Number: ${pkg.trackingNumber}</h3>`;
-  html += `<p><b>Destination:</b> ${pkg.destination}</p><ul>`;
-  pkg.updates.forEach(u => {
-    html += `<li>${u.time} - ${u.location} - ${u.status}</li>`;
-  });
-  html += "</ul>";
-  document.getElementById("result").innerHTML = html;
-}
+  fetch("http://localhost:5000/api/track/" + trackingId) // 👈 point to your backend
+    .then(res => res.json())
+    .then(data => {
+      if (data.message === "Package not found") {
+        document.getElementById("result").innerHTML = "<p>❌ Tracking number not found</p>";
+      } else {
+        document.getElementById("result").innerHTML = `
+          <h3>Tracking ID: ${data.trackingId}</h3>
+          <p><b>Status:</b> ${data.status}</p>
+          <p><b>From:</b> ${data.origin} → <b>To:</b> ${data.destination}</p>
+          <p><b>Extended Description:</b> ${data.extendedDescription}</p>
+          <h4>History:</h4>
+          <ul>
+            ${data.history.map(h => `<li>${h.date} - ${h.location} - ${h.status} (${h.extendedDescription})</li>`).join("")}
+          </ul>
+        `;
+      }
+    })
+    .catch(err => {
+      document.getElementById("result").innerHTML = "<p>⚠️ Error fetching tracking info.</p>";
+      console.error(err);
+    });
+});
