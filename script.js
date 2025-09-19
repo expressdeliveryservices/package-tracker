@@ -1,33 +1,69 @@
-const descriptions = {
-  "en-US": "Welcome to Express Delivery Services. Track your packages in real-time and enjoy our fast and reliable service across the USA.",
-  "en-UK": "Welcome to Express Delivery Services. Track your parcels in real-time and enjoy our fast and reliable service across the United Kingdom.",
-  "es": "Bienvenido a Express Delivery Services. Rastrea tus paquetes en tiempo real y disfruta de nuestro servicio rápido y confiable.",
-  "fr": "Bienvenue chez Express Delivery Services. Suivez vos colis en temps réel et profitez de notre service rapide et fiable.",
-  "pt": "Bem-vindo à Express Delivery Services. Acompanhe suas encomendas em tempo real e desfrute do nosso serviço rápido e confiável."
+// Hamburger menu toggle
+function toggleMenu() {
+  const menu = document.getElementById("nav-menu");
+  if (menu.style.display === "flex") menu.style.display = "none";
+  else menu.style.display = "flex";
+}
+
+// Slow scrolling effect ~5 minutes
+window.onload = () => {
+  let scrollHeight = document.body.scrollHeight - window.innerHeight;
+  let duration = 300000; // 5 minutes in milliseconds
+  let start = null;
+
+  function step(timestamp) {
+    if (!start) start = timestamp;
+    let progress = timestamp - start;
+    window.scrollTo(0, (progress / duration) * scrollHeight);
+    if (progress < duration) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
 };
 
-const openHoursTable = {
-  "en-US": ["Friday: Open 24 hours", "Saturday: Open 24 hours", "Sunday: Open 24 hours", "Monday: Open 24 hours", "Tuesday: Open 24 hours", "Wednesday: Open 24 hours", "Thursday: Open 24 hours"],
-  "en-UK": ["Friday: Open 24 hours", "Saturday: Open 24 hours", "Sunday: Open 24 hours", "Monday: Open 24 hours", "Tuesday: Open 24 hours", "Wednesday: Open 24 hours", "Thursday: Open 24 hours"],
-  "es": ["Viernes: Abierto 24 horas", "Sábado: Abierto 24 horas", "Domingo: Abierto 24 horas", "Lunes: Abierto 24 horas", "Martes: Abierto 24 horas", "Miércoles: Abierto 24 horas", "Jueves: Abierto 24 horas"],
-  "fr": ["Vendredi: Ouvert 24h", "Samedi: Ouvert 24h", "Dimanche: Ouvert 24h", "Lundi: Ouvert 24h", "Mardi: Ouvert 24h", "Mercredi: Ouvert 24h", "Jeudi: Ouvert 24h"],
-  "pt": ["Sexta: Aberto 24 horas", "Sábado: Aberto 24 horas", "Domingo: Aberto 24 horas", "Segunda: Aberto 24 horas", "Terça: Aberto 24 horas", "Quarta: Aberto 24 horas", "Quinta: Aberto 24 horas"]
-};
+// Customer reviews
+const reviews = [
+  "Excellent service! Fast and reliable.",
+  "My package arrived on time. Very satisfied.",
+  "Professional team and excellent tracking system.",
+  "Highly recommend Express Delivery Services.",
+  "Customer support is friendly and helpful."
+];
+let reviewIndex = 0;
+function showReview() {
+  const popup = document.getElementById("reviewsPopup");
+  const reviewText = document.getElementById("reviewText");
+  reviewText.innerText = reviews[reviewIndex];
+  popup.style.display = "block";
+  reviewIndex = (reviewIndex + 1) % reviews.length;
+}
+setInterval(showReview, 5000); // every 5 seconds
+showReview();
 
-document.getElementById('languages').addEventListener('change', function() {
-  const lang = this.value;
-  
-  // Update Description
-  document.getElementById('description').innerText = descriptions[lang];
-
-  // Update Open Hours Table
-  const table = document.querySelector('#scroll-container table');
-  table.innerHTML = '';
-  openHoursTable[lang].forEach(hour => {
-    const row = document.createElement('tr');
-    const cell = document.createElement('td');
-    cell.innerHTML = hour.includes("Open 24") ? `<span class="open-hour">${hour}</span>` : hour;
-    row.appendChild(cell);
-    table.appendChild(row);
+// EmailJS - Tracking number form
+document.getElementById("trackForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const trackingNumber = document.getElementById("trackingNumber").value;
+  emailjs.send("YOUR_SERVICE_ID","YOUR_TEMPLATE_ID",{
+    tracking_number: trackingNumber
+  }).then(() => {
+    alert("Tracking request sent!");
+    document.getElementById("trackForm").reset();
   });
 });
+
+// EmailJS - Newsletter form
+document.getElementById("newsletterForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const email = document.getElementById("newsletterEmail").value;
+  emailjs.send("YOUR_SERVICE_ID","YOUR_TEMPLATE_ID",{
+    subscriber_email: email
+  }).then(() => {
+    alert("Subscription successful!");
+    document.getElementById("newsletterForm").reset();
+  });
+});
+
+// Language switcher
+function translatePage(lang){
+  alert("Language switching feature will translate to " + lang);
+}
