@@ -1,918 +1,569 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Track your packages with EDS. Fast, reliable, and eco-friendly delivery services.">
-    <title>EDS - Track Your Package</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #87CEEB; /* Sky blue background */
-            color: #333;
-            scroll-behavior: smooth;
-        }
-        header {
-            background-color: #007bff;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .header-content {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .eds-logo {
-            font-size: 32px;
-            font-weight: bold;
-            color: #FFD700; /* Gold-like color for EDS */
-            position: relative;
-            display: inline-block;
-        }
-        .eds-logo span:nth-child(1) {
-            color: #FF4500; /* Orange-red for "E" */
-        }
-        .eds-logo span:nth-child(2) {
-            color: #FFD700; /* Gold for "D" */
-        }
-        .eds-logo span:nth-child(3) {
-            color: #00CED1; /* Dark turquoise for "S" */
-        }
-        .eds-logo::after {
-            content: "🚚 ✈️";
-            font-size: 20px;
-            margin-left: 5px;
-            vertical-align: middle;
-        }
-        .logo img {
-            max-width: 200px;
-            height: auto;
-            display: none; /* Hide the default logo image */
-        }
-        .logo-selector {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 1;
-        }
-        .logo-selector select {
-            padding: 5px;
-            font-size: 14px;
-            background-color: #0056b3;
-            color: white;
-            border: none;
-            border-radius: 5px;
-        }
-        .hamburger {
-            display: none;
-            font-size: 24px;
-            cursor: pointer;
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            color: white;
-            z-index: 1001;
-        }
-        .nav-menu {
-            display: none;
-            position: fixed;
-            top: 70px;
-            right: 20px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 10px 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            z-index: 1000;
-            min-width: 200px;
-        }
-        .nav-menu.active {
-            display: block;
-        }
-        .nav-menu ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .nav-menu li {
-            margin: 5px 0;
-            padding: 10px 20px;
-            border-bottom: 1px solid #eee;
-        }
-        .nav-menu li:last-child {
-            border-bottom: none;
-        }
-        .nav-menu a {
-            text-decoration: none;
-            color: #007bff;
-            font-size: 16px;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        .nav-menu a:hover {
-            color: #0056b3;
-            padding-left: 5px;
-        }
-        .main-content {
-            padding: 20px;
-        }
-        .section {
-            min-height: 100vh;
-            padding: 50px 20px;
-            scroll-margin-top: 80px;
-        }
-        .tracking-section {
-            background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c'), url('https://images.unsplash.com/photo-1581094795159-43d864f837e3'), url('https://images.unsplash.com/photo-1601128534300-3a82f3e8f616');
-            background-size: cover, auto, auto;
-            background-position: left, center, right;
-            background-repeat: no-repeat, repeat-x, no-repeat;
-            color: white;
-            position: relative;
-            background-attachment: fixed;
-        }
-        .tracking-section::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.3);
-        }
-        .tracking-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            z-index: 1;
-            position: relative;
-        }
-        .tracking-input {
-            width: 300px;
-            padding: 12px 15px;
-            font-size: 16px;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            background-color: white;
-            color: #333;
-            transition: border-color 0.3s;
-        }
-        .tracking-input::placeholder {
-            text-transform: uppercase;
-            font-size: 12px;
-            color: #888;
-        }
-        .tracking-input:focus {
-            border-color: #007bff;
-            outline: none;
-        }
-        .tracking-button {
-            padding: 12px 20px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transition: background-color 0.3s;
-            text-transform: uppercase;
-        }
-        .tracking-button:hover {
-            background-color: #218838;
-        }
-        #tracking-result {
-            margin-top: 20px;
-            font-size: 18px;
-            color: #333;
-            z-index: 1;
-            position: relative;
-        }
-        .newsletter-section {
-            margin-top: 20px;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.9);
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            text-align: center;
-            z-index: 1;
-            position: relative;
-        }
-        .newsletter-input {
-            width: 250px;
-            padding: 12px 15px;
-            font-size: 16px;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            background-color: white;
-            color: #333;
-            transition: border-color 0.3s;
-        }
-        .newsletter-input:focus {
-            border-color: #007bff;
-            outline: none;
-        }
-        .newsletter-button {
-            padding: 12px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transition: background-color 0.3s;
-        }
-        .newsletter-button:hover {
-            background-color: #0056b3;
-        }
-        #newsletter-result {
-            margin-top: 10px;
-            color: #28a745;
-        }
-        .language-selector {
-            position: absolute;
-            top: 20px;
-            right: 60px;
-            z-index: 1;
-        }
-        .language-button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .language-button:hover {
-            background-color: #0056b3;
-        }
-        .language-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            list-style: none;
-            padding: 10px;
-            margin: 0;
-            max-height: 300px;
-            overflow-y: auto;
-            min-width: 150px;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .language-menu.active {
-            display: block;
-        }
-        .language-menu li {
-            padding: 5px 10px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-        }
-        .language-menu li:hover {
-            background-color: #f0f0f0;
-        }
-        .flag {
-            margin-right: 8px;
-            font-size: 16px;
-        }
-        .chat-bubble {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-        .chat-window {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            width: 300px;
-            height: 400px;
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            display: none;
-            flex-direction: column;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-        .chat-header {
-            background-color: #007bff;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            position: relative;
-        }
-        .chat-category {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
-        .chat-category select {
-            padding: 5px;
-            font-size: 14px;
-            background-color: #0056b3;
-            color: white;
-            border: none;
-            border-radius: 5px;
-        }
-        .chat-body {
-            flex: 1;
-            padding: 10px;
-            overflow-y: auto;
-            border-bottom: 1px solid #ddd;
-        }
-        .chat-message {
-            margin: 10px 0;
-            padding: 8px;
-            border-radius: 5px;
-        }
-        .user-message {
-            background-color: #e9ecef;
-            text-align: right;
-        }
-        .bot-message {
-            background-color: #d1ecf1;
-            text-align: left;
-        }
-        .chat-input {
-            width: 100%;
-            padding: 10px;
-            border-top: 1px solid #ddd;
-            display: flex;
-        }
-        .chat-input input {
-            flex: 1;
-            padding: 10px;
-            border: none;
-        }
-        .chat-input button {
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .hours {
-            margin: 20px 0;
-        }
-        .day {
-            margin-bottom: 5px;
-        }
-        .open-now {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            animation: blink 1s infinite;
-        }
-        .closed-now {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            animation: blink 1s infinite;
-        }
-        .global-offices {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-        }
-        .office-logo img {
-            max-width: 100px;
-            height: auto;
-        }
-        .service-images, .testimonial-images {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-        .service-images img, .testimonial-images img {
-            max-width: 300px;
-            height: auto;
-            border-radius: 5px;
-        }
-        .reviews-section {
-            padding: 20px;
-            background-color: #fff;
-            margin-top: 20px;
-        }
-        .reviews-slider {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            max-width: 600px;
-        }
-        .reviews-track {
-            display: flex;
-            transition: transform 0.5s ease-in-out;
-        }
-        .review {
-            min-width: 100%;
-            padding: 15px;
-            box-sizing: border-box;
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 5px;
-            margin-right: 10px;
-            animation: popIn 0.5s ease-out;
-        }
-        .review:nth-child(1) { background-color: #f8f9fa; }
-        .review:nth-child(2) { background-color: #e9ecef; }
-        .review:nth-child(3) { background-color: #f8f9fa; }
-        .review-stars {
-            color: #ffc107;
-            font-size: 20px;
-        }
-        .nav-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(0,0,0,0.5);
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-        }
-        .prev { left: 10px; }
-        .next { right: 10px; }
-        .testimonial {
-            margin: 20px 0;
-            padding: 15px;
-            background-color: #e9ecef;
-            border-radius: 5px;
-        }
-        .ready-to-ship {
-            text-align: center;
-            background-image: url('https://images.unsplash.com/photo-1552484894-33b636c88502');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            position: relative;
-        }
-        .ready-to-ship::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-        .ready-to-ship-content {
-            position: relative;
-            z-index: 1;
-        }
-        .start-shipping-btn {
-            padding: 10px 20px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 20px;
-        }
-        .start-shipping-btn:hover {
-            background-color: #218838;
-        }
-        .reach-stat {
-            text-align: center;
-            margin: 20px 0;
-            font-size: 18px;
-        }
-        .become-partners {
-            text-align: center;
-            background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            position: relative;
-        }
-        .become-partners::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-        .become-partners-content {
-            position: relative;
-            z-index: 1;
-        }
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            margin-top: 20px;
-            position: relative;
-        }
-        footer img {
-            max-width: 100%;
-            height: auto;
-            margin-top: 10px;
-        }
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0.3; }
-        }
-        @keyframes popIn {
-            from { transform: scale(0); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-        @media (max-width: 768px) {
-            .hamburger {
-                display: block;
-            }
-            .language-selector {
-                right: 60px;
-            }
-            .nav-menu {
-                top: 70px;
-                right: 20px;
-                width: 220px;
-            }
-            .nav-menu.active {
-                display: block;
-            }
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Track your packages with EDS. Fast, reliable, and eco-friendly delivery services." />
+  <title>EDS - Track Your Package</title>
+
+  <!-- Favicon (place favicon.png and favicon.ico in your repo root) -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
+  <link rel="manifest" href="site.webmanifest">
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="EDS — Express Delivery Services" />
+  <meta property="og:description" content="Track your packages with EDS. Fast, reliable delivery with air & ground options." />
+  <meta property="og:image" content="favicon.png" />
+  <meta name="twitter:card" content="summary" />
+
+  <style>
+    :root{
+      --eds-blue: #007bff;
+      --eds-dark: #0056b3;
+      --eds-green: #28a745;
+      --eds-bg: #f7fbff;
+      --accent: #1a73e8;
+      --max-width: 1100px;
+      --header-height: 84px;
+    }
+
+    /* Reset & base */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg,#e8f6ff 0%, #f7fbff 100%);
+      color:#222;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+      scroll-behavior: smooth;
+    }
+    a{color:var(--eds-blue); text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    /* Header */
+    header{
+      position:sticky;
+      top:0;
+      z-index:1000;
+      background:var(--eds-blue);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      height:var(--header-height);
+      padding:12px 20px;
+      box-shadow:0 2px 10px rgba(0,0,0,0.08);
+    }
+    .site-inner{max-width:var(--max-width); width:100%; display:flex; align-items:center; gap:16px; justify-content:space-between}
+
+    /* Logo area */
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .brand .logo-img{
+      width:56px;
+      height:56px;
+      object-fit:contain;
+      border-radius:8px;
+      background:transparent;
+      display:block;
+    }
+    /* textual fallback logo (shown if image hidden or error) */
+    .eds-text{
+      font-weight:800;
+      font-size:20px;
+      letter-spacing:0.6px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .eds-text span:nth-child(1){color:#FF4500}
+    .eds-text span:nth-child(2){color:#FFD700}
+    .eds-text span:nth-child(3){color:#00CED1}
+    .eds-text .icons{font-size:18px; opacity:0.95}
+
+    /* Controls */
+    .controls{display:flex;align-items:center;gap:12px}
+    .logo-selector select,
+    .language-button{
+      padding:8px 10px;
+      border-radius:6px;
+      border:none;
+      background:var(--eds-dark);
+      color:#fff;
+      cursor:pointer;
+      font-weight:600;
+      font-size:13px;
+    }
+    .hamburger{display:none; font-size:22px; cursor:pointer; background:transparent; color:#fff; border:none}
+
+    /* Nav menu (floating on mobile) */
+    .nav-menu{
+      display:none;
+      position:fixed;
+      right:18px;
+      top:84px;
+      background:#fff;
+      border-radius:10px;
+      box-shadow:0 8px 26px rgba(0,0,0,0.12);
+      overflow:hidden;
+      z-index:1100;
+      min-width:220px;
+    }
+    .nav-menu ul{list-style:none;margin:0;padding:8px}
+    .nav-menu li{padding:10px 12px;border-bottom:1px solid #f0f0f0}
+    .nav-menu li:last-child{border-bottom:none}
+    .nav-menu a{color:var(--eds-blue);font-weight:600}
+
+    /* Main layout */
+    main{max-width:var(--max-width); margin:28px auto; padding:16px}
+    .hero{
+      background: linear-gradient(90deg, rgba(0,123,255,0.08), rgba(0,0,0,0));
+      padding:34px;
+      border-radius:12px;
+      display:flex;
+      gap:20px;
+      align-items:center;
+      justify-content:space-between;
+      box-shadow:0 6px 22px rgba(9,30,66,0.04);
+    }
+    .hero-left{flex:1;min-width:280px}
+    .hero-right{width:420px;max-width:46%}
+
+    .hero h1{margin:0 0 8px; font-size:26px; color:var(--eds-dark)}
+    .hero p{margin:0 0 18px; color:#334155}
+
+    /* Tracking input */
+    .tracking-box{display:flex; gap:10px; align-items:center}
+    .tracking-input{
+      flex:1;
+      padding:12px 14px;
+      font-size:16px;
+      border-radius:8px;
+      border:1px solid #d1d5db;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.6);
+    }
+    .tracking-button{
+      background:var(--eds-green);
+      color:#fff;
+      padding:12px 18px;
+      border-radius:8px;
+      border:none;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .tracking-result{margin-top:12px;color:#0f172a;font-weight:600}
+
+    /* Newsletter */
+    .newsletter{margin-top:14px;padding:12px;background:#fff;border-radius:8px;border:1px solid #e6edf8}
+    .newsletter input{padding:10px;border-radius:8px;border:1px solid #dbe6fb;margin-right:8px}
+
+    /* Sections */
+    section{margin-top:28px;padding:22px;background:#fff;border-radius:12px;border:1px solid #eef4fb}
+    section h2{margin:0 0 12px;color:var(--eds-dark)}
+
+    /* Service cards */
+    .services{display:flex;gap:12px;flex-wrap:wrap}
+    .service{flex:1 1 240px;padding:14px;border-radius:9px;background:linear-gradient(180deg,#fff,#fbfdff);border:1px solid #eef4fb;display:flex;gap:12px;align-items:center}
+    .service img{width:84px;height:56px;object-fit:cover;border-radius:6px}
+
+    /* Reviews slider */
+    .reviews-slider{position:relative;overflow:hidden;border-radius:8px}
+    .reviews-track{display:flex;transition:transform .5s ease}
+    .review{min-width:100%;padding:12px}
+
+    /* Chat bubble */
+    .chat-bubble{
+      position:fixed;right:18px;bottom:18px;background:var(--eds-blue);color:#fff;padding:12px 16px;border-radius:999px;cursor:pointer;z-index:1200;box-shadow:0 8px 20px rgba(0,0,0,0.12)
+    }
+    .chat-window{
+      position:fixed;right:18px;bottom:74px;width:320px;height:420px;background:#fff;border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,0.14);display:none;flex-direction:column;overflow:hidden;z-index:1200;
+    }
+    .chat-header{background:var(--eds-blue);color:#fff;padding:12px;font-weight:700;display:flex;align-items:center;justify-content:space-between}
+    .chat-body{padding:12px;overflow:auto;flex:1;background:linear-gradient(180deg,#fff,#f7fbff)}
+    .chat-input{padding:10px;border-top:1px solid #eef4fb;display:flex;gap:8px}
+
+    /* Footer */
+    footer{margin-top:22px;padding:20px;text-align:center;color:#fff;background:#111827;border-radius:8px}
+
+    /* Utilities */
+    .muted{color:#6b7280}
+    .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .col{flex:1}
+
+    /* Responsive */
+    @media (max-width:900px){
+      .hero{flex-direction:column; align-items:flex-start}
+      .hero-right{width:100%}
+      .brand .logo-img{width:48px;height:48px}
+    }
+    @media (max-width:700px){
+      .hamburger{display:block}
+      .controls .logo-selector{display:none}
+      .controls .language-button{display:none}
+    }
+  </style>
 </head>
 <body>
-    <header>
+  <!-- Header -->
+  <header>
+    <div class="site-inner">
+      <div class="brand">
+        <!-- Use the uploaded image by default (raw GitHub URL you provided earlier) -->
+        <img id="siteLogo" class="logo-img" src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1721.jpeg"
+             alt="EDS logo" onerror="this.style.display='none'; document.querySelector('.eds-text').style.display='flex'">
+        <!-- Fallback textual logo (hidden if image loads) -->
+        <div class="eds-text" style="display:none">
+          <span>E</span><span>D</span><span>S</span>
+          <span class="icons">🚚 ✈️</span>
+        </div>
+        <div style="display:none" id="logoStatus" aria-hidden="true"></div>
+      </div>
+
+      <div class="controls">
         <div class="logo-selector">
-            <select id="logoSelect" onchange="changeLogo()">
-                <option value="eds-logo.png">Default Logo</option>
-                <option value="eds-modern.png">Modern Logo</option>
-                <option value="eds-classic.png">Classic Logo</option>
-            </select>
+          <select id="logoSelect" title="Choose logo" onchange="changeLogo()">
+            <!-- First option points to your uploaded file (so changeLogo switches image quickly) -->
+            <option value="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1721.jpeg">EDS - Primary</option>
+            <option value="eds-modern.png">EDS - Modern (local)</option>
+            <option value="eds-classic.png">EDS - Classic (local)</option>
+          </select>
         </div>
-        <div class="header-content">
-            <div class="eds-logo">
-                <span>E</span><span>D</span><span>S</span>
-            </div>
-            <div class="logo">
-                <img src="eds-logo.png" alt="EDS Logo" id="logoImg" onerror="this.src='https://via.placeholder.com/200?text=Logo+Not+Found';">
-            </div>
-        </div>
-        <div class="hamburger" onclick="toggleMenu()">☰</div>
-        <div class="language-selector">
-            <button class="language-button" onclick="toggleLanguageMenu()">Change Language</button>
-            <ul class="language-menu" id="language-menu">
-                <li data-lang="en" onclick="changeLanguage('en')">🇺🇸 English</li>
-                <li data-lang="es" onclick="changeLanguage('es')">🇪🇸 Spanish</li>
-                <li data-lang="fr" onclick="changeLanguage('fr')">🇫🇷 French</li>
-                <li data-lang="de" onclick="changeLanguage('de')">🇩🇪 German</li>
-                <li data-lang="it" onclick="changeLanguage('it')">🇮🇹 Italian</li>
-                <li data-lang="pt" onclick="changeLanguage('pt')">🇵🇹 Portuguese</li>
-                <li data-lang="zh" onclick="changeLanguage('zh')">🇨🇳 Chinese (Simplified)</li>
-                <li data-lang="ja" onclick="changeLanguage('ja')">🇯🇵 Japanese</li>
-                <li data-lang="ko" onclick="changeLanguage('ko')">🇰🇷 Korean</li>
-                <li data-lang="ar" onclick="changeLanguage('ar')">🇸🇦 Arabic</li>
-                <li data-lang="ru" onclick="changeLanguage('ru')">🇷🇺 Russian</li>
-                <li data-lang="hi" onclick="changeLanguage('hi')">🇮🇳 Hindi</li>
-                <li data-lang="en-GB" onclick="changeLanguage('en-GB')">🇬🇧 English (UK)</li>
-                <li data-lang="bn" onclick="changeLanguage('bn')">🇧🇩 Bengali</li>
-                <li data-lang="pa" onclick="changeLanguage('pa')">🇮🇳 Punjabi</li>
-                <li data-lang="te" onclick="changeLanguage('te')">🇮🇳 Telugu</li>
-                <li data-lang="ta" onclick="changeLanguage('ta')">🇮🇳 Tamil</li>
-                <li data-lang="mr" onclick="changeLanguage('mr')">🇮🇳 Marathi</li>
-                <li data-lang="ur" onclick="changeLanguage('ur')">🇵🇰 Urdu</li>
-                <li data-lang="tr" onclick="changeLanguage('tr')">🇹🇷 Turkish</li>
-            </ul>
-        </div>
-    </header>
-    <div class="nav-menu" id="nav-menu">
-        <ul>
-            <li><a href="#track">Track</a></li>
-            <li><a href="#locations">Locations</a></li>
-            <li><a href="#support">Support</a></li>
-            <li><a href="#contact">Contact Us</a></li>
-            <li><a href="#about-us">About Us</a></li>
-            <li><a href="#call-center">Call Center</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#testimonials">Testimonials</a></li>
-            <li><a href="#year-in-numbers">Year in Numbers</a></li>
-            <li><a href="#ready-to-ship">Ready to Ship</a></li>
-            <li><a href="#our-reach">Our Reach</a></li>
-            <li><a href="#protection-insurance">Protection & Insurance</a></li>
-            <li><a href="#become-partners">Become Our Partners</a></li>
-        </ul>
+
+        <button class="language-button" onclick="toggleLanguageMenu()" aria-expanded="false">Language</button>
+
+        <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">☰</button>
+      </div>
     </div>
-    <div class="main-content">
-        <div id="track" class="section tracking-section">
-            <h1>Track Your Package</h1>
-            <div class="tracking-container">
-                <input type="text" id="tracking-number" class="tracking-input" placeholder="TRACKING ID">
-                <button class="tracking-button" onclick="trackPackage()">TRACK</button>
-            </div>
-            <div id="tracking-result"></div>
-            <div class="newsletter-section">
-                <h3>Subscribe to Our Newsletter</h3>
-                <p>Stay updated with the latest delivery news and offers!</p>
-                <div class="tracking-container">
-                    <input type="email" id="newsletter-email" class="newsletter-input" placeholder="Enter your email">
-                    <button class="newsletter-button" onclick="subscribeNewsletter()">Subscribe</button>
-                </div>
-                <div id="newsletter-result"></div>
-            </div>
-        </div>
-        <div id="locations" class="section">
-            <h2>Headquarters</h2>
-            <p>55 Water St #28, New York, NY 10041, United States</p>
-            <div class="open-now blinking">Open Now 🟢</div>
-            <div class="hours">
-                <div class="day"><strong>Thursday:</strong> <span>8 am – 3 am</span></div>
-                <div class="day"><strong>Friday:</strong> <span>8 am – 3 am</span></div>
-                <div class="day"><strong>Saturday:</strong> <span>8 am – 3 am</span></div>
-                <div class="day"><strong>Sunday:</strong> <span>8 am – 3 am</span></div>
-                <div class="day"><strong>Monday:</strong> <span>8 am – 3 am</span></div>
-                <div class="day"><strong>Tuesday:</strong> <span>8 am – 3 am</span></div>
-                <div class="day"><strong>Wednesday:</strong> <span>8 am – 3 am</span></div>
-            </div>
-            <iframe id="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3871914.1091000007!2d-74.259865685106!3d40.697403442972!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa92c5b4f5d%3A0x3c3d4b1a7a4f3e3a!2s55%20Water%20St%20%2328%2C%20New%20York%2C%20NY%2010041%2C%20USA!5e0!3m2!1sen!2sus!4v1726670000000!5m2!1sen!2sus" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-        <div id="support" class="section">
-            <h2>Support</h2>
-            <p>Phone: <a href="tel:+12186908932">+1 218-690-8932</a></p>
-            <p>Available 24/7 to assist you with any questions or concerns.</p>
-        </div>
-        <div id="contact" class="section">
-            <h2>Contact Us</h2>
-            <p>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></p>
-            <p>Phone: <a href="tel:+12018563008">+1 201-856-3008</a></p>
-        </div>
-        <div id="about-us" class="section">
-            <h2>About Us</h2>
-            <p>EDS is a leading logistics provider committed to delivering excellence worldwide.</p>
-        </div>
-        <div id="call-center" class="section">
-            <h2>Call Center</h2>
-            <p>Free Call: <a href="tel:+12018563008">+1 201-856-3008</a></p>
-            <div class="hours">
-                <div class="day">Mon-Sat: 7 AM - 5 PM</div>
-                <div class="day">Sunday: 9 AM - 3 PM</div>
-                <div class="open-now blinking">Open Now 🟢</div>
-            </div>
-            <p>Location: 300 Kansas Ave NW, New Jersey, United States</p>
-            <div class="global-offices">
-                <div class="office-logo"><img src="https://via.placeholder.com/100?text=Global+Office+1" alt="Global Office 1"></div>
-                <div class="office-logo"><img src="https://via.placeholder.com/100?text=Global+Office+2" alt="Global Office 2"></div>
-            </div>
-        </div>
-        <div id="services" class="section">
-            <h2>Our Services</h2>
-            <h3>Local Shipping</h3>
-            <p>We provide seamless local shipping services to ensure your packages reach their destination on time, every time.</p>
-            <div class="service-images">
-                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" alt="Local Shipping 1">
-                <img src="https://images.unsplash.com/photo-1581094795159-43d864f837e3" alt="Local Shipping 2">
-            </div>
-            <h3>International Shipping</h3>
-            <p>Take your business global with our international shipping solutions. We handle customs, documentation, and logistics, making international trade hassle-free.</p>
-            <div class="service-images">
-                <img src="https://images.unsplash.com/photo-1601128534300-3a82f3e8f616" alt="International Shipping 1">
-                <img src="https://images.unsplash.com/photo-1552484894-33b636c88502" alt="International Shipping 2">
-            </div>
-            <h3>Express Delivery</h3>
-            <p>Guaranteed same-day or next-day delivery for urgent shipments, ensuring your packages arrive on time, every time.</p>
-            <div class="service-images">
-                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" alt="Express Delivery 1">
-                <img src="https://images.unsplash.com/photo-1581094795159-43d864f837e3" alt="Express Delivery 2">
-            </div>
-            <h3>Customs Clearance Assistance</h3>
-            <p>Simplify international shipping with our expert customs clearance services, ensuring hassle-free import and export compliance.</p>
-            <div class="service-images">
-                <img src="https://images.unsplash.com/photo-1601128534300-3a82f3e8f616" alt="Customs Clearance 1">
-                <img src="https://images.unsplash.com/photo-1552484894-33b636c88502" alt="Customs Clearance 2">
-            </div>
-            <h3>Warehousing</h3>
-            <p>Our state-of-the-art warehousing facilities are designed to provide secure storage solutions for your goods.</p>
-            <h3>Shipping</h3>
-            <p>Shipping is at the core of what we do. We take pride in our efficient and reliable shipping services, whether it's local, international, or freight shipments.</p>
-            <div class="service-images">
-                <img src="https://via.placeholder.com/100?text=Shipping+Logo+1" alt="Shipping Logo 1">
-                <img src="https://via.placeholder.com/100?text=Shipping+Logo+2" alt="Shipping Logo 2">
-            </div>
-        </div>
-        <div id="testimonials" class="section">
-            <h2>Our Testimonials</h2>
-            <p>What customers say about us</p>
-            <p>Don't just take our word for it. Hear what our satisfied customers have to say about their experiences with.</p>
-            <div class="reviews-section">
-                <div class="reviews-slider">
-                    <div class="reviews-track" id="reviews-track">
-                        <div class="review">Great service! My package arrived on time. - John D. ⭐⭐⭐⭐⭐</div>
-                        <div class="review">Very reliable and professional. Highly recommend! - Sarah K. ⭐⭐⭐⭐☆</div>
-                        <div class="review">Fast delivery, excellent customer support. - Mike T. ⭐⭐⭐⭐⭐</div>
-                        <div class="review">Amazing experience, will use again! - Emily R. ⭐⭐⭐⭐☆</div>
-                        <div class="review">Top-notch logistics service. - David L. ⭐⭐⭐⭐⭐</div>
-                        <div class="review">Quick and secure shipping. - Anna P. ⭐⭐⭐⭐☆</div>
-                        <div class="review">Highly efficient team! - James B. ⭐⭐⭐⭐⭐</div>
-                        <div class="review">Great value for money. - Lisa M. ⭐⭐⭐⭐☆</div>
-                        <div class="review">Always on time, very satisfied. - Robert S. ⭐⭐⭐⭐⭐</div>
-                        <div class="review">Exceptional service quality. - Clara H. ⭐⭐⭐⭐☆</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="year-in-numbers" class="section">
-            <h2>Our Year In Numbers</h2>
-            <p>We serve businesses and individuals across the world, ensuring that your shipments are handled with care, no matter where they need to go.</p>
-        </div>
-        <div id="ready-to-ship" class="section ready-to-ship">
-            <div class="ready-to-ship-content">
-                <h2>Ready to Ship with Confidence?</h2>
-                <p>Partner with us for seamless and reliable logistics solutions. Whether it's local deliveries, international shipping, or freight services, we've got you covered.</p>
-                <p>Ready to start? Let's Get Your Goods Moving!</p>
-                <button class="start-shipping-btn" onclick="startShipping()">START SHIPPING NOW</button>
-            </div>
-        </div>
-        <div id="our-reach" class="section">
-            <h2>Our Reach</h2>
-            <div class="reach-stat">3,092+ Safe Cargo</div>
-            <div class="reach-stat">563+ Warehouses</div>
-            <div class="reach-stat">148+ Operating Countries</div>
-            <div class="reach-stat">297+ Representative Offices</div>
-        </div>
-        <div id="protection-insurance" class="section">
-            <h2>Protection & Insurance</h2>
-            <h3>Protection Policy</h3>
-            <p>At EDS, we take your privacy and data protection seriously. We have robust security measures in place to safeguard your sensitive information.</p>
-            <h3>Weather Insurance</h3>
-            <p>We understand that unexpected weather events can impact your shipments. That's why we offer weather insurance to provide an extra layer of protection for your valuable cargo.</p>
-        </div>
-        <div id="become-partners" class="section become-partners">
-            <div class="become-partners-content">
-                <h2>Become Our Partners</h2>
-                <p>At EDS, we are more than just a logistics company; we're your dedicated partners in shipping success.</p>
-                <p>Established 2010, we have been at the forefront of the shipping industry, providing unparalleled services to clients worldwide. Our commitment to excellence, reliability, and customer satisfaction sets us apart.</p>
-            </div>
-        </div>
+
+    <!-- Language menu (hidden by default) -->
+    <div id="languageMenu" style="position:absolute;right:18px;top:84px;display:none;z-index:1200;background:#fff;border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,0.12);overflow:hidden">
+      <ul style="list-style:none;margin:0;padding:10px;min-width:200px">
+        <li style="padding:8px;cursor:pointer" onclick="changeLanguage('en')">🇺🇸 English</li>
+        <li style="padding:8px;cursor:pointer" onclick="changeLanguage('en-GB')">🇬🇧 English (UK)</li>
+        <li style="padding:8px;cursor:pointer" onclick="changeLanguage('es')">🇪🇸 Spanish</li>
+        <li style="padding:8px;cursor:pointer" onclick="changeLanguage('fr')">🇫🇷 French</li>
+        <li style="padding:8px;cursor:pointer" onclick="changeLanguage('de')">🇩🇪 German</li>
+        <li style="padding:8px;cursor:pointer" onclick="changeLanguage('it')">🇮🇹 Italian</li>
+        <li style="padding:8px;cursor:pointer" onclick="changeLanguage('pt')">🇵🇹 Portuguese</li>
+        <li style="padding:8px;cursor:pointer" onclick="changeLanguage('zh')">🇨🇳 Chinese (Simplified)</li>
+        <li style="padding:8px;cursor:pointer" onclick="changeLanguage('ja')">🇯🇵 Japanese</li>
+        <li style="padding:8px;cursor:pointer" onclick="changeLanguage('ko')">🇰🇷 Korean</li>
+        <li style="padding:8px;cursor:pointer" onclick="changeLanguage('ar')">🇸🇦 Arabic</li>
+        <li style="padding:8px;cursor:pointer" onclick="changeLanguage('ru')">🇷🇺 Russian</li>
+        <li style="padding:8px;cursor:pointer" onclick="changeLanguage('hi')">🇮🇳 Hindi</li>
+        <li style="padding:8px;cursor:pointer" onclick="changeLanguage('bn')">🇧🇩 Bengali</li>
+        <li style="padding:8px;cursor:pointer" onclick="changeLanguage('pa')">🇮🇳 Punjabi</li>
+        <li style="padding:8px;cursor:pointer" onclick="changeLanguage('ur')">🇵🇰 Urdu</li>
+        <li style="padding:8px;cursor:pointer" onclick="changeLanguage('tr')">🇹🇷 Turkish</li>
+      </ul>
     </div>
-    <div class="chat-bubble" onclick="toggleChat()">Chat with Us</div>
-    <div class="chat-window" id="chat-window">
-        <div class="chat-header">
-            Chat Support
-            <div class="chat-category">
-                <select id="chatCategory" onchange="changeChatCategory()">
-                    <option value="general">General</option>
-                    <option value="tracking">Tracking</option>
-                    <option value="shipping">Shipping</option>
-                </select>
-            </div>
-        </div>
-        <div class="chat-body" id="chat-body"></div>
-        <div class="chat-input">
-            <input type="text" id="chat-input" placeholder="Type a message...">
-            <button onclick="sendMessage()">Send</button>
-        </div>
+
+    <!-- Mobile nav -->
+    <div id="floatNav" class="nav-menu" aria-hidden="true">
+      <ul>
+        <li><a href="#track">Track</a></li>
+        <li><a href="#locations">Locations</a></li>
+        <li><a href="#support">Support</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+      </ul>
     </div>
-    <footer>
-        <p>©2025. Express Delivery Services All Rights Reserved. Logistics Company.</p>
-        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" alt="Logistics Image" onerror="this.src='https://via.placeholder.com/800x200?text=Logistics+Image+Not+Found';">
-    </footer>
+  </header>
 
-    <script>
-        function trackPackage() {
-            const trackingNumber = document.getElementById('tracking-number').value;
-            if (trackingNumber) {
-                document.getElementById('tracking-result').innerText = `Tracking package ${trackingNumber}`;
-                // Simulate package status based on tracking number (example logic)
-                const status = getPackageStatus(trackingNumber);
-                setTimeout(() => {
-                    document.getElementById('tracking-result').innerHTML = `Tracking package ${trackingNumber}<br>${status}`;
-                }, 1000);
-            } else {
-                document.getElementById('tracking-result').innerText = 'Please enter a tracking number.';
-            }
-        }
+  <main>
+    <!-- Hero / Tracking -->
+    <section class="hero" id="hero">
+      <div class="hero-left">
+        <h1>Track your package with EDS</h1>
+        <p>Fast, reliable, and eco-friendly delivery — air and ground. Enter your tracking ID below to get live-style status instantly.</p>
 
-        function getPackageStatus(trackingNumber) {
-            // Simple logic based on tracking number (for demo purposes)
-            const num = parseInt(trackingNumber.replace(/\D/g, '')) || 0;
-            if (num % 4 === 0) return 'WE HAVE YOUR PACKAGE';
-            if (num % 4 === 1) return 'ON THE WAY';
-            if (num % 4 === 2) return 'OUT FOR DELIVERY';
-            return 'TO the location';
-        }
+        <div class="tracking-box" id="trackBox">
+          <input id="tracking-number" class="tracking-input" placeholder="Enter tracking ID (e.g. EDS123456)" />
+          <button class="tracking-button" onclick="trackPackage()">Track</button>
+        </div>
+        <div id="tracking-result" class="tracking-result" aria-live="polite"></div>
 
-        function subscribeNewsletter() {
-            const email = document.getElementById('newsletter-email').value;
-            if (email) {
-                // Placeholder for email sending (requires backend implementation)
-                document.getElementById('newsletter-result').innerText = 'Subscription successful! Check your email for confirmation.';
-                // Simulate sending to Expressdeliveryservice0016@gmail.com
-                console.log(`Sending subscription email: ${email} to Expressdeliveryservice0016@gmail.com`);
-                // To implement real email sending, use a backend service (e.g., Node.js with Nodemailer)
-                // Example backend call (uncomment and set up server):
-                // fetch('your-backend-endpoint', {
-                //     method: 'POST',
-                //     headers: { 'Content-Type': 'application/json' },
-                //     body: JSON.stringify({ email: email, to: 'Expressdeliveryservice0016@gmail.com' })
-                // })
-                // .then(response => response.json())
-                // .then(data => console.log(data))
-                // .catch(error => console.error('Error:', error));
-            } else {
-                document.getElementById('newsletter-result').innerText = 'Please enter a valid email.';
-            }
-        }
+        <div class="newsletter" aria-label="Newsletter signup">
+          <strong>Subscribe</strong>
+          <div style="margin-top:8px; display:flex; gap:8px; align-items:center;">
+            <input id="newsletter-email" type="email" placeholder="you@company.com" style="flex:1;border-radius:8px;padding:10px;border:1px solid #e6eefb">
+            <button class="newsletter-button" onclick="subscribeNewsletter()">Subscribe</button>
+          </div>
+          <div id="newsletter-result" style="margin-top:8px;color:green"></div>
+        </div>
+      </div>
 
-        function changeLogo() {
-            const select = document.getElementById('logoSelect');
-            document.getElementById('logoImg').src = select.value;
-        }
+      <div class="hero-right">
+        <img src="https://images.unsplash.com/photo-1552484894-33b636c88502?w=900&q=60&auto=format&fit=crop" alt="Delivery hero" style="width:100%;height:220px;object-fit:cover;border-radius:10px;box-shadow:0 8px 18px rgba(15,23,42,0.06)">
+      </div>
+    </section>
 
-        function toggleLanguageMenu() {
-            const menu = document.getElementById('language-menu');
-            menu.classList.toggle('active');
-        }
+    <!-- Locations -->
+    <section id="locations">
+      <h2>Headquarters</h2>
+      <p class="muted">55 Water St #28, New York, NY 10041, United States</p>
+      <div style="margin-top:12px" class="row">
+        <div class="col">
+          <div class="open-now" style="display:inline-block;padding:8px 10px;border-radius:8px;background:#e6ffef;color:#0b6b36;font-weight:700">Open Now 🟢</div>
+          <div style="margin-top:12px">
+            <strong>Hours</strong>
+            <div class="hours" style="margin-top:8px">
+              <div class="day">Mon–Sun: 8 AM – 3 AM</div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <iframe id="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3871914.1091000007!2d-74.259865685106!3d40.697403442972!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa92c5b4f5d%3A0x3c3d4b1a7a4f3e3a!2s55%20Water%20St%20%2328%2C%20New%20York%2C%20NY%2010041%2C%20USA!5e0!3m2!1sen!2sus!4v1726670000000!5m2!1sen!2sus" style="width:100%;height:180px;border:0;border-radius:8px"></iframe>
+        </div>
+      </div>
+    </section>
 
-        function changeLanguage(lang) {
-            console.log(`Switched to ${lang}`);
-            document.documentElement.lang = lang;
-            document.getElementById('language-menu').classList.remove('active');
-        }
+    <!-- Services -->
+    <section id="services">
+      <h2>Services</h2>
+      <div class="services">
+        <div class="service">
+          <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=60&auto=format&fit=crop" alt="Local Shipping">
+          <div>
+            <strong>Local Shipping</strong>
+            <div class="muted">Fast door-to-door delivery within cities.</div>
+          </div>
+        </div>
 
-        function toggleChat() {
-            const chatWindow = document.getElementById('chat-window');
-            chatWindow.style.display = chatWindow.style.display === 'flex' ? 'none' : 'flex';
-        }
+        <div class="service">
+          <img src="https://images.unsplash.com/photo-1601128534300-3a82f3e8f616?w=600&q=60&auto=format&fit=crop" alt="International">
+          <div>
+            <strong>International Shipping</strong>
+            <div class="muted">Trusted cross-border delivery and customs support.</div>
+          </div>
+        </div>
 
-        function changeChatCategory() {
-            const select = document.getElementById('chatCategory');
-            console.log(`Chat category changed to ${select.value}`);
-        }
+        <div class="service">
+          <img src="https://images.unsplash.com/photo-1581094795159-43d864f837e3?w=600&q=60&auto=format&fit=crop" alt="Express">
+          <div>
+            <strong>Express Delivery</strong>
+            <div class="muted">Same-day and next-day priority options available.</div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        function sendMessage() {
-            const input = document.getElementById('chat-input');
-            const message = input.value;
-            if (message) {
-                const chatBody = document.getElementById('chat-body');
-                const userMessage = document.createElement('div');
-                userMessage.className = 'chat-message user-message';
-                userMessage.innerText = message;
-                chatBody.appendChild(userMessage);
-                input.value = '';
-                setTimeout(() => {
-                    const botMessage = document.createElement('div');
-                    botMessage.className = 'chat-message bot-message';
-                    botMessage.innerText = 'Thank you for your message! How can I assist you today?';
-                    chatBody.appendChild(botMessage);
-                    chatBody.scrollTop = chatBody.scrollHeight;
-                }, 500);
-                chatBody.scrollTop = chatBody.scrollHeight;
-            }
-        }
+    <!-- Support & Contact -->
+    <section id="support">
+      <h2>Support</h2>
+      <p>Phone: <a href="tel:+12186908932">+1 218-690-8932</a> — Available 24/7</p>
+      <p>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></p>
+    </section>
 
-        function startShipping() {
-            alert('Redirecting to shipping setup...');
-        }
+    <!-- Testimonials -->
+    <section id="testimonials">
+      <h2>What customers say</h2>
+      <div class="reviews-slider" aria-roledescription="carousel">
+        <div class="reviews-track" id="reviews-track">
+          <div class="review">Great service — my package arrived on time. <strong>- John D.</strong></div>
+          <div class="review">Very reliable and professional. Highly recommend! <strong>- Sarah K.</strong></div>
+          <div class="review">Fast delivery and excellent customer support. <strong>- Mike T.</strong></div>
+        </div>
+      </div>
+    </section>
 
-        function toggleMenu() {
-            const navMenu = document.getElementById('nav-menu');
-            navMenu.classList.toggle('active');
-        }
+    <!-- Ready to ship -->
+    <section id="ready-to-ship" class="ready-to-ship">
+      <h2>Ready to Ship with Confidence?</h2>
+      <p>Partner with EDS for seamless logistics — local, international, or freight. Let's get your goods moving.</p>
+      <button class="start-shipping-btn" onclick="startShipping()">Start Shipping</button>
+    </section>
 
-        let slideIndex = 0;
-        const reviewsTrack = document.getElementById('reviews-track');
-        const totalSlides = reviewsTrack.children.length;
+    <!-- Our reach / partners -->
+    <section id="our-reach">
+      <h2>Our Reach</h2>
+      <div class="row" style="gap:18px">
+        <div class="col"><strong>3,092+</strong><div class="muted">Safe Cargo</div></div>
+        <div class="col"><strong>563+</strong><div class="muted">Warehouses</div></div>
+        <div class="col"><strong>148+</strong><div class="muted">Countries</div></div>
+        <div class="col"><strong>297+</strong><div class="muted">Offices</div></div>
+      </div>
+    </section>
 
-        function autoSlide() {
-            slideIndex = (slideIndex + 1) % totalSlides;
-            const offset = -slideIndex * 100;
-            reviewsTrack.style.transform = `translateX(${offset}%)`;
-        }
+    <!-- Become partners -->
+    <section id="become-partners" class="become-partners">
+      <h2>Become Our Partners</h2>
+      <p>Join our global logistics network. Contact partnership@eds.example (replace with real address) to learn more.</p>
+    </section>
 
-        setInterval(autoSlide, 3000);
-    </script>
+  </main>
+
+  <!-- Chat bubble + window -->
+  <div class="chat-bubble" onclick="toggleChat()" aria-label="Open chat">Chat with us</div>
+  <div id="chat-window" class="chat-window" role="dialog" aria-hidden="true">
+    <div class="chat-header">
+      <div>Chat Support</div>
+      <div>
+        <select id="chatCategory" onchange="changeChatCategory()" style="padding:6px;border-radius:6px;border:none">
+          <option value="general">General</option>
+          <option value="tracking">Tracking</option>
+          <option value="shipping">Shipping</option>
+        </select>
+      </div>
+    </div>
+    <div class="chat-body" id="chat-body" aria-live="polite"></div>
+    <div class="chat-input">
+      <input id="chat-input" placeholder="Type a message..." style="flex:1;padding:8px;border-radius:8px;border:1px solid #e6eefb">
+      <button onclick="sendMessage()" style="background:var(--eds-blue);color:#fff;padding:8px 10px;border-radius:8px;border:none">Send</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div style="max-width:var(--max-width);margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <div>©2025 Express Delivery Services — All rights reserved.</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <a href="#" title="Facebook" aria-label="Facebook">FB</a>
+        <a href="#" title="Twitter" aria-label="Twitter">TW</a>
+        <a href="#" title="LinkedIn" aria-label="LinkedIn">IN</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ---------- Utility & initial DOM safe references ----------
+    document.addEventListener('DOMContentLoaded', () => {
+      // track reviews slider safety
+      const reviewsTrack = document.getElementById('reviews-track');
+      if (reviewsTrack && reviewsTrack.children.length > 0) {
+        startAutoSlide();
+      }
+
+      // If logo image failed to load earlier, ensure textual fallback visible
+      const logoImg = document.getElementById('siteLogo');
+      logoImg.addEventListener('error', () => {
+        const txt = document.querySelector('.eds-text');
+        if (txt) { txt.style.display = 'flex'; logoImg.style.display='none'; }
+      });
+    });
+
+    // ---------- Tracking demo ----------
+    function trackPackage(){
+      const input = document.getElementById('tracking-number');
+      const out = document.getElementById('tracking-result');
+      const val = (input && input.value || '').trim();
+      if (!val) { out.textContent = 'Please enter a tracking ID.'; out.style.color='maroon'; return; }
+      out.style.color = '#0f172a';
+      out.textContent = `Searching for ${val}…`;
+      // demo simulation:
+      setTimeout(()=> {
+        const num = parseInt(val.replace(/\D/g,'')) || Date.now();
+        const state = ['Received','Processing','In Transit','Out for Delivery','Delivered'][num % 5];
+        out.innerHTML = `<strong>${state}</strong> — Last update: ${new Date().toLocaleString()}`;
+      }, 850);
+    }
+
+    // ---------- Newsletter (placeholder) ----------
+    function subscribeNewsletter(){
+      const email = document.getElementById('newsletter-email').value.trim();
+      const res = document.getElementById('newsletter-result');
+      if (!email || !email.includes('@')) { res.style.color='maroon'; res.textContent='Please enter a valid email.'; return; }
+      res.style.color='green';
+      res.textContent = 'Thanks — subscription request received!';
+      console.log('Newsletter signup:', email);
+    }
+
+    // ---------- Logo selector ----------
+    function changeLogo(){
+      const val = document.getElementById('logoSelect').value;
+      const img = document.getElementById('siteLogo');
+      if (!img) return;
+      img.src = val;
+      img.style.display = 'block';
+      // hide text fallback when image chosen
+      const txt = document.querySelector('.eds-text');
+      if (txt) txt.style.display = 'none';
+    }
+
+    // ---------- Language menu ----------
+    function toggleLanguageMenu(){
+      const el = document.getElementById('languageMenu');
+      const btn = document.querySelector('.language-button');
+      if (!el) return;
+      const isShown = el.style.display === 'block';
+      el.style.display = isShown ? 'none' : 'block';
+      btn.setAttribute('aria-expanded', String(!isShown));
+    }
+    function changeLanguage(lang){
+      document.documentElement.lang = lang;
+      // close menu
+      const el = document.getElementById('languageMenu');
+      if (el) el.style.display = 'none';
+      console.log('Language set to', lang);
+    }
+
+    // ---------- Floating mobile menu ----------
+    function toggleMenu(){
+      const nav = document.getElementById('floatNav');
+      if (!nav) return;
+      const shown = nav.style.display === 'block';
+      nav.style.display = shown ? 'none' : 'block';
+      nav.setAttribute('aria-hidden', String(shown));
+    }
+
+    // ---------- Chat ----------
+    function toggleChat(){
+      const win = document.getElementById('chat-window');
+      const isHidden = win.style.display !== 'flex';
+      win.style.display = isHidden ? 'flex' : 'none';
+      win.setAttribute('aria-hidden', String(!isHidden));
+    }
+    function changeChatCategory(){ console.log('Chat category:', document.getElementById('chatCategory').value); }
+    function sendMessage(){
+      const input = document.getElementById('chat-input');
+      const body = document.getElementById('chat-body');
+      if (!input || !body) return;
+      const message = input.value.trim();
+      if (!message) return;
+      const user = document.createElement('div');
+      user.className = 'chat-message user-message';
+      user.innerText = message;
+      body.appendChild(user);
+      input.value = '';
+      body.scrollTop = body.scrollHeight;
+      setTimeout(()=> {
+        const bot = document.createElement('div');
+        bot.className = 'chat-message bot-message';
+        bot.innerText = 'Thanks! A member of our team will respond soon. For tracking help, paste your tracking ID here.';
+        body.appendChild(bot);
+        body.scrollTop = body.scrollHeight;
+      }, 700);
+    }
+
+    // ---------- Reviews slider ----------
+    let slideIndex = 0;
+    let slideTimer = null;
+    function startAutoSlide(){
+      const track = document.getElementById('reviews-track');
+      if (!track) return;
+      const total = track.children.length;
+      if (total <= 1) return;
+      slideTimer = setInterval(()=> {
+        slideIndex = (slideIndex + 1) % total;
+        track.style.transform = `translateX(-${slideIndex * 100}%)`;
+      }, 3500);
+    }
+    function stopAutoSlide(){
+      if (slideTimer) clearInterval(slideTimer);
+    }
+
+    // ---------- Misc ----------
+    function startShipping(){ alert('Redirecting to shipping setup — (demo).'); }
+
+  </script>
 </body>
 </html>
