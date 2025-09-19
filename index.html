@@ -1,237 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Express Delivery Services</title>
-<link rel="stylesheet" href="style.css">
-<style>
-/* Hamburger menu */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  background-color: #111;
-  padding: 10px 20px;
-  color: white;
-}
-.navbar ul {
-  display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.navbar li {
-  margin: 0 15px;
-}
-.navbar a {
-  text-decoration: none;
-  color: white;
-  font-weight: bold;
-}
-.hamburger {
-  display: none;
-  cursor: pointer;
-}
-.hamburger div {
-  width: 25px;
-  height: 3px;
-  background-color: white;
-  margin: 5px 0;
-}
-
-/* Support popup */
-#supportPopup {
-  position: fixed;
-  bottom: 80px;
-  right: 20px;
-  width: 300px;
-  background: white;
-  border: 2px solid #111;
-  border-radius: 10px;
-  display: none;
-  flex-direction: column;
-  z-index: 9999;
-  padding: 10px;
-}
-#supportPopup h3 { margin: 0; text-align: center; }
-#supportPopup textarea { width: 100%; margin: 5px 0; }
-#supportPopup button { background: #111; color: white; border: none; padding: 5px; cursor: pointer; }
-
-/* Customer review popup */
-#reviewPopup {
-  position: fixed;
-  bottom: 150px;
-  right: 20px;
-  background: #fffae6;
-  border: 2px solid #111;
-  padding: 10px;
-  border-radius: 10px;
-  display: none;
-  z-index: 9999;
-}
-
-/* Newsletter input */
-.newsletter input, .newsletter button {
-  padding: 10px;
-  margin: 5px;
-}
-
-/* Shining green text */
-.shining-green {
-  color: limegreen;
-  font-weight: bold;
-  text-shadow: 0 0 5px limegreen, 0 0 10px limegreen;
-  animation: glow 1.5s infinite alternate;
-}
-@keyframes glow {
-  from { text-shadow: 0 0 5px limegreen, 0 0 10px limegreen; }
-  to { text-shadow: 0 0 20px limegreen, 0 0 30px limegreen; }
-}
-
-/* Blinking indicator */
-.blinking {
-  animation: blink 1s infinite;
-}
-@keyframes blink { 50% { opacity: 0; } }
-
-/* Responsive Hamburger */
-@media screen and (max-width: 768px){
-  .navbar ul {
-    display: none;
-    flex-direction: column;
-    background-color: #111;
-    position: absolute;
-    top: 50px;
-    right: 0;
-    width: 200px;
-  }
-  .navbar ul.show {
-    display: flex;
-  }
-  .hamburger {
-    display: block;
-  }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Express Delivery Services</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
+    (function(){
+      emailjs.init("YOUR_EMAILJS_USER_ID"); // Replace with your EmailJS user ID
+    })();
+  </script>
 </head>
 <body>
 
-<!-- Navigation -->
-<div class="navbar">
-  <div class="logo">Express Delivery Services</div>
-  <ul id="navLinks">
-    <li><a href="#">HOME</a></li>
-    <li><a href="#">ABOUT</a></li>
-    <li><a href="#">SERVICES</a></li>
-    <li><a href="#">TRACK PACKAGES</a></li>
-    <li><a href="#">CONTACT</a></li>
-  </ul>
-  <div class="hamburger" onclick="toggleMenu()">
-    <div></div><div></div><div></div>
+  <!-- Header -->
+  <header style="background-image: url('https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg');">
+    <div class="top-bar">
+      <div class="logo">Express Delivery Services</div>
+      <div class="hamburger" onclick="toggleMenu()">☰</div>
+      <nav id="nav-menu">
+        <a href="#home">HOME</a>
+        <a href="#about">ABOUT</a>
+        <a href="#services">SERVICES</a>
+        <a href="#track">TRACK PACKAGES</a>
+        <a href="#contact">CONTACT</a>
+      </nav>
+      <div class="language-switcher">
+        <select onchange="translatePage(this.value)">
+          <option value="">Language</option>
+          <option value="en">United States</option>
+          <option value="en-uk">United Kingdom</option>
+          <option value="pt">Portuguese</option>
+          <option value="es">Spanish</option>
+          <option value="de">German</option>
+          <option value="zh">China</option>
+          <option value="th">Thailand</option>
+        </select>
+      </div>
+    </div>
+    <h1>Fast Logistics Company</h1>
+    <p>Reliable & Quick Delivery Services</p>
+  </header>
+
+  <!-- Image Wall -->
+  <section id="home" class="image-wall">
+    <div class="image-item">
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" alt="Delivery Truck">
+      <p>Fast delivery with modern fleet.</p>
+    </div>
+    <div class="image-item">
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1677.webp" alt="Warehouse">
+      <p>Secure storage and packaging.</p>
+    </div>
+    <div class="image-item">
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" alt="Team">
+      <p>Professional delivery team at work.</p>
+    </div>
+    <div class="image-item">
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1679.png" alt="Airplane Delivery">
+      <p>Air delivery for international packages.</p>
+    </div>
+    <div class="image-item">
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" alt="Tracking">
+      <p>Real-time tracking available.</p>
+    </div>
+    <div class="image-item">
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1681.jpeg" alt="Delivery">
+      <p>Quick delivery to your doorstep.</p>
+    </div>
+    <div class="image-item">
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1682.jpeg" alt="Package">
+      <p>Careful handling of packages.</p>
+    </div>
+    <div class="image-item">
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1684.jpeg" alt="Office">
+      <p>Efficient logistics management.</p>
+    </div>
+    <div class="image-item">
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1725.jpeg" alt="Customer Support">
+      <p>24/7 customer support for all clients.</p>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="section-dark">
+    <h2>About Our Company</h2>
+    <p>Express Delivery Services is a fast logistics company delivering packages globally with security and speed. Our professional team ensures every package reaches on time. Open 24 hours every day!</p>
+  </section>
+
+  <!-- Services -->
+  <section id="services">
+    <h2>Services</h2>
+    <ul>
+      <li>Local & International Delivery</li>
+      <li>Package Tracking</li>
+      <li>Secure Packaging</li>
+      <li>Air & Ground Transport</li>
+    </ul>
+  </section>
+
+  <!-- Track Packages -->
+  <section id="track" class="section-dark">
+    <h2>Track Your Package</h2>
+    <form id="trackForm">
+      <input type="text" id="trackingNumber" placeholder="Enter Tracking Number" required>
+      <button type="submit">Track</button>
+    </form>
+  </section>
+
+  <!-- Newsletter -->
+  <section id="contact">
+    <h2>Subscribe to Our Newsletter</h2>
+    <form id="newsletterForm">
+      <input type="email" id="newsletterEmail" placeholder="Enter your email" required>
+      <button type="submit">Subscribe</button>
+    </form>
+    <p>Contact: +15865479777 | Email: Expressdeliveryservice0016@gmail.com</p>
+  </section>
+
+  <!-- Customer Reviews Popup -->
+  <div id="reviewsPopup">
+    <p id="reviewText"></p>
   </div>
-</div>
 
-<!-- Header with background -->
-<header style="background-image: url('https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg'); height: 400px; background-size: cover; display:flex; align-items:center; justify-content:center;">
-  <h1 style="color:white; text-shadow:2px 2px #000;">Welcome to Express Delivery Services</h1>
-</header>
+  <!-- Footer -->
+  <footer>
+    <p>©2023. Express Delivery Service. All Rights Reserved. Fast Logistics Company.</p>
+  </footer>
 
-<!-- Working Hours Section -->
-<section id="hours" style="padding: 20px; text-align:center;">
-  <h2>Working Hours</h2>
-  <p><span class="blinking">🟢</span> Friday: <span class="shining-green">Open 24 hours</span></p>
-  <p>Saturday: <span class="shining-green">Open 24 hours</span></p>
-  <p>Sunday: <span class="shining-green">Open 24 hours</span></p>
-  <p>Monday: <span class="shining-green">Open 24 hours</span></p>
-  <p>Tuesday: <span class="shining-green">Open 24 hours</span></p>
-  <p>Wednesday: <span class="shining-green">Open 24 hours</span></p>
-  <p>Thursday: <span class="shining-green">Open 24 hours</span></p>
-</section>
-
-<!-- Tracking Section -->
-<section id="tracking" style="padding: 20px; text-align:center;">
-  <h2>Track Your Package</h2>
-  <input type="text" id="trackingNumber" placeholder="Enter Tracking Number">
-  <button onclick="trackPackage()">Track</button>
-  <p id="trackingResult" style="margin-top:10px; font-weight:bold;"></p>
-</section>
-
-<!-- Newsletter Section -->
-<section class="newsletter" style="padding:20px; text-align:center;">
-  <h3>Subscribe to our Newsletter</h3>
-  <input type="email" id="newsletterEmail" placeholder="Your Email">
-  <button onclick="subscribeNewsletter()">Subscribe</button>
-  <p id="newsletterMessage" style="color:green; font-weight:bold;"></p>
-</section>
-
-<!-- Gallery -->
-<section class="gallery" style="display:flex; flex-wrap:wrap; justify-content:center; padding:20px;">
-  <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" width="200"><p>Description 1</p></div>
-  <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1677.webp" width="200"><p>Description 2</p></div>
-  <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" width="200"><p>Description 3</p></div>
-  <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1679.png" width="200"><p>Description 4</p></div>
-  <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" width="200"><p>Description 5</p></div>
-  <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1681.jpeg" width="200"><p>Description 6</p></div>
-  <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1682.jpeg" width="200"><p>Description 7</p></div>
-  <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1684.jpeg" width="200"><p>Description 8</p></div>
-  <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1725.jpeg" width="200"><p>Description 9</p></div>
-</section>
-
-<!-- Support Popup -->
-<div id="supportPopup">
-  <h3>Contact Support</h3>
-  <textarea id="supportMessage" rows="4" placeholder="Type your message..."></textarea>
-  <button onclick="sendSupportMessage()">Send</button>
-</div>
-<button onclick="toggleSupport()" style="position:fixed; bottom:20px; right:20px; padding:10px;">Support</button>
-
-<!-- Customer Review Popup -->
-<div id="reviewPopup">
-  <p><strong>John D.</strong>: Excellent service! My package arrived on time.</p>
-</div>
-
-<script>
-function toggleMenu() {
-  document.getElementById('navLinks').classList.toggle('show');
-}
-
-// Support popup
-function toggleSupport() {
-  let popup = document.getElementById('supportPopup');
-  popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
-}
-function sendSupportMessage() {
-  let msg = document.getElementById('supportMessage').value;
-  if(msg) alert('Support message sent: ' + msg + '\nWe will reply to Expressdeliveryservice0016@gmail.com');
-  else alert('Please type a message.');
-  document.getElementById('supportMessage').value = '';
-}
-
-// Tracking function
-function trackPackage() {
-  let number = document.getElementById('trackingNumber').value;
-  let result = document.getElementById('trackingResult');
-  if(number) result.innerText = 'Tracking info for ' + number + ': Package is in transit.';
-  else result.innerText = 'Please enter a tracking number.';
-}
-
-// Newsletter subscription
-function subscribeNewsletter() {
-  let email = document.getElementById('newsletterEmail').value;
-  if(email) {
-    document.getElementById('newsletterMessage').innerText = 'Subscribed successfully! You will receive updates.';
-    console.log('Send newsletter email to Expressdeliveryservice0016@gmail.com with subscriber: ' + email);
-    document.getElementById('newsletterEmail').value = '';
-  } else document.getElementById('newsletterMessage').innerText = 'Please enter a valid email.';
-}
-
-// Customer reviews popup every 5 seconds
-setInterval(() => {
-  let popup = document.getElementById('reviewPopup');
-  popup.style.display = 'block';
-  setTimeout(() => { popup.style.display = 'none'; }, 5000);
-}, 10000); // shows every 10 seconds
-</script>
-
+  <script src="script.js"></script>
 </body>
 </html>
