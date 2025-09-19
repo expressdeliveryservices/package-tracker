@@ -5,252 +5,156 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Express Delivery Service</title>
 <link rel="stylesheet" href="style.css">
-<style>
-/* Dark theme general styles */
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #121212;
-    color: #ffffff;
-    scroll-behavior: smooth;
-}
-
-/* Header */
-header {
-    background: url('https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg') center/cover no-repeat;
-    height: 400px;
-    position: relative;
-}
-header h1 {
-    position: absolute;
-    bottom: 30px;
-    left: 30px;
-    color: #ffffff;
-    font-size: 3rem;
-}
-
-/* Navbar */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    background-color: #1c1c1c;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-.nav-links {
-    display: flex;
-    gap: 20px;
-}
-.nav-links a {
-    cursor: pointer;
-    font-weight: bold;
-    color: #1e90ff;
-}
-.hamburger {
-    display: none;
-    flex-direction: column;
-    cursor: pointer;
-}
-.hamburger div {
-    width: 25px;
-    height: 3px;
-    background-color: #1e90ff;
-    margin: 4px 0;
-}
-
-/* Responsive Navbar */
-@media(max-width:768px){
-    .nav-links {display:none; flex-direction:column; background-color:#1c1c1c; position:absolute; top:70px; right:0; width:200px; padding:20px;}
-    .nav-links.active {display:flex;}
-    .hamburger {display:flex;}
-}
-
-/* Sections */
-section {
-    padding: 50px 20px;
-    background-color: #1c1c1c;
-    border-radius: 10px;
-    margin: 20px auto;
-}
-.section-title {font-size:2rem; margin-bottom:20px; color:#1e90ff;}
-
-/* Tracking */
-.tracking {display:flex; gap:10px; margin-bottom:20px;}
-.tracking input {flex:1; padding:10px; border:none; border-radius:5px;}
-.tracking button {padding:10px 20px; border:none; border-radius:5px; background-color:#1e90ff; color:white; cursor:pointer;}
-#trackingBoard {width:100%; border-collapse:collapse; margin-top:20px;}
-#trackingBoard th, #trackingBoard td {border:1px solid #1e90ff; padding:10px; text-align:left;}
-#trackingBoard th {background-color:#1e90ff; color:white;}
-
-/* Newsletter */
-.newsletter {display:flex; gap:10px; margin-top:20px;}
-.newsletter input {flex:1; padding:10px; border-radius:5px; border:none;}
-.newsletter button {padding:10px 20px; border-radius:5px; border:none; background-color:#1e90ff; color:white; cursor:pointer;}
-
-/* Image Wall */
-.image-wall {display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px;}
-.image-wall img {width:100%; border-radius:10px;}
-.image-wall .desc {margin-top:10px; font-size:0.9rem; color:#b0c4de;}
-
-/* Customer Reviews */
-#reviewsBoard {display:flex; flex-direction:column; gap:10px; margin-top:20px; border:1px solid #1e90ff; padding:15px; border-radius:10px; background-color:#1c1c1c;}
-.review {border-bottom:1px solid #1e90ff; padding:10px 0;}
-.review:last-child {border-bottom:none;}
-.review strong {color:#1e90ff;}
-
-/* Business Hours */
-.business-hours span {display:inline-block; margin-right:10px;}
-.blink {color:#00ff00; animation:blink 1s infinite;}
-@keyframes blink {0%,50%,100%{opacity:1;} 25%,75%{opacity:0;}}
-
-/* Footer */
-footer {background-color:#0d0d0d; color:#1e90ff; text-align:center; padding:20px; border-radius:10px;}
-
-/* Support Popup */
-#supportPopup {display:none; position:fixed; bottom:30px; right:30px; background-color:#1c1c1c; padding:20px; border-radius:10px; box-shadow:0px 0px 15px #1e90ff; z-index:10000;}
-#supportPopup input, #supportPopup textarea {width:100%; margin-bottom:10px; padding:8px; border-radius:5px; border:none;}
-#supportPopup button {padding:8px 15px; background-color:#1e90ff; color:white; border:none; border-radius:5px; cursor:pointer;}
-
-/* Google Map iframe */
-.map-container iframe {width:100%; height:400px; border-radius:10px;}
-</style>
 </head>
 <body>
 
 <!-- Navbar -->
 <div class="navbar">
-    <div class="logo"><strong>Express Delivery</strong></div>
-    <div class="nav-links" id="navLinks">
-        <a href="#home">HOME</a>
-        <a href="#services">SERVICES</a>
-        <a href="#track">TRACK PACKAGES</a>
-        <a href="#contact">CONTACT</a>
-        <a href="#about">ABOUT</a>
-    </div>
-    <div class="hamburger" onclick="toggleMenu()"><div></div><div></div><div></div></div>
+  <div class="logo"><strong>Express Delivery</strong></div>
+  <div class="nav-links" id="navLinks">
+    <a href="#home">HOME</a>
+    <a href="#services">SERVICES</a>
+    <a href="#track">TRACK PACKAGES</a>
+    <a href="#contact">CONTACT</a>
+    <a href="#about">ABOUT</a>
+  </div>
+  <div class="hamburger" onclick="toggleMenu()">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
 </div>
 
 <!-- Header -->
 <header id="home">
-<h1>Express Delivery Service</h1>
+  <h1>Express Delivery Service</h1>
 </header>
 
 <!-- Services -->
 <section id="services">
-<h2 class="section-title">Our Services</h2>
-<p>Become Our Partners. At Express Delivery Service, we are more than just a logistics company; we’re your dedicated partners in tracking success.</p>
+  <h2 class="section-title">Our Services</h2>
+  <p>Become Our Partners. At Express Delivery Service, we are more than just a logistics company; we’re your dedicated partners in tracking success.</p>
 </section>
 
 <!-- Track Packages -->
 <section id="track">
-<h2 class="section-title">Track Your Package</h2>
-<div class="tracking">
-<input type="text" id="trackingNumber" placeholder="Enter Tracking Number">
-<button onclick="trackPackage()">Track</button>
-</div>
-<table id="trackingBoard">
-<thead>
-<tr><th>Tracking Number</th><th>Status</th><th>Location</th><th>Date/Time</th><th>Expected Delivery</th></tr>
-</thead>
-<tbody id="trackingBody"></tbody>
-</table>
+  <h2 class="section-title">Track Your Package</h2>
+  <div class="tracking">
+    <input type="text" id="trackingNumber" placeholder="Enter Tracking Number">
+    <button onclick="trackPackage()">Track</button>
+  </div>
+  <table id="trackingBoard">
+    <thead>
+      <tr><th>Tracking Number</th><th>Status</th><th>Location</th><th>Date/Time</th><th>Expected Delivery</th></tr>
+    </thead>
+    <tbody id="trackingBody"></tbody>
+  </table>
 </section>
 
 <!-- Newsletter -->
 <section>
-<h2 class="section-title">Subscribe Now</h2>
-<p>Don’t miss our future updates! Get Subscribed Today!</p>
-<div class="newsletter">
-<input type="email" id="newsletterEmail" placeholder="Enter your email">
-<button onclick="subscribeNewsletter()">Subscribe</button>
-</div>
+  <h2 class="section-title">Subscribe Now</h2>
+  <p>Don’t miss our future updates! Get Subscribed Today!</p>
+  <div class="newsletter">
+    <input type="email" id="newsletterEmail" placeholder="Enter your email">
+    <button onclick="subscribeNewsletter()">Subscribe</button>
+  </div>
 </section>
 
-<!-- Image Wall -->
+<!-- Delivery Wall -->
 <section>
-<h2 class="section-title">Delivery Wall</h2>
-<div class="image-wall">
-<div>
-<img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" alt="Delivery 1">
-<p class="desc">Express Delivery Service ensures fast, secure, and reliable parcel delivery with professional handling every step of the way. Customers can track their packages in real-time. Our team is committed to transparency, safety, and efficiency to provide a stress-free delivery experience for all clients worldwide.</p>
-</div>
-<div>
-<img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1677.webp" alt="Delivery 2">
-<p class="desc">Timely delivery of parcels, documents, and goods across cities and countries is our specialty. Each shipment is monitored closely to guarantee safe arrival. Clients are informed with updates, ensuring reliability and building trust through consistent, professional service from pickup to doorstep delivery.</p>
-</div>
-<div>
-<img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" alt="Delivery 3">
-<p class="desc">We employ cutting-edge technology to handle deliveries efficiently. Our real-time tracking system allows customers to monitor their parcels and receive notifications throughout the shipping process. Fragile and valuable items are prioritized and carefully transported to ensure prompt, safe delivery.</p>
-</div>
-<div>
-<img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1679.png" alt="Delivery 4">
-<p class="desc">Customer satisfaction is our priority. We maintain constant communication, adhere to deadlines, and ensure high-quality service. Our team is trained to handle all shipments efficiently, providing peace of mind to clients while delivering their packages safely and promptly.</p>
-</div>
-<div>
-<img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" alt="Delivery 5">
-<p class="desc">With expertise and technology integration, we optimize delivery routes, reduce delays, and maintain accuracy. Regular feedback and improvements ensure high standards, making every shipment reliable and trustworthy for customers around the globe.</p>
-</div>
-<div>
-<img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1681.jpeg" alt="Delivery 6">
-<p class="desc">Our logistics professionals monitor shipments 24/7, ensuring timely updates and proactive solutions to any issues. Safety, speed, and efficiency are central to our operations, guaranteeing every package reaches its destination on schedule with minimal stress for clients.</p>
-</div>
-<div>
-<img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1682.jpeg" alt="Delivery 7">
-<p class="desc">We provide full transparency in tracking, enabling clients to plan ahead. Our professional handling of all parcels, whether small or large, ensures secure transport and accurate delivery times. Customer feedback drives continuous improvement of our service quality.</p>
-</div>
-<div>
-<img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg" alt="Delivery 8">
-<p class="desc">Our commitment to excellence guarantees reliable deliveries across all regions. Each shipment is tracked, carefully handled, and delivered efficiently. Clients enjoy a seamless experience with confidence that their packages will arrive safely and on time.</p>
-</div>
-</div>
+  <h2 class="section-title">Delivery Wall</h2>
+  <div class="image-wall">
+    <div>
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" alt="Delivery 1">
+      <p class="desc">Our delivery service ensures packages reach their destinations swiftly and safely, providing professional handling and real-time updates for every shipment. Customers can track their packages from pickup to delivery. Reliability and efficiency are at the core of our operations, guaranteeing satisfaction. Our logistics team monitors shipments closely, resolving any issues promptly and maintaining transparent communication to ensure seamless deliveries. We optimize routes and provide continuous support, ensuring every package is delivered on time and in perfect condition, building trust with our clients.</p>
+    </div>
+    <div>
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1677.webp" alt="Delivery 2">
+      <p class="desc">We specialize in timely delivery of parcels, documents, and goods across cities. Each package is carefully handled to ensure safety and efficiency. Our expert team proactively monitors all shipments to maintain a smooth process. Clients receive real-time notifications and tracking updates. Customer satisfaction is our top priority, and we continuously improve our services to meet clients’ needs. Through professional handling and dedicated support, we ensure that every delivery meets high-quality standards and reaches the recipient without delay, creating a dependable delivery experience for all.</p>
+    </div>
+    <div>
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" alt="Delivery 3">
+      <p class="desc">Express Delivery Service employs advanced technology for package tracking and handling. Our system provides real-time updates, alerts, and notifications. Fragile and critical items are prioritized and treated with care. Clients can relax knowing their deliveries are monitored professionally. We maintain efficiency and accuracy in every delivery, ensuring deadlines are met. Our team is committed to solving problems proactively and keeping communication transparent. Every shipment is optimized for the fastest, safest route, ensuring parcels arrive securely and on time for a stress-free experience.</p>
+    </div>
+    <div>
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1679.png" alt="Delivery 4">
+      <p class="desc">Customer-first approach guides every decision at Express Delivery Service. We ensure all deliveries meet deadlines and quality standards. Communication is clear, and clients are informed at every step. Our dedicated staff maintains efficiency and professionalism throughout collection and doorstep delivery. We continuously improve our logistics network, using technology to streamline operations and optimize routes. Every package is handled with care, and our services build reliability and trust. Clients can rely on us for accurate tracking, timely deliveries, and consistent support throughout the shipping process.</p>
+    </div>
+    <div>
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" alt="Delivery 5">
+      <p class="desc">We integrate logistics expertise and technology to optimize delivery routes, ensuring timely and accurate deliveries. Each shipment is monitored closely, minimizing errors or delays. Feedback is collected to improve services and maintain high-quality standards. Our team prioritizes customer satisfaction, providing reliable and efficient deliveries. From pickup to final delivery, every step is carefully managed. Clients are kept informed with real-time tracking updates, creating trust and dependability. Our focus on speed, safety, and transparency ensures a professional and seamless delivery experience.</p>
+    </div>
+    <div>
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1681.jpeg" alt="Delivery 6">
+      <p class="desc">Every package we handle is treated with the utmost care. Our logistics network ensures timely delivery while maintaining package integrity. Advanced tracking technology provides clients with notifications at every step. Our team resolves issues proactively to avoid delays. Clients enjoy transparency, safety, and reliability. We combine expertise and technology to guarantee efficient deliveries across multiple locations. Customer trust is built through consistent and accurate service, and we continuously monitor and optimize delivery routes for the fastest, safest, and most reliable experience.</p>
+    </div>
+    <div>
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1682.jpeg" alt="Delivery 7">
+      <p class="desc">Our services cover domestic and international deliveries with precision. Every shipment is tracked in real-time and handled professionally. Communication with clients is maintained throughout the shipping process. Packages are delivered safely and efficiently. Our team uses technology to ensure timely arrivals and to prevent errors. By monitoring and managing logistics, we provide a consistent and dependable delivery experience. Customer satisfaction remains our highest priority, and we continuously refine our operations to ensure all deliveries meet the highest standards of quality, safety, and speed.</p>
+    </div>
+    <div>
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg" alt="Delivery 8">
+      <p class="desc">Express Delivery Service combines advanced tracking systems with expert handling to deliver parcels reliably. Every package is monitored until it reaches its destination. Our network ensures timely and safe delivery. Clients receive updates and notifications for transparency and confidence. Logistics optimization guarantees efficiency and speed. We maintain professionalism in handling, communication, and support. Our services ensure that packages arrive intact and on schedule. Trust, accuracy, and customer satisfaction define every delivery, creating a dependable shipping experience across cities and countries for all clients.</p>
+    </div>
+  </div>
 </section>
 
 <!-- Customer Reviews -->
 <section>
-<h2 class="section-title">Customer Reviews</h2>
-<div id="reviewsBoard"></div>
+  <h2 class="section-title">Customer Reviews</h2>
+  <div id="reviewsBoard"></div>
 </section>
 
 <!-- Business Hours -->
 <section>
-<h2 class="section-title">Business Hours</h2>
-<div class="business-hours">
-<span>Friday: <span class="blink">Open 24 hours</span></span><br>
-<span>Saturday: <span class="blink">Open 24 hours</span></span><br>
-<span>Sunday: <span class="blink">Open 24 hours</span></span><br>
-<span>Monday: <span class="blink">Open 24 hours</span></span><br>
-<span>Tuesday: <span class="blink">Open 24 hours</span></span><br>
-<span>Wednesday: <span class="blink">Open 24 hours</span></span><br>
-<span>Thursday: <span class="blink">Open 24 hours</span></span>
-</div>
+  <h2 class="section-title">Business Hours</h2>
+  <div class="business-hours">
+    <span>Friday: <span class="blink">Open 24 hours</span></span><br>
+    <span>Saturday: <span class="blink">Open 24 hours</span></span><br>
+    <span>Sunday: <span class="blink">Open 24 hours</span></span><br>
+    <span>Monday: <span class="blink">Open 24 hours</span></span><br>
+    <span>Tuesday: <span class="blink">Open 24 hours</span></span><br>
+    <span>Wednesday: <span class="blink">Open 24 hours</span></span><br>
+    <span>Thursday: <span class="blink">Open 24 hours</span></span>
+  </div>
 </section>
 
-<!-- Contact / Support -->
+<!-- Contact Section -->
 <section id="contact">
-<h2 class="section-title">Contact Us</h2>
-<p>Phone: +1 (941) 207-8626</p>
-<button style="background-color:#1e90ff;color:white;padding:10px 20px;border:none;border-radius:5px;" onclick="openSupport()">Support</button>
+  <h2 class="section-title">Contact Us</h2>
+  <p>Phone: +1 (941) 207-8626</p>
+  <p>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></p>
+  <button onclick="openSupport()">Support</button>
 
-<!-- Map (Clickable iframe without API) -->
-<h2 class="section-title">Our Headquarters</h2>
-<div class="map-container">
-<a href="https://www.google.com/maps/place/47-00+Northern+Blvd,+Long+Island+City,+NY+11101,+USA" target="_blank">
-<iframe src="https://www.google.com/maps?q=47-00+Northern+Blvd,+Long+Island+City,+NY+11101,+USA&output=embed" allowfullscreen></iframe>
-</a>
-</div>
+  <!-- Google Translate -->
+  <div id="google_translate_element" style="margin-top:20px;"></div>
 </section>
 
 <!-- About Us -->
 <section id="about">
-<h2 class="section-title">About Us</h2>
-<p>Our mission is to provide seamless, efficient shipping solutions that empower businesses and connect people globally. Established in 2015, we are committed to excellence, reliability, and customer satisfaction in every delivery.</p>
+  <h2 class="section-title">About Us</h2>
+  <p>Our mission is simple yet fundamental: to provide seamless and efficient shipping solutions that empower businesses, enable growth, and connect people and goods across the globe. Established in 2015, we have been at the forefront of the shipping industry, providing unparalleled services to clients worldwide.</p>
 </section>
 
 <!-- Support Popup -->
 <div id="supportPopup">
-<h3>Welcome to Express Delivery Service</h3>
-<p>How can we help you?</p>
-<input type="text" id="supportName"
+  <h3>Welcome to Express Delivery Service</h3>
+  <p>How can we help you?</p>
+  <input type="text" id="supportName" placeholder="Your Name">
+  <input type="email" id="supportEmail" placeholder="Your Email">
+  <textarea id="supportMessage" placeholder="Your Message"></textarea>
+  <button onclick="sendSupport()">Send</button>
+  <button onclick="closeSupport()">Close</button>
+</div>
+
+<!-- Footer -->
+<footer>
+  ©2023. Express Delivery Service. All Rights Reserved.<br>
+  Fast Logistics Company.
+</footer>
+
+<script src="script.js"></script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>
