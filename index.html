@@ -4,263 +4,233 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Express Delivery Services</title>
+<link rel="stylesheet" href="style.css">
 <style>
-  body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #111;
-    color: #fff;
-    overflow-x: hidden;
-  }
+/* Hamburger menu */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  background-color: #111;
+  padding: 10px 20px;
+  color: white;
+}
+.navbar ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.navbar li {
+  margin: 0 15px;
+}
+.navbar a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+}
+.hamburger {
+  display: none;
+  cursor: pointer;
+}
+.hamburger div {
+  width: 25px;
+  height: 3px;
+  background-color: white;
+  margin: 5px 0;
+}
 
-  header {
-    background: url('https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg') no-repeat center center;
-    background-size: cover;
-    padding: 30px;
-    text-align: center;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
+/* Support popup */
+#supportPopup {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 300px;
+  background: white;
+  border: 2px solid #111;
+  border-radius: 10px;
+  display: none;
+  flex-direction: column;
+  z-index: 9999;
+  padding: 10px;
+}
+#supportPopup h3 { margin: 0; text-align: center; }
+#supportPopup textarea { width: 100%; margin: 5px 0; }
+#supportPopup button { background: #111; color: white; border: none; padding: 5px; cursor: pointer; }
 
-  h1 {
-    margin: 0;
-    font-size: 2rem;
-    color: #fff;
-    text-shadow: 2px 2px 8px #000;
-  }
+/* Customer review popup */
+#reviewPopup {
+  position: fixed;
+  bottom: 150px;
+  right: 20px;
+  background: #fffae6;
+  border: 2px solid #111;
+  padding: 10px;
+  border-radius: 10px;
+  display: none;
+  z-index: 9999;
+}
 
-  #language-switcher {
-    margin-top: 10px;
-  }
+/* Newsletter input */
+.newsletter input, .newsletter button {
+  padding: 10px;
+  margin: 5px;
+}
 
-  #description {
-    margin: 20px;
-    font-size: 1.2rem;
-    text-align: center;
-  }
+/* Shining green text */
+.shining-green {
+  color: limegreen;
+  font-weight: bold;
+  text-shadow: 0 0 5px limegreen, 0 0 10px limegreen;
+  animation: glow 1.5s infinite alternate;
+}
+@keyframes glow {
+  from { text-shadow: 0 0 5px limegreen, 0 0 10px limegreen; }
+  to { text-shadow: 0 0 20px limegreen, 0 0 30px limegreen; }
+}
 
-  /* Scroll container */
-  #scroll-container {
-    height: 600px;
-    overflow: hidden;
-    margin: 20px auto;
-    width: 90%;
-    max-width: 600px;
-    background: rgba(0,0,0,0.6);
-    border-radius: 10px;
-    padding: 10px;
-  }
+/* Blinking indicator */
+.blinking {
+  animation: blink 1s infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
+/* Responsive Hamburger */
+@media screen and (max-width: 768px){
+  .navbar ul {
+    display: none;
+    flex-direction: column;
+    background-color: #111;
+    position: absolute;
+    top: 50px;
+    right: 0;
+    width: 200px;
   }
-
-  td {
-    padding: 10px;
-    font-size: 1.2rem;
-    border-bottom: 1px solid #555;
-  }
-
-  /* Open hour shining green */
-  .open-hour {
-    color: #00ff00;
-    font-weight: bold;
-    text-shadow: 0 0 10px #00ff00;
-    animation: glow 1.5s infinite alternate;
-  }
-
-  @keyframes glow {
-    from { text-shadow: 0 0 5px #00ff00; }
-    to { text-shadow: 0 0 20px #00ff00; }
-  }
-
-  /* Blinking indicator */
-  .blinking {
-    animation: blink 1s infinite;
-    font-weight: bold;
-    margin-right: 10px;
-  }
-
-  @keyframes blink {
-    0%, 50%, 100% { opacity: 1; }
-    25%, 75% { opacity: 0; }
-  }
-
-  /* Extended description */
-  #extended-description {
-    margin: 20px auto;
-    width: 90%;
-    max-width: 800px;
-    background: rgba(0,0,0,0.5);
-    padding: 15px;
-    border-radius: 10px;
-    font-size: 1rem;
-    line-height: 1.5;
-  }
-
-  /* Image gallery */
-  .gallery {
+  .navbar ul.show {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-    margin: 20px auto;
-    width: 95%;
-    max-width: 1200px;
   }
-
-  .gallery-item {
-    flex: 1 1 250px;
-    background: rgba(0,0,0,0.5);
-    border-radius: 10px;
-    overflow: hidden;
-    text-align: center;
-    padding-bottom: 10px;
-  }
-
-  .gallery-item img {
-    width: 100%;
+  .hamburger {
     display: block;
-    border-bottom: 1px solid #555;
   }
-
-  .gallery-item p {
-    margin: 10px;
-    font-size: 1rem;
-  }
-
-  footer {
-    background: rgba(0,0,0,0.7);
-    text-align: center;
-    padding: 20px;
-    position: relative;
-  }
+}
 </style>
 </head>
 <body>
 
-<header>
-  <h1>Express Delivery Services <span class="blinking">🟢</span>Open Now</h1>
-  <div id="language-switcher">
-    <label for="languages">Language:</label>
-    <select id="languages">
-      <option value="en-US">English (US)</option>
-      <option value="en-UK">English (UK)</option>
-      <option value="es">Spanish</option>
-      <option value="fr">French</option>
-      <option value="pt">Portuguese</option>
-    </select>
+<!-- Navigation -->
+<div class="navbar">
+  <div class="logo">Express Delivery Services</div>
+  <ul id="navLinks">
+    <li><a href="#">HOME</a></li>
+    <li><a href="#">ABOUT</a></li>
+    <li><a href="#">SERVICES</a></li>
+    <li><a href="#">TRACK PACKAGES</a></li>
+    <li><a href="#">CONTACT</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()">
+    <div></div><div></div><div></div>
   </div>
+</div>
+
+<!-- Header with background -->
+<header style="background-image: url('https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg'); height: 400px; background-size: cover; display:flex; align-items:center; justify-content:center;">
+  <h1 style="color:white; text-shadow:2px 2px #000;">Welcome to Express Delivery Services</h1>
 </header>
 
-<div id="description">
-  Welcome to Express Delivery Services. Track your packages in real-time and enjoy our fast and reliable service across the USA and UK.
-</div>
+<!-- Working Hours Section -->
+<section id="hours" style="padding: 20px; text-align:center;">
+  <h2>Working Hours</h2>
+  <p><span class="blinking">🟢</span> Friday: <span class="shining-green">Open 24 hours</span></p>
+  <p>Saturday: <span class="shining-green">Open 24 hours</span></p>
+  <p>Sunday: <span class="shining-green">Open 24 hours</span></p>
+  <p>Monday: <span class="shining-green">Open 24 hours</span></p>
+  <p>Tuesday: <span class="shining-green">Open 24 hours</span></p>
+  <p>Wednesday: <span class="shining-green">Open 24 hours</span></p>
+  <p>Thursday: <span class="shining-green">Open 24 hours</span></p>
+</section>
 
-<div id="scroll-container">
-  <table>
-    <tr><td><span class="open-hour">Friday: Open 24 hours</span></td></tr>
-    <tr><td><span class="open-hour">Saturday: Open 24 hours</span></td></tr>
-    <tr><td><span class="open-hour">Sunday: Open 24 hours</span></td></tr>
-    <tr><td><span class="open-hour">Monday: Open 24 hours</span></td></tr>
-    <tr><td><span class="open-hour">Tuesday: Open 24 hours</span></td></tr>
-    <tr><td><span class="open-hour">Wednesday: Open 24 hours</span></td></tr>
-    <tr><td><span class="open-hour">Thursday: Open 24 hours</span></td></tr>
-  </table>
-</div>
+<!-- Tracking Section -->
+<section id="tracking" style="padding: 20px; text-align:center;">
+  <h2>Track Your Package</h2>
+  <input type="text" id="trackingNumber" placeholder="Enter Tracking Number">
+  <button onclick="trackPackage()">Track</button>
+  <p id="trackingResult" style="margin-top:10px; font-weight:bold;"></p>
+</section>
 
-<div class="gallery">
-  <div class="gallery-item">
-    <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" alt="Delivery Van">
-    <p>Our modern delivery fleet ensures fast and secure delivery.</p>
-  </div>
-  <div class="gallery-item">
-    <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1677.webp" alt="Package Sorting">
-    <p>Advanced sorting facilities for timely package processing.</p>
-  </div>
-  <div class="gallery-item">
-    <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" alt="Warehouse">
-    <p>Spacious warehouses for safe storage of parcels.</p>
-  </div>
-  <div class="gallery-item">
-    <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1679.png" alt="Tracking">
-    <p>Real-time tracking ensures you never lose sight of your package.</p>
-  </div>
-  <div class="gallery-item">
-    <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" alt="Express Delivery">
-    <p>Express delivery options for urgent shipments.</p>
-  </div>
-  <div class="gallery-item">
-    <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1681.jpeg" alt="Staff">
-    <p>Professional staff handling packages with care.</p>
-  </div>
-  <div class="gallery-item">
-    <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1682.jpeg" alt="Loading">
-    <p>Efficient loading system for fast dispatch.</p>
-  </div>
-  <div class="gallery-item">
-    <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1684.jpeg" alt="Delivery Route">
-    <p>Optimized delivery routes for timely arrival.</p>
-  </div>
-  <div class="gallery-item">
-    <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1725.jpeg" alt="Customer Service">
-    <p>Responsive customer service for all your inquiries.</p>
-  </div>
-</div>
+<!-- Newsletter Section -->
+<section class="newsletter" style="padding:20px; text-align:center;">
+  <h3>Subscribe to our Newsletter</h3>
+  <input type="email" id="newsletterEmail" placeholder="Your Email">
+  <button onclick="subscribeNewsletter()">Subscribe</button>
+  <p id="newsletterMessage" style="color:green; font-weight:bold;"></p>
+</section>
 
-<div id="extended-description">
-  Our Express Delivery Services ensures your parcels reach safely and on time. We cover the USA, UK, and international shipping with real-time tracking. Customer satisfaction is our priority. Contact our support via email at <strong>Expressdeliveryservice0016@gmail.com</strong> or call <strong>+1 586 547 9777</strong>. Enjoy 24/7 service and live tracking on all packages.
-</div>
+<!-- Gallery -->
+<section class="gallery" style="display:flex; flex-wrap:wrap; justify-content:center; padding:20px;">
+  <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" width="200"><p>Description 1</p></div>
+  <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1677.webp" width="200"><p>Description 2</p></div>
+  <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" width="200"><p>Description 3</p></div>
+  <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1679.png" width="200"><p>Description 4</p></div>
+  <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" width="200"><p>Description 5</p></div>
+  <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1681.jpeg" width="200"><p>Description 6</p></div>
+  <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1682.jpeg" width="200"><p>Description 7</p></div>
+  <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1684.jpeg" width="200"><p>Description 8</p></div>
+  <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1725.jpeg" width="200"><p>Description 9</p></div>
+</section>
 
-<footer>
-  &copy; 2025 Express Delivery Services
-</footer>
+<!-- Support Popup -->
+<div id="supportPopup">
+  <h3>Contact Support</h3>
+  <textarea id="supportMessage" rows="4" placeholder="Type your message..."></textarea>
+  <button onclick="sendSupportMessage()">Send</button>
+</div>
+<button onclick="toggleSupport()" style="position:fixed; bottom:20px; right:20px; padding:10px;">Support</button>
+
+<!-- Customer Review Popup -->
+<div id="reviewPopup">
+  <p><strong>John D.</strong>: Excellent service! My package arrived on time.</p>
+</div>
 
 <script>
-const descriptions = {
-  "en-US": "Welcome to Express Delivery Services. Track your packages in real-time and enjoy our fast and reliable service across the USA.",
-  "en-UK": "Welcome to Express Delivery Services. Track your parcels in real-time and enjoy our fast and reliable service across the United Kingdom.",
-  "es": "Bienvenido a Express Delivery Services. Rastrea tus paquetes en tiempo real y disfruta de nuestro servicio rápido y confiable.",
-  "fr": "Bienvenue chez Express Delivery Services. Suivez vos colis en temps réel et profitez de notre service rapide et fiable.",
-  "pt": "Bem-vindo à Express Delivery Services. Acompanhe suas encomendas em tempo real e desfrute do nosso serviço rápido e confiável."
-};
-
-const openHoursTable = {
-  "en-US": ["Friday: Open 24 hours", "Saturday: Open 24 hours", "Sunday: Open 24 hours", "Monday: Open 24 hours", "Tuesday: Open 24 hours", "Wednesday: Open 24 hours", "Thursday: Open 24 hours"],
-  "en-UK": ["Friday: Open 24 hours", "Saturday: Open 24 hours", "Sunday: Open 24 hours", "Monday: Open 24 hours", "Tuesday: Open 24 hours", "Wednesday: Open 24 hours", "Thursday: Open 24 hours"],
-  "es": ["Viernes: Abierto 24 horas", "Sábado: Abierto 24 horas", "Domingo: Abierto 24 horas", "Lunes: Abierto 24 horas", "Martes: Abierto 24 horas", "Miércoles: Abierto 24 horas", "Jueves: Abierto 24 horas"],
-  "fr": ["Vendredi: Ouvert 24h", "Samedi: Ouvert 24h", "Dimanche: Ouvert 24h", "Lundi: Ouvert 24h", "Mardi: Ouvert 24h", "Mercredi: Ouvert 24h", "Jeudi: Ouvert 24h"],
-  "pt": ["Sexta: Aberto 24 horas", "Sábado: Aberto 24 horas", "Domingo: Aberto 24 horas", "Segunda: Aberto 24 horas", "Terça: Aberto 24 horas", "Quarta: Aberto 24 horas", "Quinta: Aberto 24 horas"]
-};
-
-document.getElementById('languages').addEventListener('change', function() {
-  const lang = this.value;
-  document.getElementById('description').innerText = descriptions[lang];
-
-  const table = document.querySelector('#scroll-container table');
-  table.innerHTML = '';
-  openHoursTable[lang].forEach(hour => {
-    const row = document.createElement('tr');
-    const cell = document.createElement('td');
-    cell.innerHTML = hour.includes("Open 24") ? `<span class="open-hour">${hour}</span>` : hour;
-    row.appendChild(cell);
-    table.appendChild(row);
-  });
-});
-
-// Auto-scroll (~5 minutes)
-const scrollContainer = document.getElementById('scroll-container');
-let scrollHeight = scrollContainer.scrollHeight - scrollContainer.clientHeight;
-let scrollStep = scrollHeight / (5 * 60 * 60);
-function autoScroll() {
-  if(scrollContainer.scrollTop < scrollHeight) {
-    scrollContainer.scrollTop += scrollStep;
-    requestAnimationFrame(autoScroll);
-  }
+function toggleMenu() {
+  document.getElementById('navLinks').classList.toggle('show');
 }
-autoScroll();
+
+// Support popup
+function toggleSupport() {
+  let popup = document.getElementById('supportPopup');
+  popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
+}
+function sendSupportMessage() {
+  let msg = document.getElementById('supportMessage').value;
+  if(msg) alert('Support message sent: ' + msg + '\nWe will reply to Expressdeliveryservice0016@gmail.com');
+  else alert('Please type a message.');
+  document.getElementById('supportMessage').value = '';
+}
+
+// Tracking function
+function trackPackage() {
+  let number = document.getElementById('trackingNumber').value;
+  let result = document.getElementById('trackingResult');
+  if(number) result.innerText = 'Tracking info for ' + number + ': Package is in transit.';
+  else result.innerText = 'Please enter a tracking number.';
+}
+
+// Newsletter subscription
+function subscribeNewsletter() {
+  let email = document.getElementById('newsletterEmail').value;
+  if(email) {
+    document.getElementById('newsletterMessage').innerText = 'Subscribed successfully! You will receive updates.';
+    console.log('Send newsletter email to Expressdeliveryservice0016@gmail.com with subscriber: ' + email);
+    document.getElementById('newsletterEmail').value = '';
+  } else document.getElementById('newsletterMessage').innerText = 'Please enter a valid email.';
+}
+
+// Customer reviews popup every 5 seconds
+setInterval(() => {
+  let popup = document.getElementById('reviewPopup');
+  popup.style.display = 'block';
+  setTimeout(() => { popup.style.display = 'none'; }, 5000);
+}, 10000); // shows every 10 seconds
 </script>
 
 </body>
