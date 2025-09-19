@@ -5,64 +5,87 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Express Delivery Service</title>
 <style>
-body { margin:0; font-family:Arial,sans-serif; background-color:#121212; color:#fff; scroll-behavior:smooth; }
-a { color:#1e90ff; text-decoration:none; }
-header { background:url('https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg') center/cover no-repeat; height:400px; position:relative; }
-header h1 { position:absolute; bottom:30px; left:30px; color:#fff; font-size:3rem; }
-.navbar { display:flex; justify-content:space-between; align-items:center; padding:20px; background-color:#1c1c1c; position:sticky; top:0; z-index:1000; }
-.nav-links { display:flex; gap:20px; }
-.nav-links a { cursor:pointer; font-weight:bold; }
-.hamburger { display:none; flex-direction:column; cursor:pointer; }
-.hamburger div { width:25px; height:3px; background-color:#1e90ff; margin:4px 0; }
-@media(max-width:768px){ .nav-links { display:none; flex-direction:column; background-color:#1c1c1c; position:absolute; top:70px; right:0; width:200px; padding:20px; } .nav-links.active { display:flex; } .hamburger { display:flex; } }
-section { padding:50px 20px; }
-.section-title { font-size:2rem; margin-bottom:20px; color:#1e90ff; }
-.tracking { display:flex; gap:10px; margin-bottom:20px; }
-.tracking input { flex:1; padding:10px; border:none; border-radius:5px; }
-.tracking button { padding:10px 20px; border:none; border-radius:5px; background-color:#1e90ff; color:#fff; cursor:pointer; }
-#trackingBoard { width:100%; border-collapse:collapse; margin-top:20px; }
-#trackingBoard th, #trackingBoard td { border:1px solid #1e90ff; padding:10px; text-align:left; }
-#trackingBoard th { background-color:#1e90ff; color:white; }
-.newsletter { display:flex; gap:10px; margin-top:20px; }
-.newsletter input { flex:1; padding:10px; border-radius:5px; border:none; }
-.newsletter button { padding:10px 20px; border-radius:5px; border:none; background-color:#1e90ff; color:white; cursor:pointer; }
-#supportPopup { display:none; position:fixed; bottom:30px; right:30px; background-color:#1c1c1c; padding:20px; border-radius:10px; box-shadow:0px 0px 15px #1e90ff; z-index:10000; }
-#supportPopup input, #supportPopup textarea { width:100%; margin-bottom:10px; padding:8px; border-radius:5px; border:none; }
-#supportPopup button { padding:8px 15px; background-color:#1e90ff; color:white; border:none; border-radius:5px; cursor:pointer; }
-#reviewsBoard { display:flex; flex-direction:column; gap:10px; margin-top:20px; border:1px solid #1e90ff; padding:15px; border-radius:10px; background-color:#1c1c1c; }
-.review { border-bottom:1px solid #1e90ff; padding:10px 0; }
-.review:last-child { border-bottom:none; }
-.review strong { color:#1e90ff; }
-.image-wall { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:20px; }
-.image-wall img { width:100%; border-radius:10px; }
-.image-wall .desc { margin-top:10px; font-size:0.9rem; color:#b0c4de; }
-.business-hours span { display:inline-block; margin-right:10px; }
-.blink { color:#00ff00; animation:blink 1s infinite; }
-@keyframes blink { 0%,50%,100%{opacity:1;} 25%,75%{opacity:0;} }
-footer { background-color:#0d0d0d; text-align:center; padding:20px; color:#1e90ff; }
-.language-switcher { margin-top:10px; background-color:#1c1c1c; color:white; border-radius:5px; padding:5px; }
-#map { width:100%; height:400px; margin-top:20px; border-radius:10px; }
+/* General Styles */
+body {margin:0; font-family:Arial,sans-serif; background-color:#121212; color:#fff; scroll-behavior:smooth;}
+a {color:#1e90ff; text-decoration:none;}
+header {background:url('https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg') center/cover no-repeat; height:400px; position:relative;}
+header h1 {position:absolute; bottom:30px; left:30px; color:#fff; font-size:3rem;}
+.navbar {display:flex; justify-content:space-between; align-items:center; padding:20px; background-color:#1c1c1c; position:sticky; top:0; z-index:1000;}
+.nav-links {display:flex; gap:20px;}
+.nav-links a {cursor:pointer; font-weight:bold;}
+.hamburger {display:none; flex-direction:column; cursor:pointer;}
+.hamburger div {width:25px; height:3px; background-color:#1e90ff; margin:4px 0;}
+
+/* Responsive Navbar */
+@media(max-width:768px){
+.nav-links {display:none; flex-direction:column; background-color:#1c1c1c; position:absolute; top:70px; right:0; width:200px; padding:20px;}
+.nav-links.active {display:flex;}
+.hamburger {display:flex;}
+}
+
+section {padding:50px 20px;}
+.section-title {font-size:2rem; margin-bottom:20px; color:#1e90ff;}
+
+/* Tracking */
+.tracking {display:flex; gap:10px; margin-bottom:20px;}
+.tracking input {flex:1; padding:10px; border:none; border-radius:5px;}
+.tracking button {padding:10px 20px; border:none; border-radius:5px; background-color:#1e90ff; color:white; cursor:pointer;}
+#trackingBoard {width:100%; border-collapse:collapse; margin-top:20px;}
+#trackingBoard th, #trackingBoard td {border:1px solid #1e90ff; padding:10px; text-align:left;}
+#trackingBoard th {background-color:#1e90ff; color:white;}
+
+/* Newsletter */
+.newsletter {display:flex; gap:10px; margin-top:20px;}
+.newsletter input {flex:1; padding:10px; border-radius:5px; border:none;}
+.newsletter button {padding:10px 20px; border-radius:5px; border:none; background-color:#1e90ff; color:white; cursor:pointer;}
+
+/* Support Popup */
+#supportPopup {display:none; position:fixed; bottom:30px; right:30px; background-color:#1c1c1c; padding:20px; border-radius:10px; box-shadow:0px 0px 15px #1e90ff; z-index:10000;}
+#supportPopup input,#supportPopup textarea {width:100%; margin-bottom:10px; padding:8px; border-radius:5px; border:none;}
+#supportPopup button {padding:8px 15px; background-color:#1e90ff; color:white; border:none; border-radius:5px; cursor:pointer;}
+
+/* Customer Reviews */
+#reviewsBoard {display:flex; flex-direction:column; gap:10px; margin-top:20px; border:1px solid #1e90ff; padding:15px; border-radius:10px; background-color:#1c1c1c;}
+.review {border-bottom:1px solid #1e90ff; padding:10px 0;}
+.review:last-child {border-bottom:none;}
+.review strong {color:#1e90ff;}
+
+/* Image Wall */
+.image-wall {display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px;}
+.image-wall img {width:100%; border-radius:10px;}
+.image-wall .desc {margin-top:10px; font-size:0.9rem; color:#b0c4de;}
+
+/* Business Hours */
+.business-hours span {display:inline-block; margin-right:10px;}
+.blink {color:#00ff00; animation:blink 1s infinite;}
+@keyframes blink {0%,50%,100%{opacity:1;} 25%,75%{opacity:0;}}
+
+/* Footer */
+footer {background-color:#0d0d0d; text-align:center; padding:20px; color:#1e90ff;}
+
+/* Map */
+#map {width:100%; height:400px; border-radius:10px; margin-top:20px;}
 </style>
 </head>
 <body>
 
 <!-- Navbar -->
 <div class="navbar">
-    <div class="logo"><strong>Express Delivery</strong></div>
-    <div class="nav-links" id="navLinks">
-        <a href="#home">HOME</a>
-        <a href="#services">SERVICES</a>
-        <a href="#track">TRACK PACKAGES</a>
-        <a href="#contact">CONTACT</a>
-        <a href="#about">ABOUT</a>
-    </div>
-    <div class="hamburger" onclick="toggleMenu()">
-        <div></div><div></div><div></div>
-    </div>
+<div class="logo"><strong>Express Delivery</strong></div>
+<div class="nav-links" id="navLinks">
+<a href="#home">HOME</a>
+<a href="#services">SERVICES</a>
+<a href="#track">TRACK PACKAGES</a>
+<a href="#contact">CONTACT</a>
+<a href="#about">ABOUT</a>
+</div>
+<div class="hamburger" onclick="toggleMenu()"><div></div><div></div><div></div></div>
 </div>
 
 <!-- Header -->
-<header id="home"><h1>Express Delivery Service</h1></header>
+<header id="home">
+<h1>Express Delivery Service</h1>
+</header>
 
 <!-- Services -->
 <section id="services">
@@ -99,11 +122,26 @@ footer { background-color:#0d0d0d; text-align:center; padding:20px; color:#1e90f
 <section>
 <h2 class="section-title">Delivery Wall</h2>
 <div class="image-wall">
-<div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" alt="Delivery 1"><p class="desc">Our delivery service ensures packages reach their destinations swiftly and safely. With professional handling and real-time tracking, customers stay informed from pickup to delivery. Reliability is at the core of our operations, guaranteeing customer satisfaction. We constantly optimize routes and maintain transparent communication to make every delivery seamless and stress-free.</p></div>
-<div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1677.webp" alt="Delivery 2"><p class="desc">We specialize in timely delivery of parcels, documents, and goods across cities and countries. Each package is handled with utmost care, ensuring safety and efficiency. Our expert logistics team monitors every shipment and proactively solves issues to maintain a smooth delivery process. Customer satisfaction is our highest priority, building trust and loyalty through consistent service.</p></div>
-<div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" alt="Delivery 3"><p class="desc">Express Delivery Service employs cutting-edge technology for tracking and handling packages. Our advanced system allows real-time updates, notifications, and alerts for clients. From fragile goods to critical documents, every shipment is prioritized and treated with care. Clients can relax knowing that their delivery is in professional hands, reaching destinations on time.</p></div>
-<div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1679.png" alt="Delivery 4"><p class="desc">Customer-first approach guides every decision we make. Our team ensures all deliveries meet deadlines and quality standards. Communication is clear and continuous, keeping clients informed at every step. From collection to doorstep delivery, our dedicated staff maintains efficiency and professionalism in every transaction, building a dependable delivery experience for all clients.</p></div>
-<div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" alt="Delivery 5"><p class="desc">We integrate logistics expertise and technology to optimize delivery routes and reduce delays. Our commitment to speed and accuracy ensures that parcels arrive intact and on schedule. Regular feedback and continuous improvement enable us to maintain high standards and adapt to customers’ needs, making every delivery a reliable experience, trusted by clients worldwide.</p></div>
+<div>
+<img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" alt="Delivery 1">
+<p class="desc">Our delivery service ensures packages reach their destinations swiftly and safely...</p>
+</div>
+<div>
+<img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1677.webp" alt="Delivery 2">
+<p class="desc">We specialize in timely delivery of parcels, documents, and goods across cities...</p>
+</div>
+<div>
+<img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" alt="Delivery 3">
+<p class="desc">Express Delivery Service employs cutting-edge technology for tracking...</p>
+</div>
+<div>
+<img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1679.png" alt="Delivery 4">
+<p class="desc">Customer-first approach guides every decision we make...</p>
+</div>
+<div>
+<img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" alt="Delivery 5">
+<p class="desc">We integrate logistics expertise and technology to optimize delivery routes...</p>
+</div>
 </div>
 </section>
 
@@ -127,29 +165,24 @@ footer { background-color:#0d0d0d; text-align:center; padding:20px; color:#1e90f
 </div>
 </section>
 
-<!-- Contact -->
+<!-- Contact Section -->
 <section id="contact">
 <h2 class="section-title">Contact Us</h2>
 <p>Phone: +1 (941) 207-8626</p>
 <p>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></p>
-<button onclick="openSupport()">Support</button>
+<button style="background-color:#1e90ff;color:white;padding:10px 20px;border:none;border-radius:5px;" onclick="openSupport()">Support</button>
+
+<!-- Google Translate -->
+<div id="google_translate_element" style="margin-top:20px;"></div>
+
+<!-- Map -->
 <div id="map"></div>
-<div class="language-switcher">
-<select id="languageSelect" onchange="switchLanguage()">
-<option value="en">English</option>
-<option value="pt">Portuguese</option>
-<option value="es">Spanish</option>
-<option value="de">German</option>
-<option value="zh">Chinese</option>
-<option value="th">Thai</option>
-</select>
-</div>
 </section>
 
-<!-- About -->
+<!-- About Us -->
 <section id="about">
 <h2 class="section-title">About Us</h2>
-<p>Our mission is simple yet fundamental: to provide seamless and efficient shipping solutions that empower businesses, enable growth, and connect people and goods across the globe. Established in 2015, we have been at the forefront of the shipping industry, providing unparalleled services to clients worldwide. Our commitment to excellence, reliability, and customer satisfaction sets us apart.</p>
+<p>Our mission is simple yet fundamental: to provide seamless and efficient shipping solutions that empower businesses, enable growth, and connect people and goods across the globe...</p>
 </section>
 
 <!-- Support Popup -->
@@ -164,45 +197,50 @@ footer { background-color:#0d0d0d; text-align:center; padding:20px; color:#1e90f
 
 <!-- Footer -->
 <footer>
-©2023. Express Delivery Service. All Rights Reserved.<br>
+©2023 Express Delivery Service. All Rights Reserved.<br>
 Fast Logistics Company
 </footer>
 
-<!-- Google Maps API -->
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
-
 <script>
-/* Hamburger Menu */
-function toggleMenu(){ document.getElementById('navLinks').classList.toggle('active'); }
+// Hamburger Menu
+function toggleMenu(){document.getElementById('navLinks').classList.toggle('active');}
 
-/* Tracking */
+// Tracking
 function trackPackage(){
-const number=document.getElementById('trackingNumber').value;
-const tbody=document.getElementById('trackingBody');
-tbody.innerHTML='';
-if(number){
-const data=[
-{status:'Shipped', location:'New York, NY', datetime:'2025-09-19 08:00', delivery:'2025-09-21'},
-{status:'In Transit', location:'Philadelphia, PA', datetime:'2025-09-19 12:00', delivery:'2025-09-21'},
-{status:'Out for Delivery', location:'Baltimore, MD', datetime:'2025-09-19 16:00', delivery:'2025-09-21'},
-];
-data.forEach(row=>{
-const tr=document.createElement('tr');
-tr.innerHTML=`<td>${number}</td><td>${row.status}</td><td>${row.location}</td><td>${row.datetime}</td><td>${row.delivery}</td>`;
-tbody.appendChild(tr);
-});
-} else alert('Please enter a tracking number.');
+  const number=document.getElementById('trackingNumber').value;
+  const tbody=document.getElementById('trackingBody'); tbody.innerHTML='';
+  if(number){
+    const data=[
+      {status:'Shipped', location:'New York, NY', datetime:'2025-09-19 08:00', delivery:'2025-09-21'},
+      {status:'In Transit', location:'Philadelphia, PA', datetime:'2025-09-19 12:00', delivery:'2025-09-21'},
+      {status:'Out for Delivery', location:'Baltimore, MD', datetime:'2025-09-19 16:00', delivery:'2025-09-21'}
+    ];
+    data.forEach(row=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td>${number}</td><td>${row.status}</td><td>${row.location}</td><td>${row.datetime}</td><td>${row.delivery}</td>`;
+      tbody.appendChild(tr);
+    });
+  }else alert('Please enter a tracking number.');
 }
 
-/* Newsletter */
-function subscribeNewsletter(){ const email=document.getElementById('newsletterEmail').value; if(email){alert("Thank you! Updates will be sent to "+email);} else alert("Please enter your email."); }
+// Newsletter
+function subscribeNewsletter(){
+  const email=document.getElementById('newsletterEmail').value;
+  if(email) alert("Thank you! Updates will be sent to "+email); else alert("Please enter your email.");
+}
 
-/* Support */
-function openSupport(){ document.getElementById('supportPopup').style.display='block'; }
-function closeSupport(){ document.getElementById('supportPopup').style.display='none'; }
-function sendSupport(){ const name=document.getElementById('supportName').value; const email=document.getElementById('supportEmail').value; const message=document.getElementById('supportMessage').value; if(name && email && message){ alert("Message sent! We'll contact you at "+email); closeSupport(); } else alert("Please fill in all fields."); }
+// Support Popup
+function openSupport(){document.getElementById('supportPopup').style.display='block';}
+function closeSupport(){document.getElementById('supportPopup').style.display='none';}
+function sendSupport(){
+  const name=document.getElementById('supportName').value;
+  const email=document.getElementById('supportEmail').value;
+  const msg=document.getElementById('supportMessage').value;
+  if(name && email && msg){alert("Message sent! We'll contact you at "+email); closeSupport();}
+  else alert("Please fill in all fields.");
+}
 
-/* Customer Reviews */
+// Customer Reviews
 const reviews=[
 {name:'Alice Johnson', text:'Excellent delivery service! Fast and reliable.'},
 {name:'Michael Smith', text:'My package arrived ahead of time, very professional.'},
@@ -211,23 +249,28 @@ const reviews=[
 {name:'Linda White', text:'Highly recommend Express Delivery Service for all shipments.'}
 ];
 let reviewIndex=0;
-function showReview(){ const board=document.getElementById('reviewsBoard'); board.innerHTML=`<div class="review"><strong>${reviews[reviewIndex].name}:</strong> ${reviews[reviewIndex].text}</div>`; reviewIndex=(reviewIndex+1)%reviews.length; }
-showReview(); setInterval(showReview,5000);
+function showReview(){
+  const board=document.getElementById('reviewsBoard');
+  board.innerHTML=`<div class="review"><strong>${reviews[reviewIndex].name}:</strong> ${reviews[reviewIndex].text}</div>`;
+  reviewIndex=(reviewIndex+1)%reviews.length;
+}
+showReview();
+setInterval(showReview,5000);
 
-/* Google Map */
-function initMap(){ const hq={lat:40.749, lng:-73.9488}; const map=new google.maps.Map(document.getElementById('map'),{zoom:16,center:hq}); new google.maps.Marker({position:hq,map:map,title:"Express Delivery HQ"}); }
-window.onload=initMap;
+// Google Translate
+function googleTranslateElementInit(){new google.translate.TranslateElement({pageLanguage:'en'},'google_translate_element');}
 
-/* Language Translation using Google Translate */
-function switchLanguage(){ const lang=document.getElementById('languageSelect').value; const iframe=document.querySelector('iframe.goog-te-menu-frame'); if(iframe){ iframe.contentWindow.document.querySelector(`a[lang="${lang}"]`)?.click(); } }
+// Google Map
+function initMap(){
+  const hq={lat:40.7472,lng:-73.9488};
+  const map=new google.maps.Map(document.getElementById("map"),{zoom:15,center:hq});
+  const marker=new google.maps.Marker({position:hq,map:map,title:"Express Delivery HQ"});
+}
 </script>
 
-<!-- Google Translate -->
-<div id="google_translate_element" style="display:none;"></div>
-<script type="text/javascript">
-function googleTranslateElementInit(){ new google.translate.TranslateElement({pageLanguage:'en'},'google_translate_element'); }
-</script>
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<!-- Google Translate & Maps API -->
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
 
 </body>
 </html>
