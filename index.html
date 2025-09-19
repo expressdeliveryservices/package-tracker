@@ -1,134 +1,425 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Express Delivery Services</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-  <script>
-    (function(){
-      emailjs.init("YOUR_EMAILJS_USER_ID"); // Replace with your EmailJS user ID
-    })();
-  </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Express Delivery Service</title>
+<style>
+/* --- General Styles --- */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #ffffff;
+    scroll-behavior: smooth;
+}
+a {
+    color: #1e90ff;
+    text-decoration: none;
+}
+
+/* --- Header & Navbar --- */
+header {
+    background: url('https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg') center/cover no-repeat;
+    height: 400px;
+    position: relative;
+}
+header h1 {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    color: #ffffff;
+    font-size: 3rem;
+}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #1c1c1c;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+.nav-links a {
+    cursor: pointer;
+    font-weight: bold;
+}
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+.hamburger div {
+    width: 25px;
+    height: 3px;
+    background-color: #1e90ff;
+    margin: 4px 0;
+}
+
+/* --- Responsive Navbar --- */
+@media(max-width: 768px){
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        background-color: #1c1c1c;
+        position: absolute;
+        top: 70px;
+        right: 0;
+        width: 200px;
+        padding: 20px;
+    }
+    .nav-links.active {
+        display: flex;
+    }
+    .hamburger {
+        display: flex;
+    }
+}
+
+/* --- Section Styles --- */
+section {
+    padding: 50px 20px;
+}
+.section-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #1e90ff;
+}
+
+/* --- Tracking Input --- */
+.tracking {
+    display: flex;
+    gap: 10px;
+}
+.tracking input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+.tracking button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #1e90ff;
+    color: white;
+    cursor: pointer;
+}
+
+/* --- Newsletter --- */
+.newsletter {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+.newsletter input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+}
+.newsletter button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: #1e90ff;
+    color: white;
+    cursor: pointer;
+}
+
+/* --- Support Popup --- */
+#supportPopup {
+    display: none;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #1c1c1c;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px #1e90ff;
+    z-index: 10000;
+}
+#supportPopup input, #supportPopup textarea {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+}
+#supportPopup button {
+    padding: 8px 15px;
+    background-color: #1e90ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* --- Customer Reviews Popup --- */
+#reviewsPopup {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    background-color: #1c1c1c;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px #1e90ff;
+    display: none;
+    z-index: 10000;
+}
+
+/* --- Image Wall --- */
+.image-wall {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+.image-wall img {
+    width: 100%;
+    border-radius: 10px;
+}
+.image-wall .desc {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #b0c4de;
+}
+
+/* --- Business Hours --- */
+.business-hours span {
+    display: inline-block;
+    margin-right: 10px;
+}
+.blink {
+    color: #00ff00;
+    animation: blink 1s infinite;
+}
+@keyframes blink {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0; }
+}
+
+/* --- Footer --- */
+footer {
+    background-color: #0d0d0d;
+    text-align: center;
+    padding: 20px;
+    color: #1e90ff;
+}
+
+/* --- Language Switcher --- */
+.language-switcher {
+    margin-top: 10px;
+    background-color: #1c1c1c;
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+}
+</style>
 </head>
 <body>
 
-  <!-- Header -->
-  <header style="background-image: url('https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg');">
-    <div class="top-bar">
-      <div class="logo">Express Delivery Services</div>
-      <div class="hamburger" onclick="toggleMenu()">☰</div>
-      <nav id="nav-menu">
+<!-- Navbar -->
+<div class="navbar">
+    <div class="logo"><strong>Express Delivery</strong></div>
+    <div class="nav-links" id="navLinks">
         <a href="#home">HOME</a>
         <a href="#about">ABOUT</a>
         <a href="#services">SERVICES</a>
         <a href="#track">TRACK PACKAGES</a>
         <a href="#contact">CONTACT</a>
-      </nav>
-      <div class="language-switcher">
-        <select onchange="translatePage(this.value)">
-          <option value="">Language</option>
-          <option value="en">United States</option>
-          <option value="en-uk">United Kingdom</option>
-          <option value="pt">Portuguese</option>
-          <option value="es">Spanish</option>
-          <option value="de">German</option>
-          <option value="zh">China</option>
-          <option value="th">Thailand</option>
+    </div>
+    <div class="hamburger" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</div>
+
+<!-- Header -->
+<header id="home">
+    <h1>Express Delivery Service</h1>
+</header>
+
+<!-- About Section -->
+<section id="about">
+    <h2 class="section-title">About Us</h2>
+    <p>
+    Our mission is simple yet fundamental: to provide seamless and efficient shipping solutions that empower businesses, enable growth, and connect people and goods across the globe. Established in 2015, we have been at the forefront of the shipping industry, providing unparalleled services to clients worldwide. Our commitment to excellence, reliability, and customer satisfaction sets us apart.
+    </p>
+</section>
+
+<!-- Services Section -->
+<section id="services">
+    <h2 class="section-title">Our Services</h2>
+    <p>Become Our Partners. At Express Delivery Service, we are more than just a logistics company; we’re your dedicated partners in tracking success.</p>
+</section>
+
+<!-- Track Packages Section -->
+<section id="track">
+    <h2 class="section-title">Track Your Package</h2>
+    <div class="tracking">
+        <input type="text" id="trackingNumber" placeholder="Enter Tracking Number">
+        <button onclick="trackPackage()">Track</button>
+    </div>
+</section>
+
+<!-- Newsletter Section -->
+<section>
+    <h2 class="section-title">Subscribe Now</h2>
+    <p>Don’t miss our future updates! Get Subscribed Today!</p>
+    <div class="newsletter">
+        <input type="email" id="newsletterEmail" placeholder="Enter your email">
+        <button onclick="subscribeNewsletter()">Subscribe</button>
+    </div>
+</section>
+
+<!-- Image Wall Section -->
+<section>
+    <h2 class="section-title">Delivery Wall</h2>
+    <div class="image-wall">
+        <div>
+            <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" alt="Delivery 1">
+            <p class="desc">Our delivery service ensures packages reach their destinations swiftly and safely. With professional handling and real-time tracking, customers stay informed from pickup to delivery. Reliability is at the core of our operations, guaranteeing customer satisfaction. We constantly optimize routes and maintain transparent communication to make every delivery seamless and stress-free.</p>
+        </div>
+        <div>
+            <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1677.webp" alt="Delivery 2">
+            <p class="desc">We specialize in timely delivery of parcels, documents, and goods across cities and countries. Each package is handled with utmost care, ensuring safety and efficiency. Our expert logistics team monitors every shipment and proactively solves issues to maintain a smooth delivery process. Customer satisfaction is our highest priority, building trust and loyalty through consistent service.</p>
+        </div>
+        <div>
+            <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" alt="Delivery 3">
+            <p class="desc">Express Delivery Service employs cutting-edge technology for tracking and handling packages. Our advanced system allows real-time updates, notifications, and alerts for clients. From fragile goods to critical documents, every shipment is prioritized and treated with care. Clients can relax knowing that their delivery is in professional hands, reaching destinations on time.</p>
+        </div>
+        <div>
+            <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1679.png" alt="Delivery 4">
+            <p class="desc">Customer-first approach guides every decision we make. Our team ensures all deliveries meet deadlines and quality standards. Communication is clear and continuous, keeping clients informed at every step. From collection to doorstep delivery, our dedicated staff maintains efficiency and professionalism in every transaction, building a dependable delivery experience for all clients.</p>
+        </div>
+        <div>
+            <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" alt="Delivery 5">
+            <p class="desc">We integrate logistics expertise and technology to optimize delivery routes and reduce delays. Our commitment to speed and accuracy ensures that parcels arrive intact and on schedule. Regular feedback and continuous improvement enable us to maintain high standards and adapt to customers’ needs, making every delivery a reliable experience, trusted by clients worldwide.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Business Hours Section -->
+<section>
+    <h2 class="section-title">Business Hours</h2>
+    <div class="business-hours">
+        <span>Friday: <span class="blink">Open 24 hours</span></span><br>
+        <span>Saturday: <span class="blink">Open 24 hours</span></span><br>
+        <span>Sunday: <span class="blink">Open 24 hours</span></span><br>
+        <span>Monday: <span class="blink">Open 24 hours</span></span><br>
+        <span>Tuesday: <span class="blink">Open 24 hours</span></span><br>
+        <span>Wednesday: <span class="blink">Open 24 hours</span></span><br>
+        <span>Thursday: <span class="blink">Open 24 hours</span></span>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact">
+    <h2 class="section-title">Contact Us</h2>
+    <p>Phone: +1 (941) 207-8626</p>
+    <p>Email: Expressdeliveryservice0016@gmail.com</p>
+    <button onclick="openSupport()">Support</button>
+    <div class="language-switcher">
+        <select id="languageSelect" onchange="switchLanguage()">
+            <option value="en-US">United States</option>
+            <option value="en-UK">United Kingdom</option>
+            <option value="pt">Portuguese</option>
+            <option value="es">Spanish</option>
+            <option value="de">German</option>
+            <option value="zh">Chinese</option>
+            <option value="th">Thai</option>
         </select>
-      </div>
     </div>
-    <h1>Fast Logistics Company</h1>
-    <p>Reliable & Quick Delivery Services</p>
-  </header>
+</section>
 
-  <!-- Image Wall -->
-  <section id="home" class="image-wall">
-    <div class="image-item">
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" alt="Delivery Truck">
-      <p>Fast delivery with modern fleet.</p>
-    </div>
-    <div class="image-item">
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1677.webp" alt="Warehouse">
-      <p>Secure storage and packaging.</p>
-    </div>
-    <div class="image-item">
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" alt="Team">
-      <p>Professional delivery team at work.</p>
-    </div>
-    <div class="image-item">
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1679.png" alt="Airplane Delivery">
-      <p>Air delivery for international packages.</p>
-    </div>
-    <div class="image-item">
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" alt="Tracking">
-      <p>Real-time tracking available.</p>
-    </div>
-    <div class="image-item">
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1681.jpeg" alt="Delivery">
-      <p>Quick delivery to your doorstep.</p>
-    </div>
-    <div class="image-item">
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1682.jpeg" alt="Package">
-      <p>Careful handling of packages.</p>
-    </div>
-    <div class="image-item">
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1684.jpeg" alt="Office">
-      <p>Efficient logistics management.</p>
-    </div>
-    <div class="image-item">
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1725.jpeg" alt="Customer Support">
-      <p>24/7 customer support for all clients.</p>
-    </div>
-  </section>
+<!-- Support Popup -->
+<div id="supportPopup">
+    <h3>Send us a message</h3>
+    <input type="text" id="supportName" placeholder="Your Name">
+    <input type="email" id="supportEmail" placeholder="Your Email">
+    <textarea id="supportMessage" placeholder="Your Message"></textarea>
+    <button onclick="sendSupport()">Send</button>
+    <button onclick="closeSupport()">Close</button>
+</div>
 
-  <!-- About -->
-  <section id="about" class="section-dark">
-    <h2>About Our Company</h2>
-    <p>Express Delivery Services is a fast logistics company delivering packages globally with security and speed. Our professional team ensures every package reaches on time. Open 24 hours every day!</p>
-  </section>
+<!-- Customer Reviews Popup -->
+<div id="reviewsPopup"></div>
 
-  <!-- Services -->
-  <section id="services">
-    <h2>Services</h2>
-    <ul>
-      <li>Local & International Delivery</li>
-      <li>Package Tracking</li>
-      <li>Secure Packaging</li>
-      <li>Air & Ground Transport</li>
-    </ul>
-  </section>
+<!-- Footer -->
+<footer>
+    ©2023. Express Delivery Service. All Rights Reserved.<br>
+    Fast Logistics Company
+</footer>
 
-  <!-- Track Packages -->
-  <section id="track" class="section-dark">
-    <h2>Track Your Package</h2>
-    <form id="trackForm">
-      <input type="text" id="trackingNumber" placeholder="Enter Tracking Number" required>
-      <button type="submit">Track</button>
-    </form>
-  </section>
+<script>
+/* --- Hamburger Menu --- */
+function toggleMenu() {
+    document.getElementById('navLinks').classList.toggle('active');
+}
 
-  <!-- Newsletter -->
-  <section id="contact">
-    <h2>Subscribe to Our Newsletter</h2>
-    <form id="newsletterForm">
-      <input type="email" id="newsletterEmail" placeholder="Enter your email" required>
-      <button type="submit">Subscribe</button>
-    </form>
-    <p>Contact: +15865479777 | Email: Expressdeliveryservice0016@gmail.com</p>
-  </section>
+/* --- Tracking Function --- */
+function trackPackage() {
+    const trackingNumber = document.getElementById('trackingNumber').value;
+    if(trackingNumber) {
+        alert("Tracking info for " + trackingNumber + " will be sent to your email shortly!");
+    } else {
+        alert("Please enter a tracking number.");
+    }
+}
 
-  <!-- Customer Reviews Popup -->
-  <div id="reviewsPopup">
-    <p id="reviewText"></p>
-  </div>
+/* --- Newsletter --- */
+function subscribeNewsletter() {
+    const email = document.getElementById('newsletterEmail').value;
+    if(email) {
+        alert("Thank you! Updates will be sent to " + email);
+    } else {
+        alert("Please enter your email.");
+    }
+}
 
-  <!-- Footer -->
-  <footer>
-    <p>©2023. Express Delivery Service. All Rights Reserved. Fast Logistics Company.</p>
-  </footer>
+/* --- Support Popup --- */
+function openSupport() { document.getElementById('supportPopup').style.display = 'block'; }
+function closeSupport() { document.getElementById('supportPopup').style.display = 'none'; }
+function sendSupport() {
+    const name = document.getElementById('supportName').value;
+    const email = document.getElementById('supportEmail').value;
+    const message = document.getElementById('supportMessage').value;
+    if(name && email && message){
+        alert("Message sent! We'll contact you at " + email);
+        closeSupport();
+    } else {
+        alert("Please fill in all fields.");
+    }
+}
 
-  <script src="script.js"></script>
+/* --- Customer Reviews --- */
+const reviews = [
+    "Excellent delivery service! Fast and reliable.",
+    "My package arrived ahead of time, very professional.",
+    "Customer support was very helpful and responsive.",
+    "Tracking system is accurate and easy to use.",
+    "Highly recommend Express Delivery Service for all shipments."
+];
+let reviewIndex = 0;
+function showReview() {
+    const popup = document.getElementById('reviewsPopup');
+    popup.innerText = reviews[reviewIndex];
+    popup.style.display = 'block';
+    reviewIndex = (reviewIndex + 1) % reviews.length;
+}
+setInterval(showReview, 5000);
+
+/* --- Language Switcher --- */
+function switchLanguage() {
+    const lang = document.getElementById('languageSelect').value;
+    alert("Language changed to " + lang + " (Note: Actual translation requires integration).");
+}
+</script>
 </body>
 </html>
