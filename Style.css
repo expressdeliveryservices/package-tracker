@@ -1,66 +1,254 @@
-/* 
-==============================
-OPTIONAL EXTENDED DESCRIPTION
-==============================
-External stylesheet for Express Delivery Service website.
-Includes layout, colors, header, navbar, tables, popup, reviews, delivery wall, business hours, and footer styling.
-*/
-
 /* General Styles */
-body {margin:0; font-family:Arial,sans-serif; background-color:#121212; color:#fff; scroll-behavior:smooth;}
-a {color:#1e90ff; text-decoration:none;}
-header {background:url('https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg') center/cover no-repeat; height:400px; position:relative;}
-header h1 {position:absolute; bottom:30px; left:30px; color:#fff; font-size:3rem;}
-
-/* Navbar */
-.navbar {display:flex; justify-content:space-between; align-items:center; padding:20px; background-color:#1c1c1c; position:sticky; top:0; z-index:1000;}
-.nav-links {display:flex; gap:20px;}
-.nav-links a {cursor:pointer; font-weight:bold;}
-.hamburger {display:none; flex-direction:column; cursor:pointer;}
-.hamburger div {width:25px; height:3px; background-color:#1e90ff; margin:4px 0;}
-@media(max-width:768px){
-    .nav-links {display:none; flex-direction:column; background-color:#1c1c1c; position:absolute; top:70px; right:0; width:200px; padding:20px;}
-    .nav-links.active {display:flex;}
-    .hamburger {display:flex;}
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #121212;
+  color: #ffffff;
+  scroll-behavior: smooth;
 }
 
-/* Sections */
-section {padding:50px 20px;}
-.section-title {font-size:2rem; margin-bottom:20px; color:#1e90ff;}
+a {
+  color: #1e90ff;
+  text-decoration: none;
+}
+
+header {
+  background: url('https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg') center/cover no-repeat;
+  height: 400px;
+  position: relative;
+}
+
+header h1 {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  color: #ffffff;
+  font-size: 3rem;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #1c1c1c;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.hamburger div {
+  width: 25px;
+  height: 3px;
+  background-color: #1e90ff;
+  margin: 4px 0;
+}
+
+/* Responsive Navbar */
+@media(max-width: 768px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    background-color: #1c1c1c;
+    position: absolute;
+    top: 70px;
+    right: 0;
+    width: 200px;
+    padding: 20px;
+  }
+  .nav-links.active {
+    display: flex;
+  }
+  .hamburger {
+    display: flex;
+  }
+}
+
+section {
+  padding: 50px 20px;
+}
+
+.section-title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #1e90ff;
+}
 
 /* Tracking */
-.tracking {display:flex; gap:10px; margin-bottom:20px;}
-.tracking input {flex:1; padding:10px; border:none; border-radius:5px;}
-.tracking button {padding:10px 20px; border:none; border-radius:5px; background-color:#1e90ff; color:white; cursor:pointer;}
-#trackingBoard {width:100%; border-collapse:collapse; margin-top:20px;}
-#trackingBoard th, #trackingBoard td {border:1px solid #1e90ff; padding:10px; text-align:left;}
-#trackingBoard th {background-color:#1e90ff; color:white;}
+.tracking {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tracking input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+}
+
+.tracking button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #1e90ff;
+  color: white;
+  cursor: pointer;
+}
+
+#trackingBoard {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+#trackingBoard th,
+#trackingBoard td {
+  border: 1px solid #1e90ff;
+  padding: 10px;
+  text-align: left;
+}
+
+#trackingBoard th {
+  background-color: #1e90ff;
+  color: white;
+}
 
 /* Newsletter */
-.newsletter {display:flex; gap:10px; margin-top:20px;}
-.newsletter input {flex:1; padding:10px; border-radius:5px; border:none;}
-.newsletter button {padding:10px 20px; border-radius:5px; border:none; background-color:#1e90ff; color:white; cursor:pointer;}
+.newsletter {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.newsletter input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+}
+
+.newsletter button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  background-color: #1e90ff;
+  color: white;
+  cursor: pointer;
+}
 
 /* Support Popup */
-#supportPopup {display:none; position:fixed; bottom:30px; right:30px; background-color:#1c1c1c; padding:20px; border-radius:10px; box-shadow:0px 0px 15px #1e90ff; z-index:10000;}
-#supportPopup input, #supportPopup textarea {width:100%; margin-bottom:10px; padding:8px; border-radius:5px; border:none;}
-#supportPopup button {padding:8px 15px; background-color:#1e90ff; color:white; border:none; border-radius:5px; cursor:pointer;}
+#supportPopup {
+  display: none;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: #1c1c1c;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 15px #1e90ff;
+  z-index: 10000;
+}
+
+#supportPopup input,
+#supportPopup textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+}
+
+#supportPopup button {
+  padding: 8px 15px;
+  background-color: #1e90ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
 /* Customer Reviews */
-#reviewsBoard {display:flex; flex-direction:column; gap:10px; margin-top:20px; border:1px solid #1e90ff; padding:15px; border-radius:10px; background-color:#1c1c1c;}
-.review {border-bottom:1px solid #1e90ff; padding:10px 0;}
-.review:last-child {border-bottom:none;}
-.review strong {color:#1e90ff;}
+#reviewsBoard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  border: 1px solid #1e90ff;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: #1c1c1c;
+}
 
-/* Delivery Wall */
-.image-wall {display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px;}
-.image-wall img {width:100%; border-radius:10px;}
-.image-wall .desc {margin-top:10px; font-size:0.9rem; color:#b0c4de;}
+.review {
+  border-bottom: 1px solid #1e90ff;
+  padding: 10px 0;
+}
+
+.review:last-child {
+  border-bottom: none;
+}
+
+.review strong {
+  color: #1e90ff;
+}
+
+/* Image Wall */
+.image-wall {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.image-wall img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.image-wall .desc {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: #b0c4de;
+}
 
 /* Business Hours */
-.business-hours span {display:inline-block; margin-right:10px;}
-.blink {color:#00ff00; animation:blink 1s infinite;}
-@keyframes blink {0%,50%,100%{opacity:1;} 25%,75%{opacity:0;}}
+.business-hours span {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.blink {
+  color: #00ff00;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0; }
+}
 
 /* Footer */
-footer {background-color:#0d0d0d; text-align:center; padding:20px; color:#1e90ff;}
+footer {
+  background-color: #0d0d0d;
+  text-align: center;
+  padding: 20px;
+  color: #1e90ff;
+}
