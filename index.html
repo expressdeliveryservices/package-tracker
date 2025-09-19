@@ -3,279 +3,265 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Track your packages with EDS. Fast, reliable, and eco-friendly delivery services.">
-<title>EDS - Track Your Package</title>
+<title>Express Delivery Services</title>
 <style>
-body {
-    font-family: Arial, sans-serif;
+  body {
     margin: 0;
-    padding: 0;
-    background-color: #87CEEB;
-    color: #333;
-    scroll-behavior: smooth;
-}
-header {
-    background-color: #007bff;
-    color: white;
-    padding: 20px;
+    font-family: Arial, sans-serif;
+    background: #111;
+    color: #fff;
+    overflow-x: hidden;
+  }
+
+  header {
+    background: url('https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg') no-repeat center center;
+    background-size: cover;
+    padding: 30px;
     text-align: center;
     position: sticky;
     top: 0;
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.header-content {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.eds-logo {
-    font-size: 32px;
+    z-index: 100;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: #fff;
+    text-shadow: 2px 2px 8px #000;
+  }
+
+  #language-switcher {
+    margin-top: 10px;
+  }
+
+  #description {
+    margin: 20px;
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  /* Scroll container */
+  #scroll-container {
+    height: 600px;
+    overflow: hidden;
+    margin: 20px auto;
+    width: 90%;
+    max-width: 600px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 10px;
+    padding: 10px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  td {
+    padding: 10px;
+    font-size: 1.2rem;
+    border-bottom: 1px solid #555;
+  }
+
+  /* Open hour shining green */
+  .open-hour {
+    color: #00ff00;
     font-weight: bold;
-    color: #FFD700;
+    text-shadow: 0 0 10px #00ff00;
+    animation: glow 1.5s infinite alternate;
+  }
+
+  @keyframes glow {
+    from { text-shadow: 0 0 5px #00ff00; }
+    to { text-shadow: 0 0 20px #00ff00; }
+  }
+
+  /* Blinking indicator */
+  .blinking {
+    animation: blink 1s infinite;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+
+  @keyframes blink {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0; }
+  }
+
+  /* Extended description */
+  #extended-description {
+    margin: 20px auto;
+    width: 90%;
+    max-width: 800px;
+    background: rgba(0,0,0,0.5);
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  /* Image gallery */
+  .gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px auto;
+    width: 95%;
+    max-width: 1200px;
+  }
+
+  .gallery-item {
+    flex: 1 1 250px;
+    background: rgba(0,0,0,0.5);
+    border-radius: 10px;
+    overflow: hidden;
+    text-align: center;
+    padding-bottom: 10px;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    display: block;
+    border-bottom: 1px solid #555;
+  }
+
+  .gallery-item p {
+    margin: 10px;
+    font-size: 1rem;
+  }
+
+  footer {
+    background: rgba(0,0,0,0.7);
+    text-align: center;
+    padding: 20px;
     position: relative;
-    display: inline-block;
-}
-.eds-logo span:nth-child(1){ color: #FF4500; }
-.eds-logo span:nth-child(2){ color: #FFD700; }
-.eds-logo span:nth-child(3){ color: #00CED1; }
-.eds-logo::after {
-    content: "🚚 ✈️";
-    font-size: 20px;
-    margin-left: 5px;
-    vertical-align: middle;
-}
-.logo img {
-    max-width: 200px;
-    height: auto;
-}
-.logo-selector {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 1;
-}
-.logo-selector select {
-    padding: 5px;
-    font-size: 14px;
-    background-color: #0056b3;
-    color: white;
-    border: none;
-    border-radius: 5px;
-}
-.hamburger {
-    display: none;
-    font-size: 24px;
-    cursor: pointer;
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    color: white;
-    z-index: 1001;
-}
-.nav-menu {
-    display: none;
-    position: fixed;
-    top: 70px;
-    right: 20px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 10px 0;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    z-index: 1000;
-    min-width: 200px;
-}
-.nav-menu.active { display: block; }
-.nav-menu ul { list-style: none; padding: 0; margin: 0; }
-.nav-menu li { margin: 5px 0; padding: 10px 20px; border-bottom: 1px solid #eee; }
-.nav-menu li:last-child { border-bottom: none; }
-.nav-menu a { text-decoration: none; color: #007bff; font-size: 16px; font-weight: 500; transition: color 0.3s; }
-.nav-menu a:hover { color: #0056b3; padding-left: 5px; }
-.main-content { padding: 20px; }
-.section { min-height: 100vh; padding: 50px 20px; scroll-margin-top: 80px; }
-.tracking-section {
-    background-image: url('https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg'),
-                      url('https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1682.jpeg'),
-                      url('https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1679.png');
-    background-size: cover, contain, contain;
-    background-position: center, center, center;
-    background-repeat: no-repeat;
-    color: white;
-    position: relative;
-    background-attachment: fixed;
-}
-.tracking-section::before {
-    content: "";
-    position: absolute;
-    top:0; left:0;
-    width:100%; height:100%;
-    background-color: rgba(0,0,0,0.3);
-}
-.tracking-container {
-    display:flex; align-items:center; justify-content:center; gap:10px; z-index:1; position:relative;
-}
-.tracking-input {
-    width:300px; padding:12px 15px; font-size:16px; border:2px solid #ccc; border-radius:5px; box-shadow:0 2px 5px rgba(0,0,0,0.1);
-}
-.tracking-input::placeholder { color:#888; text-transform:uppercase; font-size:12px; }
-.tracking-button {
-    padding:12px 20px; background-color:#28a745; color:white; border:none; font-size:16px; cursor:pointer; border-radius:5px;
-}
-.tracking-button:hover { background-color:#218838; }
-#tracking-result { margin-top:20px; font-size:18px; z-index:1; position:relative; }
-.newsletter-section { margin-top:20px; padding:20px; background-color:rgba(255,255,255,0.9); border:2px solid #ddd; border-radius:10px; text-align:center; z-index:1; position:relative; }
-.newsletter-input { width:250px; padding:12px 15px; border:2px solid #ccc; border-radius:5px; }
-.newsletter-button { padding:12px 20px; background-color:#007bff; color:white; border:none; border-radius:5px; cursor:pointer; }
-#newsletter-result { margin-top:10px; color:#28a745; }
-.language-selector { position:absolute; top:20px; right:60px; z-index:1; }
-.language-button { padding:10px 20px; background-color:#007bff; color:white; border:none; border-radius:5px; cursor:pointer; font-size:14px; }
-.language-menu { display:none; position:absolute; top:100%; right:0; background:white; border:1px solid #ddd; border-radius:5px; list-style:none; padding:10px; max-height:300px; overflow-y:auto; min-width:150px; box-shadow:0 2px 10px rgba(0,0,0,0.1); z-index:1000; }
-.language-menu.active { display:block; }
-.language-menu li { padding:5px 10px; cursor:pointer; display:flex; align-items:center; }
-.language-menu li:hover { background-color:#f0f0f0; }
-.flag { margin-right:8px; font-size:16px; }
-.chat-bubble { position:fixed; bottom:20px; right:20px; background-color:#007bff; color:white; padding:10px 20px; border-radius:50px; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,0.2); z-index:1; }
-.chat-window { position:fixed; bottom:80px; right:20px; width:300px; height:400px; background:white; border:1px solid #ddd; border-radius:10px; display:none; flex-direction:column; box-shadow:0 2px 10px rgba(0,0,0,0.2); z-index:1; }
-.chat-header { background:#007bff; color:white; padding:10px; text-align:center; position:relative; }
-.chat-body { flex:1; padding:10px; overflow-y:auto; border-bottom:1px solid #ddd; }
-.chat-message { margin:10px 0; padding:8px; border-radius:5px; }
-.user-message { background-color:#e9ecef; text-align:right; }
-.bot-message { background-color:#d1ecf1; text-align:left; }
-.chat-input { width:100%; padding:10px; display:flex; border-top:1px solid #ddd; }
-.chat-input input { flex:1; padding:10px; border:none; }
-.chat-input button { padding:10px; background:#007bff; color:white; border:none; cursor:pointer; }
-footer { background:#333; color:white; text-align:center; padding:20px; }
-footer img { max-width:100%; margin-top:10px; }
-@media(max-width:768px){
-    .hamburger { display:block; }
-}
+  }
 </style>
 </head>
 <body>
+
 <header>
-<div class="logo-selector">
-<select id="logoSelect" onchange="changeLogo()">
-<option value="eds-logo.png">Default Logo</option>
-<option value="eds-modern.png">Modern Logo</option>
-<option value="eds-classic.png">Classic Logo</option>
-</select>
-</div>
-<div class="header-content">
-<div class="eds-logo"><span>E</span><span>D</span><span>S</span></div>
-<div class="logo"><img src="eds-logo.png" id="logoImg"></div>
-</div>
-<div class="hamburger" onclick="toggleMenu()">☰</div>
-<div class="language-selector">
-<button class="language-button" onclick="toggleLanguageMenu()">Change Language</button>
-<ul class="language-menu" id="language-menu">
-<li data-lang="en" onclick="changeLanguage('en')">🇺🇸 English</li>
-<li data-lang="es" onclick="changeLanguage('es')">🇪🇸 Spanish</li>
-<li data-lang="fr" onclick="changeLanguage('fr')">🇫🇷 French</li>
-</ul>
-</div>
+  <h1>Express Delivery Services <span class="blinking">🟢</span>Open Now</h1>
+  <div id="language-switcher">
+    <label for="languages">Language:</label>
+    <select id="languages">
+      <option value="en-US">English (US)</option>
+      <option value="en-UK">English (UK)</option>
+      <option value="es">Spanish</option>
+      <option value="fr">French</option>
+      <option value="pt">Portuguese</option>
+    </select>
+  </div>
 </header>
-<div class="nav-menu" id="nav-menu">
-<ul>
-<li><a href="#track">Track</a></li>
-<li><a href="#locations">Locations</a></li>
-<li><a href="#support">Support</a></li>
-<li><a href="#reviews">Reviews</a></li>
-<li><a href="#contact">Contact</a></li>
-</ul>
+
+<div id="description">
+  Welcome to Express Delivery Services. Track your packages in real-time and enjoy our fast and reliable service across the USA and UK.
 </div>
 
-<section class="section tracking-section" id="track">
-<div class="tracking-container">
-<input type="text" id="trackingNumber" class="tracking-input" placeholder="Enter tracking number">
-<button onclick="trackPackage()" class="tracking-button">Track Package</button>
+<div id="scroll-container">
+  <table>
+    <tr><td><span class="open-hour">Friday: Open 24 hours</span></td></tr>
+    <tr><td><span class="open-hour">Saturday: Open 24 hours</span></td></tr>
+    <tr><td><span class="open-hour">Sunday: Open 24 hours</span></td></tr>
+    <tr><td><span class="open-hour">Monday: Open 24 hours</span></td></tr>
+    <tr><td><span class="open-hour">Tuesday: Open 24 hours</span></td></tr>
+    <tr><td><span class="open-hour">Wednesday: Open 24 hours</span></td></tr>
+    <tr><td><span class="open-hour">Thursday: Open 24 hours</span></td></tr>
+  </table>
 </div>
-<div id="tracking-result"></div>
-<div class="newsletter-section">
-<h3>Subscribe to our Newsletter</h3>
-<input type="email" id="newsletterEmail" class="newsletter-input" placeholder="Your email">
-<button onclick="subscribeNewsletter()" class="newsletter-button">Subscribe</button>
-<div id="newsletter-result"></div>
-</div>
-</section>
 
-<section class="section" id="locations">
-<h2>Our Headquarters & Locations</h2>
-<iframe src="https://www.google.com/maps?q=47-00+Northern+Blvd,+Long+Island+City,+NY+11101,+United+States&output=embed" width="100%" height="400" style="border:0;" allowfullscreen></iframe>
-</section>
-
-<section class="section" id="support">
-<h2>Customer Support</h2>
-<p>Click the chat bubble at the bottom-right to chat with our support team live.</p>
-</section>
-
-<section class="section" id="reviews">
-<h2>Customer Reviews</h2>
-<div style="overflow:hidden; width:100%;">
-<div id="reviews-track" style="display:flex; transition:0.5s ease;">
-<div class="review" style="min-width:100%; padding:20px; box-sizing:border-box;">"Great service, fast delivery!" - John D.</div>
-<div class="review" style="min-width:100%; padding:20px; box-sizing:border-box;">"Reliable and professional." - Maria S.</div>
-<div class="review" style="min-width:100%; padding:20px; box-sizing:border-box;">"Tracking system is amazing." - Lee W.</div>
+<div class="gallery">
+  <div class="gallery-item">
+    <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" alt="Delivery Van">
+    <p>Our modern delivery fleet ensures fast and secure delivery.</p>
+  </div>
+  <div class="gallery-item">
+    <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1677.webp" alt="Package Sorting">
+    <p>Advanced sorting facilities for timely package processing.</p>
+  </div>
+  <div class="gallery-item">
+    <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" alt="Warehouse">
+    <p>Spacious warehouses for safe storage of parcels.</p>
+  </div>
+  <div class="gallery-item">
+    <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1679.png" alt="Tracking">
+    <p>Real-time tracking ensures you never lose sight of your package.</p>
+  </div>
+  <div class="gallery-item">
+    <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" alt="Express Delivery">
+    <p>Express delivery options for urgent shipments.</p>
+  </div>
+  <div class="gallery-item">
+    <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1681.jpeg" alt="Staff">
+    <p>Professional staff handling packages with care.</p>
+  </div>
+  <div class="gallery-item">
+    <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1682.jpeg" alt="Loading">
+    <p>Efficient loading system for fast dispatch.</p>
+  </div>
+  <div class="gallery-item">
+    <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1684.jpeg" alt="Delivery Route">
+    <p>Optimized delivery routes for timely arrival.</p>
+  </div>
+  <div class="gallery-item">
+    <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1725.jpeg" alt="Customer Service">
+    <p>Responsive customer service for all your inquiries.</p>
+  </div>
 </div>
-</div>
-</section>
 
-<div class="chat-bubble" onclick="toggleChat()">💬 Chat</div>
-<div class="chat-window" id="chatWindow">
-<div class="chat-header">Live Support</div>
-<div class="chat-body" id="chatBody"></div>
-<div class="chat-input">
-<input type="text" id="chatInput" placeholder="Type a message">
-<button onclick="sendMessage()">Send</button>
-</div>
+<div id="extended-description">
+  Our Express Delivery Services ensures your parcels reach safely and on time. We cover the USA, UK, and international shipping with real-time tracking. Customer satisfaction is our priority. Contact our support via email at <strong>Expressdeliveryservice0016@gmail.com</strong> or call <strong>+1 586 547 9777</strong>. Enjoy 24/7 service and live tracking on all packages.
 </div>
 
 <footer>
-<p>&copy; 2025 Express Delivery Services. All rights reserved.</p>
-<img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" alt="Delivery Truck">
+  &copy; 2025 Express Delivery Services
 </footer>
 
 <script>
-function changeLogo(){
-    const select = document.getElementById('logoSelect');
-    document.getElementById('logoImg').src = select.value;
-}
-function toggleMenu(){ document.getElementById('nav-menu').classList.toggle('active'); }
-function toggleLanguageMenu(){ document.getElementById('language-menu').classList.toggle('active'); }
-function changeLanguage(lang){ alert('Language changed to: ' + lang); }
+const descriptions = {
+  "en-US": "Welcome to Express Delivery Services. Track your packages in real-time and enjoy our fast and reliable service across the USA.",
+  "en-UK": "Welcome to Express Delivery Services. Track your parcels in real-time and enjoy our fast and reliable service across the United Kingdom.",
+  "es": "Bienvenido a Express Delivery Services. Rastrea tus paquetes en tiempo real y disfruta de nuestro servicio rápido y confiable.",
+  "fr": "Bienvenue chez Express Delivery Services. Suivez vos colis en temps réel et profitez de notre service rapide et fiable.",
+  "pt": "Bem-vindo à Express Delivery Services. Acompanhe suas encomendas em tempo real e desfrute do nosso serviço rápido e confiável."
+};
 
-function trackPackage(){
-    const number = document.getElementById('trackingNumber').value;
-    if(number) document.getElementById('tracking-result').innerText = `Tracking Number ${number}: In Transit 🚚`;
-    else document.getElementById('tracking-result').innerText = 'Please enter a tracking number.';
-}
+const openHoursTable = {
+  "en-US": ["Friday: Open 24 hours", "Saturday: Open 24 hours", "Sunday: Open 24 hours", "Monday: Open 24 hours", "Tuesday: Open 24 hours", "Wednesday: Open 24 hours", "Thursday: Open 24 hours"],
+  "en-UK": ["Friday: Open 24 hours", "Saturday: Open 24 hours", "Sunday: Open 24 hours", "Monday: Open 24 hours", "Tuesday: Open 24 hours", "Wednesday: Open 24 hours", "Thursday: Open 24 hours"],
+  "es": ["Viernes: Abierto 24 horas", "Sábado: Abierto 24 horas", "Domingo: Abierto 24 horas", "Lunes: Abierto 24 horas", "Martes: Abierto 24 horas", "Miércoles: Abierto 24 horas", "Jueves: Abierto 24 horas"],
+  "fr": ["Vendredi: Ouvert 24h", "Samedi: Ouvert 24h", "Dimanche: Ouvert 24h", "Lundi: Ouvert 24h", "Mardi: Ouvert 24h", "Mercredi: Ouvert 24h", "Jeudi: Ouvert 24h"],
+  "pt": ["Sexta: Aberto 24 horas", "Sábado: Aberto 24 horas", "Domingo: Aberto 24 horas", "Segunda: Aberto 24 horas", "Terça: Aberto 24 horas", "Quarta: Aberto 24 horas", "Quinta: Aberto 24 horas"]
+};
 
-function subscribeNewsletter(){
-    const email = document.getElementById('newsletterEmail').value;
-    if(email) document.getElementById('newsletter-result').innerText = `Subscribed successfully: ${email}`;
-    else document.getElementById('newsletter-result').innerText = 'Please enter a valid email.';
-}
+document.getElementById('languages').addEventListener('change', function() {
+  const lang = this.value;
+  document.getElementById('description').innerText = descriptions[lang];
 
-let slideIndex = 0;
-const reviewsTrack = document.getElementById('reviews-track');
-const totalSlides = reviewsTrack.children.length;
-function autoSlide(){
-    slideIndex = (slideIndex + 1) % totalSlides;
-    reviewsTrack.style.transform = `translateX(-${slideIndex*100}%)`;
-}
-setInterval(autoSlide,3000);
+  const table = document.querySelector('#scroll-container table');
+  table.innerHTML = '';
+  openHoursTable[lang].forEach(hour => {
+    const row = document.createElement('tr');
+    const cell = document.createElement('td');
+    cell.innerHTML = hour.includes("Open 24") ? `<span class="open-hour">${hour}</span>` : hour;
+    row.appendChild(cell);
+    table.appendChild(row);
+  });
+});
 
-function toggleChat(){ document.getElementById('chatWindow').style.display = (document.getElementById('chatWindow').style.display==='flex'?'none':'flex'); }
-function sendMessage(){
-    const input = document.getElementById('chatInput');
-    if(input.value.trim()==='') return;
-    const chatBody = document.getElementById('chatBody');
-    const userMsg = document.createElement('div'); userMsg.className='chat-message user-message'; userMsg.innerText=input.value; chatBody.appendChild(userMsg);
-    const botMsg = document.createElement('div'); botMsg.className='chat-message bot-message'; botMsg.innerText='Thank you! Our support will contact you shortly.'; chatBody.appendChild(botMsg);
-    input.value=''; chatBody.scrollTop=chatBody.scrollHeight;
+// Auto-scroll (~5 minutes)
+const scrollContainer = document.getElementById('scroll-container');
+let scrollHeight = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+let scrollStep = scrollHeight / (5 * 60 * 60);
+function autoScroll() {
+  if(scrollContainer.scrollTop < scrollHeight) {
+    scrollContainer.scrollTop += scrollStep;
+    requestAnimationFrame(autoScroll);
+  }
 }
+autoScroll();
 </script>
+
 </body>
 </html>
