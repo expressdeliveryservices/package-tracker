@@ -91,10 +91,11 @@ section {
     color: #1e90ff;
 }
 
-/* --- Tracking Input --- */
+/* --- Tracking Input & Board --- */
 .tracking {
     display: flex;
     gap: 10px;
+    margin-bottom: 20px;
 }
 .tracking input {
     flex: 1;
@@ -109,6 +110,20 @@ section {
     background-color: #1e90ff;
     color: white;
     cursor: pointer;
+}
+#trackingBoard {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+#trackingBoard th, #trackingBoard td {
+    border: 1px solid #1e90ff;
+    padding: 10px;
+    text-align: left;
+}
+#trackingBoard th {
+    background-color: #1e90ff;
+    color: white;
 }
 
 /* --- Newsletter --- */
@@ -160,18 +175,23 @@ section {
     cursor: pointer;
 }
 
-/* --- Customer Reviews Popup --- */
-#reviewsPopup {
-    position: fixed;
-    bottom: 30px;
-    left: 30px;
-    background-color: #1c1c1c;
-    padding: 20px;
+/* --- Customer Reviews Board --- */
+#reviewsBoard {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+    border: 1px solid #1e90ff;
+    padding: 15px;
     border-radius: 10px;
-    box-shadow: 0px 0px 15px #1e90ff;
-    display: none;
-    z-index: 10000;
+    background-color: #1c1c1c;
 }
+.review {
+    border-bottom: 1px solid #1e90ff;
+    padding: 10px 0;
+}
+.review:last-child { border-bottom: none; }
+.review strong { color: #1e90ff; }
 
 /* --- Image Wall --- */
 .image-wall {
@@ -228,10 +248,10 @@ footer {
     <div class="logo"><strong>Express Delivery</strong></div>
     <div class="nav-links" id="navLinks">
         <a href="#home">HOME</a>
-        <a href="#about">ABOUT</a>
         <a href="#services">SERVICES</a>
         <a href="#track">TRACK PACKAGES</a>
         <a href="#contact">CONTACT</a>
+        <a href="#about">ABOUT</a>
     </div>
     <div class="hamburger" onclick="toggleMenu()">
         <div></div>
@@ -244,14 +264,6 @@ footer {
 <header id="home">
     <h1>Express Delivery Service</h1>
 </header>
-
-<!-- About Section -->
-<section id="about">
-    <h2 class="section-title">About Us</h2>
-    <p>
-    Our mission is simple yet fundamental: to provide seamless and efficient shipping solutions that empower businesses, enable growth, and connect people and goods across the globe. Established in 2015, we have been at the forefront of the shipping industry, providing unparalleled services to clients worldwide. Our commitment to excellence, reliability, and customer satisfaction sets us apart.
-    </p>
-</section>
 
 <!-- Services Section -->
 <section id="services">
@@ -266,6 +278,20 @@ footer {
         <input type="text" id="trackingNumber" placeholder="Enter Tracking Number">
         <button onclick="trackPackage()">Track</button>
     </div>
+    <table id="trackingBoard">
+        <thead>
+            <tr>
+                <th>Tracking Number</th>
+                <th>Status</th>
+                <th>Location</th>
+                <th>Date/Time</th>
+                <th>Expected Delivery</th>
+            </tr>
+        </thead>
+        <tbody id="trackingBody">
+            <!-- Tracking data will appear here -->
+        </tbody>
+    </table>
 </section>
 
 <!-- Newsletter Section -->
@@ -305,6 +331,12 @@ footer {
     </div>
 </section>
 
+<!-- Customer Reviews Section -->
+<section>
+    <h2 class="section-title">Customer Reviews</h2>
+    <div id="reviewsBoard"></div>
+</section>
+
 <!-- Business Hours Section -->
 <section>
     <h2 class="section-title">Business Hours</h2>
@@ -338,6 +370,14 @@ footer {
     </div>
 </section>
 
+<!-- About Section (Bottom) -->
+<section id="about">
+    <h2 class="section-title">About Us</h2>
+    <p>
+    Our mission is simple yet fundamental: to provide seamless and efficient shipping solutions that empower businesses, enable growth, and connect people and goods across the globe. Established in 2015, we have been at the forefront of the shipping industry, providing unparalleled services to clients worldwide. Our commitment to excellence, reliability, and customer satisfaction sets us apart.
+    </p>
+</section>
+
 <!-- Support Popup -->
 <div id="supportPopup">
     <h3>Send us a message</h3>
@@ -347,9 +387,6 @@ footer {
     <button onclick="sendSupport()">Send</button>
     <button onclick="closeSupport()">Close</button>
 </div>
-
-<!-- Customer Reviews Popup -->
-<div id="reviewsPopup"></div>
 
 <!-- Footer -->
 <footer>
@@ -365,22 +402,29 @@ function toggleMenu() {
 
 /* --- Tracking Function --- */
 function trackPackage() {
-    const trackingNumber = document.getElementById('trackingNumber').value;
-    if(trackingNumber) {
-        alert("Tracking info for " + trackingNumber + " will be sent to your email shortly!");
-    } else {
-        alert("Please enter a tracking number.");
-    }
+    const number = document.getElementById('trackingNumber').value;
+    const tbody = document.getElementById('trackingBody');
+    tbody.innerHTML = '';
+    if(number){
+        const data = [
+            {status:'Shipped', location:'New York, NY', datetime:'2025-09-19 08:00', delivery:'2025-09-21'},
+            {status:'In Transit', location:'Philadelphia, PA', datetime:'2025-09-19 12:00', delivery:'2025-09-21'},
+            {status:'Out for Delivery', location:'Baltimore, MD', datetime:'2025-09-19 16:00', delivery:'2025-09-21'},
+        ];
+        data.forEach(row=>{
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${number}</td><td>${row.status}</td><td>${row.location}</td><td>${row.datetime}</td><td>${row.delivery}</td>`;
+            tbody.appendChild(tr);
+        });
+    } else alert('Please enter a tracking number.');
 }
 
 /* --- Newsletter --- */
 function subscribeNewsletter() {
     const email = document.getElementById('newsletterEmail').value;
-    if(email) {
+    if(email){
         alert("Thank you! Updates will be sent to " + email);
-    } else {
-        alert("Please enter your email.");
-    }
+    } else alert("Please enter your email.");
 }
 
 /* --- Support Popup --- */
@@ -393,26 +437,24 @@ function sendSupport() {
     if(name && email && message){
         alert("Message sent! We'll contact you at " + email);
         closeSupport();
-    } else {
-        alert("Please fill in all fields.");
-    }
+    } else alert("Please fill in all fields.");
 }
 
 /* --- Customer Reviews --- */
 const reviews = [
-    "Excellent delivery service! Fast and reliable.",
-    "My package arrived ahead of time, very professional.",
-    "Customer support was very helpful and responsive.",
-    "Tracking system is accurate and easy to use.",
-    "Highly recommend Express Delivery Service for all shipments."
+    {name:'Alice Johnson', text:'Excellent delivery service! Fast and reliable.'},
+    {name:'Michael Smith', text:'My package arrived ahead of time, very professional.'},
+    {name:'Samantha Lee', text:'Customer support was very helpful and responsive.'},
+    {name:'David Brown', text:'Tracking system is accurate and easy to use.'},
+    {name:'Linda White', text:'Highly recommend Express Delivery Service for all shipments.'}
 ];
 let reviewIndex = 0;
 function showReview() {
-    const popup = document.getElementById('reviewsPopup');
-    popup.innerText = reviews[reviewIndex];
-    popup.style.display = 'block';
+    const board = document.getElementById('reviewsBoard');
+    board.innerHTML = `<div class="review"><strong>${reviews[reviewIndex].name}:</strong> ${reviews[reviewIndex].text}</div>`;
     reviewIndex = (reviewIndex + 1) % reviews.length;
 }
+showReview();
 setInterval(showReview, 5000);
 
 /* --- Language Switcher --- */
