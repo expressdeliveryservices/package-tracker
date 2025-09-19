@@ -158,34 +158,6 @@ h2.section-title {
 }
 @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-/* Map */
-#world-map {
-  width: 100%;
-  height: 400px;
-  background: url('https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1679.png') no-repeat center;
-  background-size: cover;
-  position: relative;
-}
-.hub {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background: red;
-  border-radius: 50%;
-  animation: blink 1s infinite;
-}
-@keyframes blink { 0%,50%,100% {opacity:1;} 25%,75% {opacity:0;} }
-#hq-label {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  color: white;
-  font-weight: bold;
-  background: rgba(0,0,0,0.5);
-  padding: 5px 10px;
-  border-radius: 5px;
-}
-
 /* Company Info Section */
 .company-info {
   display: flex;
@@ -249,6 +221,7 @@ footer a:hover { text-decoration: underline; }
 #chatInput { display: flex; border-top: 1px solid #ccc; }
 #chatInput input { flex: 1; padding: 10px; border: none; }
 #chatInput button { padding: 10px; background: #1a73e8; color: white; border: none; cursor: pointer; }
+
 </style>
 </head>
 <body>
@@ -299,12 +272,11 @@ footer a:hover { text-decoration: underline; }
 </div>
 
 <h2 class="section-title">Our Global Hubs & HQ</h2>
-<div id="world-map">
-  <div class="hub" style="top: 50px; left: 50px;"></div>
-  <div class="hub" style="top: 200px; left: 300px;"></div>
-  <div class="hub" style="top: 150px; left: 600px;"></div>
-  <div class="hub" style="top: 100px; left: 800px;"></div>
-  <div id="hq-label">HQ: 55 Water St #28, New York, NY 10041, USA</div>
+<div id="world-map" style="width:100%; height:400px;">
+  <iframe
+    src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3021.6783905691417!2d-74.008293!3d40.704756!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1695132654321!5m2!1sen!2sus"
+    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+  </iframe>
 </div>
 
 <h2 class="section-title">About Our Company</h2>
@@ -392,11 +364,6 @@ function showNextReview() {
 }
 showNextReview();
 setInterval(showNextReview, 5000);
-
-// Language switcher
-function switchLanguage(lang) {
-  alert("Language switched to " + lang);
-}
 </script>
 
 </body>
