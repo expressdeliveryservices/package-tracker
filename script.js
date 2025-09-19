@@ -1,69 +1,66 @@
-// Hamburger menu toggle
-function toggleMenu() {
-  const menu = document.getElementById("nav-menu");
-  if (menu.style.display === "flex") menu.style.display = "none";
-  else menu.style.display = "flex";
+// Hamburger Menu
+function toggleMenu(){ document.getElementById('navLinks').classList.toggle('active'); }
+
+// Tracking
+function trackPackage(){
+  const number=document.getElementById('trackingNumber').value;
+  const tbody=document.getElementById('trackingBody');
+  tbody.innerHTML='';
+  if(number){
+    const data=[
+      {status:'Shipped',location:'New York, NY',datetime:'2025-09-19 08:00',delivery:'2025-09-21'},
+      {status:'In Transit',location:'Philadelphia, PA',datetime:'2025-09-19 12:00',delivery:'2025-09-21'},
+      {status:'Out for Delivery',location:'Baltimore, MD',datetime:'2025-09-19 16:00',delivery:'2025-09-21'}
+    ];
+    data.forEach(row=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td>${number}</td><td>${row.status}</td><td>${row.location}</td><td>${row.datetime}</td><td>${row.delivery}</td>`;
+      tbody.appendChild(tr);
+    });
+  } else alert('Please enter a tracking number.');
 }
 
-// Slow scrolling effect ~5 minutes
-window.onload = () => {
-  let scrollHeight = document.body.scrollHeight - window.innerHeight;
-  let duration = 300000; // 5 minutes in milliseconds
-  let start = null;
+// Newsletter
+function subscribeNewsletter(){
+  const email=document.getElementById('newsletterEmail').value;
+  if(email) alert("Thank you! Updates will be sent to "+email);
+  else alert("Please enter your email.");
+}
 
-  function step(timestamp) {
-    if (!start) start = timestamp;
-    let progress = timestamp - start;
-    window.scrollTo(0, (progress / duration) * scrollHeight);
-    if (progress < duration) requestAnimationFrame(step);
-  }
-  requestAnimationFrame(step);
-};
+// Support
+function openSupport(){ document.getElementById('supportPopup').style.display='block'; }
+function closeSupport(){ document.getElementById('supportPopup').style.display='none'; }
+function sendSupport(){
+  const name=document.getElementById('supportName').value;
+  const email=document.getElementById('supportEmail').value;
+  const message=document.getElementById('supportMessage').value;
+  if(name&&email&&message){ alert("Message sent! We'll contact you at "+email); closeSupport(); }
+  else alert("Please fill in all fields.");
+}
 
-// Customer reviews
-const reviews = [
-  "Excellent service! Fast and reliable.",
-  "My package arrived on time. Very satisfied.",
-  "Professional team and excellent tracking system.",
-  "Highly recommend Express Delivery Services.",
-  "Customer support is friendly and helpful."
+// Customer Reviews
+const reviews=[
+{name:'Alice Johnson',text:'Excellent delivery service! Fast and reliable.'},
+{name:'Michael Smith',text:'My package arrived ahead of time, very professional.'},
+{name:'Samantha Lee',text:'Customer support was very helpful and responsive.'},
+{name:'David Brown',text:'Tracking system is accurate and easy to use.'},
+{name:'Linda White',text:'Highly recommend Express Delivery Service for all shipments.'}
 ];
-let reviewIndex = 0;
-function showReview() {
-  const popup = document.getElementById("reviewsPopup");
-  const reviewText = document.getElementById("reviewText");
-  reviewText.innerText = reviews[reviewIndex];
-  popup.style.display = "block";
-  reviewIndex = (reviewIndex + 1) % reviews.length;
+let reviewIndex=0;
+function showReview(){
+  const board=document.getElementById('reviewsBoard');
+  board.innerHTML=`<div class="review"><strong>${reviews[reviewIndex].name}:</strong> ${reviews[reviewIndex].text}</div>`;
+  reviewIndex=(reviewIndex+1)%reviews.length;
 }
-setInterval(showReview, 5000); // every 5 seconds
 showReview();
+setInterval(showReview,5000);
 
-// EmailJS - Tracking number form
-document.getElementById("trackForm").addEventListener("submit", function(e){
-  e.preventDefault();
-  const trackingNumber = document.getElementById("trackingNumber").value;
-  emailjs.send("YOUR_SERVICE_ID","YOUR_TEMPLATE_ID",{
-    tracking_number: trackingNumber
-  }).then(() => {
-    alert("Tracking request sent!");
-    document.getElementById("trackForm").reset();
-  });
-});
+// Google Translate
+function googleTranslateElementInit(){ new google.translate.TranslateElement({pageLanguage:'en'},'google_translate_element'); }
 
-// EmailJS - Newsletter form
-document.getElementById("newsletterForm").addEventListener("submit", function(e){
-  e.preventDefault();
-  const email = document.getElementById("newsletterEmail").value;
-  emailjs.send("YOUR_SERVICE_ID","YOUR_TEMPLATE_ID",{
-    subscriber_email: email
-  }).then(() => {
-    alert("Subscription successful!");
-    document.getElementById("newsletterForm").reset();
-  });
-});
-
-// Language switcher
-function translatePage(lang){
-  alert("Language switching feature will translate to " + lang);
+// Google Map
+function initMap(){
+  const hq={lat:40.7494,lng:-73.941};
+  const map=new google.maps.Map(document.getElementById("map"),{zoom:15,center:hq});
+  new google.maps.Marker({position:hq,map:map,title:"Express Delivery Service HQ"});
 }
