@@ -4,7 +4,95 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Express Delivery Service</title>
-<link rel="stylesheet" href="style.css">
+<style>
+/* ===== Dark Theme & General Styles ===== */
+body {
+  margin:0;
+  font-family:Arial,sans-serif;
+  background-color:#121212;
+  color:#fff;
+  scroll-behavior:smooth;
+}
+a {color:#1e90ff; text-decoration:none;}
+h1,h2,h3,h4,h5,h6 {color:#1e90ff;}
+header {background:url('https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg') center/cover no-repeat; height:400px; position:relative;}
+header h1 {position:absolute; bottom:30px; left:30px; color:#fff; font-size:3rem;}
+
+/* ===== Navbar ===== */
+.navbar {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px;
+  background-color:#1c1c1c;
+  position:sticky;
+  top:0;
+  z-index:1000;
+}
+.nav-links {display:flex; gap:20px;}
+.nav-links a {cursor:pointer; font-weight:bold;}
+.hamburger {display:none; flex-direction:column; cursor:pointer;}
+.hamburger div {width:25px; height:3px; background-color:#1e90ff; margin:4px 0;}
+@media(max-width:768px){
+  .nav-links {display:none; flex-direction:column; background-color:#1c1c1c; position:absolute; top:70px; right:0; width:200px; padding:20px;}
+  .nav-links.active {display:flex;}
+  .hamburger {display:flex;}
+}
+
+/* ===== Sections ===== */
+section {padding:50px 20px;}
+.section-title {font-size:2rem; margin-bottom:20px; color:#1e90ff;}
+
+/* ===== Tracking ===== */
+.tracking {display:flex; gap:10px; margin-bottom:20px;}
+.tracking input {flex:1; padding:10px; border:none; border-radius:5px; background:#1c1c1c; color:#fff;}
+.tracking button {padding:10px 20px; border:none; border-radius:5px; background-color:#1e90ff; color:white; cursor:pointer;}
+#trackingBoard {width:100%; border-collapse:collapse; margin-top:20px;}
+#trackingBoard th, #trackingBoard td {border:1px solid #1e90ff; padding:10px; text-align:left;}
+#trackingBoard th {background-color:#1e90ff; color:white;}
+
+/* ===== Newsletter ===== */
+.newsletter {display:flex; gap:10px; margin-top:20px;}
+.newsletter input {flex:1; padding:10px; border-radius:5px; border:none; background:#1c1c1c; color:#fff;}
+.newsletter button {padding:10px 20px; border-radius:5px; border:none; background-color:#1e90ff; color:white; cursor:pointer;}
+
+/* ===== Support Popup ===== */
+#supportPopup {
+  display:none;
+  position:fixed;
+  bottom:30px;
+  right:30px;
+  background-color:#1c1c1c;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0px 0px 15px #1e90ff;
+  z-index:10000;
+}
+#supportPopup input,#supportPopup textarea {width:100%; margin-bottom:10px; padding:8px; border-radius:5px; border:none; background:#2a2a2a; color:#fff;}
+#supportPopup button {padding:8px 15px; background-color:#1e90ff; color:white; border:none; border-radius:5px; cursor:pointer;}
+
+/* ===== Customer Reviews ===== */
+#reviewsBoard {display:flex; flex-direction:column; gap:10px; margin-top:20px; border:1px solid #1e90ff; padding:15px; border-radius:10px; background-color:#1c1c1c;}
+.review {border-bottom:1px solid #1e90ff; padding:10px 0;}
+.review:last-child {border-bottom:none;}
+.review strong {color:#1e90ff;}
+
+/* ===== Image Wall ===== */
+.image-wall {display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px;}
+.image-wall img {width:100%; border-radius:10px;}
+.image-wall .desc {margin-top:10px; font-size:0.9rem; color:#b0c4de;}
+
+/* ===== Business Hours ===== */
+.business-hours span{display:inline-block; margin-right:10px;}
+.blink{color:#00ff00; animation:blink 1s infinite;}
+@keyframes blink{0%,50%,100%{opacity:1;}25%,75%{opacity:0;}}
+
+/* ===== Footer ===== */
+footer {background-color:#0d0d0d; text-align:center; padding:20px; color:#1e90ff;}
+
+/* ===== Google Translate Container ===== */
+#google_translate_element {margin-top:20px;}
+</style>
 </head>
 <body>
 
@@ -12,11 +100,11 @@
 <div class="navbar">
   <div class="logo"><strong>Express Delivery</strong></div>
   <div class="nav-links" id="navLinks">
-    <a href="#home">HOME</a>
-    <a href="#services">SERVICES</a>
-    <a href="#track">TRACK PACKAGES</a>
-    <a href="#contact">CONTACT</a>
-    <a href="#about">ABOUT</a>
+    <a href="#home">Home</a>
+    <a href="#track">Tracking</a>
+    <a href="#services">Services</a>
+    <a href="#contact">Contact</a>
+    <a href="#about">About</a>
   </div>
   <div class="hamburger" onclick="toggleMenu()"><div></div><div></div><div></div></div>
 </div>
@@ -26,13 +114,13 @@
   <h1>Express Delivery Service</h1>
 </header>
 
-<!-- Services Section -->
+<!-- Services -->
 <section id="services">
   <h2 class="section-title">Our Services</h2>
-  <p>Become our partners. At Express Delivery Service, we are more than a logistics company; we are your dedicated partners in tracking success. Our mission is to ensure reliable, fast, and safe deliveries worldwide.</p>
+  <p>Become Our Partners. At Express Delivery Service, we are more than just a logistics company; we’re your dedicated partners in tracking success.</p>
 </section>
 
-<!-- Track Packages Section -->
+<!-- Track Packages -->
 <section id="track">
   <h2 class="section-title">Track Your Package</h2>
   <div class="tracking">
@@ -41,62 +129,57 @@
   </div>
   <table id="trackingBoard">
     <thead>
-      <tr>
-        <th>Tracking Number</th>
-        <th>Status</th>
-        <th>Location</th>
-        <th>Date/Time</th>
-        <th>Expected Delivery</th>
-      </tr>
+      <tr><th>Tracking Number</th><th>Status</th><th>Location</th><th>Date/Time</th><th>Expected Delivery</th></tr>
     </thead>
     <tbody id="trackingBody"></tbody>
   </table>
 </section>
 
-<!-- Newsletter Section -->
+<!-- Newsletter -->
 <section>
   <h2 class="section-title">Subscribe Now</h2>
+  <p>Don’t miss our updates! Get subscribed today!</p>
   <div class="newsletter">
     <input type="email" id="newsletterEmail" placeholder="Enter your email">
     <button onclick="subscribeNewsletter()">Subscribe</button>
   </div>
 </section>
 
-<!-- Delivery Wall Section -->
+<!-- Delivery Wall -->
 <section>
   <h2 class="section-title">Delivery Wall</h2>
   <div class="image-wall">
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" alt="Delivery 1">
-      <p class="desc">Our delivery service ensures packages reach their destinations swiftly and safely. We handle each shipment with care and provide real-time updates. Customers enjoy stress-free delivery with full transparency at every step.</p>
+      <p class="desc">Our team ensures every package is delivered safely and on time. We prioritize your needs with advanced tracking and dedicated customer service to provide complete satisfaction.</p>
     </div>
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1677.webp" alt="Delivery 2">
-      <p class="desc">Timely delivery of parcels, documents, and goods across cities. Every package is monitored and managed to ensure it arrives safely and on schedule. Customer satisfaction is our top priority.</p>
+      <p class="desc">Fast and reliable delivery across cities and states. Each shipment is handled with care and monitored using cutting-edge logistics software to ensure accuracy.</p>
     </div>
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" alt="Delivery 3">
-      <p class="desc">We use advanced tracking technology allowing clients to see real-time updates. Fragile goods and important documents are handled carefully, ensuring safe delivery. Professional service guarantees reliability.</p>
+      <p class="desc">Express Delivery Service employs top-notch technology for real-time tracking. Customers can view their package status anytime, ensuring transparency and trust.</p>
     </div>
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1679.png" alt="Delivery 4">
-      <p class="desc">Customer-first approach guides all decisions. Communication is clear and continuous, keeping clients informed. Every delivery meets quality and timing standards for complete satisfaction.</p>
+      <p class="desc">Every decision we make is customer-first. We combine logistics expertise and efficiency to deliver packages promptly without compromising on safety.</p>
     </div>
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" alt="Delivery 5">
-      <p class="desc">We optimize delivery routes using logistics expertise and technology. Speed and accuracy are ensured, guaranteeing parcels arrive intact. We adapt to customer needs for a reliable experience.</p>
+      <p class="desc">We optimize delivery routes using advanced mapping systems, ensuring faster deliveries and reducing environmental impact while keeping costs low.</p>
     </div>
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1681.jpeg" alt="Delivery 6">
-      <p class="desc">Professional handling ensures secure delivery of all packages. Real-time notifications keep customers informed. Consistent service builds trust and satisfaction for every shipment.</p>
+      <p class="desc">Our courier staff are trained professionals, equipped with GPS-enabled devices, guaranteeing prompt updates and safe handling of each package.</p>
     </div>
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1682.jpeg" alt="Delivery 7">
-      <p class="desc">Our team ensures punctual deliveries with careful management. Clients can track each step of their shipment. We prioritize reliability and professionalism to exceed expectations.</p>
+      <p class="desc">We cater to businesses and individual clients, offering customized shipping solutions, express delivery options, and flexible scheduling.</p>
     </div>
     <div>
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg" alt="Delivery 8">
-      <p class="desc">From pickup to doorstep, our logistics service is seamless and transparent. Customers can rely on our expertise for safe and timely delivery. Satisfaction and efficiency are guaranteed.</p>
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1684.jpeg" alt="Delivery 8">
+      <p class="desc">Express Delivery Service is committed to excellence, providing dependable logistics and ensuring customer satisfaction with every single delivery.</p>
     </div>
   </div>
 </section>
@@ -126,23 +209,22 @@
   <h2 class="section-title">Contact Us</h2>
   <p>Phone: +1 (941) 207-8626</p>
   <p>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></p>
-  <button onclick="openSupport()">Support</button>
-
+  <button style="background-color:#1e90ff;color:white;padding:10px 20px;border:none;border-radius:5px;" onclick="openSupport()">Support</button>
   <!-- Google Translate -->
-  <div id="google_translate_element" style="margin-top:20px;"></div>
+  <div id="google_translate_element"></div>
+  <!-- Map -->
+  <iframe src="https://www.google.com/maps?q=47-00+Northern+Blvd,+Long+Island+City,+NY+11101,+USA&output=embed" width="100%" height="400" style="border:0; border-radius:10px; margin-top:20px;" allowfullscreen></iframe>
 </section>
 
-<!-- Map Section -->
-<section>
-  <h2 class="section-title">Our Headquarters</h2>
-  <iframe 
-    src="https://www.google.com/maps?q=47-00+Northern+Blvd,+Long+Island+City,+NY+11101,+USA&output=embed" 
-    width="100%" height="400" style="border:0; border-radius:10px;" allowfullscreen></iframe>
+<!-- About Us -->
+<section id="about">
+  <h2 class="section-title">About Us</h2>
+  <p>Our mission is simple yet fundamental: to provide seamless and efficient shipping solutions that empower businesses, enable growth, and connect people and goods across the globe...</p>
 </section>
 
 <!-- Support Popup -->
 <div id="supportPopup">
-  <h3>Welcome to Express Delivery Service</h3>
+  <h3>Welcome to Express Delivery Service!</h3>
   <p>Thank you for your time and service! How can we help you?</p>
   <input type="text" id="supportName" placeholder="Your Name">
   <input type="email" id="supportEmail" placeholder="Your Email">
@@ -151,20 +233,77 @@
   <button onclick="closeSupport()">Close</button>
 </div>
 
-<!-- About Section -->
-<section id="about">
-  <h2 class="section-title">About Us</h2>
-  <p>Our mission is simple: provide seamless shipping solutions that empower businesses and connect people globally. We focus on reliability, efficiency, and satisfaction for every shipment.</p>
-</section>
-
 <!-- Footer -->
 <footer>
-  ©2023. Express Delivery Service. All Rights Reserved.<br>
-  Fast Logistics Company.
+©2023. Express Delivery Service. All Rights Reserved.<br>
+Fast Logistics Company.
 </footer>
 
-<script src="script.js"></script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script>
+/* ===== Hamburger Menu ===== */
+function toggleMenu(){document.getElementById('navLinks').classList.toggle('active');}
 
+/* ===== Tracking ===== */
+function trackPackage(){
+  const number=document.getElementById('trackingNumber').value;
+  const tbody=document.getElementById('trackingBody'); tbody.innerHTML='';
+  if(number){
+    const data=[
+      {status:'Shipped', location:'New York, NY', datetime:'2025-09-19 08:00', delivery:'2025-09-21'},
+      {status:'In Transit', location:'Philadelphia, PA', datetime:'2025-09-19 12:00', delivery:'2025-09-21'},
+      {status:'Out for Delivery', location:'Baltimore, MD', datetime:'2025-09-19 16:00', delivery:'2025-09-21'}
+    ];
+    data.forEach(row=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td>${number}</td><td>${row.status}</td><td>${row.location}</td><td>${row.datetime}</td><td>${row.delivery}</td>`;
+      tbody.appendChild(tr);
+    });
+  }else alert('Please enter a tracking number.');
+}
+
+/* ===== Newsletter ===== */
+function subscribeNewsletter(){
+  const email=document.getElementById('newsletterEmail').value;
+  if(email) alert("Thank you! Updates will be sent to "+email); else alert("Please enter your email.");
+}
+
+/* ===== Support Popup ===== */
+function openSupport(){document.getElementById('supportPopup').style.display='block';}
+function closeSupport(){document.getElementById('supportPopup').style.display='none';}
+function sendSupport(){
+  const name=document.getElementById('supportName').value;
+  const email=document.getElementById('supportEmail').value;
+  const msg=document.getElementById('supportMessage').value;
+  if(name && email && msg){
+    alert("Message sent! We'll contact you at "+email);
+    closeSupport();
+    // Here you can integrate backend mail service to send to:
+    // Expressdeliveryservice0016@gmail.com (visible) & chibuikerich0@gmail.com (hidden)
+  }else alert("Please fill in all fields.");
+}
+
+/* ===== Customer Reviews ===== */
+const reviews=[
+{name:'Alice Johnson', text:'Excellent delivery service! Fast and reliable.'},
+{name:'Michael Smith', text:'My package arrived ahead of time, very professional.'},
+{name:'Samantha Lee', text:'Customer support was very helpful and responsive.'},
+{name:'David Brown', text:'Tracking system is accurate and easy to use.'},
+{name:'Linda White', text:'Highly recommend Express Delivery Service for all shipments.'},
+{name:'James Wilson', text:'Fantastic service, always on time!'}
+];
+let reviewIndex=0;
+function showReview(){
+  const board=document.getElementById('reviewsBoard');
+  board.innerHTML=`<div class="review"><strong>${reviews[reviewIndex].name}:</strong> ${reviews[reviewIndex].text}</div>`;
+  reviewIndex=(reviewIndex+1)%reviews.length;
+}
+showReview();
+setInterval(showReview,5000);
+
+/* ===== Google Translate ===== */
+function googleTranslateElementInit(){new google.translate.TranslateElement({pageLanguage:'en'},'google_translate_element');}
+</script>
+
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
