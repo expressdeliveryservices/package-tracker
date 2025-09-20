@@ -59,12 +59,23 @@
         #trackingBoard th, #trackingBoard td { border: 1px solid #1e90ff; padding: 10px; text-align: left; }
         #trackingBoard th { background-color: #1e90ff; color: white; }
 
-        /* ===== Shipment Details ===== */
-        .shipment-details { margin-top: 20px; }
-        .shipment-details .details { margin-bottom: 15px; }
-        .shipment-details .details label { display: block; font-weight: bold; color: #555; margin-bottom: 5px; }
-        .shipment-details .details span { display: block; padding: 8px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 10px; }
-        .shipment-details .section-title { color: #d32f2f; font-size: 18px; margin-top: 15px; margin-bottom: 10px; border-left: 4px solid #d32f2f; padding-left: 10px; }
+        /* ===== Shipment Details (Receipt Style) ===== */
+        .receipt {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            border: 1px solid #000;
+            padding: 20px;
+            font-family: monospace;
+            font-size: 14px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+        .receipt .header { text-align: center; font-weight: bold; margin-bottom: 20px; border-bottom: 1px dashed #000; padding-bottom: 10px; }
+        .receipt .details { margin-bottom: 15px; }
+        .receipt .details label { font-weight: bold; }
+        .receipt .details span { display: block; margin-bottom: 5px; }
+        .receipt .section-title { font-size: 16px; margin-top: 15px; margin-bottom: 10px; border-top: 1px dashed #000; padding-top: 10px; }
 
         /* ===== Map ===== */
         .map-container {
@@ -157,6 +168,7 @@
         <a href="#about">About</a>
         <a href="#services">Services</a>
         <a href="#track">Track Packages</a>
+        <a href="#shipment-details">Shipment Details</a>
         <a href="#contact">Contact</a>
     </div>
     <div class="hamburger" onclick="toggleMenu()">
@@ -169,6 +181,55 @@
     <header>
         <h1>Express Delivery Service</h1>
     </header>
+    <!-- Newsletter (moved to home as dashboard) -->
+    <h2 class="section-title">Subscribe Now</h2>
+    <p>Don’t miss our updates! Get subscribed today!</p>
+    <div class="newsletter">
+        <input type="email" id="newsletterEmail" placeholder="Enter your email">
+        <button onclick="subscribeNewsletter()">Subscribe</button>
+    </div>
+    <!-- Delivery Wall -->
+    <h2 class="section-title">Delivery Wall</h2>
+    <div class="image-wall">
+        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" alt="Delivery 1">
+            <p class="desc">Our team ensures every package is delivered safely and on time, providing advanced tracking and dedicated customer service for complete satisfaction.</p>
+        </div>
+        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1677.webp" alt="Delivery 2">
+            <p class="desc">Fast and reliable delivery across cities and states, with each shipment carefully monitored using modern logistics software for accuracy.</p>
+        </div>
+        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" alt="Delivery 3">
+            <p class="desc">Express Delivery Service employs top-notch technology for real-time tracking, ensuring transparency and trust for every customer.</p>
+        </div>
+        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1679.png" alt="Delivery 4">
+            <p class="desc">Every decision we make is customer-first, combining logistics expertise and efficiency for prompt delivery without compromising safety.</p>
+        </div>
+        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" alt="Delivery 5">
+            <p class="desc">Optimized delivery routes using advanced mapping systems ensure faster deliveries while minimizing environmental impact and cost.</p>
+        </div>
+        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1681.jpeg" alt="Delivery 6">
+            <p class="desc">Our courier staff are trained professionals equipped with GPS-enabled devices, guaranteeing safe handling and prompt updates for each package.</p>
+        </div>
+        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1682.jpeg" alt="Delivery 7">
+            <p class="desc">We cater to businesses and individual clients, offering customized shipping solutions, express delivery options, and flexible scheduling.</p>
+        </div>
+        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1684.jpeg" alt="Delivery 8">
+            <p class="desc">Express Delivery Service is committed to excellence, providing dependable logistics and ensuring customer satisfaction with every delivery.</p>
+        </div>
+    </div>
+    <!-- Customer Reviews -->
+    <h2 class="section-title">Customer Reviews</h2>
+    <div id="reviewsBoard"></div>
+    <!-- Business Hours -->
+    <h2 class="section-title">Business Hours</h2>
+    <div class="business-hours">
+        <span>Friday: <span class="blink shine-green">Open 24 hours</span></span><br>
+        <span>Saturday: <span class="blink shine-green">Open 24 hours</span></span><br>
+        <span>Sunday: <span class="blink shine-green">Open 24 hours</span></span><br>
+        <span>Monday: <span class="blink shine-green">Open 24 hours</span></span><br>
+        <span>Tuesday: <span class="blink shine-green">Open 24 hours</span></span><br>
+        <span>Wednesday: <span class="blink shine-green">Open 24 hours</span></span><br>
+        <span>Thursday: <span class="blink shine-green">Open 24 hours</span></span>
+    </div>
 </section>
 
 <!-- About -->
@@ -196,10 +257,13 @@
         </thead>
         <tbody id="trackingBody"></tbody>
     </table>
+</section>
 
-    <!-- Shipment Details -->
-    <div class="shipment-details">
-        <div class="section-title">Shipment Details</div>
+<!-- Shipment Details -->
+<section id="shipment-details">
+    <h2 class="section-title">Content of Shipping: Package</h2>
+    <div class="receipt">
+        <div class="header">Shipment Receipt</div>
         <div class="details">
             <label>Tracking Number:</label>
             <span>1Z999BB20234567890</span>
@@ -246,7 +310,7 @@
                 Enable JavaScript to see Google Maps.
             </div>
         </div>
-        <div class="timestamp">Last Updated: 01:36 PM WAT, Saturday, September 20, 2025</div>
+        <div class="timestamp">Last Updated: 12:54 PM WAT, Saturday, September 20, 2025</div>
     </div>
 </section>
 
@@ -260,67 +324,6 @@
     <div id="google_translate_element"></div>
     <!-- Additional Map -->
     <iframe src="https://www.google.com/maps?q=47-00+Northern+Blvd,+Long+Island+City,+NY+11101,+USA&output=embed" width="100%" height="400" style="border:0; border-radius: 10px; margin-top: 20px;" allowfullscreen></iframe>
-</section>
-
-<!-- Newsletter -->
-<section>
-    <h2 class="section-title">Subscribe Now</h2>
-    <p>Don’t miss our updates! Get subscribed today!</p>
-    <div class="newsletter">
-        <input type="email" id="newsletterEmail" placeholder="Enter your email">
-        <button onclick="subscribeNewsletter()">Subscribe</button>
-    </div>
-</section>
-
-<!-- Delivery Wall -->
-<section>
-    <h2 class="section-title">Delivery Wall</h2>
-    <div class="image-wall">
-        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" alt="Delivery 1">
-            <p class="desc">Our team ensures every package is delivered safely and on time, providing advanced tracking and dedicated customer service for complete satisfaction.</p>
-        </div>
-        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1677.webp" alt="Delivery 2">
-            <p class="desc">Fast and reliable delivery across cities and states, with each shipment carefully monitored using modern logistics software for accuracy.</p>
-        </div>
-        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" alt="Delivery 3">
-            <p class="desc">Express Delivery Service employs top-notch technology for real-time tracking, ensuring transparency and trust for every customer.</p>
-        </div>
-        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1679.png" alt="Delivery 4">
-            <p class="desc">Every decision we make is customer-first, combining logistics expertise and efficiency for prompt delivery without compromising safety.</p>
-        </div>
-        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" alt="Delivery 5">
-            <p class="desc">Optimized delivery routes using advanced mapping systems ensure faster deliveries while minimizing environmental impact and cost.</p>
-        </div>
-        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1681.jpeg" alt="Delivery 6">
-            <p class="desc">Our courier staff are trained professionals equipped with GPS-enabled devices, guaranteeing safe handling and prompt updates for each package.</p>
-        </div>
-        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1682.jpeg" alt="Delivery 7">
-            <p class="desc">We cater to businesses and individual clients, offering customized shipping solutions, express delivery options, and flexible scheduling.</p>
-        </div>
-        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1684.jpeg" alt="Delivery 8">
-            <p class="desc">Express Delivery Service is committed to excellence, providing dependable logistics and ensuring customer satisfaction with every delivery.</p>
-        </div>
-    </div>
-</section>
-
-<!-- Customer Reviews -->
-<section>
-    <h2 class="section-title">Customer Reviews</h2>
-    <div id="reviewsBoard"></div>
-</section>
-
-<!-- Business Hours -->
-<section>
-    <h2 class="section-title">Business Hours</h2>
-    <div class="business-hours">
-        <span>Friday: <span class="blink shine-green">Open 24 hours</span></span><br>
-        <span>Saturday: <span class="blink shine-green">Open 24 hours</span></span><br>
-        <span>Sunday: <span class="blink shine-green">Open 24 hours</span></span><br>
-        <span>Monday: <span class="blink shine-green">Open 24 hours</span></span><br>
-        <span>Tuesday: <span class="blink shine-green">Open 24 hours</span></span><br>
-        <span>Wednesday: <span class="blink shine-green">Open 24 hours</span></span><br>
-        <span>Thursday: <span class="blink shine-green">Open 24 hours</span></span>
-    </div>
 </section>
 
 <!-- Support Popup -->
