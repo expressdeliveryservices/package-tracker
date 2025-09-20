@@ -33,7 +33,7 @@ section{padding:20px;scroll-margin-top:60px;}
 .tracking input{flex:1;padding:8px;border:1px solid #ddd;border-radius:3px;background:#fff;color:#000;font-size:0.9rem;}
 .tracking input::placeholder{text-transform:uppercase;font-size:0.8rem;}
 .tracking button{padding:8px 15px;border:none;border-radius:3px;background-color:#1e90ff;color:white;cursor:pointer;}
-.shipment-tracking,.shipment-content{max-width:400px;margin:10px auto;padding:15px;font-family:'Courier New',Courier,monospace;font-size:12px;border:1px solid #000;background:#fff;}
+.shipment-tracking,.shipment-content{max-width:500px;margin:10px auto;padding:15px;font-family:'Courier New',Courier,monospace;font-size:12px;border:1px solid #000;background:#fff;}
 .shipment-tracking .header,.shipment-content .header{font-weight:bold;font-size:14px;margin-bottom:10px;}
 .shipment-content .details label{display:inline-block;width:120px;font-weight:bold;}
 .shipment-content .details span{display:inline-block;margin-left:10px;}
@@ -41,36 +41,9 @@ section{padding:20px;scroll-margin-top:60px;}
 /* Map */
 .map-container{width:100%;height:300px;margin:20px 0;overflow:hidden;position:relative;}
 .map-overlay{position:absolute;top:10px;left:50%;transform:translateX(-50%);background-color:rgba(255,255,255,0.8);padding:5px 10px;border-radius:3px;font-size:14px;color:#000;z-index:5; font-weight:bold; text-transform:uppercase;}
-.map-placeholder{width:100%;height:100%;background:#fff;text-align:center;padding-top:60px;color:#555;}
-
-/* Newsletter */
-.newsletter{display:flex;gap:10px;margin-top:15px;}
-.newsletter input{flex:1;padding:8px;border-radius:3px;border:1px solid #ddd;background:#fff;color:#000;}
-.newsletter button{padding:8px 15px;border-radius:3px;border:none;background-color:#1e90ff;color:white;cursor:pointer;}
-
-/* Support Popup */
-#supportPopup{display:none;position:fixed;bottom:20px;right:20px;background:#f8f8f8;padding:15px;border-radius:8px;box-shadow:0 0 10px #1e90ff;z-index:10000;color:#000;}
-#supportPopup input,#supportPopup textarea{width:100%;margin-bottom:8px;padding:6px;border-radius:3px;border:1px solid #ddd;background:#fff;color:#000;}
-#supportPopup button{padding:6px 12px;background-color:#1e90ff;color:white;border:none;border-radius:3px;cursor:pointer;}
-
-/* Customer Reviews */
-#reviewsBoard{margin-top:15px;padding:10px;border:1px solid #1e90ff;border-radius:5px;background:#fff;min-height:40px;display:flex;align-items:center;justify-content:center;position:relative;}
-.review{opacity:0;position:absolute;transition:opacity 1s ease-in-out;width:100%;text-align:center;font-size:1rem;}
-.review.show{opacity:1;position:relative;}
-
-/* Image Wall */
-.image-wall{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px;}
-.image-wall img,.image-wall video{width:100%;border-radius:5px;}
-.image-wall video{pointer-events:none;} /* Read-only video */
-.image-wall .desc{margin-top:8px;font-size:0.85rem;color:#555;}
-
-/* Business Hours */
-.business-hours span{color:black;font-weight:bold;}
-.business-hours .open-hours{color:#00ff00;animation:blink 1s infinite;font-weight:bold;}
-@keyframes blink{0%,50%,100%{opacity:1;}25%,75%{opacity:0;}}
 
 /* Tracking timeline ticks */
-.timeline{display:flex;flex-direction:column;gap:15px;}
+.timeline{display:flex;flex-direction:column;gap:15px;margin-bottom:10px;}
 .tick-container{display:flex;align-items:center;gap:10px;}
 .tick-circle{width:20px;height:20px;border-radius:50%;border:2px solid #1e90ff;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#1e90ff;flex-shrink:0;}
 .tick-label{background:#f0f0f0;padding:5px 10px;border-radius:3px;flex:1;}
@@ -108,68 +81,6 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
   </div>
 </header>
 
-<!-- Home Section -->
-<section id="home">
-  <!-- Newsletter -->
-  <h2 class="section-title">Subscribe Now</h2>
-  <p>Don’t miss our updates! Get subscribed today!</p>
-  <div class="newsletter">
-    <input type="email" id="newsletterEmail" placeholder="Enter your email">
-    <button onclick="subscribeNewsletter()">Subscribe</button>
-  </div>
-
-  <!-- Delivery Wall -->
-  <h2 class="section-title">Delivery Wall</h2>
-  <div class="image-wall">
-    <div>
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" alt="Delivery 1">
-      <p class="desc">Our team ensures every package is delivered safely and on time with reliable logistics services for all customers.</p>
-    </div>
-    <div>
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1677.webp" alt="Delivery 2">
-      <p class="desc">Fast and reliable delivery across cities and states, keeping your shipments secure and timely.</p>
-    </div>
-    <div>
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" alt="Delivery 3">
-      <p class="desc">Real-time tracking with top-notch technology ensures transparency and peace of mind.</p>
-    </div>
-  </div>
-
-  <!-- Customer Reviews -->
-  <h2 class="section-title">Customer Reviews</h2>
-  <div id="reviewsBoard">
-    <div class="review" id="review0">⭐ Alice Johnson: Excellent service! Fast and reliable.</div>
-    <div class="review" id="review1">⭐⭐ Michael Smith: Package arrived ahead of time.</div>
-    <div class="review" id="review2">⭐⭐⭐ Samantha Lee: Helpful and responsive support.</div>
-    <div class="review" id="review3">⭐⭐⭐⭐ John Doe: Amazing service, highly recommend!</div>
-    <div class="review" id="review4">⭐⭐⭐⭐⭐ Emily Davis: Professional and efficient delivery every time.</div>
-  </div>
-
-  <!-- Business Hours -->
-  <h2 class="section-title">Business Hours</h2>
-  <div class="business-hours">
-    <span>Friday: <span class="open-hours">Open 24 hours</span></span><br>
-    <span>Saturday: <span class="open-hours">Open 24 hours</span></span><br>
-    <span>Sunday: <span class="open-hours">Open 24 hours</span></span><br>
-    <span>Monday: <span class="open-hours">Open 24 hours</span></span><br>
-    <span>Tuesday: <span class="open-hours">Open 24 hours</span></span><br>
-    <span>Wednesday: <span class="open-hours">Open 24 hours</span></span><br>
-    <span>Thursday: <span class="open-hours">Open 24 hours</span></span>
-  </div>
-</section>
-
-<!-- About Us -->
-<section id="about">
-  <h2 class="section-title">About Us</h2>
-  <p>Our mission is to provide seamless and efficient shipping solutions that empower businesses and connect people globally. We pride ourselves on reliability, professionalism, and real-time tracking for every delivery.</p>
-</section>
-
-<!-- Services -->
-<section id="services">
-  <h2 class="section-title">Our Services</h2>
-  <p>Become our partner. We offer advanced tracking and logistics expertise to ensure your shipments are handled efficiently and safely.</p>
-</section>
-
 <!-- Track Packages -->
 <section id="track">
   <h2 class="section-title">Track Your Package</h2>
@@ -187,58 +98,14 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
   </div>
 </section>
 
-<!-- Contact -->
-<section id="contact">
-  <h2 class="section-title">Contact Us</h2>
-  <p>Phone: +1 (941) 207-8626</p>
-  <p>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></p>
-  <button style="background-color: #1e90ff; color: white; padding: 8px 15px; border: none; border-radius: 3px;" onclick="openSupport()">Support</button>
-  <div id="google_translate_element" style="margin-top:10px;"></div>
-
-  <!-- Headquarter Map -->
-  <iframe src="https://www.google.com/maps?q=47-00+Northern+Blvd,+Long+Island+City,+NY+11101,+USA&output=embed" width="100%" height="300" style="border:0; border-radius:5px; margin-top:15px;" allowfullscreen></iframe>
-</section>
-
-<!-- Support Popup -->
-<div id="supportPopup">
-  <h3>Welcome to Express Delivery Service!</h3>
-  <p>How can we help you?</p>
-  <form method="POST" action="send_support.php" id="supportForm">
-    <input type="text" name="name" placeholder="Your Name" required>
-    <input type="email" name="email" placeholder="Your Email" required>
-    <textarea name="message" placeholder="Your Message" required></textarea>
-    <button type="submit">Send</button>
-  </form>
-  <button onclick="closeSupport()">Close</button>
-</div>
-
 <!-- Footer -->
 <footer>
-  ©2023. Express delivery service. All Rights Reserved.<br>
+  ©2025. Express delivery service. All Rights Reserved.<br>
   Fast Logistics Company.
 </footer>
 
 <script>
-/* Hamburger Menu */
 function toggleMenu(){document.getElementById('navLinks').classList.toggle('active');}
-
-/* Newsletter */
-function subscribeNewsletter(){
-  const email=document.getElementById('newsletterEmail').value;
-  if(email) alert("Thank you! Updates will be sent to "+email); else alert("Please enter your email.");
-}
-
-/* Support Popup */
-function openSupport(){document.getElementById('supportPopup').style.display='block';}
-function closeSupport(){document.getElementById('supportPopup').style.display='none';}
-
-/* Customer Reviews Rotation */
-const reviews=document.querySelectorAll(".review"); let currentReview=0;
-function showReview(){reviews.forEach(r=>r.classList.remove("show"));reviews[currentReview].classList.add("show");currentReview=(currentReview+1)%reviews.length;}
-showReview(); setInterval(showReview,5000);
-
-/* Google Translate */
-function googleTranslateElementInit(){new google.translate.TranslateElement({pageLanguage:'en'},'google_translate_element');}
 
 /* Tracking */
 function trackPackage(){
@@ -246,24 +113,27 @@ function trackPackage(){
   const trackingDiv=document.getElementById('shipmentTracking');
   const contentDiv=document.getElementById('shipmentContent');
   trackingDiv.style.display='none'; contentDiv.style.display='none';
-  trackingDiv.innerHTML='<div class="header">Tracking...</div>';
-  trackingDiv.style.display='block';
+  trackingDiv.innerHTML='<div class="header">Tracking...</div>'; trackingDiv.style.display='block';
 
   if(number){
     setTimeout(()=>{
-      // First, show tracking timeline
-      trackingDiv.innerHTML='<div class="header">Tracking Shipment</div><div class="timeline"><div class="tick-container"><div class="tick-circle tick-complete">✓</div><div class="tick-label">Item has arrived at Vnukovo International Airport, Russia <span style="background:#ccc;padding:2px 5px;margin-left:5px;border-radius:3px;">On Hold</span></div><div class="tick-time">23 Sep 2025, 07:30</div></div></div><button class="print-btn" onclick="printInvoice()">Print Invoice</button>';
-      
+      trackingDiv.innerHTML='<div class="header">Tracking Shipment</div><div class="timeline">'+
+      '<div class="tick-container"><div class="tick-circle tick-complete">✓</div><div class="tick-label">Item has arrived at Vnukovo International Airport, Russia <span style="background:#ccc;padding:2px 5px;margin-left:5px;border-radius:3px;">On Hold</span></div><div class="tick-time">23 Sep 2025, 07:30</div></div>'+
+      '<div class="tick-container"><div class="tick-circle tick-complete">☑️</div><div class="tick-label">Your item is on its way to Russia, London UK <span style="background:#ccc;padding:2px 5px;margin-left:5px;border-radius:3px;">In Transit</span></div><div class="tick-time">22 Sep 2025, 14:00</div></div></div>'+
+      '<button class="print-btn" onclick="printInvoice()">Print Invoice</button>';
+
       setTimeout(()=>{
-        // Then show content of shipment
-        contentDiv.innerHTML='<div class="header">Content of Shipment: Package</div><div class="details"><label>Est. Delivery Date:</label><span>22 Sep 2025</span><br><label>Origin Area:</label><span>London UK</span><br><label>Destination Area:</label><span>Russia</span></div><div class="section-title">Sender\'s Details</div><div class="details"><label>Name:</label><span>James</span><br><label>Address:</label><span>London UK</span></div><div class="section-title">Receiver\'s Details</div><div class="details"><label>Name:</label><span>Podvezennaya Elena Ivanovna</span><br><label>Address:</label><span>195299 St. Petersburg, Prosveshcheniya Avenue 104, Apt. 281</span><br><label>Mobile:</label><span>+79932195775</span><br><label>Bill:</label><span>$500</span></div>';
+        contentDiv.innerHTML='<div class="header">Content of Shipment: Package</div>'+
+        '<div class="details"><label>Est. Delivery Date:</label><span>22 Sep 2025</span><br><label>Origin Area:</label><span>London UK</span><br><label>Destination Area:</label><span>Russia</span></div>'+
+        '<div class="section-title">Sender\'s Details</div>'+
+        '<div class="details"><label>Name:</label><span>James</span><br><label>Address:</label><span>London UK</span></div>'+
+        '<div class="section-title">Receiver\'s Details</div>'+
+        '<div class="details"><label>Name:</label><span>Podvezennaya Elena Ivanovna</span><br><label>Address:</label><span>195299 St. Petersburg, Prosveshcheniya Avenue 104, Apt. 281</span><br><label>Mobile:</label><span>+79932195775</span></div>';
         contentDiv.style.display='block';
       },5000);
 
     },5000);
-  } else {
-    trackingDiv.innerHTML='<div class="header">Please enter a tracking number.</div>';
-  }
+  } else {trackingDiv.innerHTML='<div class="header">Please enter a tracking number.</div>';}
 }
 
 /* Print Invoice */
@@ -276,6 +146,5 @@ function printInvoice(){
   printWindow.print();
 }
 </script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
