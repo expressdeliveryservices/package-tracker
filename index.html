@@ -38,6 +38,16 @@ section{padding:20px;scroll-margin-top:60px;}
 .shipment-content .details label{display:inline-block;width:120px;font-weight:bold;}
 .shipment-content .details span{display:inline-block;margin-left:10px;}
 
+/* Timeline for tracking */
+.timeline{display:flex;flex-direction:column;gap:20px;margin-top:15px;}
+.timeline-item{display:flex;align-items:flex-start;gap:10px;}
+.circle{width:20px;height:20px;border-radius:50%;border:3px solid;flex-shrink:0;margin-top:5px;}
+.circle.green{border-color:green;background:green;}
+.status{background:#f5f5f5;padding:10px;border-radius:5px;position:relative;}
+.small-box{display:inline-block;padding:2px 5px;border-radius:3px;font-size:0.75rem;margin-top:5px;}
+.small-box.ash{background:gray;color:#fff;}
+.time-date{margin-top:5px;font-size:0.8rem;}
+
 /* Map */
 .map-container{width:100%;height:300px;margin:20px 0;overflow:hidden;position:relative;}
 .map-overlay{position:absolute;top:10px;left:50%;transform:translateX(-50%);background-color:rgba(255,255,255,0.8);padding:5px 10px;border-radius:3px;font-size:14px;color:#000;z-index:5;}
@@ -192,13 +202,41 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
     <input type="text" id="trackingNumber" placeholder="Enter Tracking ID">
     <button onclick="trackPackage()">Track Now</button>
   </div>
-  <div id="shipmentTracking" class="shipment-tracking" style="display:none;"></div>
-  <div id="shipmentContent" class="shipment-content" style="display:none;"></div>
+
+  <!-- Shipment Tracking Timeline -->
+  <div id="shipmentTracking" class="shipment-tracking" style="display:none;">
+    <div class="header">Tracking Timeline</div>
+    <div class="timeline">
+      <!-- In Transit -->
+      <div class="timeline-item">
+        <div class="circle green"></div>
+        <div class="status">
+          <strong>☑️ Your item is on its way to</strong><br>
+          Russia<br>London UK
+          <div class="small-box ash">In Transit</div>
+          <div class="time-date" style="color:blue;">22 Sep 2025<br>14:00</div>
+        </div>
+      </div>
+      <!-- Arrived -->
+      <div class="timeline-item">
+        <div class="circle green"></div>
+        <div class="status">
+          <strong>✅ Item has arrived at</strong><br>
+          Vnukovointernational Airport, Russia
+          <div class="small-box ash">On Hold</div>
+          <div class="time-date">23 Sep 2025<br>7:30</div>
+        </div>
+      </div>
+    </div>
+    <button class="print-btn" onclick="printInvoice()">Print Invoice</button>
+  </div>
 
   <!-- Receiver Map -->
-  <div class="map-container">
-    <div class="map-overlay">Current Location On Map</div>
+  <div class="map-container" style="position:relative;">
+    <div class="map-overlay">Receiver Location</div>
     <iframe src="https://www.google.com/maps?q=195299%20St.%20Petersburg,%20Prosveshcheniya%20Avenue%20104,%20Apt.%20281&output=embed" width="100%" height="300" style="border:0;" allowfullscreen></iframe>
+    <!-- Red Pin -->
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:20px;height:20px;background:red;border-radius:50%;border:3px solid #fff;z-index:10;"></div>
   </div>
 </section>
 
@@ -259,24 +297,17 @@ function googleTranslateElementInit(){new google.translate.TranslateElement({pag
 function trackPackage(){
   const number=document.getElementById('trackingNumber').value.trim();
   const trackingDiv=document.getElementById('shipmentTracking');
-  const contentDiv=document.getElementById('shipmentContent');
-  trackingDiv.style.display='none'; contentDiv.style.display='none';
-  const resultText='Tracking...'; trackingDiv.innerHTML='<div class="header">'+resultText+'</div>'; trackingDiv.style.display='block';
-  setTimeout(()=>{
-    if(number){
-      trackingDiv.innerHTML='<div class="header">Tracking Shipment</div><button class="print-btn" onclick="printInvoice()">Print-Invoice</button><div class="info">Tracking No: 1Z999BB20234567890 <span class="date-time">22 Sep 2025, 14:03</span></div><div class="location">Your item is on its way to<br>Russia<br>London UK IN TRANSIT</div>';
-      contentDiv.innerHTML='<div class="header">Content of Shipment: Package</div><div class="details"><label>Est. Delivery Date:</label><span>22 Sep 2025</span><br><label>Origin Area:</label><span>London UK</span><br><label>Destination Area:</label><span>Russia</span></div><div class="section-title">Sender\'s Details</div><div class="details"><label>Name:</label><span>James</span><br><label>Address:</label><span>London UK</span></div><div class="section-title">Receiver\'s Details</div><div class="details"><label>Name:</label><span>Podvezennaya Elena Ivanovna</span><br><label>Address:</label><span>195299 St. Petersburg, Prosveshcheniya Avenue 104, Apt. 281</span><br><label>Mobile:</label><span>+79932195775</span><br><label>Bill:</label><span>$500</span></div>';
-      contentDiv.style.display='block';
-    } else {trackingDiv.innerHTML='<div class="header">Please enter a tracking number.</div>';}
-  },5000);
+  if(number){trackingDiv.style.display='block';} 
+  else{trackingDiv.style.display='none'; alert("Please enter a tracking number.");}
 }
 
-/* Print Invoice */
+/* Print Invoice only downloads image */
 function printInvoice(){
-  const printContent=document.getElementById('shipmentTracking').innerHTML;
-  const originalContent=document.body.innerHTML;
-  document.body.innerHTML='<div>'+printContent+'</div><style>body{font-family:"Courier New",Courier,monospace;font-size:12px;}.print-btn{display:none;}</style>';
-  window.print(); document.body.innerHTML=originalContent;
+  const imageUrl = "https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1790.jpeg";
+  const w = window.open('');
+  w.document.write('<img src="'+imageUrl+'" style="width:100%;">');
+  w.print();
+  w.close();
 }
 </script>
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
