@@ -3,255 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Express Delivery Service | Package Tracking</title>
+    <title>Express Delivery Service</title>
     <style>
-        /* ===== General & Light Theme (Inspired by justdropnow.com) ===== */
+        /* ===== General & Dark Theme ===== */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #f8f8f8;
-            color: #333;
+            background-color: #121212;
+            color: #fff;
             scroll-behavior: smooth;
         }
         a {color: #1e90ff; text-decoration: none;}
-        h1, h2, h3, h4, h5, h6 {color: #333; margin: 0;}
-        header {
-            background-color: #fff;
-            padding: 20px;
-            border-bottom: 1px solid #ddd;
-            text-align: center;
-        }
-        header .logo {
-            font-weight: bold;
-            font-size: 1.8rem;
-            color: #333;
-        }
+        h1, h2, h3, h4, h5, h6 {color: #1e90ff; margin: 0;}
+        header {background: url('https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg') center/cover no-repeat; height: 400px; position: relative;}
+        header h1 {position: absolute; bottom: 30px; left: 30px; color: #fff; font-size: 3rem;}
 
         /* ===== Navbar ===== */
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 20px;
-            background-color: #fff;
-            border-bottom: 1px solid #ddd;
+            padding: 20px;
+            background-color: #1c1c1c;
             position: sticky;
             top: 0;
             z-index: 1000;
         }
-        .logo {font-weight: bold; font-size: 1.5rem; color: #333;}
         .nav-links {display: flex; gap: 20px;}
-        .nav-links a {cursor: pointer; font-weight: bold; color: #333;}
+        .nav-links a {cursor: pointer; font-weight: bold;}
         .hamburger {display: none; flex-direction: column; cursor: pointer;}
-        .hamburger div {width: 25px; height: 3px; background-color: #333; margin: 4px 0;}
+        .hamburger div {width: 25px; height: 3px; background-color: #1e90ff; margin: 4px 0;}
         @media(max-width: 768px) {
-            .nav-links {display: none; flex-direction: column; background-color: #fff; position: absolute; top: 60px; right: 0; width: 200px; padding: 20px; border: 1px solid #ddd;}
+            .nav-links {display: none; flex-direction: column; background-color: #1c1c1c; position: absolute; top: 70px; right: 0; width: 200px; padding: 20px;}
             .nav-links.active {display: flex;}
             .hamburger {display: flex;}
         }
 
         /* ===== Sections ===== */
-        section {
-            padding: 40px 20px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .section-title {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: #333;
-            text-align: center;
-        }
+        section {padding: 50px 20px;}
+        .section-title {font-size: 2rem; margin-bottom: 20px; color: #1e90ff;}
 
         /* ===== Tracking ===== */
-        .tracking {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            justify-content: center;
-        }
+        .tracking {display: flex; gap: 10px; margin-bottom: 20px;}
         .tracking input {
-            flex: 1;
-            max-width: 300px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background: #fff;
-            color: #000;
-            font-size: 0.9rem;
+            flex: 1; padding: 10px; border: none; border-radius: 5px; background: #fff; color: #000; font-size: 0.9rem;
         }
-        .tracking input::placeholder {font-size: 0.8rem;}
-        .tracking button {
-            padding: 10px 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #fff;
-            color: #333;
-            cursor: pointer;
+        .tracking input::placeholder {text-transform: uppercase; font-size: 0.8rem;}
+        .tracking button {padding: 10px 20px; border: none; border-radius: 5px; background-color: #1e90ff; color: white; cursor: pointer;}
+        #trackingBoard {width: 100%; border-collapse: collapse; margin-top: 20px;}
+        #trackingBoard th, #trackingBoard td {border: 1px solid #1e90ff; padding: 10px; text-align: left;}
+        #trackingBoard th {background-color: #1e90ff; color: white;}
+
+        /* ===== Newsletter ===== */
+        .newsletter {display: flex; gap: 10px; margin-top: 20px;}
+        .newsletter input {flex: 1; padding: 10px; border-radius: 5px; border: none; background: #1c1c1c; color: #fff;}
+        .newsletter button {padding: 10px 20px; border-radius: 5px; border: none; background-color: #1e90ff; color: white; cursor: pointer;}
+
+        /* ===== Support Popup ===== */
+        #supportPopup {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #1c1c1c;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px #1e90ff;
+            z-index: 10000;
         }
-        .tracking button:hover {background-color: #f0f0f0;}
-        #trackingBoard {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background: #fff;
-        }
-        #trackingBoard th, #trackingBoard td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-        #trackingBoard th {background-color: #f0f0f0; color: #333;}
+        #supportPopup input, #supportPopup textarea {width: 100%; margin-bottom: 10px; padding: 8px; border-radius: 5px; border: none; background: #2a2a2a; color: #fff;}
+        #supportPopup button {padding: 8px 15px; background-color: #1e90ff; color: white; border: none; border-radius: 5px; cursor: pointer;}
+
+        /* ===== Customer Reviews ===== */
+        #reviewsBoard {display: flex; flex-direction: column; gap: 10px; margin-top: 20px; border: 1px solid #1e90ff; padding: 15px; border-radius: 10px; background-color: #1c1c1c;}
+        .review {border-bottom: 1px solid #1e90ff; padding: 10px 0;}
+        .review:last-child {border-bottom: none;}
+        .review strong {color: #1e90ff;}
+
+        /* ===== Image Wall ===== */
+        .image-wall {display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;}
+        .image-wall img {width: 100%; border-radius: 10px;}
+        .image-wall .desc {margin-top: 10px; font-size: 0.9rem; color: #b0c4de;}
+
+        /* ===== Business Hours ===== */
+        .business-hours span {display: inline-block; margin-right: 10px;}
         .blink {animation: blink 1s infinite;}
-
-        /* ===== Shipment Details & Receipt ===== */
-        .shipment-details, .receipt {
-            display: none;
-            margin-top: 20px;
-            background: #fff;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        .shipment-details.active, .receipt.active {display: block;}
-        .shipment-details .header, .receipt .header {color: red; font-size: 1.2em; margin-bottom: 10px;}
-        .shipment-details .details, .receipt .details {margin: 10px 0;}
-        .shipment-details .details label, .receipt .details label {
-            font-weight: bold;
-            display: inline-block;
-            width: 150px;
-        }
-        .shipment-details .details span, .receipt .details span {
-            border: 1px solid #ddd;
-            padding: 5px;
-            width: 300px;
-            display: inline-block;
-            background-color: #f9f9f9;
-        }
-        .extended-description {
-            display: none;
-            margin-top: 10px;
-            padding: 10px;
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        .extended-description.active {display: block;}
-        .toggle-button {
-            padding: 5px 10px;
-            background-color: #fff;
-            color: #1e90ff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .toggle-button:hover {background-color: #f0f0f0;}
-        .print-button {
-            padding: 10px 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #fff;
-            color: #333;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        .print-button:hover {background-color: #f0f0f0;}
-        @media print {
-            .no-print {display: none;}
-            .receipt {border: none; box-shadow: none; padding: 0;}
-            .receipt .details {margin: 5px 0;}
-            .receipt .details label {width: 120px;}
-            .receipt .details span {width: 250px;}
-        }
-
-        /* ===== Delivery Wall ===== */
-        .delivery-wall {
-            margin-top: 20px;
-            background: #fff;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        .delivery-wall .header {color: red; font-size: 1.2em; margin-bottom: 10px;}
-        .delivery-wall .description-item {
-            margin: 5px 0;
-            padding-left: 10px;
-            border-left: 2px solid #1e90ff;
-            color: #666;
-        }
-
-        /* ===== Contact Us (Inspired by justdropnow.com/contact.php) ===== */
-        .contact-us {
-            background: #fff;
-            padding: 30px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            text-align: center;
-            margin-top: 20px;
-        }
-        .contact-info {margin-bottom: 20px;}
-        .contact-info p {margin: 5px 0; font-size: 1.1em;}
-        .contact-form {max-width: 500px; margin: 0 auto;}
-        .contact-form input, .contact-form textarea {
-            width: 100%;
-            margin-bottom: 15px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background: #f9f9f9;
-            color: #333;
-            box-sizing: border-box;
-        }
-        .contact-form button {
-            padding: 10px 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #fff;
-            color: #333;
-            cursor: pointer;
-        }
-        .contact-form button:hover {background-color: #f0f0f0;}
-        #contactResponse {margin-top: 10px; color: #1e90ff; font-weight: bold;}
-
-        /* ===== Footer ===== */
-        footer {
-            background-color: #f8f8f8;
-            text-align: center;
-            padding: 20px;
-            border-top: 1px solid #ddd;
-            color: #666;
-            margin-top: 40px;
-        }
-
-        /* ===== Blink Animation ===== */
         @keyframes blink {
             0%, 50%, 100% {opacity: 1;}
             25%, 75% {opacity: 0;}
+        }
+
+        /* ===== Footer ===== */
+        footer {background-color: #0d0d0d; text-align: center; padding: 20px; color: #1e90ff;}
+
+        /* ===== Google Translate Container ===== */
+        #google_translate_element {margin-top: 20px;}
+
+        /* ===== NoScript Message ===== */
+        noscript {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1c1c1c;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px #1e90ff;
+            text-align: center;
+            color: #fff;
+            z-index: 10000;
         }
     </style>
 </head>
 <body>
 
-<!-- Header -->
-<header>
-    <div class="logo">Express Delivery Service</div>
-</header>
-
 <!-- Navbar -->
 <div class="navbar">
     <div class="logo"><strong>Express Delivery</strong></div>
     <div class="nav-links" id="navLinks">
-        <a href="#track">Track Package</a>
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#track">Track Packages</a>
         <a href="#contact">Contact</a>
     </div>
     <div class="hamburger" onclick="toggleMenu()"><div></div><div></div><div></div></div>
 </div>
 
-<!-- Track Packages Section -->
+<!-- Header -->
+<header id="home">
+    <h1>Express Delivery Service</h1>
+</header>
+
+<!-- Services -->
+<section id="services">
+    <h2 class="section-title">Our Services</h2>
+    <p>Become Our Partners. At Express Delivery Service, we are more than just a logistics company; we’re your dedicated partners in tracking success.</p>
+</section>
+
+<!-- Track Packages -->
 <section id="track">
     <h2 class="section-title">Track Your Package</h2>
     <div class="tracking">
-        <input type="text" id="trackingNumber" placeholder="Enter Tracking ID (e.g., EZW-205271688)">
+        <input type="text" id="trackingNumber" placeholder="TRACK ID">
         <button onclick="trackPackage()">Track</button>
     </div>
     <table id="trackingBoard">
@@ -260,236 +154,177 @@
         </thead>
         <tbody id="trackingBody"></tbody>
     </table>
-    <div class="shipment-details" id="shipmentDetails">
-        <div class="header">Content of Shipment: Package</div>
-        <div class="details">
-            <label>Est. Delivery Date:</label>
-            <span>25 Sept 2025, 10:30 AM</span>
-        </div>
-        <div class="details">
-            <label>Origin Area:</label>
-            <span>London UK</span>
-        </div>
-        <div class="details">
-            <label>Destination Area:</label>
-            <span>Russia</span>
-        </div>
-        <div class="header">Sender's Details</div>
-        <div class="details">
-            <label>Name:</label>
-            <span>James David</span>
-        </div>
-        <div class="details">
-            <label>Email:</label>
-            <span></span>
-        </div>
-        <div class="details">
-            <label>Address:</label>
-            <span>London UK</span>
-        </div>
-        <div class="details">
-            <label>Mobile:</label>
-            <span></span>
-        </div>
-        <div class="header">Receiver's Details</div>
-        <div class="details">
-            <label>Name:</label>
-            <span>Podvezennaya Elena Ivanovna</span>
-        </div>
-        <div class="details">
-            <label>Email:</label>
-            <span></span>
-        </div>
-        <div class="details">
-            <label>Address:</label>
-            <span>195299 St. Petersburg, prosveshcheniya Avenue 104, apt. 281</span>
-        </div>
-        <div class="details">
-            <label>Mobile:</label>
-            <span>+79932195775</span>
-        </div>
-        <button class="toggle-button" onclick="toggleDescription()">Show Extended Description</button>
-        <div class="extended-description" id="extendedDescription">
-            This package contains personal items and documents. It is securely packed and insured for transit. Please ensure the receiver is available for delivery on the estimated date. For any issues, contact our support team immediately. Special handling instructions: Handle with care due to fragile contents.
-        </div>
-        <div class="delivery-wall">
-            <div class="header">Delivery Wall</div>
-            <div class="description-item">1. Package preparation initiated.</div>
-            <div class="description-item">2. Items verified and packed.</div>
-            <div class="description-item">3. Package labeled and sealed.</div>
-            <div class="description-item">4. Shipment handed to courier.</div>
-            <div class="description-item">5. Departed from London warehouse.</div>
-            <div class="description-item">6. In transit through UK customs.</div>
-            <div class="description-item">7. Arrived at international hub.</div>
-            <div class="description-item">8. Cleared for international shipping.</div>
-            <div class="description-item">9. Loaded onto international flight.</div>
-            <div class="description-item">10. Departed for Russia.</div>
-            <div class="description-item">11. In air transit to Russia.</div>
-            <div class="description-item">12. Arrived at Russian customs.</div>
-            <div class="description-item">13. Undergoing customs inspection.</div>
-            <div class="description-item">14. Customs clearance completed.</div>
-            <div class="description-item">15. Transferred to local courier.</div>
-            <div class="description-item">16. Departed from airport hub.</div>
-            <div class="description-item">17. In transit to St. Petersburg.</div>
-            <div class="description-item">18. Arrived at St. Petersburg hub.</div>
-            <div class="description-item">19. Package sorted for local delivery.</div>
-            <div class="description-item">20. Out for final delivery attempt.</div>
-        </div>
-        <button class="print-button no-print" id="printReceipt" onclick="printReceipt()" style="display: none;">Print Invoice</button>
+</section>
+
+<!-- Newsletter -->
+<section>
+    <h2 class="section-title">Subscribe Now</h2>
+    <p>Don’t miss our updates! Get subscribed today!</p>
+    <div class="newsletter">
+        <input type="email" id="newsletterEmail" placeholder="Enter your email">
+        <button onclick="subscribeNewsletter()">Subscribe</button>
     </div>
-    <div class="receipt" id="receipt" style="display: none;">
-        <div class="header">Tracking Shipment</div>
-        <div class="details">
-            <label>Print-Invoice</label>
-            <span></span>
+</section>
+
+<!-- Delivery Wall -->
+<section>
+    <h2 class="section-title">Delivery Wall</h2>
+    <div class="image-wall">
+        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" alt="Delivery 1">
+            <p class="desc">Our team ensures every package is delivered safely and on time, providing advanced tracking and dedicated customer service for complete satisfaction.</p>
         </div>
-        <div class="details">
-            <label>Tracking No:</label>
-            <span>EZW-205271688</span>
+        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1677.webp" alt="Delivery 2">
+            <p class="desc">Fast and reliable delivery across cities and states, with each shipment carefully monitored using modern logistics software for accuracy.</p>
         </div>
-        <div class="details">
-            <label>Date/Time:</label>
-            <span>25 Sept 2025, 10:30 AM</span>
+        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" alt="Delivery 3">
+            <p class="desc">Express Delivery Service employs top-notch technology for real-time tracking, ensuring transparency and trust for every customer.</p>
         </div>
-        <div class="details">
-            <label>Status:</label>
-            <span>Your item is on its way to Russia</span>
+        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1679.png" alt="Delivery 4">
+            <p class="desc">Every decision we make is customer-first, combining logistics expertise and efficiency for prompt delivery without compromising safety.</p>
         </div>
-        <div class="details">
-            <label>Origin:</label>
-            <span>London, UK</span>
+        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" alt="Delivery 5">
+            <p class="desc">Optimized delivery routes using advanced mapping systems ensure faster deliveries while minimizing environmental impact and cost.</p>
         </div>
-        <div class="details">
-            <label>Current Status:</label>
-            <span>IN TRANSIT</span>
+        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1681.jpeg" alt="Delivery 6">
+            <p class="desc">Our courier staff are trained professionals equipped with GPS-enabled devices, guaranteeing safe handling and prompt updates for each package.</p>
+        </div>
+        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1682.jpeg" alt="Delivery 7">
+            <p class="desc">We cater to businesses and individual clients, offering customized shipping solutions, express delivery options, and flexible scheduling.</p>
+        </div>
+        <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1684.jpeg" alt="Delivery 8">
+            <p class="desc">Express Delivery Service is committed to excellence, providing dependable logistics and ensuring customer satisfaction with every delivery.</p>
         </div>
     </div>
 </section>
 
-<!-- Contact Us Section (Inspired by justdropnow.com/contact.php) -->
-<section id="contact" class="contact-us">
-    <h2 class="section-title">Contact Us</h2>
-    <div class="contact-info">
-        <p><strong>Get in touch with us</strong></p>
-        <p>We value your comments and suggestions</p>
-        <p>Email: <a href="mailto:support@expressdeliveryservice.com">support@expressdeliveryservice.com</a></p>
-        <p>Phone: <a href="tel:+19412078626">+1 (941) 207-8626</a></p>
-    </div>
-    <div class="contact-form">
-        <input type="text" id="contactName" placeholder="Your Name" required>
-        <input type="email" id="contactEmail" placeholder="Your Email" required>
-        <textarea id="contactMessage" placeholder="Your Message" rows="4" required></textarea>
-        <button onclick="submitContact()">Submit</button>
-        <div id="contactResponse"></div>
+<!-- Customer Reviews -->
+<section>
+    <h2 class="section-title">Customer Reviews</h2>
+    <div id="reviewsBoard"></div>
+</section>
+
+<!-- Business Hours -->
+<section>
+    <h2 class="section-title">Business Hours</h2>
+    <div class="business-hours">
+        <span>Friday: <span class="blink">Open 24 hours</span></span><br>
+        <span>Saturday: <span class="blink">Open 24 hours</span></span><br>
+        <span>Sunday: <span class="blink">Open 24 hours</span></span><br>
+        <span>Monday: <span class="blink">Open 24 hours</span></span><br>
+        <span>Tuesday: <span class="blink">Open 24 hours</span></span><br>
+        <span>Wednesday: <span class="blink">Open 24 hours</span></span><br>
+        <span>Thursday: <span class="blink">Open 24 hours</span></span>
     </div>
 </section>
+
+<!-- Contact Section -->
+<section id="contact">
+    <h2 class="section-title">Contact Us</h2>
+    <p>Phone: +1 (941) 207-8626</p>
+    <p>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></p>
+    <button style="background-color: #1e90ff; color: white; padding: 10px 20px; border: none; border-radius: 5px;" onclick="openSupport()">Support</button>
+    <!-- Google Translate -->
+    <div id="google_translate_element"></div>
+    <!-- Map -->
+    <iframe src="https://www.google.com/maps?q=47-00+Northern+Blvd,+Long+Island+City,+NY+11101,+USA&output=embed" width="100%" height="400" style="border: 0; border-radius: 10px; margin-top: 20px;" allowfullscreen></iframe>
+</section>
+
+<!-- About Us -->
+<section id="about">
+    <h2 class="section-title">About Us</h2>
+    <p>Our mission is simple yet fundamental: to provide seamless and efficient shipping solutions that empower businesses, enable growth, and connect people and goods across the globe...</p>
+</section>
+
+<!-- Support Popup -->
+<div id="supportPopup">
+    <h3>Welcome to Express Delivery Service!</h3>
+    <p>Thank you for your time and service! How can we help you?</p>
+    <form method="POST" action="send_support.php" id="supportForm">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <textarea name="message" placeholder="Your Message" required></textarea>
+        <button type="submit">Send</button>
+    </form>
+    <button onclick="closeSupport()">Close</button>
+</div>
 
 <!-- Footer -->
 <footer>
-    ©2025. Express Delivery Service. All Rights Reserved.
+    ©2023. Express Delivery Service. All Rights Reserved.<br>
+    Fast Logistics Company.
 </footer>
+
+<!-- NoScript Message -->
+<noscript>
+    When you have eliminated the JavaScript, whatever remains must be an empty page.<br>
+    Enable JavaScript to see Google Maps.
+</noscript>
 
 <script>
     /* ===== Hamburger Menu ===== */
     function toggleMenu() { document.getElementById('navLinks').classList.toggle('active'); }
 
-    /* ===== Tracking (Live Updates Based on Delivery Date) ===== */
+    /* ===== Tracking ===== */
     function trackPackage() {
         const number = document.getElementById('trackingNumber').value.trim();
-        const tbody = document.getElementById('trackingBody');
-        const shipmentDetails = document.getElementById('shipmentDetails');
-        const receipt = document.getElementById('receipt');
-        const printButton = document.getElementById('printReceipt');
+        const tbody = document.getElementById('trackingBody'); 
         tbody.innerHTML = '';
-        shipmentDetails.classList.remove('active');
-        receipt.style.display = 'none';
-        printButton.style.display = 'none';
-
-        if (number === 'EZW-205271688') {
-            shipmentDetails.classList.add('active');
-            const locations = ['London, UK', 'In Transit', 'Russia Customs', 'St. Petersburg, Russia'];
-            let currentIndex = 0;
-            const currentDate = new Date();
-            const deliveryDate = new Date('2025-09-25T10:30:00+01:00'); // 10:30 AM WAT on 25 Sept 2025
-
-            const updateTracking = () => {
-                const tr = document.createElement('tr');
-                let status, color, icon;
-
-                if (currentIndex < locations.length) {
-                    status = currentIndex === 0 ? 'In Transit' : currentIndex === locations.length - 1 ? 'Out for Delivery' : 'In Transit';
-                    color = currentIndex === 0 ? 'red' : currentIndex === locations.length - 1 ? 'green' : 'dodgerblue';
-                    icon = currentIndex === 0 ? '🔴' : currentIndex === locations.length - 1 ? '🔵' : '🔴';
+        if (number) {
+            const data = [
+                {status: 'In Transit', color: 'red', icon: '🔴', location: 'London, UK', datetime: '2025-09-19 08:00'},
+                {status: 'Out for Delivery', color: 'blue', icon: '🔵', location: 'St. Petersburg, Russia', datetime: '2025-09-21 09:00'},
+                {status: 'Delivered', color: 'green', icon: '🟢', location: 'Apt. 281, Prosveshcheniya Avenue 104, 195299 St. Petersburg, Russia', datetime: '2025-09-21 14:30'}
+            ];
+            const currentDate = new Date('2025-09-20T11:37:00+01:00'); // Current time: 11:37 AM WAT, September 20, 2025
+            data.forEach(row => {
+                const rowDate = new Date(row.datetime);
+                if (currentDate >= rowDate || row.status === 'In Transit') {
+                    const tr = document.createElement('tr');
                     tr.innerHTML = `<td>${number}</td>
-                                    <td style="color: ${color}; font-weight: bold;">
-                                        <span class="blink">${icon}</span> ${status}
+                                    <td style="color: ${row.color}; font-weight: bold;">
+                                        <span class="blink">${row.icon}</span> ${row.status}
                                     </td>
-                                    <td>${locations[currentIndex]}</td>
-                                    <td>${currentDate.toLocaleString('en-US', { timeZone: 'Africa/Lagos', hour12: true })}</td>`;
-                    tbody.innerHTML = '';
+                                    <td>${row.location}</td>
+                                    <td>${rowDate.toLocaleString('en-US', { timeZone: 'Africa/Lagos', hour12: true })}</td>`;
                     tbody.appendChild(tr);
-                    currentIndex++;
-                } else if (currentDate >= deliveryDate) {
-                    status = 'Delivered';
-                    color = 'yellow';
-                    icon = '🟡';
-                    tr.innerHTML = `<td>${number}</td>
-                                    <td style="color: ${color}; font-weight: bold;">
-                                        <span class="blink">${icon}</span> ${status}
-                                    </td>
-                                    <td>St. Petersburg, Russia</td>
-                                    <td>${deliveryDate.toLocaleString('en-US', { timeZone: 'Africa/Lagos', hour12: true })}</td>`;
-                    tbody.innerHTML = '';
-                    tbody.appendChild(tr);
-                    shipmentDetails.classList.remove('active');
-                    receipt.style.display = 'block';
-                    printButton.style.display = 'block';
                 }
-
-                if (currentIndex <= locations.length || currentDate < deliveryDate) {
-                    setTimeout(updateTracking, 2000); // Simulate live update every 2 seconds
-                }
-            };
-            updateTracking();
+            });
         } else {
-            alert('Invalid tracking number. Please enter EZW-205271688.');
+            alert('Please enter a tracking number.');
         }
     }
 
-    /* ===== Contact Form Submission ===== */
-    function submitContact() {
-        const name = document.getElementById('contactName').value.trim();
-        const email = document.getElementById('contactEmail').value.trim();
-        const message = document.getElementById('contactMessage').value.trim();
-        const response = document.getElementById('contactResponse');
-
-        if (name && email && message) {
-            response.innerHTML = `✅ Thank you, ${name}! We have received your message at ${email}. We will respond shortly.`;
-            document.getElementById('contactName').value = '';
-            document.getElementById('contactEmail').value = '';
-            document.getElementById('contactMessage').value = '';
-        } else {
-            response.innerHTML = `❌ Please fill in all fields.`;
-        }
+    /* ===== Newsletter ===== */
+    function subscribeNewsletter() {
+        const email = document.getElementById('newsletterEmail').value;
+        if (email) alert("Thank you! Updates will be sent to " + email); else alert("Please enter your email.");
     }
 
-    /* ===== Toggle Extended Description ===== */
-    function toggleDescription() {
-        const description = document.getElementById('extendedDescription');
-        const button = document.querySelector('.toggle-button');
-        if (description.classList.contains('active')) {
-            description.classList.remove('active');
-            button.textContent = 'Show Extended Description';
-        } else {
-            description.classList.add('active');
-            button.textContent = 'Hide Extended Description';
-        }
-    }
+    /* ===== Support Popup ===== */
+    function openSupport() { document.getElementById('supportPopup').style.display = 'block'; }
+    function closeSupport() { document.getElementById('supportPopup').style.display = 'none'; }
 
-    /* ===== Print Receipt ===== */
-    function printReceipt() {
-        window.print();
+    /* ===== Customer Reviews ===== */
+    const reviews = [
+        {name: 'Alice Johnson', text: 'Excellent delivery service! Fast and reliable.'},
+        {name: 'Michael Smith', text: 'My package arrived ahead of time, very professional.'},
+        {name: 'Samantha Lee', text: 'Customer support was very helpful and responsive.'},
+        {name: 'David Brown', text: 'Tracking system is accurate and easy to use.'},
+        {name: 'Linda White', text: 'Highly recommend Express Delivery Service for all shipments.'},
+        {name: 'James Wilson', text: 'Fantastic service, always on time!'}
+    ];
+    let reviewIndex = 0;
+    function showReview() {
+        const board = document.getElementById('reviewsBoard');
+        board.innerHTML = `<div class="review"><strong>${reviews[reviewIndex].name}:</strong> ${reviews[reviewIndex].text}</div>`;
+        reviewIndex = (reviewIndex + 1) % reviews.length;
     }
+    showReview();
+    setInterval(showReview, 5000);
+
+    /* ===== Google Translate ===== */
+    function googleTranslateElementInit() { new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element'); }
 </script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
