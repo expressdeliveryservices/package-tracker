@@ -33,22 +33,25 @@ section{padding:20px;scroll-margin-top:60px;}
 .tracking input{flex:1;padding:8px;border:1px solid #ddd;border-radius:3px;background:#fff;color:#000;font-size:0.9rem;}
 .tracking input::placeholder{text-transform:uppercase;font-size:0.8rem;}
 .tracking button{padding:8px 15px;border:none;border-radius:3px;background-color:#1e90ff;color:white;cursor:pointer;}
-.shipment-tracking,.shipment-content{max-width:600px;margin:10px auto;padding:15px;font-family:'Courier New',Courier,monospace;font-size:12px;border:1px solid #000;background:#fff;}
+.shipment-tracking,.shipment-content{max-width:400px;margin:10px auto;padding:15px;font-family:'Courier New',Courier,monospace;font-size:12px;border:1px solid #000;background:#fff;}
 .shipment-tracking .header,.shipment-content .header{font-weight:bold;font-size:14px;margin-bottom:10px;}
 .shipment-content .details label{display:inline-block;width:120px;font-weight:bold;}
 .shipment-content .details span{display:inline-block;margin-left:10px;}
 
-/* Timeline ticks */
-.timeline{display:flex;flex-direction:column;gap:15px;margin-bottom:10px;}
-.tick-container{display:flex;align-items:center;gap:10px;opacity:0;transition:opacity 1s;}
-.tick-circle{width:28px;height:28px;border-radius:50%;border:3px solid #1e90ff;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fff;flex-shrink:0;background:#1e90ff;}
-.tick-complete{background-color:#00cc44;border-color:#00cc44;color:#fff;font-weight:bold;}
-.tick-label{background:#f0f0f0;padding:5px 10px;border-radius:3px;flex:1;}
-.tick-time{margin-left:auto;font-size:12px;color:blue;}
+/* Shipment Timeline */
+.shipment-timeline{margin-top:10px;}
+.timeline-step{display:flex;align-items:flex-start;margin-bottom:15px;position:relative;}
+.circle{width:20px;height:20px;border-radius:50%;border:2px solid green;background:white;color:green;text-align:center;line-height:18px;font-weight:bold;margin-right:10px;transform:scale(0);animation:pop 0.5s forwards;}
+.circle.thick{border:4px solid green;font-size:16px;}
+@keyframes pop{0%{transform:scale(0);}70%{transform:scale(1.3);}100%{transform:scale(1);}}
+.step-content{background:#f0f0f0;padding:5px 10px;border-radius:3px;flex:1;}
+.sub-box{background:#ccc;color:#000;padding:2px 5px;border-radius:3px;margin-top:2px;font-size:0.8rem;}
+.time{font-size:0.75rem;color:#333;margin-top:2px;}
+.blue-text{color:#1e90ff;}
 
 /* Map */
 .map-container{width:100%;height:300px;margin:20px 0;overflow:hidden;position:relative;}
-.map-overlay{position:absolute;top:10px;left:50%;transform:translateX(-50%);background-color:rgba(255,255,255,0.8);padding:5px 10px;border-radius:3px;font-size:14px;color:#000;z-index:5; font-weight:bold; text-transform:uppercase;}
+.map-overlay{position:absolute;top:10px;left:50%;transform:translateX(-50%);background-color:rgba(255,255,255,0.8);padding:5px 10px;border-radius:3px;font-size:14px;color:#000;z-index:5;}
 
 /* Newsletter */
 .newsletter{display:flex;gap:10px;margin-top:15px;}
@@ -129,31 +132,10 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
       <p class="desc">Fast and reliable delivery across cities and states, keeping your shipments secure and timely.</p>
     </div>
     <div>
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" alt="Delivery 3">
-      <p class="desc">Real-time tracking with top-notch technology ensures transparency and peace of mind.</p>
-    </div>
-    <div>
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" alt="Delivery 4">
-      <p class="desc">Efficient logistics solutions designed to meet every customer’s unique requirements.</p>
-    </div>
-    <div>
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1681.jpeg" alt="Delivery 5">
-      <p class="desc">Timely deliveries across regions, maintaining top-quality service and reliability.</p>
-    </div>
-    <div>
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1682.jpeg" alt="Delivery 6">
-      <p class="desc">Our dedicated team guarantees every shipment is handled with care and precision.</p>
-    </div>
-    <div>
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg" alt="Delivery 7">
-      <p class="desc">State-of-the-art tracking technology keeps you updated in real-time.</p>
-    </div>
-    <div>
       <video autoplay loop muted playsinline>
-        <source src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/From%20KlickPin%20CF%20White%20Truck%20Parked%20Next%20to%20Bridge.mov" type="video/mp4">
-        Your browser does not support the video tag.
+        <source src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1790.jpeg" type="video/mp4">
       </video>
-      <p class="desc">Observe our logistics process in action, ensuring timely delivery every time.</p>
+      <p class="desc">Animated vehicle carrying cartons.</p>
     </div>
   </div>
 
@@ -178,6 +160,18 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
     <span>Wednesday: <span class="open-hours">Open 24 hours</span></span><br>
     <span>Thursday: <span class="open-hours">Open 24 hours</span></span>
   </div>
+</section>
+
+<!-- About Us -->
+<section id="about">
+  <h2 class="section-title">About Us</h2>
+  <p>Our mission is to provide seamless and efficient shipping solutions that empower businesses and connect people globally. We pride ourselves on reliability, professionalism, and real-time tracking for every delivery.</p>
+</section>
+
+<!-- Services -->
+<section id="services">
+  <h2 class="section-title">Our Services</h2>
+  <p>Become our partner. We offer advanced tracking and logistics expertise to ensure your shipments are handled efficiently and safely.</p>
 </section>
 
 <!-- Track Packages -->
@@ -235,7 +229,8 @@ function toggleMenu(){document.getElementById('navLinks').classList.toggle('acti
 /* Newsletter */
 function subscribeNewsletter(){
   const email=document.getElementById('newsletterEmail').value;
-  if(email) alert("Thank you! Updates will be sent to "+email); else alert("Please enter your email.");
+  if(email) alert("Thank you! Updates will be sent to "+email);
+  else alert("Please enter your email.");
 }
 
 /* Support Popup */
@@ -247,6 +242,9 @@ const reviews=document.querySelectorAll(".review"); let currentReview=0;
 function showReview(){reviews.forEach(r=>r.classList.remove("show"));reviews[currentReview].classList.add("show");currentReview=(currentReview+1)%reviews.length;}
 showReview(); setInterval(showReview,5000);
 
+/* Google Translate */
+function googleTranslateElementInit(){new google.translate.TranslateElement({pageLanguage:'en'},'google_translate_element');}
+
 /* Tracking */
 function trackPackage(){
   const number=document.getElementById('trackingNumber').value.trim();
@@ -255,50 +253,52 @@ function trackPackage(){
   trackingDiv.style.display='none'; contentDiv.style.display='none';
   trackingDiv.innerHTML='<div class="header">Tracking...</div>'; trackingDiv.style.display='block';
 
-  if(number){
-    // Show shipment tracking timeline after 5s
-    setTimeout(()=>{
-      trackingDiv.innerHTML='<div class="header">Tracking Shipment</div><div class="timeline">'+
-      '<div class="tick-container" id="tick1"><div class="tick-circle tick-complete">✓</div><div class="tick-label">Item has arrived at Vnukovo International Airport, Russia <span style="background:#ccc;padding:2px 5px;margin-left:5px;border-radius:3px;">On Hold</span></div><div class="tick-time">23 Sep 2025, 07:30</div></div>'+
-      '<div class="tick-container" id="tick2"><div class="tick-circle tick-complete">☑️</div><div class="tick-label">Your item is on its way to Russia, London UK <span style="background:#ccc;padding:2px 5px;margin-left:5px;border-radius:3px;">In Transit</span></div><div class="tick-time">23 Sep 2025, 12:00</div></div></div>';
+  setTimeout(()=>{
+    if(number){
+      // First: Tracking shipment appears
+      trackingDiv.innerHTML='<div class="header">Tracking Shipment</div><button class="print-btn" onclick="printInvoice()">Print Invoice</button>';
 
-      // Animate ticks to appear
-      document.getElementById('tick1').style.opacity='1';
-      setTimeout(()=>{document.getElementById('tick2').style.opacity='1';},1000);
+      // Add shipment timeline
+      trackingDiv.innerHTML += `
+      <div class="shipment-timeline">
+        <div class="timeline-step">
+          <div class="circle thick">✔</div>
+          <div class="step-content">
+            ✅ Item has arrived at Vnukovo International Airport, Russia
+            <div class="sub-box">On Hold</div>
+            <div class="time blue-text">23 Sep 2025, 07:30</div>
+          </div>
+        </div>
+        <div class="timeline-step">
+          <div class="circle">✔</div>
+          <div class="step-content">
+            ☑️ Your item is on its way to Russia, London UK
+            <div class="sub-box">In Transit</div>
+            <div class="time blue-text">22 Sep 2025, 14:00</div>
+          </div>
+        </div>
+      </div>`;
 
-      // Show shipment content after 5 more seconds
+      // Second: Content of shipment appears after another 5 seconds
       setTimeout(()=>{
+        contentDiv.innerHTML='<div class="header">Content of Shipment: Package</div><div class="details"><label>Est. Delivery Date:</label><span>22 Sep 2025</span><br><label>Origin Area:</label><span>London UK</span><br><label>Destination Area:</label><span>Russia</span></div><div class="section-title">Sender\'s Details</div><div class="details"><label>Name:</label><span>James</span><br><label>Address:</label><span>London UK</span></div><div class="section-title">Receiver\'s Details</div><div class="details"><label>Name:</label><span>Podvezennaya Elena Ivanovna</span><br><label>Address:</label><span>195299 St. Petersburg, Prosveshcheniya Avenue 104, Apt. 281</span><br><label>Mobile:</label><span>+79932195775</span></div>';
         contentDiv.style.display='block';
-        contentDiv.innerHTML='<div class="header">Content of Shipment</div>'+
-        '<div class="details"><label>Package:</label><span>Electronics Gadgets</span></div>'+
-        '<div class="details"><label>Weight:</label><span>2.5kg</span></div>'+
-        '<div class="details"><label>Sender:</label><span>Express Delivery Services</span></div>'+
-        '<div class="details"><label>Receiver:</label><span>John Doe, London, UK</span></div>'+
-        '<div class="details"><label>Status:</label><span>In Transit</span></div>'+
-        '<button onclick="printInvoice()">Print Invoice</button>';
       },5000);
-
-    },5000);
-  }else{alert("Please enter your tracking number.");}
+    } else { trackingDiv.innerHTML='<div class="header">Please enter a tracking number.</div>'; }
+  },5000);
 }
 
-/* Print Invoice */
+/* Print Invoice - Only the image downloads */
 function printInvoice(){
-  const invoiceContent=document.querySelector('.shipment-content').innerHTML;
-  const newWin=window.open('','Print-Window','width=600,height=600');
-  newWin.document.open();
-  newWin.document.write('<html><head><title>Invoice</title></head><body>'+invoiceContent+'</body></html>');
-  newWin.document.close();
-  newWin.print();
+  const url='https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1790.jpeg';
+  const link=document.createElement('a');
+  link.href=url;
+  link.download='invoice.jpg';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 </script>
-
-<script type="text/javascript">
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
-}
-</script>
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
