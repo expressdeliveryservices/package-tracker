@@ -41,7 +41,11 @@
         }
 
         /* ===== Sections ===== */
-        section { padding: 50px 20px; }
+        section {
+            padding: 50px 20px;
+            min-height: 100vh; /* Ensure each section takes full viewport height for page-like feel */
+            scroll-margin-top: 70px; /* Adjust for sticky navbar */
+        }
         .section-title { font-size: 2rem; margin-bottom: 20px; color: #1e90ff; }
 
         /* ===== Tracking ===== */
@@ -114,6 +118,15 @@
         /* ===== Business Hours ===== */
         .business-hours span { display: inline-block; margin-right: 10px; }
         .blink { animation: blink 1s infinite; }
+        .shine-green {
+            color: #00ff00; /* Green color */
+            text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00; /* Glowing effect */
+            animation: shine 2s infinite alternate; /* Shining animation */
+        }
+        @keyframes shine {
+            from { text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00; }
+            to { text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00; }
+        }
         @keyframes blink {
             0%, 50%, 100% { opacity: 1; }
             25%, 75% { opacity: 0; }
@@ -151,10 +164,18 @@
     </div>
 </div>
 
-<!-- Header -->
-<header id="home">
-    <h1>Express Delivery Service</h1>
-</header>
+<!-- Home -->
+<section id="home">
+    <header>
+        <h1>Express Delivery Service</h1>
+    </header>
+</section>
+
+<!-- About -->
+<section id="about">
+    <h2 class="section-title">About Us</h2>
+    <p>Our mission is simple yet fundamental: to provide seamless and efficient shipping solutions that empower businesses, enable growth, and connect people and goods across the globe...</p>
+</section>
 
 <!-- Services -->
 <section id="services">
@@ -225,8 +246,20 @@
                 Enable JavaScript to see Google Maps.
             </div>
         </div>
-        <div class="timestamp">Last Updated: 12:54 PM WAT, Saturday, September 20, 2025</div>
+        <div class="timestamp">Last Updated: 01:36 PM WAT, Saturday, September 20, 2025</div>
     </div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+    <h2 class="section-title">Contact Us</h2>
+    <p>Phone: +1 (941) 207-8626</p>
+    <p>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></p>
+    <button style="background-color: #1e90ff; color: white; padding: 10px 20px; border: none; border-radius: 5px;" onclick="openSupport()">Support</button>
+    <!-- Google Translate -->
+    <div id="google_translate_element"></div>
+    <!-- Additional Map -->
+    <iframe src="https://www.google.com/maps?q=47-00+Northern+Blvd,+Long+Island+City,+NY+11101,+USA&output=embed" width="100%" height="400" style="border:0; border-radius: 10px; margin-top: 20px;" allowfullscreen></iframe>
 </section>
 
 <!-- Newsletter -->
@@ -280,32 +313,14 @@
 <section>
     <h2 class="section-title">Business Hours</h2>
     <div class="business-hours">
-        <span>Friday: <span class="blink">Open 24 hours</span></span><br>
-        <span>Saturday: <span class="blink">Open 24 hours</span></span><br>
-        <span>Sunday: <span class="blink">Open 24 hours</span></span><br>
-        <span>Monday: <span class="blink">Open 24 hours</span></span><br>
-        <span>Tuesday: <span class="blink">Open 24 hours</span></span><br>
-        <span>Wednesday: <span class="blink">Open 24 hours</span></span><br>
-        <span>Thursday: <span class="blink">Open 24 hours</span></span>
+        <span>Friday: <span class="blink shine-green">Open 24 hours</span></span><br>
+        <span>Saturday: <span class="blink shine-green">Open 24 hours</span></span><br>
+        <span>Sunday: <span class="blink shine-green">Open 24 hours</span></span><br>
+        <span>Monday: <span class="blink shine-green">Open 24 hours</span></span><br>
+        <span>Tuesday: <span class="blink shine-green">Open 24 hours</span></span><br>
+        <span>Wednesday: <span class="blink shine-green">Open 24 hours</span></span><br>
+        <span>Thursday: <span class="blink shine-green">Open 24 hours</span></span>
     </div>
-</section>
-
-<!-- Contact Section -->
-<section id="contact">
-    <h2 class="section-title">Contact Us</h2>
-    <p>Phone: +1 (941) 207-8626</p>
-    <p>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></p>
-    <button style="background-color: #1e90ff; color: white; padding: 10px 20px; border: none; border-radius: 5px;" onclick="openSupport()">Support</button>
-    <!-- Google Translate -->
-    <div id="google_translate_element"></div>
-    <!-- Additional Map -->
-    <iframe src="https://www.google.com/maps?q=47-00+Northern+Blvd,+Long+Island+City,+NY+11101,+USA&output=embed" width="100%" height="400" style="border:0; border-radius: 10px; margin-top: 20px;" allowfullscreen></iframe>
-</section>
-
-<!-- About Us -->
-<section id="about">
-    <h2 class="section-title">About Us</h2>
-    <p>Our mission is simple yet fundamental: to provide seamless and efficient shipping solutions that empower businesses, enable growth, and connect people and goods across the globe...</p>
 </section>
 
 <!-- Support Popup -->
