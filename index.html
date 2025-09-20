@@ -53,13 +53,25 @@
         #trackingBoard {width: 100%; border-collapse: collapse; margin-top: 20px;}
         #trackingBoard th, #trackingBoard td {border: 1px solid #1e90ff; padding: 10px; text-align: left;}
         #trackingBoard th {background-color: #1e90ff; color: white;}
+        .receipt {display: none; margin-top: 20px; background: #1c1c1c; padding: 15px; border: 1px solid #1e90ff; border-radius: 5px;}
+        .receipt.active {display: block;}
 
         /* ===== Shipment Details ===== */
-        .shipment-details {margin-top: 20px; background: #1c1c1c; padding: 15px; border: 1px solid #1e90ff; border-radius: 5px;}
+        .shipment-details {display: none; margin-top: 20px; background: #1c1c1c; padding: 15px; border: 1px solid #1e90ff; border-radius: 5px;}
+        .shipment-details.active {display: block;}
         .shipment-details .header {color: red; font-size: 1.2em; margin-bottom: 10px;}
         .shipment-details .details {margin: 10px 0;}
         .shipment-details .details label {font-weight: bold; display: inline-block; width: 120px;}
         .shipment-details .details span {border: 1px solid #ccc; padding: 5px; width: 200px; display: inline-block; background-color: #2a2a2a; color: #fff;}
+        .extended-description {display: none; margin-top: 10px; padding: 10px; background: #2a2a2a; border-radius: 5px;}
+        .extended-description.active {display: block;}
+        .toggle-button {padding: 5px 10px; background-color: #1e90ff; color: white; border: none; border-radius: 5px; cursor: pointer;}
+        .toggle-button:hover {background: #fff; color: #000;}
+
+        /* ===== Delivery Wall ===== */
+        .delivery-wall {margin-top: 20px; background: #2a2a2a; padding: 15px; border: 1px solid #1e90ff; border-radius: 5px;}
+        .delivery-wall .header {color: red; font-size: 1.2em; margin-bottom: 10px;}
+        .delivery-wall .description-item {margin: 5px 0; padding-left: 10px; border-left: 2px solid #1e90ff;}
 
         /* ===== Newsletter ===== */
         .newsletter {display: flex; gap: 10px; margin-top: 20px;}
@@ -79,6 +91,7 @@
             border-radius: 10px;
             box-shadow: 0px 0px 15px #1e90ff;
             z-index: 10000;
+            width: 300px;
         }
         #supportPopup input, #supportPopup textarea {
             width: 100%; margin-bottom: 10px; padding: 8px; border-radius: 5px;
@@ -145,7 +158,7 @@
         </thead>
         <tbody id="trackingBody"></tbody>
     </table>
-    <div class="shipment-details">
+    <div class="shipment-details" id="shipmentDetails">
         <div class="header">Content of Shipment: Package</div>
         <div class="details">
             <label>Est. Delivery Date:</label>
@@ -193,6 +206,86 @@
             <label>Mobile:</label>
             <span>+79932195775</span>
         </div>
+        <button class="toggle-button" onclick="toggleDescription()">Show Extended Description</button>
+        <div class="extended-description" id="extendedDescription">
+            This package contains personal items and documents. It is securely packed and insured for transit. Please ensure the receiver is available for delivery on the estimated date. For any issues, contact our support team immediately.
+        </div>
+        <div class="delivery-wall">
+            <div class="header">Delivery Wall</div>
+            <div class="description-item">1. Package preparation initiated.</div>
+            <div class="description-item">2. Items verified and packed.</div>
+            <div class="description-item">3. Package labeled and sealed.</div>
+            <div class="description-item">4. Shipment handed to courier.</div>
+            <div class="description-item">5. Departed from London warehouse.</div>
+            <div class="description-item">6. In transit through UK customs.</div>
+            <div class="description-item">7. Arrived at international hub.</div>
+            <div class="description-item">8. Cleared for international shipping.</div>
+            <div class="description-item">9. Loaded onto international flight.</div>
+            <div class="description-item">10. Departed for Russia.</div>
+            <div class="description-item">11. In air transit to Russia.</div>
+            <div class="description-item">12. Arrived at Russian customs.</div>
+            <div class="description-item">13. Undergoing customs inspection.</div>
+            <div class="description-item">14. Customs clearance completed.</div>
+            <div class="description-item">15. Transferred to local courier.</div>
+            <div class="description-item">16. Departed from airport hub.</div>
+            <div class="description-item">17. In transit to St. Petersburg.</div>
+            <div class="description-item">18. Arrived at St. Petersburg hub.</div>
+            <div class="description-item">19. Package sorted for local delivery.</div>
+            <div class="description-item">20. Out for final delivery attempt.</div>
+            <div class="description-item">21. Delivery scheduled for 20 Sept 2025.</div>
+            <div class="description-item">22. Driver assigned to route.</div>
+            <div class="description-item">23. En route to destination address.</div>
+            <div class="description-item">24. Approaching delivery location.</div>
+            <div class="description-item">25. Delivery vehicle at location.</div>
+            <div class="description-item">26. Attempting contact with receiver.</div>
+            <div class="description-item">27. Package handed to receiver.</div>
+            <div class="description-item">28. Signature collected.</div>
+            <div class="description-item">29. Delivery confirmation sent.</div>
+            <div class="description-item">30. Package delivery completed.</div>
+            <div class="description-item">31. Feedback requested from receiver.</div>
+            <div class="description-item">32. Tracking update logged.</div>
+            <div class="description-item">33. Insurance details recorded.</div>
+            <div class="description-item">34. Package weight verified.</div>
+            <div class="description-item">35. Dimensions checked.</div>
+            <div class="description-item">36. Security seal applied.</div>
+            <div class="description-item">37. Temperature control monitored.</div>
+            <div class="description-item">38. Transit time estimated.</div>
+            <div class="description-item">39. Route optimization applied.</div>
+            <div class="description-item">40. Real-time tracking activated.</div>
+            <div class="description-item">41. GPS tracking enabled.</div>
+            <div class="description-item">42. Courier updated with details.</div>
+            <div class="description-item">43. Backup delivery plan prepared.</div>
+            <div class="description-item">44. Weather conditions monitored.</div>
+            <div class="description-item">45. Road conditions checked.</div>
+            <div class="description-item">46. Package insured up to $500.</div>
+            <div class="description-item">47. Customer support available.</div>
+            <div class="description-item">48. Delivery reschedule option.</div>
+            <div class="description-item">49. Final inspection completed.</div>
+            <div class="description-item">50. Service satisfaction survey.</div>
+        </div>
+    </div>
+    <div class="receipt" id="receipt">
+        <div class="header">Delivery Receipt</div>
+        <div class="details">
+            <label>Tracking Number:</label>
+            <span>EZW-205271688</span>
+        </div>
+        <div class="details">
+            <label>Delivery Date:</label>
+            <span>20 Sept 2025</span>
+        </div>
+        <div class="details">
+            <label>Receiver Name:</label>
+            <span>Podvezennaya Elena Ivanovna</span>
+        </div>
+        <div class="details">
+            <label>Delivery Address:</label>
+            <span>195299 St. Petersburg, prosveshcheniya Avenue 104, apt. 281</span>
+        </div>
+        <div class="details">
+            <label>Status:</label>
+            <span>Delivered</span>
+        </div>
     </div>
 </section>
 
@@ -222,7 +315,11 @@
 <!-- Support Popup -->
 <div id="supportPopup">
     <h3>Welcome to Express Delivery Service!</h3>
-    <div id="supportResponse" style="margin: 10px 0; color: #1e90ff;">How can we help you? 👋</div>
+    <div id="supportResponse" style="margin: 10px 0; color: #1e90ff;"></div>
+    <input type="text" id="supportName" placeholder="Your Name" required>
+    <input type="email" id="supportEmail" placeholder="Your Email" required>
+    <textarea id="supportMessage" placeholder="Your Message" rows="4" required></textarea>
+    <button onclick="submitSupport()">Submit</button>
     <button onclick="closeSupport()">Close</button>
 </div>
 
@@ -239,24 +336,49 @@
     function trackPackage() {
         const number = document.getElementById('trackingNumber').value.trim();
         const tbody = document.getElementById('trackingBody');
+        const shipmentDetails = document.getElementById('shipmentDetails');
+        const receipt = document.getElementById('receipt');
         tbody.innerHTML = '';
-        if (number) {
-            const data = [
-                { status: 'In Transit', color: 'red', icon: '🔴', location: 'London, UK', datetime: '2025-09-19 08:00' },
-                { status: 'Current Location', color: 'dodgerblue', icon: '🔵', location: 'In Transit', datetime: '2025-09-20 10:02 AM WAT' }
-            ];
-            data.forEach(row => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td>${number}</td>
-                                <td style="color: ${row.color}; font-weight: bold;">
-                                    <span class="blink-pulse">${row.icon}</span> ${row.status}
-                                </td>
-                                <td>${row.location}</td>
-                                <td>${row.datetime}</td>`;
-                tbody.appendChild(tr);
-            });
+        shipmentDetails.classList.remove('active');
+        receipt.classList.remove('active');
+
+        if (number === 'EZW-205271688') {
+            shipmentDetails.classList.add('active');
+            const locations = ['London, UK', 'In Transit', 'Russia Customs', 'St. Petersburg, Russia'];
+            let currentIndex = 0;
+            const updateTracking = () => {
+                if (currentIndex < locations.length) {
+                    const tr = document.createElement('tr');
+                    const status = currentIndex === 0 ? 'In Transit' : currentIndex === locations.length - 1 ? 'Out for Delivery' : 'In Transit';
+                    const color = currentIndex === 0 ? 'red' : currentIndex === locations.length - 1 ? 'green' : 'dodgerblue';
+                    const icon = currentIndex === 0 ? '🔴' : currentIndex === locations.length - 1 ? '🟢' : '🔵';
+                    tr.innerHTML = `<td>${number}</td>
+                                    <td style="color: ${color}; font-weight: bold;">
+                                        <span class="blink-pulse">${icon}</span> ${status}
+                                    </td>
+                                    <td>${locations[currentIndex]}</td>
+                                    <td>${new Date().toLocaleString('en-US', { timeZone: 'Africa/Lagos', hour12: true })}</td>`;
+                    tbody.innerHTML = ''; // Clear previous row
+                    tbody.appendChild(tr);
+                    currentIndex++;
+                } else {
+                    shipmentDetails.classList.remove('active');
+                    receipt.classList.add('active');
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${number}</td>
+                                    <td style="color: green; font-weight: bold;"><span class="blink-pulse">🟢</span> Delivered</td>
+                                    <td>St. Petersburg, Russia</td>
+                                    <td>${new Date().toLocaleString('en-US', { timeZone: 'Africa/Lagos', hour12: true })}</td>`;
+                    tbody.innerHTML = '';
+                    tbody.appendChild(tr);
+                }
+                if (currentIndex <= locations.length) {
+                    setTimeout(updateTracking, 2000); // Simulate live update every 2 seconds
+                }
+            };
+            updateTracking();
         } else {
-            alert('Please enter a tracking number.');
+            alert('Invalid tracking number. Please enter EZW-205271688.');
         }
     }
 
@@ -266,13 +388,30 @@
         if (email) alert("Thank you! Updates will be sent to " + email); else alert("Please enter your email.");
     }
 
-    /* ===== Support Popup with Auto Response ===== */
+    /* ===== Support Popup with Form Submission ===== */
     function openSupport() {
         document.getElementById('supportPopup').style.display = 'block';
-        const res = document.getElementById('supportResponse');
-        res.innerHTML = "✅ Thank you for contacting us! Our support team will respond shortly.";
+        document.getElementById('supportResponse').innerHTML = "How can we help you? 👋";
+        document.getElementById('supportName').value = '';
+        document.getElementById('supportEmail').value = '';
+        document.getElementById('supportMessage').value = '';
     }
-    function closeSupport() { document.getElementById('supportPopup').style.display = 'none'; }
+
+    function submitSupport() {
+        const name = document.getElementById('supportName').value.trim();
+        const email = document.getElementById('supportEmail').value.trim();
+        const message = document.getElementById('supportMessage').value.trim();
+
+        if (name && email && message) {
+            document.getElementById('supportResponse').innerHTML = `✅ Thank you, ${name}! We have received your message. We will respond to ${email} shortly.`;
+        } else {
+            document.getElementById('supportResponse').innerHTML = `❌ Please fill in all fields.`;
+        }
+    }
+
+    function closeSupport() {
+        document.getElementById('supportPopup').style.display = 'none';
+    }
 
     /* ===== Customer Reviews ===== */
     const reviews = [
@@ -289,6 +428,19 @@
     }
     showReview();
     setInterval(showReview, 5000);
+
+    /* ===== Toggle Extended Description ===== */
+    function toggleDescription() {
+        const description = document.getElementById('extendedDescription');
+        const button = document.querySelector('.toggle-button');
+        if (description.classList.contains('active')) {
+            description.classList.remove('active');
+            button.textContent = 'Show Extended Description';
+        } else {
+            description.classList.add('active');
+            button.textContent = 'Hide Extended Description';
+        }
+    }
 </script>
 </body>
 </html>
