@@ -38,18 +38,9 @@ section{padding:20px;scroll-margin-top:60px;}
 .shipment-content .details label{display:inline-block;width:120px;font-weight:bold;}
 .shipment-content .details span{display:inline-block;margin-left:10px;}
 
-/* Timeline */
-.timeline{margin-top:10px;}
-.timeline-item{display:flex;align-items:flex-start;margin-bottom:10px;gap:10px;}
-.circle{width:20px;height:20px;border-radius:50%;border:2px solid green;flex-shrink:0;}
-.circle.green{background-color:green;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px;}
-.status{flex:1;}
-.small-box{display:inline-block;padding:3px 8px;margin-top:3px;border-radius:3px;background:#ccc;font-size:11px;}
-.time-date{font-size:11px;margin-top:2px;}
-
 /* Map */
 .map-container{width:100%;height:300px;margin:20px 0;overflow:hidden;position:relative;}
-.map-overlay{position:absolute;top:10px;left:50%;transform:translateX(-50%);background-color:rgba(255,255,255,0.8);padding:5px 10px;border-radius:3px;font-size:14px;color:#000;z-index:5;}
+.map-overlay{position:absolute;top:10px;left:50%;transform:translateX(-50%);background-color:rgba(255,255,255,0.8);padding:5px 10px;border-radius:3px;font-size:14px;color:#000;z-index:5; font-weight:bold; text-transform:uppercase;}
 .map-placeholder{width:100%;height:100%;background:#fff;text-align:center;padding-top:60px;color:#555;}
 
 /* Newsletter */
@@ -77,6 +68,14 @@ section{padding:20px;scroll-margin-top:60px;}
 .business-hours span{color:black;font-weight:bold;}
 .business-hours .open-hours{color:#00ff00;animation:blink 1s infinite;font-weight:bold;}
 @keyframes blink{0%,50%,100%{opacity:1;}25%,75%{opacity:0;}}
+
+/* Tracking timeline ticks */
+.timeline{display:flex;flex-direction:column;gap:15px;}
+.tick-container{display:flex;align-items:center;gap:10px;}
+.tick-circle{width:20px;height:20px;border-radius:50%;border:2px solid #1e90ff;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#1e90ff;flex-shrink:0;}
+.tick-label{background:#f0f0f0;padding:5px 10px;border-radius:3px;flex:1;}
+.tick-time{margin-left:auto;font-size:12px;color:blue;}
+.tick-complete{background-color:#00ff00;color:#fff;border-color:#00ff00;}
 
 /* Footer */
 footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-top:1px solid #ddd;}
@@ -134,29 +133,6 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" alt="Delivery 3">
       <p class="desc">Real-time tracking with top-notch technology ensures transparency and peace of mind.</p>
     </div>
-    <div>
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" alt="Delivery 4">
-      <p class="desc">Efficient logistics solutions designed to meet every customer’s unique requirements.</p>
-    </div>
-    <div>
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1681.jpeg" alt="Delivery 5">
-      <p class="desc">Timely deliveries across regions, maintaining top-quality service and reliability.</p>
-    </div>
-    <div>
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1682.jpeg" alt="Delivery 6">
-      <p class="desc">Our dedicated team guarantees every shipment is handled with care and precision.</p>
-    </div>
-    <div>
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg" alt="Delivery 7">
-      <p class="desc">State-of-the-art tracking technology keeps you updated in real-time.</p>
-    </div>
-    <div>
-      <video autoplay loop muted playsinline>
-        <source src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/From%20KlickPin%20CF%20White%20Truck%20Parked%20Next%20to%20Bridge.mov" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-      <p class="desc">Observe our logistics process in action, ensuring timely delivery every time.</p>
-    </div>
   </div>
 
   <!-- Customer Reviews -->
@@ -196,31 +172,31 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
 
 <!-- Track Packages -->
 <section id="track">
-<h2 class="section-title">Track Your Package</h2>
-<div class="tracking">
-  <input type="text" id="trackingNumber" placeholder="Enter Tracking ID">
-  <button onclick="trackPackage()">Track Now</button>
-</div>
-<div id="shipmentTracking" class="shipment-tracking" style="display:none;"></div>
-<div id="shipmentContent" class="shipment-content" style="display:none;"></div>
+  <h2 class="section-title">Track Your Package</h2>
+  <div class="tracking">
+    <input type="text" id="trackingNumber" placeholder="Enter Tracking ID">
+    <button onclick="trackPackage()">Track Now</button>
+  </div>
+  <div id="shipmentTracking" class="shipment-tracking" style="display:none;"></div>
+  <div id="shipmentContent" class="shipment-content" style="display:none;"></div>
 
-<!-- Receiver Map -->
-<div class="map-container">
-  <div class="map-overlay">Receiver Location on Map</div>
-  <iframe src="https://www.google.com/maps?q=195299%20St.%20Petersburg,%20Prosveshcheniya%20Avenue%20104,%20Apt.%20281&output=embed" width="100%" height="300" style="border:0;" allowfullscreen></iframe>
-</div>
+  <!-- Receiver Map -->
+  <div class="map-container">
+    <div class="map-overlay">CURRENT LOCATION ON MAP</div>
+    <iframe src="https://www.google.com/maps?q=195299%20St.%20Petersburg,%20Prosveshcheniya%20Avenue%20104,%20Apt.%20281&output=embed" width="100%" height="300" style="border:0;" allowfullscreen></iframe>
+  </div>
 </section>
 
 <!-- Contact -->
 <section id="contact">
-<h2 class="section-title">Contact Us</h2>
-<p>Phone: +1 (941) 207-8626</p>
-<p>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></p>
-<button style="background-color: #1e90ff; color: white; padding: 8px 15px; border: none; border-radius: 3px;" onclick="openSupport()">Support</button>
-<div id="google_translate_element" style="margin-top:10px;"></div>
+  <h2 class="section-title">Contact Us</h2>
+  <p>Phone: +1 (941) 207-8626</p>
+  <p>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></p>
+  <button style="background-color: #1e90ff; color: white; padding: 8px 15px; border: none; border-radius: 3px;" onclick="openSupport()">Support</button>
+  <div id="google_translate_element" style="margin-top:10px;"></div>
 
-<!-- Headquarter Map -->
-<iframe src="https://www.google.com/maps?q=47-00+Northern+Blvd,+Long+Island+City,+NY+11101,+USA&output=embed" width="100%" height="300" style="border:0; border-radius:5px; margin-top:15px;" allowfullscreen></iframe>
+  <!-- Headquarter Map -->
+  <iframe src="https://www.google.com/maps?q=47-00+Northern+Blvd,+Long+Island+City,+NY+11101,+USA&output=embed" width="100%" height="300" style="border:0; border-radius:5px; margin-top:15px;" allowfullscreen></iframe>
 </section>
 
 <!-- Support Popup -->
@@ -266,83 +242,38 @@ function googleTranslateElementInit(){new google.translate.TranslateElement({pag
 
 /* Tracking */
 function trackPackage(){
-  const number = document.getElementById('trackingNumber').value.trim();
-  const trackingDiv = document.getElementById('shipmentTracking');
-  const contentDiv = document.getElementById('shipmentContent');
-
-  trackingDiv.style.display='none';
-  contentDiv.style.display='none';
-
-  if(!number){
-    trackingDiv.style.display='block';
-    trackingDiv.innerHTML='<div class="header">Please enter a tracking number.</div>';
-    return;
-  }
-
-  // Step 1: Tracking...
-  trackingDiv.style.display='block';
+  const number=document.getElementById('trackingNumber').value.trim();
+  const trackingDiv=document.getElementById('shipmentTracking');
+  const contentDiv=document.getElementById('shipmentContent');
+  trackingDiv.style.display='none'; contentDiv.style.display='none';
   trackingDiv.innerHTML='<div class="header">Tracking...</div>';
+  trackingDiv.style.display='block';
 
-  // Step 2: After 5s, show timeline
-  setTimeout(() => {
-    trackingDiv.innerHTML = `
-      <div class="header">Tracking Timeline</div>
-      <div class="timeline">
-        <div class="timeline-item">
-          <div class="circle green">☑️</div>
-          <div class="status">
-            <strong>Your item is on its way to</strong><br>
-            Russia<br>London UK
-            <div class="small-box ash">In Transit</div>
-            <div class="time-date" style="color:blue;">22 Sep 2025<br>14:00</div>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="circle green">✅</div>
-          <div class="status">
-            <strong>Item has arrived at</strong><br>
-            Vnukovointernational Airport, Russia
-            <div class="small-box ash">On Hold</div>
-            <div class="time-date">23 Sep 2025<br>7:30</div>
-          </div>
-        </div>
-      </div>
-    `;
-    // Step 3: After another 5s, show shipment content
-    setTimeout(() => {
-      contentDiv.style.display='block';
-      contentDiv.innerHTML=`
-        <div class="header">Content of Shipment: Package</div>
-        <div class="details">
-          <label>Est. Delivery Date:</label><span>22 Sep 2025</span><br>
-          <label>Origin Area:</label><span>London UK</span><br>
-          <label>Destination Area:</label><span>Russia</span>
-        </div>
-        <div class="header" style="margin-top:10px;">Sender's Details</div>
-        <div class="details">
-          <label>Name:</label><span>James</span><br>
-          <label>Address:</label><span>London UK</span>
-        </div>
-        <div class="header" style="margin-top:10px;">Receiver's Details</div>
-        <div class="details">
-          <label>Name:</label><span>Podvezennaya Elena Ivanovna</span><br>
-          <label>Address:</label><span>195299 St. Petersburg, Prosveshcheniya Avenue 104, Apt. 281</span><br>
-          <label>Mobile:</label><span>+79932195775</span><br>
-          <label>Bill:</label><span>$500</span>
-        </div>
-        <button class="print-btn" onclick="printInvoice()">Print Invoice</button>
-      `;
+  if(number){
+    setTimeout(()=>{
+      // First, show tracking timeline
+      trackingDiv.innerHTML='<div class="header">Tracking Shipment</div><div class="timeline"><div class="tick-container"><div class="tick-circle tick-complete">✓</div><div class="tick-label">Item has arrived at Vnukovo International Airport, Russia <span style="background:#ccc;padding:2px 5px;margin-left:5px;border-radius:3px;">On Hold</span></div><div class="tick-time">23 Sep 2025, 07:30</div></div></div><button class="print-btn" onclick="printInvoice()">Print Invoice</button>';
+      
+      setTimeout(()=>{
+        // Then show content of shipment
+        contentDiv.innerHTML='<div class="header">Content of Shipment: Package</div><div class="details"><label>Est. Delivery Date:</label><span>22 Sep 2025</span><br><label>Origin Area:</label><span>London UK</span><br><label>Destination Area:</label><span>Russia</span></div><div class="section-title">Sender\'s Details</div><div class="details"><label>Name:</label><span>James</span><br><label>Address:</label><span>London UK</span></div><div class="section-title">Receiver\'s Details</div><div class="details"><label>Name:</label><span>Podvezennaya Elena Ivanovna</span><br><label>Address:</label><span>195299 St. Petersburg, Prosveshcheniya Avenue 104, Apt. 281</span><br><label>Mobile:</label><span>+79932195775</span><br><label>Bill:</label><span>$500</span></div>';
+        contentDiv.style.display='block';
+      },5000);
+
     },5000);
-  },5000);
+  } else {
+    trackingDiv.innerHTML='<div class="header">Please enter a tracking number.</div>';
+  }
 }
 
-/* Print Invoice (only image) */
+/* Print Invoice */
 function printInvoice(){
-  const imageUrl = 'https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1790.jpeg';
-  const win = window.open('');
-  win.document.write('<img src="'+imageUrl+'" style="width:100%;"/>');
-  win.print();
-  win.close();
+  const imageUrl='https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1790.jpeg';
+  const printWindow=window.open('', '_blank');
+  printWindow.document.write('<img src="'+imageUrl+'" style="width:100%;">');
+  printWindow.document.close();
+  printWindow.focus();
+  printWindow.print();
 }
 </script>
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
