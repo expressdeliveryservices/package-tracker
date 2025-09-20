@@ -56,11 +56,9 @@ section {padding:50px 20px;}
 
 /* ===== Newsletter ===== */
 .newsletter {display:flex; gap:10px; margin-top:20px;}
-.newsletter input {
-  flex:1; padding:10px; border-radius:5px; border:none; background:#1c1c1c; color:#fff;
-}
-.newsletter input:hover {background:#fff; color:#000;}
+.newsletter input {flex:1; padding:10px; border-radius:5px; border:none; background:#1c1c1c; color:#fff;}
 .newsletter button {padding:10px 20px; border-radius:5px; border:none; background-color:#1e90ff; color:white; cursor:pointer;}
+.newsletter button:hover {background:#fff; color:#000;}
 
 /* ===== Support Popup ===== */
 #supportPopup {
@@ -74,18 +72,16 @@ section {padding:50px 20px;}
   box-shadow:0px 0px 15px #1e90ff;
   z-index:10000;
 }
-#supportPopup input,#supportPopup textarea {
-  width:100%; margin-bottom:10px; padding:8px; border-radius:5px; border:none; background:#2a2a2a; color:#fff;
-}
-#supportPopup input:hover,#supportPopup textarea:hover {background:#fff; color:#000;}
+#supportPopup input,#supportPopup textarea {width:100%; margin-bottom:10px; padding:8px; border-radius:5px; border:none; background:#2a2a2a; color:#fff;}
 #supportPopup button {padding:8px 15px; background-color:#1e90ff; color:white; border:none; border-radius:5px; cursor:pointer;}
+#supportPopup button:hover {background:#fff; color:#000;}
 
 /* ===== Customer Reviews ===== */
 #reviewsBoard {display:flex; flex-direction:column; gap:10px; margin-top:20px; border:1px solid #1e90ff; padding:15px; border-radius:10px; background-color:#1c1c1c;}
 .review {border-bottom:1px solid #1e90ff; padding:10px 0;}
 .review:last-child {border-bottom:none;}
 .review strong {color:#1e90ff;}
-.stars {color:gold; font-size:18px; margin-left:10px;}
+.review::after {content:" ⭐⭐⭐⭐⭐"; color:gold; margin-left:5px;}
 
 /* ===== Image Wall ===== */
 .image-wall {display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px;}
@@ -94,15 +90,21 @@ section {padding:50px 20px;}
 
 /* ===== Business Hours ===== */
 .business-hours span{display:inline-block; margin-right:10px;}
-.blink-green{color:limegreen; font-weight:bold; animation:blinkGreen 1s infinite;}
-@keyframes blinkGreen{50%{opacity:0;}}
+.blink{animation:blink 1s infinite;}
+@keyframes blink{
+  0%,50%,100%{opacity:1;}
+  25%,75%{opacity:0;}
+}
 
-/* ===== Status Blink Colors ===== */
-.blink-red{color:red; font-weight:bold; animation:blinkRed 1s infinite;}
-@keyframes blinkRed{50%{opacity:0;}}
-.blink-blue{color:dodgerblue; font-weight:bold; animation:blinkBlue 1s infinite;}
-@keyframes blinkBlue{50%{opacity:0;}}
-.blink-green-status{color:limegreen; font-weight:bold; animation:blinkGreen 1s infinite;}
+/* ===== Blink + Pulse for Tracking ===== */
+.blink-pulse {
+  animation: blink 1s infinite, pulse 1.5s infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
 
 /* ===== Footer ===== */
 footer {background-color:#0d0d0d; text-align:center; padding:20px; color:#1e90ff;}
@@ -166,7 +168,30 @@ footer {background-color:#0d0d0d; text-align:center; padding:20px; color:#1e90ff
 <section>
   <h2 class="section-title">Delivery Wall</h2>
   <div class="image-wall">
-    <!-- 8 Images (same as before) -->
+    <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" alt="Delivery 1">
+      <p class="desc">Our team ensures every package is delivered safely and on time, providing advanced tracking and dedicated customer service for complete satisfaction.</p>
+    </div>
+    <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1677.webp" alt="Delivery 2">
+      <p class="desc">Fast and reliable delivery across cities and states, with each shipment carefully monitored using modern logistics software for accuracy.</p>
+    </div>
+    <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" alt="Delivery 3">
+      <p class="desc">Express Delivery Service employs top-notch technology for real-time tracking, ensuring transparency and trust for every customer.</p>
+    </div>
+    <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1679.png" alt="Delivery 4">
+      <p class="desc">Every decision we make is customer-first, combining logistics expertise and efficiency for prompt delivery without compromising safety.</p>
+    </div>
+    <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" alt="Delivery 5">
+      <p class="desc">Optimized delivery routes using advanced mapping systems ensure faster deliveries while minimizing environmental impact and cost.</p>
+    </div>
+    <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1681.jpeg" alt="Delivery 6">
+      <p class="desc">Our courier staff are trained professionals equipped with GPS-enabled devices, guaranteeing safe handling and prompt updates for each package.</p>
+    </div>
+    <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1682.jpeg" alt="Delivery 7">
+      <p class="desc">We cater to businesses and individual clients, offering customized shipping solutions, express delivery options, and flexible scheduling.</p>
+    </div>
+    <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1684.jpeg" alt="Delivery 8">
+      <p class="desc">Express Delivery Service is committed to excellence, providing dependable logistics and ensuring customer satisfaction with every delivery.</p>
+    </div>
   </div>
 </section>
 
@@ -180,13 +205,13 @@ footer {background-color:#0d0d0d; text-align:center; padding:20px; color:#1e90ff
 <section>
   <h2 class="section-title">Business Hours</h2>
   <div class="business-hours">
-    <span>Friday: <span class="blink-green">Open 24 hours</span></span><br>
-    <span>Saturday: <span class="blink-green">Open 24 hours</span></span><br>
-    <span>Sunday: <span class="blink-green">Open 24 hours</span></span><br>
-    <span>Monday: <span class="blink-green">Open 24 hours</span></span><br>
-    <span>Tuesday: <span class="blink-green">Open 24 hours</span></span><br>
-    <span>Wednesday: <span class="blink-green">Open 24 hours</span></span><br>
-    <span>Thursday: <span class="blink-green">Open 24 hours</span></span>
+    <span>Friday: <span class="blink" style="color:lime;">Open 24 hours</span></span><br>
+    <span>Saturday: <span class="blink" style="color:lime;">Open 24 hours</span></span><br>
+    <span>Sunday: <span class="blink" style="color:lime;">Open 24 hours</span></span><br>
+    <span>Monday: <span class="blink" style="color:lime;">Open 24 hours</span></span><br>
+    <span>Tuesday: <span class="blink" style="color:lime;">Open 24 hours</span></span><br>
+    <span>Wednesday: <span class="blink" style="color:lime;">Open 24 hours</span></span><br>
+    <span>Thursday: <span class="blink" style="color:lime;">Open 24 hours</span></span>
   </div>
 </section>
 
@@ -198,6 +223,8 @@ footer {background-color:#0d0d0d; text-align:center; padding:20px; color:#1e90ff
   <button style="background-color:#1e90ff;color:white;padding:10px 20px;border:none;border-radius:5px;" onclick="openSupport()">Support</button>
   <!-- Google Translate -->
   <div id="google_translate_element"></div>
+  <!-- Map -->
+  <iframe src="https://www.google.com/maps?q=47-00+Northern+Blvd,+Long+Island+City,+NY+11101,+USA&output=embed" width="100%" height="400" style="border:0; border-radius:10px; margin-top:20px;" allowfullscreen></iframe>
 </section>
 
 <!-- About Us -->
@@ -235,20 +262,20 @@ function trackPackage(){
   const tbody = document.getElementById('trackingBody'); 
   tbody.innerHTML = '';
   if(number){
-    const steps = [
-      {status:'In Transit', class:'blink-red', icon:'🔴', location:'London, UK', datetime:'2025-09-19 08:00'},
-      {status:'Out for Delivery', class:'blink-blue', icon:'🔵', location:'St. Petersburg, Russia', datetime:'2025-09-19 12:00'},
-      {status:'Delivered', class:'blink-green-status', icon:'🟢', location:'Apt. 281, Prosveshcheniya Avenue 104, 195299 St. Petersburg, Russia', datetime:'2025-09-19 14:00'}
+    const data=[
+      {status:'In Transit', color:'red', icon:'🔴', location:'London, UK', datetime:'2025-09-19 08:00'},
+      {status:'Out for Delivery', color:'dodgerblue', icon:'🔵', location:'St. Petersburg, Russia', datetime:'2025-09-21 09:00'},
+      {status:'Delivered', color:'limegreen', icon:'🟢', location:'Apt. 281, Prosveshcheniya Avenue 104, 195299 St. Petersburg, Russia', datetime:'2025-09-21 14:30'}
     ];
-    steps.forEach((row,i)=>{
-      setTimeout(()=>{
-        const tr=document.createElement('tr');
-        tr.innerHTML = `<td>${number}</td>
-                        <td class="${row.class}">${row.icon} ${row.status}</td>
-                        <td>${row.location}</td>
-                        <td>${row.datetime}</td>`;
-        tbody.appendChild(tr);
-      }, i===0?0:(i===1?4*1000:6*1000)); // ⏱ For demo: 4 sec = 4 hrs, 6 sec = 6 hrs
+    data.forEach(row=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${number}</td>
+                      <td style="color:${row.color}; font-weight:bold;">
+                        <span class="blink-pulse">${row.icon}</span> ${row.status}
+                      </td>
+                      <td>${row.location}</td>
+                      <td>${row.datetime}</td>`;
+      tbody.appendChild(tr);
     });
   } else {
     alert('Please enter a tracking number.');
@@ -267,19 +294,17 @@ function closeSupport(){document.getElementById('supportPopup').style.display='n
 
 /* ===== Customer Reviews ===== */
 const reviews=[
-{name:'Alice Johnson', text:'Excellent delivery service! Fast and reliable.', stars:5},
-{name:'Michael Smith', text:'My package arrived ahead of time, very professional.', stars:4},
-{name:'Samantha Lee', text:'Customer support was very helpful and responsive.', stars:5},
-{name:'David Brown', text:'Tracking system is accurate and easy to use.', stars:4},
-{name:'Linda White', text:'Highly recommend Express Delivery Service for all shipments.', stars:5},
-{name:'James Wilson', text:'Fantastic service, always on time!', stars:5}
+{name:'Alice Johnson', text:'Excellent delivery service! Fast and reliable.'},
+{name:'Michael Smith', text:'My package arrived ahead of time, very professional.'},
+{name:'Samantha Lee', text:'Customer support was very helpful and responsive.'},
+{name:'David Brown', text:'Tracking system is accurate and easy to use.'},
+{name:'Linda White', text:'Highly recommend Express Delivery Service for all shipments.'},
+{name:'James Wilson', text:'Fantastic service, always on time!'}
 ];
 let reviewIndex=0;
 function showReview(){
   const board=document.getElementById('reviewsBoard');
-  const r=reviews[reviewIndex];
-  let stars='⭐️'.repeat(r.stars);
-  board.innerHTML=`<div class="review"><strong>${r.name}:</strong> ${r.text} <span class="stars">${stars}</span></div>`;
+  board.innerHTML=`<div class="review"><strong>${reviews[reviewIndex].name}:</strong> ${reviews[reviewIndex].text}</div>`;
   reviewIndex=(reviewIndex+1)%reviews.length;
 }
 showReview();
