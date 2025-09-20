@@ -95,7 +95,7 @@
         /* ===== Map ===== */
         .map-container {
             width: 100%;
-            height: 150px;
+            height: 300px; /* Increased height to show both locations */
             margin: 10px 0;
             overflow: hidden;
             position: relative;
@@ -160,7 +160,6 @@
 
         /* ===== Footer ===== */
         footer { background-color: #f8f8f8; text-align: center; padding: 15px; color: #1e90ff; border-top: 1px solid #ddd; }
-        /* Removed .timestamp class since timestamp is removed */
     </style>
 </head>
 <body>
@@ -245,9 +244,9 @@
     <div id="shipmentContent" class="shipment-content" style="display: none;"></div>
     <div class="map-container">
         <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1998.772923442539!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x469633387fb42009%3A0x3cc66a401b7e8886!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia%2C%20195299!5e0!3m2!1sen!2sus!4v1695219745000!5m2!1sen!2sus"
+            src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d1998.772923442539!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!1m0!1m5!1s0x47d8a00ba4c6a5f9:0x3e7a4e9e8f8b5f5f!2sLondon%2C%20UK!3m2!1d51.5074!2d-0.1278!1m5!1s0x469633387fb42009%3A0x3cc66a401b7e8886!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia%2C%20195299!3m2!1d60.0348099!2d30.4252616!5e0!3m2!1sen!2sus!4v1695219745000!5m2!1sen!2sus"
             width="100%"
-            height="150"
+            height="300"
             style="border:0;"
             allowfullscreen=""
             loading="lazy"
@@ -300,7 +299,7 @@
         const trackingDiv = document.getElementById('shipmentTracking');
         const contentDiv = document.getElementById('shipmentContent');
 
-        resultDiv.innerHTML = 'Checking...';
+        resultDiv.innerHTML = 'Tracking...';
         trackingDiv.style.display = 'none';
         contentDiv.style.display = 'none';
 
@@ -338,11 +337,11 @@
                         </div>
                     `;
                     contentDiv.style.display = 'block';
-                }, 60000); // Second 1-minute delay
+                }, 5000); // Second 5-second delay
             } else {
                 resultDiv.innerHTML = 'Please enter a tracking number.';
             }
-        }, 60000); // First 1-minute delay
+        }, 5000); // First 5-second delay
     }
 
     /* ===== Print Invoice ===== */
