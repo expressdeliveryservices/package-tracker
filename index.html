@@ -1,198 +1,310 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Express Delivery Service</title>
-<style>
-/* ===== Global Dark Theme ===== */
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #0d1117;
-  color: #e6edf3;
-  scroll-behavior: smooth;
-}
-a { color: #58a6ff; text-decoration: none; }
-h1,h2,h3,h4,h5,h6 { color: #58a6ff; margin: 0; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Express Delivery Services</title>
+  <style>
+    /* Global Dark Theme */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #0d0d0d;
+      color: #e0e0e0;
+    }
 
-/* ===== Navbar ===== */
-.navbar {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 20px; background-color: #161b22;
-  position: sticky; top: 0; z-index: 1000;
-}
-.nav-links { display: flex; gap: 20px; }
-.nav-links a { cursor: pointer; font-weight: bold; }
-.hamburger { display: none; flex-direction: column; cursor: pointer; }
-.hamburger div { width: 25px; height: 3px; background-color: #58a6ff; margin: 4px 0; }
-@media(max-width:768px){
-  .nav-links { display: none; flex-direction: column; background-color: #161b22;
-    position: absolute; top: 70px; right: 0; width: 200px; padding: 20px; }
-  .nav-links.active { display: flex; }
-  .hamburger { display: flex; }
-}
+    h1, h2 {
+      color: #00aaff;
+    }
 
-/* ===== Sections ===== */
-section { padding: 50px 20px; border-bottom: 1px solid #30363d; }
-.section-title { font-size: 2rem; margin-bottom: 20px; color: #58a6ff; }
+    a { color: #00aaff; text-decoration: none; }
 
-/* ===== Tracking ===== */
-.tracking { display: flex; gap: 10px; margin-bottom: 20px; }
-.tracking input {
-  flex: 1; padding: 10px; border: 1px solid #30363d; border-radius: 5px;
-  background: #161b22; color: #fff; font-size: 0.9rem;
-}
-.tracking input::placeholder { text-transform: uppercase; font-size: 0.8rem; color: #8b949e; }
-.tracking button { padding: 10px 20px; border: none; border-radius: 5px;
-  background-color: #238636; color: white; cursor: pointer; }
-.tracking button:hover { background-color: #2ea043; }
-#trackingBoard { width: 100%; border-collapse: collapse; margin-top: 20px; }
-#trackingBoard th, #trackingBoard td { border: 1px solid #30363d; padding: 10px; text-align: left; }
-#trackingBoard th { background-color: #161b22; color: #58a6ff; }
+    /* Header + Hamburger */
+    header {
+      background: #111;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 2px solid #00aaff;
+    }
 
-/* ===== Newsletter ===== */
-.newsletter { display: flex; gap: 10px; margin-top: 20px; }
-.newsletter input {
-  flex: 1; padding: 10px; border-radius: 5px; border: 1px solid #30363d;
-  background: #161b22; color: #fff;
-}
-.newsletter button { padding: 10px 20px; border-radius: 5px; border: none;
-  background-color: #238636; color: white; cursor: pointer; }
-.newsletter button:hover { background-color: #2ea043; }
+    header h1 {
+      font-size: 20px;
+      color: #00aaff;
+    }
 
-/* ===== Customer Reviews ===== */
-#reviewsBoard {
-  display: flex; flex-direction: column; gap: 10px;
-  margin-top: 20px; border: 1px solid #30363d;
-  padding: 15px; border-radius: 10px; background-color: #161b22;
-}
-.review { border-bottom: 1px solid #30363d; padding: 10px 0; }
-.review:last-child { border-bottom: none; }
-.review strong { color: #58a6ff; }
+    nav {
+      display: none;
+      flex-direction: column;
+      background: #1a1a1a;
+      position: absolute;
+      top: 60px;
+      right: 20px;
+      width: 200px;
+      border: 1px solid #00aaff;
+      border-radius: 5px;
+    }
 
-/* ===== Image Wall ===== */
-.image-wall { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-.image-wall img { width: 100%; border-radius: 10px; }
-.image-wall .desc { margin-top: 10px; font-size: 0.9rem; color: #8b949e; }
+    nav a {
+      padding: 12px;
+      display: block;
+      color: #e0e0e0;
+    }
 
-/* ===== Business Hours ===== */
-.business-hours span { display: inline-block; margin-right: 10px; }
-.blink { animation: blink 1s infinite; }
-@keyframes blink { 0%, 50%, 100% { opacity: 1; } 25%, 75% { opacity: 0; } }
+    nav a:hover {
+      background: #00aaff;
+      color: #000;
+    }
 
-/* ===== Footer ===== */
-footer { background-color: #0d1117; text-align: center; padding: 20px; color: #58a6ff; border-top: 1px solid #30363d; }
-</style>
+    .hamburger {
+      cursor: pointer;
+      font-size: 28px;
+      color: #00aaff;
+    }
+
+    /* Sections */
+    section {
+      padding: 50px 20px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    /* Tracking */
+    .tracking-box {
+      text-align: center;
+    }
+
+    .tracking-box input {
+      padding: 12px;
+      width: 250px;
+      border: 1px solid #00aaff;
+      border-radius: 5px;
+      background: #1a1a1a;
+      color: #fff;
+    }
+
+    .tracking-box input::placeholder {
+      text-transform: uppercase;
+      font-size: 12px;
+      color: #888;
+    }
+
+    .tracking-box button {
+      padding: 12px 15px;
+      margin-left: 10px;
+      background: #00aaff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .tracking-result {
+      margin-top: 20px;
+      background: #1a1a1a;
+      padding: 20px;
+      border-radius: 5px;
+    }
+
+    .status.red { color: red; }
+    .status.blue { color: dodgerblue; }
+    .status.green { color: limegreen; }
+
+    /* Delivery Wall */
+    .delivery-wall {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .delivery-item {
+      background: #1a1a1a;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      border: 1px solid #00aaff;
+    }
+
+    .delivery-item img {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    /* Reviews */
+    .reviews {
+      text-align: center;
+      font-style: italic;
+      color: #ccc;
+      background: #1a1a1a;
+      padding: 20px;
+      border-radius: 8px;
+      min-height: 100px;
+    }
+
+    /* Google Form */
+    iframe {
+      width: 100%;
+      height: 800px;
+      border: none;
+      border-radius: 8px;
+      background: #1a1a1a;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #111;
+      border-top: 2px solid #00aaff;
+    }
+
+    .blink {
+      animation: blink 1.5s infinite;
+      color: #00aaff;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <h1>Express Delivery Services</h1>
+    <div class="hamburger" onclick="toggleMenu()">☰</div>
+    <nav id="menu">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#delivery-wall">Delivery Wall</a>
+      <a href="#tracking">Track Packages</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
 
-<!-- Navbar -->
-<div class="navbar">
-  <div class="logo"><strong>Express Delivery</strong></div>
-  <div class="nav-links" id="navLinks">
-    <a href="#home">Home</a>
-    <a href="#about">About</a>
-    <a href="#services">Services</a>
-    <a href="#track">Track Packages</a>
-    <a href="#contact">Contact</a>
-  </div>
-  <div class="hamburger" onclick="toggleMenu()"><div></div><div></div><div></div></div>
-</div>
+  <section id="home">
+    <h2>Welcome to Express Delivery Services</h2>
+    <p>Fast, reliable, and professional logistics solutions worldwide.</p>
+    <p class="blink">Open 24 Hours ●</p>
+  </section>
 
-<!-- Header -->
-<header id="home">
-  <h1>Express Delivery Service</h1>
-  <p class="blink">Open 24 Hours ●</p>
-</header>
+  <section id="about">
+    <h2>About Us</h2>
+    <p>We are a global logistics provider delivering packages securely and on time. With years of experience and a trusted team, we ensure customer satisfaction with every delivery.</p>
+  </section>
 
-<!-- Google Form -->
-<section>
-  <h2 class="section-title">Support Form</h2>
-  <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeksGNCNzT0wgUCUrYpQRMVR8fqSj0ZUb6xtkw4_u55KM5XaA/viewform?embedded=true" width="100%" height="762" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
-</section>
+  <section id="services">
+    <h2>Our Services</h2>
+    <p>We provide international and domestic shipping, real-time package tracking, express delivery options, and 24/7 customer support.</p>
+  </section>
 
-<!-- About -->
-<section id="about">
-  <h2 class="section-title">About Us</h2>
-  <p>At Express Delivery Service, we are more than just a logistics company; we’re your dedicated partners in delivering success with speed, safety, and accuracy.</p>
-</section>
+  <section id="delivery-wall">
+    <h2>Delivery Wall</h2>
+    <div class="delivery-wall">
+      <div class="delivery-item">
+        <img src="https://source.unsplash.com/400x300/?delivery,truck">
+        <p>Our modern delivery trucks ensure fast, secure, and reliable logistics across cities and countries.</p>
+      </div>
+      <div class="delivery-item">
+        <img src="https://source.unsplash.com/400x300/?airplane,cargo">
+        <p>We specialize in international air cargo services, providing quick shipping solutions for urgent packages.</p>
+      </div>
+      <div class="delivery-item">
+        <img src="https://source.unsplash.com/400x300/?warehouse,logistics">
+        <p>Our warehouses are equipped with the latest technology to store packages safely before final dispatch.</p>
+      </div>
+      <div class="delivery-item">
+        <img src="https://source.unsplash.com/400x300/?delivery,ship">
+        <p>Reliable sea cargo services for large shipments, connecting ports worldwide with efficiency and care.</p>
+      </div>
+      <div class="delivery-item">
+        <img src="https://source.unsplash.com/400x300/?delivery,van">
+        <p>Flexible van delivery services for small businesses and individuals ensuring timely door-to-door service.</p>
+      </div>
+      <div class="delivery-item">
+        <img src="https://source.unsplash.com/400x300/?drone,delivery">
+        <p>Cutting-edge drone delivery technology for faster, eco-friendly last-mile package delivery.</p>
+      </div>
+      <div class="delivery-item">
+        <img src="https://source.unsplash.com/400x300/?delivery,team">
+        <p>Our dedicated delivery team works around the clock to guarantee reliable package handling and tracking.</p>
+      </div>
+      <div class="delivery-item">
+        <img src="https://source.unsplash.com/400x300/?cargo,plane">
+        <p>Large-scale cargo plane operations ensure seamless global logistics for high-volume shipments.</p>
+      </div>
+    </div>
+  </section>
 
-<!-- Services -->
-<section id="services">
-  <h2 class="section-title">Our Services</h2>
-  <p>We provide global and domestic shipping, express deliveries, professional tracking, and 24/7 customer support for all logistics needs.</p>
-</section>
+  <section id="tracking">
+    <h2>Track Your Package</h2>
+    <div class="tracking-box">
+      <input type="text" id="trackingId" placeholder="TRACK ID">
+      <button onclick="trackPackage()">Submit</button>
+    </div>
+    <div id="trackingResult" class="tracking-result"></div>
+  </section>
 
-<!-- Track Packages -->
-<section id="track">
-  <h2 class="section-title">Track Your Package</h2>
-  <div class="tracking">
-    <input type="text" id="trackingNumber" placeholder="TRACK ID">
-    <button onclick="trackPackage()">Track</button>
-  </div>
-  <table id="trackingBoard">
-    <thead>
-      <tr><th>Tracking Number</th><th>Status</th><th>Location</th><th>Date/Time</th></tr>
-    </thead>
-    <tbody id="trackingBody"></tbody>
-  </table>
-</section>
+  <section id="reviews">
+    <h2>Customer Reviews</h2>
+    <div class="reviews" id="reviewsBox"></div>
+  </section>
 
-<!-- Delivery Wall -->
-<section>
-  <h2 class="section-title">Delivery Wall</h2>
-  <div class="image-wall">
-    <div><img src="https://source.unsplash.com/400x300/?delivery,truck"><div class="desc">Our delivery trucks guarantee fast and secure transportation of goods with real-time monitoring to ensure safety and reliability across regions.</div></div>
-    <div><img src="https://source.unsplash.com/400x300/?cargo,ship"><div class="desc">We handle international freight through sea cargo, providing affordable solutions for bulk shipments with seamless customs clearance and tracking.</div></div>
-    <div><img src="https://source.unsplash.com/400x300/?airplane,cargo"><div class="desc">Express air shipping for urgent packages ensures timely delivery across continents with minimal delays and professional handling every step.</div></div>
-    <div><img src="https://source.unsplash.com/400x300/?warehouse,logistics"><div class="desc">Our warehouses are equipped with advanced storage systems, enabling secure handling, packaging, and sorting of shipments before final distribution.</div></div>
-    <div><img src="https://source.unsplash.com/400x300/?courier,delivery"><div class="desc">Dedicated courier staff provide reliable last-mile delivery services to ensure packages reach their recipients promptly and safely every time.</div></div>
-    <div><img src="https://source.unsplash.com/400x300/?package,parcel"><div class="desc">We provide specialized packaging solutions to keep fragile items safe and intact during transportation across both short and long distances.</div></div>
-    <div><img src="https://source.unsplash.com/400x300/?logistics,technology"><div class="desc">With advanced logistics technology, customers can enjoy efficient shipment tracking, scheduling, and predictive delivery times for better planning.</div></div>
-    <div><img src="https://source.unsplash.com/400x300/?global,delivery"><div class="desc">Our global network connects businesses and individuals worldwide, offering dependable shipping solutions tailored to every customer’s specific needs.</div></div>
-  </div>
-</section>
+  <section id="contact">
+    <h2>Contact Us</h2>
+    <p>Email: Expressdeliveryservice0016@gmail.com</p>
+    <p>Phone: +1 (941) 207-8626</p>
+    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeksGNCNzT0wgUCUrYpQRMVR8fqSj0ZUb6xtkw4_u55KM5XaA/viewform?embedded=true">Loading…</iframe>
+  </section>
 
-<!-- Customer Reviews -->
-<section>
-  <h2 class="section-title">Customer Reviews</h2>
-  <div id="reviewsBoard"></div>
-</section>
+  <footer>
+    <p>&copy; 2023 Express Delivery Services. All Rights Reserved.<br>Fast Logistics Company.</p>
+  </footer>
 
-<!-- Business Hours -->
-<section>
-  <h2 class="section-title">Business Hours</h2>
-  <div class="business-hours">
-    <span>Mon-Sun: <span class="blink">Open 24 hours</span></span>
-  </div>
-</section>
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('menu');
+      menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+    }
 
-<!-- Contact -->
-<section id="contact">
-  <h2 class="section-title">Contact Us</h2>
-  <p>Phone: +1 (941) 207-8626</p>
-  <p>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></p>
-  <iframe src="https://www.google.com/maps?q=47-00+Northern+Blvd,+Long+Island+City,+NY+11101,+USA&output=embed" width="100%" height="400" style="border:0; border-radius:10px; margin-top:20px;" allowfullscreen></iframe>
-</section>
+    function trackPackage() {
+      const id = document.getElementById('trackingId').value.trim();
+      const resultBox = document.getElementById('trackingResult');
+      if (id === "") {
+        resultBox.innerHTML = "<p class='status red'>Please enter a tracking ID.</p>";
+      } else {
+        resultBox.innerHTML = `
+          <h3>Tracking History for ${id}</h3>
+          <ul>
+            <li class='status red'>In Transit: Package is moving through the carrier’s network toward the destination.</li>
+            <li class='status blue'>Out for Delivery: Package is on the delivery vehicle for final delivery.</li>
+            <li class='status green'>Delivered: Package has been successfully delivered to Apt. 281, Prosveshcheniya Avenue 104, 195299 St. Petersburg, Russia.</li>
+          </ul>`;
+      }
+    }
 
-<!-- Footer -->
-<footer>
-  ©2023. Express Delivery Service. All Rights Reserved.<br>
-  Fast Logistics Company.
-</footer>
+    /* Rotating Reviews */
+    const reviews = [
+      '"Excellent service! My package arrived earlier than expected." – Alice Johnson ⭐⭐⭐⭐⭐',
+      '"Fast and reliable delivery every time." – Michael Smith ⭐⭐⭐⭐⭐',
+      '"Customer support was friendly and very helpful." – Samantha Lee ⭐⭐⭐⭐',
+      '"Accurate tracking and smooth delivery." – David Brown ⭐⭐⭐⭐⭐',
+      '"Highly recommend Express Delivery Services!" – Linda White ⭐⭐⭐⭐⭐',
+      '"Very professional logistics team." – James Wilson ⭐⭐⭐⭐'
+    ];
 
-<script>
-/* ===== Hamburger Menu ===== */
-function toggleMenu(){document.getElementById('navLinks').classList.toggle('active');}
-
-/* ===== Tracking ===== */
-function trackPackage(){
-  const number=document.getElementById('trackingNumber').value.trim();
-  const tbody=document.getElementById('trackingBody'); 
-  tbody.innerHTML='';
-  if(number){
-    const data=[
-      {status:'In Transit', color:'red', icon:'🔴', location:'London, UK', datetime:'2025-09-19 08:00'},
-      {status:'Out for Delivery', color:'blue', icon:'🔵', location:'St. Petersburg, Russia', datetime:'2025-09-21 09:00'},
-      {status:'Delivered', color:'green', icon:'🟢
+    let reviewIndex = 0;
+    function rotateReviews() {
+      document.getElementById("reviewsBox").innerHTML = reviews[reviewIndex];
+      reviewIndex = (reviewIndex + 1) % reviews.length;
+    }
+    rotateReviews();
+    setInterval(rotateReviews, 5000);
+  </script>
+</body>
+</html>
