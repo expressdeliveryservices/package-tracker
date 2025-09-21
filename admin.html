@@ -18,6 +18,7 @@ table{width:100%;border-collapse:collapse;margin-top:10px;}
 th,td{border:1px solid #ddd;padding:8px;text-align:left;}
 th{background:#1e90ff;color:white;}
 .shipment-form div{margin-bottom:10px;}
+#newTrackingCode{background:#4CAF50;color:white;}
 </style>
 </head>
 <body>
@@ -49,6 +50,56 @@ th{background:#1e90ff;color:white;}
     <h2>Edit Customer Reviews</h2>
     <textarea id="reviewsList" rows="5" placeholder="One review per line"></textarea>
     <button onclick="saveReviews()">Save Reviews</button>
+
+    <h2>Generate New Tracking Code</h2>
+    <div class="shipment-form">
+      <input type="text" id="newTrackingNumber" placeholder="New Tracking Code will be generated" readonly>
+      <div>
+        <label>Content:</label>
+        <input type="text" id="newShipmentContent" placeholder="Shipment Content">
+      </div>
+      <div>
+        <label>Origin:</label>
+        <input type="text" id="newShipmentOrigin" placeholder="Origin Area">
+      </div>
+      <div>
+        <label>Destination:</label>
+        <input type="text" id="newShipmentDestination" placeholder="Destination Area">
+      </div>
+      <h3>Sender Details</h3>
+      <div>
+        <label>Name:</label>
+        <input type="text" id="newSenderName" placeholder="Sender Name">
+      </div>
+      <div>
+        <label>Address:</label>
+        <input type="text" id="newSenderAddress" placeholder="Sender Address">
+      </div>
+      <h3>Receiver Details</h3>
+      <div>
+        <label>Name:</label>
+        <input type="text" id="newReceiverName" placeholder="Receiver Name">
+      </div>
+      <div>
+        <label>Address:</label>
+        <input type="text" id="newReceiverAddress" placeholder="Receiver Address">
+      </div>
+      <div>
+        <label>Mobile:</label>
+        <input type="text" id="newReceiverMobile" placeholder="Receiver Mobile">
+      </div>
+      <div>
+        <label>Latitude:</label>
+        <input type="number" id="newReceiverLat" step="0.0001" placeholder="Receiver Latitude">
+      </div>
+      <div>
+        <label>Longitude:</label>
+        <input type="number" id="newReceiverLng" step="0.0001" placeholder="Receiver Longitude">
+      </div>
+      <h3>Timeline</h3>
+      <textarea id="newTimeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"23 Sep 2025 07:30","description":"✅ Item arrived","status":"ON HOLD","completed":true}])'></textarea>
+      <button id="newTrackingCode" onclick="generateTrackingCode()">Generate Tracking Code</button>
+    </div>
 
     <h2>Edit Shipments</h2>
     <div class="shipment-form">
@@ -200,6 +251,45 @@ function saveShipment(){
     }
     localStorage.setItem('shipments', JSON.stringify(shipments));
     alert("Shipment saved!");
+  } catch (e) {
+    alert("Invalid data! Please check the timeline JSON or fields.");
+  }
+}
+
+// Generate New Tracking Code
+function generateTrackingCode() {
+  try {
+    // Generate a unique tracking code with current date and random suffix
+    const now = new Date();
+    const dateStr = now.toISOString().split('T')[0].replace(/-/g, '') + now.toTimeString().split(' ')[0].replace(/:/g, '');
+    const randomStr = Math.random().toString(36).substr(2, 5).toUpperCase();
+    const newTracking = `ZWB-${dateStr}-${randomStr}`;
+
+    const shipment = {
+      trackingNumber: newTracking,
+      content: document.getElementById('newShipmentContent').value.trim() || 'Package',
+      origin: document.getElementById('newShipmentOrigin').value.trim() || 'Unknown',
+      destination: document.getElementById('newShipmentDestination').value.trim() || 'Unknown',
+      sender: {
+        name: document.getElementById('newSenderName').value.trim() || 'Unknown',
+        address: document.getElementById('newSenderAddress').value.trim() || 'Unknown'
+      },
+      receiver: {
+        name: document.getElementById('newReceiverName').value.trim() || 'Unknown',
+        address: document.getElementById('newReceiverAddress').value.trim() || 'Unknown',
+        mobile: document.getElementById('newReceiverMobile').value.trim() || 'Unknown',
+        lat: parseFloat(document.getElementById('newReceiverLat').value) || 0.0,
+        lng: parseFloat(document.getElementById('newReceiverLng').value) || 0.0
+      },
+      timeline: JSON.parse(document.getElementById('newTimeline').value.trim() || '[]')
+    };
+
+    let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+    shipments.push(shipment);
+    localStorage.setItem('shipments', JSON.stringify(shipments));
+
+    document.getElementById('newTrackingNumber').value = newTracking;
+    alert(`New tracking code generated: ${newTracking}. Use this on the public page to load details.`);
   } catch (e) {
     alert("Invalid data! Please check the timeline JSON or fields.");
   }
