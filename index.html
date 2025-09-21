@@ -306,15 +306,52 @@ function googleTranslateElementInit(){
 
 // Initialize Maps with Leaflet
 function initMaps() {
-  // Receiver Map
-  const receiverMap = L.map('receiverMap').setView([60.0348099, 30.4252616], 15);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(receiverMap);
-  L.marker([60.0348099, 30.4252616]).addTo(receiverMap)
-    .bindPopup('Receiver Location: Prospekt Prosveshcheniya, 104, Sankt-Peterburg')
-    .openPopup();
+  // Receiver Map (Current Location)
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const userLat = position.coords.latitude;
+        const userLng = position.coords.longitude;
+        const receiverMap = L.map('receiverMap').setView([userLat, userLng], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(receiverMap);
+        const marker = L.marker([userLat, userLng]).addTo(receiverMap)
+          .bindPopup('Your Current Location')
+          .openPopup()
+          .on('click', () => {
+            window.open(`https://www.google.com/maps?q=${userLat},${userLng}`, '_blank');
+          });
+      },
+      (error) => {
+        console.error("Geolocation error:", error);
+        const receiverMap = L.map('receiverMap').setView([60.0348099, 30.4252616], 13); // Fallback to default location
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(receiverMap);
+        const marker = L.marker([60.0348099, 30.4252616]).addTo(receiverMap)
+          .bindPopup('Default Location: Prospekt Prosveshcheniya, Sankt-Peterburg')
+          .openPopup()
+          .on('click', () => {
+            window.open('https://www.google.com/maps?q=60.0348099,30.4252616', '_blank');
+          });
+      }
+    );
+  } else {
+    const receiverMap = L.map('receiverMap').setView([60.0348099, 30.4252616], 13); // Fallback if geolocation not supported
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(receiverMap);
+    const marker = L.marker([60.0348099, 30.4252616]).addTo(receiverMap)
+      .bindPopup('Default Location: Prospekt Prosveshcheniya, Sankt-Peterburg')
+      .openPopup()
+      .on('click', () => {
+        window.open('https://www.google.com/maps?q=60.0348099,30.4252616', '_blank');
+      });
+  }
 
   // Headquarter Map
   const headquarterMap = L.map('headquarterMap').setView([51.4735056, -0.2120214], 17);
@@ -322,9 +359,12 @@ function initMaps() {
     maxZoom: 19,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(headquarterMap);
-  L.marker([51.4735056, -0.2120214]).addTo(headquarterMap)
+  const headquarterMarker = L.marker([51.4735056, -0.2120214]).addTo(headquarterMap)
     .bindPopup('Headquarter: Universal Drops, 66B Oxberry Ave, London')
-    .openPopup();
+    .openPopup()
+    .on('click', () => {
+      window.open('https://www.google.com/maps?q=51.4735056,-0.2120214', '_blank');
+    });
 }
 
 // Tracking
@@ -333,13 +373,7 @@ function trackPackage(){
   const trackingDiv = document.getElementById('shipmentTracking');
   const contentDiv = document.getElementById('shipmentContent');
 
-  // Show content immediately
-  contentDiv.style.display = 'block';
-  contentDiv.innerHTML = `
-    <div class="header">Content of Shipment: Package</div>
-  `;
-
-  // Show tracking with 5-second delay
+  // Show tracking immediately with 5-second delay for details
   trackingDiv.style.display = 'block';
   trackingDiv.innerHTML = '<div class="header">Tracking...</div>';
 
@@ -363,6 +397,43 @@ function trackPackage(){
             </div>
           `).join('')}
         </div>`;
+        // Update receiver map with shipment receiver location if available
+        if (shipment.receiver.lat && shipment.receiver.lng) {
+          const receiverMap = L.map('receiverMap').setView([parseFloat(shipment.receiver.lat), parseFloat(shipment.receiver.lng)], 15);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          }).addTo(receiverMap);
+          const marker = L.marker([parseFloat(shipment.receiver.lat), parseFloat(shipment.receiver.lng)]).addTo(receiverMap)
+            .bindPopup('Receiver Location: ' + shipment.receiver.name)
+            .openPopup()
+            .on('click', () => {
+              window.open(`https://www.google.com/maps?q=${shipment.receiver.lat},${shipment.receiver.lng}`, '_blank');
+            });
+        }
+      } else {
+        trackingDiv.innerHTML = '<div class="header">Invalid tracking number.</div>';
+      }
+    } else {
+      trackingDiv.innerHTML = '<div class="header">Please enter a tracking number.</div>';
+    }
+  }, 5000); // 5-second delay for tracking details
+
+  // Show content after an additional 5 seconds (total 10 seconds)
+  setTimeout(() => {
+    contentDiv.style.display = 'block';
+    contentDiv.innerHTML = `
+      <div class="header">Content of Shipment: Package</div>
+    `;
+    if (number) {
+      let shipments = [];
+      try {
+        shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+      } catch (e) {
+        console.error('Invalid shipments JSON:', e);
+      }
+      const shipment = shipments.find(s => s.trackingNumber === number);
+      if (shipment) {
         contentDiv.innerHTML = `
           <div class="header">Content of Shipment: ${shipment.content}</div>
           <div class="details">
@@ -381,24 +452,9 @@ function trackPackage(){
             <label>Mobile:</label><span>${shipment.receiver.mobile}</span>
           </div>
           <button class="print-btn" onclick="printInvoice()">Print Invoice</button>`;
-        // Update receiver map if shipment data exists
-        if (shipment.receiver.lat && shipment.receiver.lng) {
-          const receiverMap = L.map('receiverMap').setView([parseFloat(shipment.receiver.lat), parseFloat(shipment.receiver.lng)], 15);
-          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          }).addTo(receiverMap);
-          L.marker([parseFloat(shipment.receiver.lat), parseFloat(shipment.receiver.lng)]).addTo(receiverMap)
-            .bindPopup('Receiver Location: ' + shipment.receiver.name)
-            .openPopup();
-        }
-      } else {
-        trackingDiv.innerHTML = '<div class="header">Invalid tracking number.</div>';
       }
-    } else {
-      trackingDiv.innerHTML = '<div class="header">Please enter a tracking number.</div>';
     }
-  }, 5000); // 5-second delay
+  }, 10000); // 10-second delay for content
 }
 
 // Print Invoice
