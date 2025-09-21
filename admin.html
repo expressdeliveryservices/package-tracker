@@ -17,6 +17,7 @@ label{font-weight:bold;}
 table{width:100%;border-collapse:collapse;margin-top:10px;}
 th,td{border:1px solid #ddd;padding:8px;text-align:left;}
 th{background:#1e90ff;color:white;}
+.shipment-form div{margin-bottom:10px;}
 </style>
 </head>
 <body>
@@ -50,8 +51,57 @@ th{background:#1e90ff;color:white;}
     <button onclick="saveReviews()">Save Reviews</button>
 
     <h2>Edit Shipments</h2>
-    <textarea id="shipmentsList" rows="8" placeholder='[{"trackingNumber":"12345","content":"Package","origin":"London UK","destination":"Russia","sender":{"name":"James","address":"London UK"},"receiver":{"name":"Podvezennaya Elena Ivanovna","address":"195299 St. Petersburg, Prosveshcheniya Avenue 104, Apt. 281","mobile":"+79932195775"},"timeline":[{"time":"23 Sep 2025 07:30","description":"✅ Item has arrived at Vnukovo International Airport, Russia","status":"ON HOLD","completed":true},{"time":"22 Sep 2025 14:00","description":"☑️ Your item is on its way to Russia, London UK","status":"IN TRANSIT","completed":true}]}]'></textarea>
-    <button onclick="saveShipments()">Save Shipments</button>
+    <div class="shipment-form">
+      <input type="text" id="trackingNumber" value="ZWB-208345675" placeholder="Tracking Number" readonly>
+      <div>
+        <label>Content:</label>
+        <input type="text" id="shipmentContent" value="Package" placeholder="Shipment Content">
+      </div>
+      <div>
+        <label>Origin:</label>
+        <input type="text" id="shipmentOrigin" value="London UK" placeholder="Origin Area">
+      </div>
+      <div>
+        <label>Destination:</label>
+        <input type="text" id="shipmentDestination" value="Russia" placeholder="Destination Area">
+      </div>
+      <h3>Sender Details</h3>
+      <div>
+        <label>Name:</label>
+        <input type="text" id="senderName" value="James" placeholder="Sender Name">
+      </div>
+      <div>
+        <label>Address:</label>
+        <input type="text" id="senderAddress" value="London UK" placeholder="Sender Address">
+      </div>
+      <h3>Receiver Details</h3>
+      <div>
+        <label>Name:</label>
+        <input type="text" id="receiverName" value="Podvezennaya Elena Ivanovna" placeholder="Receiver Name">
+      </div>
+      <div>
+        <label>Address:</label>
+        <input type="text" id="receiverAddress" value="195299 St. Petersburg, Prosveshcheniya Avenue 104, Apt. 281" placeholder="Receiver Address">
+      </div>
+      <div>
+        <label>Mobile:</label>
+        <input type="text" id="receiverMobile" value="+79932195775" placeholder="Receiver Mobile">
+      </div>
+      <div>
+        <label>Latitude:</label>
+        <input type="number" id="receiverLat" step="0.0001" value="59.9741" placeholder="Receiver Latitude">
+      </div>
+      <div>
+        <label>Longitude:</label>
+        <input type="number" id="receiverLng" step="0.0001" value="30.3232" placeholder="Receiver Longitude">
+      </div>
+      <h3>Timeline</h3>
+      <textarea id="timeline" rows="4" placeholder="Enter timeline events as JSON array (e.g., [{&quot;time&quot;:&quot;23 Sep 2025 07:30&quot;,&quot;description&quot;:&quot;✅ Item arrived&quot;,&quot;status&quot;:&quot;ON HOLD&quot;,&quot;completed&quot;:true}])">[
+  {"time":"23 Sep 2025 07:30","description":"✅ Item has arrived at Vnukovo International Airport, Russia","status":"ON HOLD","completed":true},
+  {"time":"22 Sep 2025 14:00","description":"☑️ Your item is on its way to Russia, London UK","status":"IN TRANSIT","completed":true}
+]</textarea>
+      <button onclick="saveShipment()">Save Shipment</button>
+    </div>
 
     <button style="background:red;margin-top:15px;" onclick="logout()">Logout</button>
   </div>
@@ -61,7 +111,7 @@ th{background:#1e90ff;color:white;}
 <script>
 // Admin Credentials
 const ADMIN_EMAIL = "Expressdeliveryservice0016@gmail.com";
-const ADMIN_PASSWORD = "YourPassword123"; // Change to a secure password
+const ADMIN_PASSWORD = "Umuojima";
 
 // Login Function
 function login(){
@@ -92,7 +142,20 @@ function loadData(){
   const shipments = localStorage.getItem('shipments') || '[]';
   document.getElementById('newsletterList').value = newsletter.split(',').join('\n');
   document.getElementById('reviewsList').value = reviews.split('|').join('\n');
-  document.getElementById('shipmentsList').value = JSON.stringify(JSON.parse(shipments), null, 2);
+  const shipment = JSON.parse(shipments).find(s => s.trackingNumber === "ZWB-208345675");
+  if(shipment){
+    document.getElementById('shipmentContent').value = shipment.content || '';
+    document.getElementById('shipmentOrigin').value = shipment.origin || '';
+    document.getElementById('shipmentDestination').value = shipment.destination || '';
+    document.getElementById('senderName').value = shipment.sender.name || '';
+    document.getElementById('senderAddress').value = shipment.sender.address || '';
+    document.getElementById('receiverName').value = shipment.receiver.name || '';
+    document.getElementById('receiverAddress').value = shipment.receiver.address || '';
+    document.getElementById('receiverMobile').value = shipment.receiver.mobile || '';
+    document.getElementById('receiverLat').value = shipment.receiver.lat || 59.9741;
+    document.getElementById('receiverLng').value = shipment.receiver.lng || 30.3232;
+    document.getElementById('timeline').value = JSON.stringify(shipment.timeline, null, 2) || '[]';
+  }
 }
 
 // Save Functions
@@ -108,14 +171,37 @@ function saveReviews(){
   alert("Customer reviews saved!");
 }
 
-function saveShipments(){
+function saveShipment(){
   try {
-    const shipments = document.getElementById('shipmentsList').value.trim();
-    JSON.parse(shipments); // Validate JSON
-    localStorage.setItem('shipments', shipments);
-    alert("Shipments saved!");
+    const shipment = {
+      trackingNumber: document.getElementById('trackingNumber').value.trim(),
+      content: document.getElementById('shipmentContent').value.trim(),
+      origin: document.getElementById('shipmentOrigin').value.trim(),
+      destination: document.getElementById('shipmentDestination').value.trim(),
+      sender: {
+        name: document.getElementById('senderName').value.trim(),
+        address: document.getElementById('senderAddress').value.trim()
+      },
+      receiver: {
+        name: document.getElementById('receiverName').value.trim(),
+        address: document.getElementById('receiverAddress').value.trim(),
+        mobile: document.getElementById('receiverMobile').value.trim(),
+        lat: parseFloat(document.getElementById('receiverLat').value) || 59.9741,
+        lng: parseFloat(document.getElementById('receiverLng').value) || 30.3232
+      },
+      timeline: JSON.parse(document.getElementById('timeline').value.trim())
+    };
+    let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+    const index = shipments.findIndex(s => s.trackingNumber === shipment.trackingNumber);
+    if(index !== -1){
+      shipments[index] = shipment;
+    } else {
+      shipments.push(shipment);
+    }
+    localStorage.setItem('shipments', JSON.stringify(shipments));
+    alert("Shipment saved!");
   } catch (e) {
-    alert("Invalid JSON format! Please check the shipments data.");
+    alert("Invalid data! Please check the timeline JSON or fields.");
   }
 }
 </script>
