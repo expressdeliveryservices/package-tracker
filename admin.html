@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard - Express Delivery</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {font-family: Arial, sans-serif; background: #f4f4f9; margin:0; padding:0;}
+    header {background:#1e90ff; color:#fff; padding:15px; text-align:center; position:relative;}
+    .menu {position:absolute; top:15px; left:15px; cursor:pointer; font-size:24px;}
+    .sidebar {
+      position:fixed; top:0; left:-250px; width:250px; height:100%;
+      background:#222; color:#fff; transition:0.3s; padding-top:60px;
+    }
+    .sidebar a {
+      display:block; padding:15px; color:#fff; text-decoration:none;
+    }
+    .sidebar a:hover {background:#1e90ff;}
+    .container {max-width:800px; margin:20px auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+    h2 {color:#1e90ff;}
+    label {display:block; margin-top:10px; font-weight:bold;}
+    input, textarea, select {width:100%; padding:8px; margin-top:5px; border:1px solid #ccc; border-radius:4px;}
+    button {margin-top:15px; padding:10px; background:#1e90ff; color:#fff; border:none; border-radius:4px; cursor:pointer;}
+    button:hover {background:#0c6cd4;}
+    .section {margin-top:20px; border-top:1px solid #ddd; padding-top:20px;}
+    .logout {text-align:right;}
+    .logout button {background:#ff4444;}
+  </style>
+</head>
+<body>
+  <header>
+    <span class="menu" onclick="toggleMenu()">☰</span>
+    <h1>Express Delivery Admin Dashboard</h1>
+  </header>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar">
+    <a href="#" onclick="showSection('loginSection')">Login</a>
+    <a href="#" onclick="showSection('dashboardSection')">Dashboard</a>
+    <a href="#" onclick="showSection('trackingSection')">Generate Tracking</a>
+    <a href="#" onclick="showSection('receiverSection')">Receiver Details</a>
+    <a href="#" onclick="showSection('statusSection')">Update Status</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container" id="loginSection">
+    <h2>Admin Login</h2>
+    <label>Email:</label>
+    <input type="email" id="adminEmail" placeholder="Enter admin email">
+    <label>Password:</label>
+    <input type="password" id="adminPassword" placeholder="Enter password">
+    <button onclick="login()">Login</button>
+  </div>
+  
+  <div class="container" id="dashboardSection" style="display:none;">
+    <div class="logout">
+      <button onclick="logout()">Logout</button>
+    </div>
+    <h2>Dashboard</h2>
+    <p>Welcome to your admin tools. Use the sidebar ☰ to navigate.</p>
+  </div>
+  
+  <!-- Generate Tracking Code -->
+  <div class="container" id="trackingSection" style="display:none;">
+    <h3>Generate Tracking Code</h3>
+    <button onclick="generateTrackingCode()">Generate Code</button>
+    <p id="generatedCode"></p>
+  </div>
+  
+  <!-- Receiver Details -->
+  <div class="container" id="receiverSection" style="display:none;">
+    <h3>Receiver Details</h3>
+    <label>Name:</label>
+    <input type="text" id="receiverName">
+    <label>Address:</label>
+    <textarea id="receiverAddress"></textarea>
+    <label>Airport:</label>
+    <input type="text" id="receiverAirport">
+  </div>
+  
+  <!-- Package Status -->
+  <div class="container" id="statusSection" style="display:none;">
+    <h3>Package Status</h3>
+    <select id="packageStatus">
+      <option value="In Transit">In Transit</option>
+      <option value="On Hold">On Hold</option>
+      <option value="Delivered">Delivered</option>
+    </select>
+    <button onclick="updateDetails()">Save Updates</button>
+  </div>
+
+  <script>
+    const ADMIN_EMAIL = "Expressdeliveryservice0016@gmail.com";
+    const ADMIN_PASS = "yourpassword"; // change this password
+
+    function toggleMenu(){
+      const sidebar = document.getElementById("sidebar");
+      sidebar.style.left = sidebar.style.left === "0px" ? "-250px" : "0px";
+    }
+
+    function showSection(id){
+      document.querySelectorAll(".container").forEach(div => div.style.display="none");
+      document.getElementById(id).style.display="block";
+      toggleMenu();
+    }
+
+    function login() {
+      const email = document.getElementById('adminEmail').value.trim();
+      const pass = document.getElementById('adminPassword').value.trim();
+      if(email === ADMIN_EMAIL && pass === ADMIN_PASS){
+        showSection('dashboardSection');
+      } else {
+        alert("Invalid credentials!");
+      }
+    }
+
+    function logout() {
+      showSection('loginSection');
+    }
+
+    function generateTrackingCode(){
+      const code = "EXP" + Math.floor(Math.random()*1000000000);
+      document.getElementById("generatedCode").innerText = "New Tracking Code: " + code;
+      // send to backend API
+      fetch("https://expressdeliveryservices.epizy.com/api/api.php?action=add&code=" + code)
+        .then(r => r.text())
+        .then(d => console.log(d));
+    }
+
+    function updateDetails(){
+      const name = document.getElementById("receiverName").value;
+      const address = document.getElementById("receiverAddress").value;
+      const airport = document.getElementById("receiverAirport").value;
+      const status = document.getElementById("packageStatus").value;
+
+      fetch("https://expressdeliveryservices.epizy.com/api/api.php?action=update", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({name, address, airport, status})
+      })
+      .then(r => r.text())
+      .then(d => alert("Details updated: " + d));
+    }
+  </script>
+</body>
+</html>
