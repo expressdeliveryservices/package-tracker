@@ -18,7 +18,7 @@ table{width:100%;border-collapse:collapse;margin-top:10px;}
 th,td{border:1px solid #ddd;padding:8px;text-align:left;}
 th{background:#1e90ff;color:white;}
 .shipment-form div{margin-bottom:10px;}
-#newTrackingCode{background:#4CAF50;color:white;}
+#generateTrackingCode{background:#4CAF50;color:white;}
 </style>
 </head>
 <body>
@@ -56,49 +56,49 @@ th{background:#1e90ff;color:white;}
       <input type="text" id="newTrackingNumber" placeholder="New Tracking Code will be generated" readonly>
       <div>
         <label>Content:</label>
-        <input type="text" id="newShipmentContent" placeholder="Shipment Content">
+        <input type="text" id="newShipmentContent" placeholder="Shipment Content" required>
       </div>
       <div>
         <label>Origin:</label>
-        <input type="text" id="newShipmentOrigin" placeholder="Origin Area">
+        <input type="text" id="newShipmentOrigin" placeholder="Origin Area" required>
       </div>
       <div>
         <label>Destination:</label>
-        <input type="text" id="newShipmentDestination" placeholder="Destination Area">
+        <input type="text" id="newShipmentDestination" placeholder="Destination Area" required>
       </div>
       <h3>Sender Details</h3>
       <div>
         <label>Name:</label>
-        <input type="text" id="newSenderName" placeholder="Sender Name">
+        <input type="text" id="newSenderName" placeholder="Sender Name" required>
       </div>
       <div>
         <label>Address:</label>
-        <input type="text" id="newSenderAddress" placeholder="Sender Address">
+        <input type="text" id="newSenderAddress" placeholder="Sender Address" required>
       </div>
       <h3>Receiver Details</h3>
       <div>
         <label>Name:</label>
-        <input type="text" id="newReceiverName" placeholder="Receiver Name">
+        <input type="text" id="newReceiverName" placeholder="Receiver Name" required>
       </div>
       <div>
         <label>Address:</label>
-        <input type="text" id="newReceiverAddress" placeholder="Receiver Address">
+        <input type="text" id="newReceiverAddress" placeholder="Receiver Address" required>
       </div>
       <div>
         <label>Mobile:</label>
-        <input type="text" id="newReceiverMobile" placeholder="Receiver Mobile">
+        <input type="text" id="newReceiverMobile" placeholder="Receiver Mobile" required>
       </div>
       <div>
         <label>Latitude:</label>
-        <input type="number" id="newReceiverLat" step="0.0001" placeholder="Receiver Latitude">
+        <input type="number" id="newReceiverLat" step="0.0001" placeholder="Receiver Latitude" required>
       </div>
       <div>
         <label>Longitude:</label>
-        <input type="number" id="newReceiverLng" step="0.0001" placeholder="Receiver Longitude">
+        <input type="number" id="newReceiverLng" step="0.0001" placeholder="Receiver Longitude" required>
       </div>
       <h3>Timeline</h3>
-      <textarea id="newTimeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"23 Sep 2025 07:30","description":"✅ Item arrived","status":"ON HOLD","completed":true}])'></textarea>
-      <button id="newTrackingCode" onclick="generateTrackingCode()">Generate Tracking Code</button>
+      <textarea id="newTimeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"23 Sep 2025 07:30","description":"✅ Item arrived","status":"ON HOLD","completed":true}])' required></textarea>
+      <button id="generateTrackingCode" onclick="generateTrackingCode()">Generate Tracking Code</button>
     </div>
 
     <h2>Edit Shipments</h2>
@@ -168,4 +168,140 @@ const ADMIN_PASSWORD = "Umuojima";
 function login(){
   const email = document.getElementById('adminEmail').value.trim();
   const pass = document.getElementById('adminPassword').value.trim();
-  if(email === ADMIN_EMAIL && pass ===
+  if(email === ADMIN_EMAIL && pass === ADMIN_PASSWORD){
+    document.getElementById('loginSection').style.display = 'none';
+    document.getElementById('dashboardSection').style.display = 'block';
+    loadData();
+  } else {
+    document.getElementById('loginMessage').innerText = "Invalid email or password!";
+  }
+}
+
+// Logout Function
+function logout(){
+  document.getElementById('loginSection').style.display = 'block';
+  document.getElementById('dashboardSection').style.display = 'none';
+  document.getElementById('adminEmail').value = '';
+  document.getElementById('adminPassword').value = '';
+  document.getElementById('loginMessage').innerText = '';
+}
+
+// Load existing data from localStorage
+function loadData(){
+  const newsletter = localStorage.getItem('newsletterEmails') || '';
+  const reviews = localStorage.getItem('customerReviews') || '';
+  const shipments = localStorage.getItem('shipments') || '[]';
+  document.getElementById('newsletterList').value = newsletter.split(',').join('\n');
+  document.getElementById('reviewsList').value = reviews.split('|').join('\n');
+  const shipment = JSON.parse(shipments).find(s => s.trackingNumber === "ZWB-208345675");
+  if(shipment){
+    document.getElementById('shipmentContent').value = shipment.content || '';
+    document.getElementById('shipmentOrigin').value = shipment.origin || '';
+    document.getElementById('shipmentDestination').value = shipment.destination || '';
+    document.getElementById('senderName').value = shipment.sender.name || '';
+    document.getElementById('senderAddress').value = shipment.sender.address || '';
+    document.getElementById('receiverName').value = shipment.receiver.name || '';
+    document.getElementById('receiverAddress').value = shipment.receiver.address || '';
+    document.getElementById('receiverMobile').value = shipment.receiver.mobile || '';
+    document.getElementById('receiverLat').value = shipment.receiver.lat || 59.9741;
+    document.getElementById('receiverLng').value = shipment.receiver.lng || 30.3232;
+    document.getElementById('timeline').value = JSON.stringify(shipment.timeline, null, 2) || '[]';
+  }
+}
+
+// Save Functions
+function saveNewsletter(){
+  const emails = document.getElementById('newsletterList').value.split('\n').map(e => e.trim()).filter(Boolean);
+  localStorage.setItem('newsletterEmails', emails.join(','));
+  alert("Newsletter emails saved!");
+}
+
+function saveReviews(){
+  const reviews = document.getElementById('reviewsList').value.split('\n').map(e => e.trim()).filter(Boolean);
+  localStorage.setItem('customerReviews', reviews.join('|'));
+  alert("Customer reviews saved!");
+}
+
+function saveShipment(){
+  try {
+    const shipment = {
+      trackingNumber: document.getElementById('trackingNumber').value.trim(),
+      content: document.getElementById('shipmentContent').value.trim(),
+      origin: document.getElementById('shipmentOrigin').value.trim(),
+      destination: document.getElementById('shipmentDestination').value.trim(),
+      sender: {
+        name: document.getElementById('senderName').value.trim(),
+        address: document.getElementById('senderAddress').value.trim()
+      },
+      receiver: {
+        name: document.getElementById('receiverName').value.trim(),
+        address: document.getElementById('receiverAddress').value.trim(),
+        mobile: document.getElementById('receiverMobile').value.trim(),
+        lat: parseFloat(document.getElementById('receiverLat').value) || 59.9741,
+        lng: parseFloat(document.getElementById('receiverLng').value) || 30.3232
+      },
+      timeline: JSON.parse(document.getElementById('timeline').value.trim())
+    };
+    let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+    const index = shipments.findIndex(s => s.trackingNumber === shipment.trackingNumber);
+    if(index !== -1){
+      shipments[index] = shipment;
+    } else {
+      shipments.push(shipment);
+    }
+    localStorage.setItem('shipments', JSON.stringify(shipments));
+    alert("Shipment saved! The receiver location map on the public page will update with the new address.");
+  } catch (e) {
+    alert("Invalid data! Please check the timeline JSON or fields.");
+  }
+}
+
+// Generate New Tracking Code with 3 letters and 9 numbers
+function generateTrackingCode() {
+  try {
+    // Generate 3 random letters
+    const letters = String.fromCharCode(...Array(3).fill().map(() => 65 + Math.floor(Math.random() * 26)));
+    // Generate 9 random numbers
+    const numbers = Math.floor(100000000 + Math.random() * 900000000).toString();
+    const newTracking = `${letters}${numbers}`;
+
+    const shipment = {
+      trackingNumber: newTracking,
+      content: document.getElementById('newShipmentContent').value.trim(),
+      origin: document.getElementById('newShipmentOrigin').value.trim(),
+      destination: document.getElementById('newShipmentDestination').value.trim(),
+      sender: {
+        name: document.getElementById('newSenderName').value.trim(),
+        address: document.getElementById('newSenderAddress').value.trim()
+      },
+      receiver: {
+        name: document.getElementById('newReceiverName').value.trim(),
+        address: document.getElementById('newReceiverAddress').value.trim(),
+        mobile: document.getElementById('newReceiverMobile').value.trim(),
+        lat: parseFloat(document.getElementById('newReceiverLat').value),
+        lng: parseFloat(document.getElementById('newReceiverLng').value)
+      },
+      timeline: JSON.parse(document.getElementById('newTimeline').value.trim())
+    };
+
+    // Validate required fields
+    if (!shipment.content || !shipment.origin || !shipment.destination || !shipment.sender.name || !shipment.sender.address ||
+        !shipment.receiver.name || !shipment.receiver.address || !shipment.receiver.mobile || isNaN(shipment.receiver.lat) ||
+        isNaN(shipment.receiver.lng) || !shipment.timeline || shipment.timeline.length === 0) {
+      throw new Error("All fields are required and must be valid.");
+    }
+
+    let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+    shipments.push(shipment);
+    localStorage.setItem('shipments', JSON.stringify(shipments));
+
+    document.getElementById('newTrackingNumber').value = newTracking;
+    alert(`New tracking code generated: ${newTracking}. Use this on the public page to load details, including the updated receiver location.`);
+  } catch (e) {
+    alert(`Error: ${e.message}`);
+  }
+}
+</script>
+
+</body>
+</html>
