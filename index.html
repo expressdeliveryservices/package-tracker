@@ -98,38 +98,38 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
   <div class="image-wall">
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" alt="Delivery 1">
-      <p class="desc">Our team ensures every package is delivered safely and on time with reliable logistics services for all customers.</p>
+      <p class="desc">Our team ensures every package is delivered safely and on time with reliable logistics services.</p>
     </div>
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1677.webp" alt="Delivery 2">
-      <p class="desc">Fast and reliable delivery across cities and states, keeping your shipments secure and timely.</p>
+      <p class="desc">Fast and reliable delivery across cities and states, keeping your shipments secure.</p>
     </div>
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" alt="Delivery 3">
-      <p class="desc">Real-time tracking with top-notch technology ensures transparency and peace of mind.</p>
+      <p class="desc">Real-time tracking with top-notch technology ensures transparency.</p>
     </div>
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" alt="Delivery 4">
-      <p class="desc">Efficient logistics solutions designed to meet every customer’s unique requirements.</p>
+      <p class="desc">Efficient logistics solutions designed to meet every customer’s needs.</p>
     </div>
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1681.jpeg" alt="Delivery 5">
-      <p class="desc">Timely deliveries across regions, maintaining top-quality service and reliability.</p>
+      <p class="desc">Timely deliveries across regions with top-quality service.</p>
     </div>
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1682.jpeg" alt="Delivery 6">
-      <p class="desc">Our dedicated team guarantees every shipment is handled with care and precision.</p>
+      <p class="desc">Every shipment is handled with care and precision.</p>
     </div>
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg" alt="Delivery 7">
-      <p class="desc">State-of-the-art tracking technology keeps you updated in real-time.</p>
+      <p class="desc">State-of-the-art tracking technology keeps you updated.</p>
     </div>
     <div>
       <video autoplay loop muted playsinline>
         <source src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/From%20KlickPin%20CF%20White%20Truck%20Parked%20Next%20to%20Bridge.mov" type="video/mp4">
         Your browser does not support the video tag.
       </video>
-      <p class="desc">Observe our logistics process in action, ensuring timely delivery every time.</p>
+      <p class="desc">Observe our logistics process in action, ensuring timely delivery.</p>
     </div>
   </div>
 
@@ -153,20 +153,20 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
 <!-- About Us -->
 <section id="about">
   <h2 class="section-title">About Us</h2>
-  <p>Our mission is to provide seamless and efficient shipping solutions that empower businesses and connect people globally. We pride ourselves on reliability, professionalism, and real-time tracking for every delivery.</p>
+  <p>Our mission is to provide seamless and efficient shipping solutions that empower businesses and connect people globally.</p>
 </section>
 
 <!-- Services -->
 <section id="services">
   <h2 class="section-title">Our Services</h2>
-  <p>Become our partner. We offer advanced tracking and logistics expertise to ensure your shipments are handled efficiently and safely.</p>
+  <p>Become our partner. We offer advanced tracking and logistics expertise to ensure your shipments are handled efficiently.</p>
 </section>
 
 <!-- Track Packages -->
 <section id="track">
   <h2 class="section-title">Track Your Package</h2>
   <div class="tracking">
-    <input type="text" id="trackingNumber" placeholder="Enter Tracking ID">
+    <input type="text" id="trackingNumber" placeholder="Enter Tracking ID (e.g., ZWB-208345675)">
     <button onclick="trackPackage()">Track Now</button>
   </div>
   <div id="shipmentTracking" class="shipment-tracking" style="display:none;"></div>
@@ -186,7 +186,13 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
   <button style="background-color: #1e90ff; color: white; padding: 8px 15px; border: none; border-radius: 3px;" onclick="openSupport()">Support</button>
   <div id="google_translate_element" style="margin-top:10px;"></div>
 
-  <iframe src="https://www.google.com/maps?q=47-00+Northern+Blvd,+Long+Island+City,+NY+11101,+USA&output=embed" width="100%" height="300" style="border:0; border-radius:5px; margin-top:15px;" allowfullscreen></iframe>
+  <iframe 
+    src="https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=47-00+Northern+Blvd,Long+Island+City,NY+11101,USA" 
+    width="100%" 
+    height="300" 
+    style="border:0; border-radius:5px; margin-top:15px;" 
+    allowfullscreen>
+  </iframe>
 </section>
 
 <!-- Support Popup -->
@@ -318,7 +324,7 @@ function trackPackage(){
     }
     const shipment = shipments.find(s => s.trackingNumber === number);
     if(number && shipment){
-      trackingDiv.innerHTML = '<div class="header">Tracking Shipment</div>';
+      trackingDiv.innerHTML = '<div class="header">Tracking Shipment: ' + number + '</div>';
       trackingDiv.innerHTML += `<div class="timeline">
         ${shipment.timeline.map(event => `
           <div class="timeline-event ${event.completed ? 'completed' : ''}">
@@ -348,7 +354,7 @@ function trackPackage(){
         <button class="print-btn" onclick="printInvoice()">Print Invoice</button>`;
       contentDiv.style.display = 'block';
     } else {
-      trackingDiv.innerHTML = '<div class="header">Please enter a valid tracking number.</div>';
+      trackingDiv.innerHTML = '<div class="header">Invalid tracking number. Please try ZWB-208345675.</div>';
     }
   }, 2000);
 }
