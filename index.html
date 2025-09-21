@@ -16,9 +16,14 @@ header .header-overlay p{font-size:1rem;max-width:700px;margin:0 auto;line-heigh
 .navbar{display:flex;justify-content:space-between;align-items:center;padding:15px;background:#f8f8f8;position:sticky;top:0;z-index:1000;border-bottom:1px solid #ddd;}
 .nav-links{display:flex;gap:15px;}
 .nav-links a{cursor:pointer;font-weight:bold;color:#1e90ff;}
-.hamburger{display:none:flex-direction:column;cursor:pointer;}
-.hamburger div{width:20px;height:2px;background-color:#1e90ff;margin:3px 0;}
-@media(max-width:768px){.nav-links{display:none;flex-direction:column;background:#f8f8f8;position:absolute;top:60px;right:0;width:200px;padding:15px;}.nav-links.active{display:flex;}.hamburger{display:flex;}}
+.hamburger{display:flex;flex-direction:column;cursor:pointer;}
+.hamburger div{width:20px;height:2px;background-color:#1e90ff;margin:3px 0;transition:0.3s;}
+@media(max-width:768px){
+  .nav-links{display:none;flex-direction:column;background:#f8f8f8;position:absolute;top:60px;right:0;width:200px;padding:15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);border-radius:0 0 5px 5px;}
+  .nav-links.active{display:flex;}
+  .hamburger{display:flex;}
+  .navbar{flex-wrap:wrap;}
+}
 section{padding:20px;scroll-margin-top:60px;}
 .section-title{font-size:1.5rem;margin-bottom:15px;color:#1e90ff;}
 .tracking{display:flex;gap:10px;margin-bottom:15px;}
@@ -70,7 +75,9 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
     <a href="#contact">Contact</a>
     <a href="admin.html">Admin</a>
   </div>
-  <div class="hamburger" onclick="toggleMenu()"><div></div><div></div><div></div></div>
+  <div class="hamburger" onclick="toggleMenu()">
+    <div></div><div></div><div></div>
+  </div>
 </div>
 
 <!-- Header Video Background -->
@@ -98,38 +105,38 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
   <div class="image-wall">
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" alt="Delivery 1">
-      <p class="desc">Our team ensures every package is delivered safely and on time.</p>
+      <p class="desc">Our dedicated team ensures every package is delivered safely and on time, using advanced tracking technology. We prioritize customer satisfaction with reliable, fast service across regions, offering peace of mind with each shipment handled with utmost care and professionalism every step of the way.</p>
     </div>
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1677.webp" alt="Delivery 2">
-      <p class="desc">Fast and reliable delivery across cities and states.</p>
+      <p class="desc">Experience fast and reliable delivery across cities and states with our expert logistics network. We provide timely shipments with real-time updates, ensuring your packages arrive securely. Our committed team works tirelessly to meet deadlines, offering top-notch service for all your shipping requirements.</p>
     </div>
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" alt="Delivery 3">
-      <p class="desc">Real-time tracking with top-notch technology.</p>
+      <p class="desc">Utilize our real-time tracking with cutting-edge technology for complete visibility of your shipments. Our system ensures accurate updates, enhancing delivery efficiency. Trust our innovative solutions to keep you informed, providing a seamless and transparent shipping experience with every package we handle.</p>
     </div>
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" alt="Delivery 4">
-      <p class="desc">Efficient logistics solutions for every customer.</p>
+      <p class="desc">Enjoy efficient logistics solutions tailored for every customer’s needs. We optimize routes and resources to ensure swift deliveries. Our skilled team provides personalized service, handling each package with care, making us the preferred choice for reliable and cost-effective shipping across the globe.</p>
     </div>
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1681.jpeg" alt="Delivery 5">
-      <p class="desc">Timely deliveries across regions with quality service.</p>
+      <p class="desc">We offer timely deliveries across regions with exceptional quality service. Our fleet ensures packages reach destinations promptly. Committed to excellence, we provide constant support and updates, ensuring a smooth experience for customers relying on our dependable and professional shipping network.</p>
     </div>
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1682.jpeg" alt="Delivery 6">
-      <p class="desc">Shipments handled with care and precision.</p>
+      <p class="desc">Our team handles shipments with care and precision, using secure packaging techniques. We prioritize safety and timeliness, ensuring every delivery meets high standards. With a focus on customer trust, we provide consistent service, making us a leader in reliable logistics solutions worldwide.</p>
     </div>
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg" alt="Delivery 7">
-      <p class="desc">Tracking technology keeps you updated in real-time.</p>
+      <p class="desc">Stay updated in real-time with our advanced tracking technology. We offer detailed insights into your shipment’s journey. Our innovative tools ensure transparency, providing peace of mind. Trust our expertise to deliver your packages efficiently, making us your go-to shipping partner every time.</p>
     </div>
     <div>
       <video autoplay loop muted playsinline>
         <source src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/From%20KlickPin%20CF%20White%20Truck%20Parked%20Next%20to%20Bridge.mov" type="video/mp4">
         Your browser does not support the video tag.
       </video>
-      <p class="desc">Watch our logistics process in action.</p>
+      <p class="desc">Watch our logistics process in action with this video showcasing our fleet. We ensure efficient operations and timely deliveries. Our team’s dedication shines through, providing a glimpse into the hard work behind every successful shipment, enhancing your trust in our services.</p>
     </div>
   </div>
 
@@ -174,7 +181,7 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
 
   <div class="map-container">
     <div class="map-overlay">CURRENT LOCATION ON MAP</div>
-    <iframe id="receiverMap" width="100%" height="300" style="border:0;" allowfullscreen src="https://www.google.com/maps/place/Prospekt+Prosveshcheniya,+104,+Sankt-Peterburg,+Russia,+195299/@60.0348099,30.4252616,15z/data=!4m6!3m5!1s0x469633387fb42009:0x3cc66a401b7e8886!8m2!3d60.0348099!4d30.4252616!16s%2Fg%2F11c5mj21c1?hl=en-us&output=embed"></iframe>
+    <div id="receiverMap" style="width:100%;height:300px;"></div>
   </div>
 </section>
 
@@ -188,7 +195,7 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
 
   <div class="map-container">
     <div class="map-overlay">HEADQUARTER LOCATION</div>
-    <iframe width="100%" height="300" style="border:0; border-radius:5px; margin-top:15px;" allowfullscreen src="https://www.google.com/maps/place/Universal+Drops,+66B+Oxberry+Ave,+London+SW6+5SS,+United+Kingdom/@51.4735056,-0.2120214,17z/data=!4m9!1m2!2m1!1sdelivery+company+in+london!3m5!1s0x48760fa000f3067b:0xb34e7af23d647db1!8m2!3d51.4735056!4d-0.2120214!16s%2Fg%2F11clyfsnw_?output=embed"></iframe>
+    <div id="headquarterMap" style="width:100%;height:300px;"></div>
   </div>
 </section>
 
@@ -231,9 +238,17 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
   </div>
 </footer>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
 <script>
 // Hamburger Menu
-function toggleMenu(){document.getElementById('navLinks').classList.toggle('active');}
+function toggleMenu() {
+  const navLinks = document.getElementById('navLinks');
+  navLinks.classList.toggle('active');
+  const hamburger = document.querySelector('.hamburger');
+  hamburger.classList.toggle('open');
+}
 
 // Newsletter
 function subscribeNewsletter(){
@@ -289,59 +304,101 @@ function googleTranslateElementInit(){
   new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
 }
 
+// Initialize Maps with Leaflet
+function initMaps() {
+  // Receiver Map
+  const receiverMap = L.map('receiverMap').setView([60.0348099, 30.4252616], 15);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(receiverMap);
+  L.marker([60.0348099, 30.4252616]).addTo(receiverMap)
+    .bindPopup('Receiver Location: Prospekt Prosveshcheniya, 104, Sankt-Peterburg')
+    .openPopup();
+
+  // Headquarter Map
+  const headquarterMap = L.map('headquarterMap').setView([51.4735056, -0.2120214], 17);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(headquarterMap);
+  L.marker([51.4735056, -0.2120214]).addTo(headquarterMap)
+    .bindPopup('Headquarter: Universal Drops, 66B Oxberry Ave, London')
+    .openPopup();
+}
+
 // Tracking
 function trackPackage(){
   const number = document.getElementById('trackingNumber').value.trim();
   const trackingDiv = document.getElementById('shipmentTracking');
   const contentDiv = document.getElementById('shipmentContent');
-  trackingDiv.style.display = 'none';
-  contentDiv.style.display = 'none';
-  trackingDiv.innerHTML = '<div class="header">Tracking...</div>';
+
+  // Show content immediately
+  contentDiv.style.display = 'block';
+  contentDiv.innerHTML = `
+    <div class="header">Content of Shipment: Package</div>
+  `;
+
+  // Show tracking with 5-second delay
   trackingDiv.style.display = 'block';
+  trackingDiv.innerHTML = '<div class="header">Tracking...</div>';
 
   setTimeout(() => {
-    let shipments = [];
-    try {
-      shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-    } catch (e) {
-      console.error('Invalid shipments JSON:', e);
-    }
-    const shipment = shipments.find(s => s.trackingNumber === number);
-    if(number && shipment){
-      trackingDiv.innerHTML = '<div class="header">Tracking Shipment: ' + number + '</div>';
-      trackingDiv.innerHTML += `<div class="timeline">
-        ${shipment.timeline.map(event => `
-          <div class="timeline-event ${event.completed ? 'completed' : ''}">
-            <div class="tick"></div>
-            <div class="time">${event.time}</div>
-            <div class="description">${event.description} <div style="background:#ccc;padding:2px 5px;border-radius:3px;margin-top:3px;">${event.status}</div></div>
+    if (number) {
+      let shipments = [];
+      try {
+        shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+      } catch (e) {
+        console.error('Invalid shipments JSON:', e);
+      }
+      const shipment = shipments.find(s => s.trackingNumber === number);
+      if (shipment) {
+        trackingDiv.innerHTML = '<div class="header">Tracking Shipment: ' + number + '</div>';
+        trackingDiv.innerHTML += `<div class="timeline">
+          ${shipment.timeline.map(event => `
+            <div class="timeline-event ${event.completed ? 'completed' : ''}">
+              <div class="tick"></div>
+              <div class="time">${event.time}</div>
+              <div class="description">${event.description} <div style="background:#ccc;padding:2px 5px;border-radius:3px;margin-top:3px;">${event.status}</div></div>
+            </div>
+          `).join('')}
+        </div>`;
+        contentDiv.innerHTML = `
+          <div class="header">Content of Shipment: ${shipment.content}</div>
+          <div class="details">
+            <label>Origin Area:</label><span>${shipment.origin}</span><br>
+            <label>Destination Area:</label><span>${shipment.destination}</span>
           </div>
-        `).join('')}
-      </div>`;
-      contentDiv.innerHTML = `
-        <div class="header">Content of Shipment: ${shipment.content}</div>
-        <div class="details">
-          <label>Origin Area:</label><span>${shipment.origin}</span><br>
-          <label>Destination Area:</label><span>${shipment.destination}</span>
-        </div>
-        <div class="section-title">Sender's Details</div>
-        <div class="details">
-          <label>Name:</label><span>${shipment.sender.name}</span><br>
-          <label>Address:</label><span>${shipment.sender.address}</span>
-        </div>
-        <div class="section-title">Receiver's Details</div>
-        <div class="details">
-          <label>Name:</label><span>${shipment.receiver.name}</span><br>
-          <label>Address:</label><span>${shipment.receiver.address}</span><br>
-          <label>Mobile:</label><span>${shipment.receiver.mobile}</span>
-        </div>
-        <button class="print-btn" onclick="printInvoice()">Print Invoice</button>`;
-      contentDiv.style.display = 'block';
-      document.getElementById('receiverMap').src = 'https://www.google.com/maps/place/' + encodeURIComponent(shipment.receiver.address) + '/@' + shipment.receiver.lat + ',' + shipment.receiver.lng + ',15z/data=!4m6!3m5!1s0x469633387fb42009:0x3cc66a401b7e8886!8m2!3d' + shipment.receiver.lat + '!4d' + shipment.receiver.lng + '!16s%2Fg%2F11c5mj21c1?hl=en-us&output=embed';
+          <div class="section-title">Sender's Details</div>
+          <div class="details">
+            <label>Name:</label><span>${shipment.sender.name}</span><br>
+            <label>Address:</label><span>${shipment.sender.address}</span>
+          </div>
+          <div class="section-title">Receiver's Details</div>
+          <div class="details">
+            <label>Name:</label><span>${shipment.receiver.name}</span><br>
+            <label>Address:</label><span>${shipment.receiver.address}</span><br>
+            <label>Mobile:</label><span>${shipment.receiver.mobile}</span>
+          </div>
+          <button class="print-btn" onclick="printInvoice()">Print Invoice</button>`;
+        // Update receiver map if shipment data exists
+        if (shipment.receiver.lat && shipment.receiver.lng) {
+          const receiverMap = L.map('receiverMap').setView([parseFloat(shipment.receiver.lat), parseFloat(shipment.receiver.lng)], 15);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          }).addTo(receiverMap);
+          L.marker([parseFloat(shipment.receiver.lat), parseFloat(shipment.receiver.lng)]).addTo(receiverMap)
+            .bindPopup('Receiver Location: ' + shipment.receiver.name)
+            .openPopup();
+        }
+      } else {
+        trackingDiv.innerHTML = '<div class="header">Invalid tracking number.</div>';
+      }
     } else {
-      trackingDiv.innerHTML = '<div class="header">Invalid tracking number.</div>';
+      trackingDiv.innerHTML = '<div class="header">Please enter a tracking number.</div>';
     }
-  }, 2000);
+  }, 5000); // 5-second delay
 }
 
 // Print Invoice
@@ -354,6 +411,7 @@ function printInvoice(){
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
   loadReviews();
+  initMaps();
 });
 </script>
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
