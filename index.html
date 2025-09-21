@@ -69,7 +69,7 @@ section{padding:20px;scroll-margin-top:60px;}
 /* Image Wall */
 .image-wall{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px;}
 .image-wall img,.image-wall video{width:100%;border-radius:5px;}
-.image-wall video{pointer-events:none;}
+.image-wall video{pointer-events:none;} /* Read-only video */
 .image-wall .desc{margin-top:8px;font-size:0.85rem;color:#555;line-height:1.4;}
 
 /* Business Hours */
@@ -79,63 +79,184 @@ section{padding:20px;scroll-margin-top:60px;}
 
 /* Footer */
 footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-top:1px solid #ddd;}
-
-/* Admin Modal */
-#adminModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:10001;justify-content:center;align-items:center;}
-#adminModal .modal-content{background:#fff;padding:20px;border-radius:5px;width:300px;}
-#adminModal input{width:100%;margin-bottom:10px;padding:6px;border-radius:3px;border:1px solid #ddd;}
-#adminModal button{padding:8px 12px;background:#1e90ff;color:#fff;border:none;border-radius:3px;cursor:pointer;}
 </style>
 </head>
 <body>
 
 <!-- Navbar -->
 <div class="navbar">
-  <div class="logo"><strong>Express Delivery</strong></div>
-  <div class="nav-links" id="navLinks">
-    <a href="#home">Home</a>
-    <a href="#about">About</a>
-    <a href="#services">Services</a>
-    <a href="#track">Track Packages</a>
-    <a href="#contact">Contact</a>
-    <a href="#" onclick="openAdminModal()">Admin</a>
-  </div>
-  <div class="hamburger" onclick="toggleMenu()"><div></div><div></div><div></div></div>
+  <div class="logo"><strong>Express Delivery</strong></div>
+  <div class="nav-links" id="navLinks">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#track">Track Packages</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="hamburger" onclick="toggleMenu()"><div></div><div></div><div></div></div>
 </div>
 
-<!-- Header, Sections, Delivery Wall, Reviews, Business Hours, About, Services, Track, Contact -->
-<!-- Use your previous code for these sections as is -->
+<!-- Header Video Background -->
+<header>
+  <video autoplay loop muted playsinline>
+    <source src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/From%20KlickPin%20CF%20Pin%20van%20Nayara%20Duartt%20op%20Slow%20in%202025.mov" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <div class="header-overlay">
+    <h1>EXPRESS DELIVERY SERVICES LOGISTIC FIRM</h1>
+    <p>We are your trusted partner for all your shipping needs. With years of experience, we specialize in providing reliable and efficient shipping solutions for every client.</p>
+  </div>
+</header>
+
+<!-- Home Section -->
+<section id="home">
+  <h2 class="section-title">Subscribe Now</h2>
+  <p>Don’t miss our updates! Get subscribed today!</p>
+  <div class="newsletter">
+    <input type="email" id="newsletterEmail" placeholder="Enter your email">
+    <button onclick="subscribeNewsletter()">Subscribe</button>
+  </div>
+
+  <!-- Delivery Wall -->
+  <h2 class="section-title">Delivery Wall</h2>
+  <div class="image-wall">
+    <div>
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" alt="Delivery 1">
+      <p class="desc">Our team ensures every package is delivered safely and on time with reliable logistics services for all customers. We handle each shipment with precision, guaranteeing punctuality and excellent service quality. From packing to delivery, every step is monitored to ensure customer satisfaction and secure transport.</p>
+    </div>
+    <div>
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1677.webp" alt="Delivery 2">
+      <p class="desc">Fast and reliable delivery across cities and states, keeping your shipments secure and timely. Each package is tracked in real-time, allowing you to monitor its journey. Our dedicated logistics team ensures that no shipment is delayed, providing peace of mind with professional handling from start to finish.</p>
+    </div>
+    <div>
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" alt="Delivery 3">
+      <p class="desc">Real-time tracking with top-notch technology ensures transparency and peace of mind. You can monitor your shipment's progress every step of the way. Our systems are designed for accuracy and reliability, keeping you informed and confident that your package is in expert hands and will arrive safely.</p>
+    </div>
+    <div>
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" alt="Delivery 4">
+      <p class="desc">Efficient logistics solutions designed to meet every customer’s unique requirements. Our team evaluates the best transport methods to ensure timely delivery. We provide specialized packaging, tracking, and handling, guaranteeing that shipments of all sizes and types reach their destination without any issues or damage.</p>
+    </div>
+    <div>
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1681.jpeg" alt="Delivery 5">
+      <p class="desc">Timely deliveries across regions, maintaining top-quality service and reliability. Each delivery is carefully scheduled and monitored. Our logistics experts ensure that even complex routes and remote destinations receive packages efficiently. Customer satisfaction is our priority, ensuring all shipments arrive safely and on schedule.</p>
+    </div>
+    <div>
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1682.jpeg" alt="Delivery 6">
+      <p class="desc">Our dedicated team guarantees every shipment is handled with care and precision. From delicate items to bulky shipments, we provide customized solutions for safe transport. We utilize advanced tracking and reporting tools to keep customers informed, making the delivery process seamless and trustworthy.</p>
+    </div>
+    <div>
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg" alt="Delivery 7">
+      <p class="desc">State-of-the-art tracking technology keeps you updated in real-time. You can check shipment locations anytime, anywhere. Our integrated systems provide alerts and notifications for every stage of delivery. This ensures complete transparency and confidence in our services, allowing customers to plan accordingly and avoid surprises.</p>
+    </div>
+    <div>
+      <video autoplay loop muted playsinline>
+        <source src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/From%20KlickPin%20CF%20White%20Truck%20Parked%20Next%20to%20Bridge.mov" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <p class="desc">Observe our logistics process in action, ensuring timely delivery every time. This video demonstrates how packages are carefully loaded and transported. The workflow highlights efficiency, security, and real-time monitoring, showcasing our commitment to quality service and reliable delivery for every client.</p>
+    </div>
+  </div>
+
+  <!-- Customer Reviews -->
+  <h2 class="section-title">Customer Reviews</h2>
+  <div id="reviewsBoard">
+    <div class="review" id="review0">⭐ Alice Johnson: Excellent service! Fast and reliable.</div>
+    <div class="review" id="review1">⭐⭐ Michael Smith: Package arrived ahead of time.</div>
+    <div class="review" id="review2">⭐⭐⭐ Samantha Lee: Helpful and responsive support.</div>
+    <div class="review" id="review3">⭐⭐⭐⭐ John Doe: Amazing service, highly recommend!</div>
+    <div class="review" id="review4">⭐⭐⭐⭐⭐ Emily Davis: Professional and efficient delivery every time.</div>
+  </div>
+
+  <!-- Business Hours -->
+  <h2 class="section-title">Business Hours</h2>
+  <div class="business-hours">
+    <span>Friday: <span class="open-hours">Open 24 hours</span></span><br>
+    <span>Saturday: <span class="open-hours">Open 24 hours</span></span><br>
+    <span>Sunday: <span class="open-hours">Open 24 hours</span></span><br>
+    <span>Monday: <span class="open-hours">Open 24 hours</span></span><br>
+    <span>Tuesday: <span class="open-hours">Open 24 hours</span></span><br>
+    <span>Wednesday: <span class="open-hours">Open 24 hours</span></span><br>
+    <span>Thursday: <span class="open-hours">Open 24 hours</span></span>
+  </div>
+</section>
+
+<!-- About Us -->
+<section id="about">
+  <h2 class="section-title">About Us</h2>
+  <p>Our mission is to provide seamless and efficient shipping solutions that empower businesses and connect people globally. We pride ourselves on reliability, professionalism, and real-time tracking for every delivery.</p>
+</section>
+
+<!-- Services -->
+<section id="services">
+  <h2 class="section-title">Our Services</h2>
+  <p>Become our partner. We offer advanced tracking and logistics expertise to ensure your shipments are handled efficiently and safely.</p>
+</section>
+
+<!-- Track Packages -->
+<section id="track">
+  <h2 class="section-title">Track Your Package</h2>
+  <div class="tracking">
+    <input type="text" id="trackingNumber" placeholder="Enter Tracking ID">
+    <button onclick="trackPackage()">Track Now</button>
+  </div>
+  <div id="shipmentTracking" class="shipment-tracking" style="display:none;"></div>
+  <div id="shipmentContent" class="shipment-content" style="display:none;"></div>
+
+  <!-- Receiver Map -->
+  <div class="map-container">
+    <div class="map-overlay">CURRENT LOCATION ON MAP</div>
+    <iframe src="https://www.google.com/maps?q=195299%20St.%20Petersburg,%20Prosveshcheniya%20Avenue%20104,%20Apt.%20281&output=embed" width="100%" height="300" style="border:0;" allowfullscreen></iframe>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+  <h2 class="section-title">Contact Us</h2>
+  <p>Phone: +1 (941) 207-8626</p>
+  <p>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></p>
+  <button style="background-color: #1e90ff; color: white; padding: 8px 15px; border: none; border-radius: 3px;" onclick="openSupport()">Support</button>
+  <div id="google_translate_element" style="margin-top:10px;"></div>
+
+  <!-- Headquarter Map -->
+  <iframe src="https://www.google.com/maps?q=47-00+Northern+Blvd,+Long+Island+City,+NY+11101,+USA&output=embed" width="100%" height="300" style="border:0; border-radius:5px; margin-top:15px;" allowfullscreen></iframe>
+</section>
 
 <!-- Support Popup -->
 <div id="supportPopup">
-  <h3>Welcome to Express Delivery Service!</h3>
-  <p>How can we help you?</p>
-  <form method="POST" action="send_support.php" id="supportForm">
-    <input type="text" name="name" placeholder="Your Name" required>
-    <input type="email" name="email" placeholder="Your Email" required>
-    <textarea name="message" placeholder="Your Message" required></textarea>
-    <button type="submit">Send</button>
-  </form>
-  <button onclick="closeSupport()">Close</button>
-</div>
-
-<!-- Admin Modal -->
-<div id="adminModal">
-  <div class="modal-content">
-    <h3>Admin Login</h3>
-    <input type="email" id="adminEmail" placeholder="Email">
-    <input type="password" id="adminPassword" placeholder="Password">
-    <button onclick="loginAdmin()">Login</button>
-    <button onclick="closeAdminModal()">Close</button>
-  </div>
+  <h3>Welcome to Express Delivery Service!</h3>
+  <p>How can we help you?</p>
+  <form method="POST" action="send_support.php" id="supportForm">
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="email" name="email" placeholder="Your Email" required>
+    <textarea name="message" placeholder="Your Message" required></textarea>
+    <button type="submit">Send</button>
+  </form>
+  <button onclick="closeSupport()">Close</button>
 </div>
 
 <!-- Footer -->
 <footer>
-  <div style="max-width:1200px;margin:0 auto;padding:20px;text-align:center;">
-    <p>©2025 Express Delivery Service. All Rights Reserved.</p>
-    <p>Fast Logistics Company | Reliable Shipping Solutions Worldwide</p>
-  </div>
+  <div style="max-width:1200px;margin:0 auto;padding:20px;text-align:center;">
+    <p>©2025 Express Delivery Service. All Rights Reserved.</p>
+    <p>Fast Logistics Company | Reliable Shipping Solutions Worldwide</p>
+    <div style="margin-top:10px;">
+      <a href="#home">Home</a> | 
+      <a href="#about">About</a> | 
+      <a href="#services">Services</a> | 
+      <a href="#track">Track Packages</a> | 
+      <a href="#contact">Contact</a>
+    </div>
+    <div style="margin-top:10px;font-size:0.9rem;color:#555;">
+      <span>Phone: +1 (941) 207-8626</span> | 
+      <span>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></span>
+    </div>
+    <div style="margin-top:10px;">
+      <span>Follow Us:</span>
+      <a href="#" style="margin:0 5px;">Facebook</a> | 
+      <a href="#" style="margin:0 5px;">Twitter</a> | 
+      <a href="#" style="margin:0 5px;">Instagram</a>
+    </div>
+  </div>
 </footer>
 
 <script>
@@ -144,29 +265,13 @@ function toggleMenu(){document.getElementById('navLinks').classList.toggle('acti
 
 /* Newsletter */
 function subscribeNewsletter(){
-  const email=document.getElementById('newsletterEmail').value;
-  if(email) alert("Thank you! Updates will be sent to "+email); else alert("Please enter your email.");
+  const email=document.getElementById('newsletterEmail').value;
+  if(email) alert("Thank you! Updates will be sent to "+email); else alert("Please enter your email.");
 }
 
 /* Support Popup */
 function openSupport(){document.getElementById('supportPopup').style.display='block';}
 function closeSupport(){document.getElementById('supportPopup').style.display='none';}
-
-/* Admin Modal */
-function openAdminModal(){document.getElementById('adminModal').style.display='flex';}
-function closeAdminModal(){document.getElementById('adminModal').style.display='none';}
-function loginAdmin(){
-  const email = document.getElementById('adminEmail').value;
-  const pass = document.getElementById('adminPassword').value;
-  // Use your specific admin email and password
-  if(email==='Expressdeliveryservice0016@gmail.com' && pass==='YourPasswordHere'){
-    alert("Admin Login Successful!");
-    closeAdminModal();
-    window.location.href='admin.html'; // Redirect to admin dashboard
-  } else {
-    alert("Invalid credentials!");
-  }
-}
 
 /* Customer Reviews Rotation */
 const reviews=document.querySelectorAll(".review"); let currentReview=0;
@@ -178,42 +283,44 @@ function googleTranslateElementInit(){new google.translate.TranslateElement({pag
 
 /* Tracking */
 function trackPackage(){
-  const number=document.getElementById('trackingNumber').value.trim();
-  const trackingDiv=document.getElementById('shipmentTracking');
-  const contentDiv=document.getElementById('shipmentContent');
-  trackingDiv.style.display='none'; contentDiv.style.display='none';
-  trackingDiv.innerHTML='<div class="header">Tracking...</div>';
-  trackingDiv.style.display='block';
-  setTimeout(()=>{
-    if(number){
-      trackingDiv.innerHTML='<div class="header">Tracking Shipment</div>';
-      trackingDiv.innerHTML += `<div class="timeline">
-        <div class="timeline-event completed">
-          <div class="tick"></div>
-          <div class="time">23 Sep 2025 07:30</div>
-          <div class="description">✅ Item has arrived at Vnukovointernational Airport, Russia <div style="background:#ccc;padding:2px 5px;border-radius:3px;margin-top:3px;">ON HOLD</div></div>
-        </div>
-        <div class="timeline-event completed">
-          <div class="tick"></div>
-          <div class="time">22 Sep 2025 14:00</div>
-          <div class="description">☑️ Your item is on its way to Russia, London UK <div style="background:#ccc;padding:2px 5px;border-radius:3px;margin-top:3px;">IN TRANSIT</div></div>
-        </div>
-      </div>`;
-      setTimeout(()=>{
-        contentDiv.innerHTML='<div class="header">Content of Shipment: Package</div><div class="details"><label>Origin Area:</label><span>London UK</span><br><label>Destination Area:</label><span>Russia</span></div><div class="section-title">Sender\'s Details</div><div class="details"><label>Name:</label><span>James</span><br><label>Address:</label><span>London UK</span></div><div class="section-title">Receiver\'s Details</div><div class="details"><label>Name:</label><span>Podvezennaya Elena Ivanovna</span><br><label>Address:</label><span>195299 St. Petersburg, Prosveshcheniya Avenue 104, Apt. 281</span><br><label>Mobile:</label><span>+79932195775</span></div><button class="print-btn" onclick="printInvoice()">Print Invoice</button>';
-        contentDiv.style.display='block';
-      },5000);
-    } else {
-      trackingDiv.innerHTML='<div class="header">Please enter a tracking number.</div>';
-    }
-  },5000);
+  const number=document.getElementById('trackingNumber').value.trim();
+  const trackingDiv=document.getElementById('shipmentTracking');
+  const contentDiv=document.getElementById('shipmentContent');
+  trackingDiv.style.display='none'; contentDiv.style.display='none';
+  trackingDiv.innerHTML='<div class="header">Tracking...</div>';
+  trackingDiv.style.display='block';
+
+  setTimeout(()=>{
+    if(number){
+      trackingDiv.innerHTML='<div class="header">Tracking Shipment</div>';
+      // Timeline
+      trackingDiv.innerHTML += `<div class="timeline">
+        <div class="timeline-event completed">
+          <div class="tick"></div>
+          <div class="time">23 Sep 2025 07:30</div>
+          <div class="description">✅ Item has arrived at Vnukovointernational Airport, Russia <div style="background:#ccc;padding:2px 5px;border-radius:3px;margin-top:3px;">ON HOLD</div></div>
+        </div>
+        <div class="timeline-event completed">
+          <div class="tick"></div>
+          <div class="time">22 Sep 2025 14:00</div>
+          <div class="description">☑️ Your item is on its way to Russia, London UK <div style="background:#ccc;padding:2px 5px;border-radius:3px;margin-top:3px;">IN TRANSIT</div></div>
+        </div>
+      </div>`;
+      setTimeout(()=>{
+        contentDiv.innerHTML='<div class="header">Content of Shipment: Package</div><div class="details"><label>Origin Area:</label><span>London UK</span><br><label>Destination Area:</label><span>Russia</span></div><div class="section-title">Sender\'s Details</div><div class="details"><label>Name:</label><span>James</span><br><label>Address:</label><span>London UK</span></div><div class="section-title">Receiver\'s Details</div><div class="details"><label>Name:</label><span>Podvezennaya Elena Ivanovna</span><br><label>Address:</label><span>195299 St. Petersburg, Prosveshcheniya Avenue 104, Apt. 281</span><br><label>Mobile:</label><span>+79932195775</span></div><button class="print-btn" onclick="printInvoice()">Print Invoice</button>';
+        contentDiv.style.display='block';
+      },5000);
+    } else {
+      trackingDiv.innerHTML='<div class="header">Please enter a tracking number.</div>';
+    }
+  },5000);
 }
 
 /* Print Invoice */
 function printInvoice(){
-  const url='https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1790.jpeg';
-  const win = window.open(url,'_blank');
-  win.focus();
+  const url='https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1790.jpeg';
+  const win = window.open(url,'_blank');
+  win.focus();
 }
 </script>
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
