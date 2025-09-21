@@ -5,103 +5,120 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Dashboard - Express Delivery</title>
 <style>
-body {font-family: Arial, sans-serif; background: #f4f4f9; margin:0; padding:0;}
-header {background:#1e90ff; color:#fff; padding:15px; text-align:center;}
-.container {max-width:800px; margin:20px auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-h2 {color:#1e90ff;}
-label {display:block; margin-top:10px; font-weight:bold;}
-input, textarea, select {width:100%; padding:8px; margin-top:5px; border:1px solid #ccc; border-radius:4px;}
-button {margin-top:15px; padding:10px; background:#1e90ff; color:#fff; border:none; border-radius:4px; cursor:pointer;}
-button:hover {background:#0c6cd4;}
-.section {margin-top:20px; border-top:1px solid #ddd; padding-top:20px;}
-.logout {text-align:right;}
-.logout button {background:#ff4444;}
+body{font-family:Arial,sans-serif;background:#f0f2f5;color:#000;margin:0;padding:0;}
+header{background:#1e90ff;color:white;padding:15px;text-align:center;}
+.container{max-width:1000px;margin:20px auto;padding:20px;background:white;border-radius:8px;box-shadow:0 0 10px rgba(0,0,0,0.1);}
+input,textarea,select,button{margin:5px 0;padding:8px;width:100%;border-radius:3px;border:1px solid #ccc;font-size:14px;}
+button{background:#1e90ff;color:white;border:none;cursor:pointer;}
+button:hover{background:#1565c0;}
+h2{color:#1e90ff;margin-top:0;}
+.section{margin-bottom:30px;}
+label{font-weight:bold;}
+table{width:100%;border-collapse:collapse;margin-top:10px;}
+th,td{border:1px solid #ddd;padding:8px;text-align:left;}
+th{background:#1e90ff;color:white;}
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Express Delivery Admin Dashboard</h1>
+  <h1>Admin Dashboard</h1>
 </header>
 
-<div class="container" id="loginSection">
-  <h2>Admin Login</h2>
-  <label>Email:</label>
-  <input type="email" id="adminEmail" placeholder="Enter admin email">
-  <label>Password:</label>
-  <input type="password" id="adminPassword" placeholder="Enter password">
-  <button onclick="login()">Login</button>
-</div>
+<div class="container">
 
-<div class="container" id="dashboardSection" style="display:none;">
-  <div class="logout">
-    <button onclick="logout()">Logout</button>
-  </div>
-  <h2>Dashboard</h2>
-
-  <div class="section">
-    <h3>Generate Tracking Code</h3>
-    <button onclick="generateTrackingCode()">Generate Code</button>
-    <p id="generatedCode"></p>
+  <!-- Login Section -->
+  <div class="section" id="loginSection">
+    <h2>Login</h2>
+    <label>Email:</label>
+    <input type="email" id="adminEmail" placeholder="Enter admin email">
+    <label>Password:</label>
+    <input type="password" id="adminPassword" placeholder="Enter password">
+    <button onclick="login()">Login</button>
+    <p id="loginMessage" style="color:red;"></p>
   </div>
 
-  <div class="section">
-    <h3>Receiver Details</h3>
-    <label>Name:</label>
-    <input type="text" id="receiverName">
-    <label>Address:</label>
-    <textarea id="receiverAddress"></textarea>
-    <label>Airport:</label>
-    <input type="text" id="receiverAirport">
+  <!-- Dashboard Section -->
+  <div class="section" id="dashboardSection" style="display:none;">
+    
+    <h2>Edit Newsletter Subscribers</h2>
+    <textarea id="newsletterList" rows="5" placeholder="One email per line"></textarea>
+    <button onclick="saveNewsletter()">Save Newsletter</button>
+
+    <h2>Edit Customer Reviews</h2>
+    <textarea id="reviewsList" rows="5" placeholder="One review per line"></textarea>
+    <button onclick="saveReviews()">Save Reviews</button>
+
+    <h2>Edit Shipments</h2>
+    <textarea id="shipmentsList" rows="8" placeholder='[{"trackingNumber":"12345","content":"Package","origin":"London UK","destination":"Russia","sender":{"name":"James","address":"London UK"},"receiver":{"name":"Podvezennaya Elena Ivanovna","address":"195299 St. Petersburg, Prosveshcheniya Avenue 104, Apt. 281","mobile":"+79932195775"},"timeline":[{"time":"23 Sep 2025 07:30","description":"✅ Item has arrived at Vnukovo International Airport, Russia","status":"ON HOLD","completed":true},{"time":"22 Sep 2025 14:00","description":"☑️ Your item is on its way to Russia, London UK","status":"IN TRANSIT","completed":true}]}]'></textarea>
+    <button onclick="saveShipments()">Save Shipments</button>
+
+    <button style="background:red;margin-top:15px;" onclick="logout()">Logout</button>
   </div>
 
-  <div class="section">
-    <h3>Package Status</h3>
-    <select id="packageStatus">
-      <option value="In Transit">In Transit</option>
-      <option value="On Hold">On Hold</option>
-      <option value="Delivered">Delivered</option>
-    </select>
-    <button onclick="updateDetails()">Save Updates</button>
-  </div>
 </div>
 
 <script>
+// Admin Credentials
 const ADMIN_EMAIL = "Expressdeliveryservice0016@gmail.com";
-const ADMIN_PASS = "yourpassword"; // set your own password
+const ADMIN_PASSWORD = "YourPassword123"; // Change to a secure password
 
-function login() {
+// Login Function
+function login(){
   const email = document.getElementById('adminEmail').value.trim();
   const pass = document.getElementById('adminPassword').value.trim();
-  if(email === ADMIN_EMAIL && pass === ADMIN_PASS){
-    document.getElementById('loginSection').style.display="none";
-    document.getElementById('dashboardSection').style.display="block";
+  if(email === ADMIN_EMAIL && pass === ADMIN_PASSWORD){
+    document.getElementById('loginSection').style.display = 'none';
+    document.getElementById('dashboardSection').style.display = 'block';
+    loadData();
   } else {
-    alert("Invalid credentials!");
+    document.getElementById('loginMessage').innerText = "Invalid email or password!";
   }
 }
 
-function logout() {
-  document.getElementById('dashboardSection').style.display="none";
-  document.getElementById('loginSection').style.display="block";
+// Logout Function
+function logout(){
+  document.getElementById('loginSection').style.display = 'block';
+  document.getElementById('dashboardSection').style.display = 'none';
+  document.getElementById('adminEmail').value = '';
+  document.getElementById('adminPassword').value = '';
+  document.getElementById('loginMessage').innerText = '';
 }
 
-function generateTrackingCode(){
-  const code = "EXP" + Math.floor(Math.random()*1000000000);
-  document.getElementById("generatedCode").innerText = "New Tracking Code: " + code;
-  // send to backend API (replace with your backend)
-  console.log("Generated code:", code);
+// Load existing data from localStorage
+function loadData(){
+  const newsletter = localStorage.getItem('newsletterEmails') || '';
+  const reviews = localStorage.getItem('customerReviews') || '';
+  const shipments = localStorage.getItem('shipments') || '[]';
+  document.getElementById('newsletterList').value = newsletter.split(',').join('\n');
+  document.getElementById('reviewsList').value = reviews.split('|').join('\n');
+  document.getElementById('shipmentsList').value = JSON.stringify(JSON.parse(shipments), null, 2);
 }
 
-function updateDetails(){
-  const name = document.getElementById("receiverName").value;
-  const address = document.getElementById("receiverAddress").value;
-  const airport = document.getElementById("receiverAirport").value;
-  const status = document.getElementById("packageStatus").value;
-  // send update to backend API (replace with your backend)
-  console.log({name, address, airport, status});
-  alert("Details updated successfully!");
+// Save Functions
+function saveNewsletter(){
+  const emails = document.getElementById('newsletterList').value.split('\n').map(e => e.trim()).filter(Boolean);
+  localStorage.setItem('newsletterEmails', emails.join(','));
+  alert("Newsletter emails saved!");
+}
+
+function saveReviews(){
+  const reviews = document.getElementById('reviewsList').value.split('\n').map(e => e.trim()).filter(Boolean);
+  localStorage.setItem('customerReviews', reviews.join('|'));
+  alert("Customer reviews saved!");
+}
+
+function saveShipments(){
+  try {
+    const shipments = document.getElementById('shipmentsList').value.trim();
+    JSON.parse(shipments); // Validate JSON
+    localStorage.setItem('shipments', shipments);
+    alert("Shipments saved!");
+  } catch (e) {
+    alert("Invalid JSON format! Please check the shipments data.");
+  }
 }
 </script>
+
 </body>
 </html>
