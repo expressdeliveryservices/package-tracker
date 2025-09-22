@@ -8,7 +8,7 @@
 body{margin:0;font-family:Arial,sans-serif;background:#fff;color:#000;scroll-behavior:smooth;}
 a{color:#1e90ff;text-decoration:none;}
 h1,h2,h3,h4,h5,h6{color:#1e90ff;margin:0;}
-header{position:relative;height:400px;overflow:hidden;}
+header{position:relation;height:400px;overflow:hidden;}
 header video{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;pointer-events:none;}
 header .header-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;z-index:2;color:#fff;text-shadow:2px 2px 8px rgba(0,0,0,0.7);}
 header .header-overlay h1{font-size:2.5rem;font-weight:bold;letter-spacing:2px;margin-bottom:10px;}
@@ -40,6 +40,8 @@ section{padding:20px;scroll-margin-top:60px;}
 .shipment-content .section-title{font-size:12px;font-weight:bold;margin:5px 0;padding-bottom:3px;}
 .shipment-content .total{font-size:12px;font-weight:bold;margin-top:10px;padding-top:5px;text-align:right;}
 .shipment-content .footer{font-size:8px;text-align:center;margin-top:10px;color:#555;}
+.shipment-content .ash-color{color:#666;}
+.shipment-content .accent-blue{color:#1e90ff;}
 .print-btn{margin-top:5px;padding:6px 12px;background-color:#1e90ff;color:white;border:none;border-radius:3px;cursor:pointer;}
 .timeline{position:relative;margin:20px 0;}
 .timeline::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:4px;background:#ddd;}
@@ -471,6 +473,9 @@ function trackPackage(){
         console.log('Loading content for shipment:', shipment);
         const companyName = shipment.receipt?.companyName || 'Express Delivery Service';
         const amount = shipment.receipt?.amount || '0.00';
+        const securedBy = shipment.receipt?.securedBy || 'GeoTrust';
+        const sslProtection = shipment.receipt?.sslProtection || '256-BIT SSL PROTECTION';
+        const paymentProviders = shipment.receipt?.paymentProviders || 'Visa, PayPal, Mastercard';
         contentDiv.innerHTML = `
           <div style="position:relative;">
             <div class="watermark" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-45deg);color:#a9a9a9;font-size:24px;font-weight:bold;opacity:0.5;z-index:0;">CERTIFIED TRUE COPY</div>
@@ -495,6 +500,10 @@ function trackPackage(){
               <label>Amount:</label><span>$${amount}</span><br>
               <label>Payment Mode:</label><span>${shipment.paymentMode || 'N/A'}</span><br>
               <label>Payment Method:</label><span>${shipment.paymentMethod || 'N/A'}</span><br>
+              <label>Secured by:</label><span class="ash-color">${securedBy} ✈️</span><br>
+              <label></label><span>${sslProtection}</span><br>
+              <label>Providers:</label><span class="accent-blue">${paymentProviders.replace('Visa', 'Visa 💳').replace('PayPal', 'PayPal 🅿️').replace('Mastercard', 'Mastercard 💳')}</span><br>
+              <label></label><span class="accent-blue">Safe Shopping 🔒</span><br>
             </div>
             <div class="section-title">Sender's Details</div>
             <div class="details">
@@ -534,6 +543,9 @@ function printInvoice(number) {
   if (shipment) {
     const companyName = shipment.receipt?.companyName || 'Express Delivery Service';
     const amount = shipment.receipt?.amount || '0.00';
+    const securedBy = shipment.receipt?.securedBy || 'GeoTrust';
+    const sslProtection = shipment.receipt?.sslProtection || '256-BIT SSL PROTECTION';
+    const paymentProviders = shipment.receipt?.paymentProviders || 'Visa, PayPal, Mastercard';
     const signatureStamp = localStorage.getItem('signatureStamp') || '';
 
     // Receipt content for both print and PDF
@@ -553,6 +565,8 @@ function printInvoice(number) {
         .details img {max-width:80px;height:auto;}
         .total {font-size:12px;font-weight:bold;margin-top:10px;padding-top:5px;text-align:right;}
         .footer {font-size:8px;text-align:center;margin-top:10px;color:#555;}
+        .ash-color {color:#666;}
+        .accent-blue {color:#1e90ff;}
         @media print {body {margin:0;}.receipt {border:1px solid #000;}}
       </style>
       </head>
@@ -580,6 +594,10 @@ function printInvoice(number) {
           <label>Amount:</label><span>$${amount}</span><br>
           <label>Payment Mode:</label><span>${shipment.paymentMode || 'N/A'}</span><br>
           <label>Payment Method:</label><span>${shipment.paymentMethod || 'N/A'}</span><br>
+          <label>Secured by:</label><span class="ash-color">${securedBy} ✈️</span><br>
+          <label></label><span>${sslProtection}</span><br>
+          <label>Providers:</label><span class="accent-blue">${paymentProviders.replace('Visa', 'Visa 💳').replace('PayPal', 'PayPal 🅿️').replace('Mastercard', 'Mastercard 💳')}</span><br>
+          <label></label><span class="accent-blue">Safe Shopping 🔒</span><br>
         </div>
         <div class="section-title">Sender's Details</div>
         <div class="details">
