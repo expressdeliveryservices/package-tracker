@@ -43,6 +43,7 @@ section{padding:20px;scroll-margin-top:60px;}
 .timeline-event .time{font-size:0.85rem;color:blue;margin-top:2px;}
 .timeline-event .description{margin-top:5px;background:#eee;padding:5px;border-radius:3px;font-size:0.9rem;}
 .map-container{width:100%;height:300px;margin:20px 0;overflow:hidden;position:relative;}
+.map-container a { text-decoration: none; display: block; }
 .map-overlay{position:absolute;top:10px;left:50%;transform:translateX(-50%);background-color:rgba(255,255,255,0.8);padding:5px 10px;border-radius:3px;font-size:14px;color:#000;z-index:10;}
 .newsletter{display:flex;gap:10px;margin-top:15px;}
 .newsletter input{flex:1;padding:8px;border-radius:3px;border:1px solid #ddd;background:#fff;color:#000;}
@@ -76,23 +77,27 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
     <a href="#contact">Contact</a>
     <a href="admin.html">Admin</a>
   </div>
-  <div class="hamburger" onclick="toggleMenu()"><div></div><div></div><div></div></div>
+  <div class="hamburger" onclick="toggleMenu()">
+    <div></div><div></div><div></div>
+  </div>
 </div>
 
-<!-- Header Video -->
+<!-- Header Video Background -->
 <header>
   <video autoplay loop muted playsinline>
     <source src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/From%20KlickPin%20CF%20Pin%20van%20Nayara%20Duartt%20op%20Slow%20in%202025.mov" type="video/mp4">
+    Your browser does not support the video tag.
   </video>
   <div class="header-overlay">
     <h1>EXPRESS DELIVERY SERVICES LOGISTIC FIRM</h1>
-    <p>Reliable and efficient shipping solutions for every client.</p>
+    <p>We are your trusted partner for all your shipping needs. With years of experience, we specialize in providing reliable and efficient shipping solutions for every client.</p>
   </div>
 </header>
 
 <!-- Home Section -->
 <section id="home">
   <h2 class="section-title">Subscribe Now</h2>
+  <p>Don’t miss our updates! Get subscribed today!</p>
   <div class="newsletter">
     <input type="email" id="newsletterEmail" placeholder="Enter your email">
     <button onclick="subscribeNewsletter()">Subscribe</button>
@@ -100,15 +105,41 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
 
   <h2 class="section-title">Delivery Wall</h2>
   <div class="image-wall">
-    <!-- images and video as before -->
-    <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg"><p class="desc">Efficient delivery...</p></div>
-    <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1677.webp"><p class="desc">Fast shipping...</p></div>
-    <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg"><p class="desc">Real-time tracking...</p></div>
-    <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg"><p class="desc">Optimized routes...</p></div>
-    <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1681.jpeg"><p class="desc">Timely deliveries...</p></div>
-    <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1682.jpeg"><p class="desc">Shipment care...</p></div>
-    <div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg"><p class="desc">Tracking updates...</p></div>
-    <div><video autoplay loop muted playsinline><source src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/From%20KlickPin%20CF%20White%20Truck%20Parked%20Next%20to%20Bridge.mov"></video><p class="desc">Our logistics video.</p></div>
+    <div>
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" alt="Delivery 1">
+      <p class="desc">Our dedicated team ensures every package is delivered safely and on time, using advanced tracking technology. We prioritize customer satisfaction with reliable, fast service across regions, offering peace of mind with each shipment handled with utmost care and professionalism every step of the way.</p>
+    </div>
+    <div>
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1677.webp" alt="Delivery 2">
+      <p class="desc">Experience fast and reliable delivery across cities and states with our expert logistics network. We provide timely shipments with real-time updates, ensuring your packages arrive securely. Our committed team works tirelessly to meet deadlines, offering top-notch service for all your shipping requirements.</p>
+    </div>
+    <div>
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" alt="Delivery 3">
+      <p class="desc">Utilize our real-time tracking with cutting-edge technology for complete visibility of your shipments. Our system ensures accurate updates, enhancing delivery efficiency. Trust our innovative solutions to keep you informed, providing a seamless and transparent shipping experience with every package we handle.</p>
+    </div>
+    <div>
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" alt="Delivery 4">
+      <p class="desc">Enjoy efficient logistics solutions tailored for every customer’s needs. We optimize routes and resources to ensure swift deliveries. Our skilled team provides personalized service, handling each package with care, making us the preferred choice for reliable and cost-effective shipping across the globe.</p>
+    </div>
+    <div>
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1681.jpeg" alt="Delivery 5">
+      <p class="desc">We offer timely deliveries across regions with exceptional quality service. Our fleet ensures packages reach destinations promptly. Committed to excellence, we provide constant support and updates, ensuring a smooth experience for customers relying on our dependable and professional shipping network.</p>
+    </div>
+    <div>
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1682.jpeg" alt="Delivery 6">
+      <p class="desc">Our team handles shipments with care and precision, using secure packaging techniques. We prioritize safety and timeliness, ensuring every delivery meets high standards. With a focus on customer trust, we provide consistent service, making us a leader in reliable logistics solutions worldwide.</p>
+    </div>
+    <div>
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg" alt="Delivery 7">
+      <p class="desc">Stay updated in real-time with our advanced tracking technology. We offer detailed insights into your shipment’s journey. Our innovative tools ensure transparency, providing peace of mind. Trust our expertise to deliver your packages efficiently, making us your go-to shipping partner every time.</p>
+    </div>
+    <div>
+      <video autoplay loop muted playsinline>
+        <source src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/From%20KlickPin%20CF%20White%20Truck%20Parked%20Next%20to%20Bridge.mov" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <p class="desc">Watch our logistics process in action with this video showcasing our fleet. We ensure efficient operations and timely deliveries. Our team’s dedication shines through, providing a glimpse into the hard work behind every successful shipment, enhancing your trust in our services.</p>
+    </div>
   </div>
 
   <h2 class="section-title">Customer Reviews</h2>
@@ -128,13 +159,19 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
   </div>
 </section>
 
-<!-- About Section -->
-<section id="about"><h2 class="section-title">About Us</h2><p>Seamless and efficient shipping solutions globally.</p></section>
+<!-- About Us -->
+<section id="about">
+  <h2 class="section-title">About Us</h2>
+  <p>Our mission is to provide seamless and efficient shipping solutions globally.</p>
+</section>
 
-<!-- Services Section -->
-<section id="services"><h2 class="section-title">Our Services</h2><p>Partner with us for advanced tracking and logistics expertise.</p></section>
+<!-- Services -->
+<section id="services">
+  <h2 class="section-title">Our Services</h2>
+  <p>Partner with us for advanced tracking and logistics expertise.</p>
+</section>
 
-<!-- Tracking Section -->
+<!-- Track Packages -->
 <section id="track">
   <h2 class="section-title">Track Your Package</h2>
   <div class="tracking">
@@ -146,42 +183,274 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
 
   <div class="map-container">
     <div class="map-overlay">CURRENT LOCATION ON MAP</div>
-    <div id="receiverMap" style="width:100%;height:100%;background:#eee;"></div>
+    <div id="receiverMap" style="width:100%;height:300px;"></div>
   </div>
 </section>
 
-<!-- Contact Section -->
+<!-- Contact -->
 <section id="contact">
   <h2 class="section-title">Contact Us</h2>
   <p>Phone: +1 (941) 207-8626</p>
   <p>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></p>
+  <button style="background-color: #1e90ff; color: white; padding: 8px 15px; border: none; border-radius: 3px;" onclick="openSupport()">Support</button>
+  <div id="google_translate_element" style="margin-top:10px;"></div>
+
+  <div class="map-container">
+    <div class="map-overlay">HEADQUARTER LOCATION</div>
+    <div id="headquarterMap" style="width:100%;height:300px;">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d-0.2120214!3d51.4735056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4876052b2e9d3c9f%3A0x2e5f9a3d7a2a9e!2sUniversal%20Drops%2C%2066B%20Oxberry%20Ave%2C%20London%20SW6%203AL%2C%20UK!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+  </div>
 </section>
+
+<!-- Support Popup -->
+<div id="supportPopup">
+  <h3>Welcome to Express Delivery Service!</h3>
+  <p>How can we help you?</p>
+  <form method="POST" action="send_support.php" id="supportForm">
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="email" name="email" placeholder="Your Email" required>
+    <textarea name="message" placeholder="Your Message" required></textarea>
+    <button type="submit">Send</button>
+  </form>
+  <button onclick="closeSupport()">Close</button>
+</div>
 
 <!-- Footer -->
 <footer>
-  <p>©2025 Express Delivery Service. All Rights Reserved.</p>
+  <div style="max-width:1200px;margin:0 auto;padding:20px;text-align:center;">
+    <p>©2025 Express Delivery Service. All Rights Reserved.</p>
+    <p>Fast Logistics Company | Reliable Shipping Solutions Worldwide</p>
+    <div style="margin-top:10px;">
+      <a href="#home">Home</a> | 
+      <a href="#about">About</a> | 
+      <a href="#services">Services</a> | 
+      <a href="#track">Track Packages</a> | 
+      <a href="#contact">Contact</a> | 
+      <a href="admin.html">Admin</a>
+    </div>
+    <div style="margin-top:10px;font-size:0.9rem;color:#555;">
+      <span>Phone: +1 (941) 207-8626</span> | 
+      <span>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></span>
+    </div>
+    <div style="margin-top:10px;">
+      <span>Follow Us:</span>
+      <a href="#" style="margin:0 5px;">Facebook</a> | 
+      <a href="#" style="margin:0 5px;">Twitter</a> | 
+      <a href="#" style="margin:0 5px;">Instagram</a>
+    </div>
+  </div>
 </footer>
 
 <script>
-// Hamburger
-function toggleMenu(){document.getElementById('navLinks').classList.toggle('active');}
+// Hamburger Menu
+function toggleMenu() {
+  const navLinks = document.getElementById('navLinks');
+  navLinks.classList.toggle('active');
+  const hamburger = document.querySelector('.hamburger');
+  hamburger.classList.toggle('open');
+}
 
 // Newsletter
-function subscribeNewsletter(){alert("Thank you for subscribing!");}
-
-// Fake tracking
-function trackPackage(){
-  const tracking=document.getElementById('trackingNumber').value;
-  if(!tracking){alert("Enter tracking ID");return;}
-  const trackDiv=document.getElementById('shipmentTracking');
-  const contentDiv=document.getElementById('shipmentContent');
-  trackDiv.style.display='block';
-  contentDiv.style.display='block';
-  trackDiv.innerHTML=`<div class="header">Tracking ID: ${tracking}</div><p>Status: In Transit</p>`;
-  contentDiv.innerHTML=`<div class="header">Shipment Details</div>
-  <div class="details"><label>From:</label><span>Atlanta, GA</span><br><label>To:</label><span>New York, NY</span><br><label>Estimated Delivery:</label><span>2 Days</span></div>
-  <button class="print-btn" onclick="window.print()">Print Receipt</button>`;
+function subscribeNewsletter(){
+  const email = document.getElementById('newsletterEmail').value.trim();
+  if(email){
+    let emails = localStorage.getItem('newsletterEmails') ? localStorage.getItem('newsletterEmails').split(',') : [];
+    if(!emails.includes(email)){
+      emails.push(email);
+      localStorage.setItem('newsletterEmails', emails.join(','));
+      alert("Thank you! Updates will be sent to " + email);
+    }else{
+      alert("This email is already subscribed.");
+    }
+  }else{
+    alert("Please enter your email.");
+  }
 }
+
+// Support Popup
+function openSupport(){document.getElementById('supportPopup').style.display='block';}
+function closeSupport(){document.getElementById('supportPopup').style.display='none';}
+
+// Customer Reviews Rotation
+function loadReviews(){
+  const reviewsBoard = document.getElementById('reviewsBoard');
+  let reviews = localStorage.getItem('customerReviews') ? localStorage.getItem('customerReviews').split('|') : [
+    '⭐ Alice Johnson: Excellent service! Fast and reliable.',
+    '⭐⭐ Michael Smith: Package arrived ahead of time.',
+    '⭐⭐⭐ Samantha Lee: Helpful and responsive support.',
+    '⭐⭐⭐⭐ John Doe: Amazing service, highly recommend!',
+    '⭐⭐⭐⭐⭐ Emily Davis: Professional and efficient delivery.'
+  ];
+  reviewsBoard.innerHTML = '';
+  reviews.forEach((review, index) => {
+    const reviewDiv = document.createElement('div');
+    reviewDiv.className = 'review';
+    reviewDiv.id = `review${index}`;
+    reviewDiv.innerText = review;
+    reviewsBoard.appendChild(reviewDiv);
+  });
+  let currentReview = 0;
+  function showReview(){
+    document.querySelectorAll('.review').forEach(r => r.classList.remove('show'));
+    document.getElementById(`review${currentReview}`).classList.add('show');
+    currentReview = (currentReview + 1) % reviews.length;
+  }
+  showReview();
+  setInterval(showReview, 5000);
+}
+
+// Google Translate
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+}
+
+// Initialize Maps with Google Maps Embed
+function initMaps() {
+  const receiverMap = document.getElementById('receiverMap');
+  receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+}
+
+// Tracking
+function trackPackage(){
+  const number = document.getElementById('trackingNumber').value.trim();
+  const trackingDiv = document.getElementById('shipmentTracking');
+  const contentDiv = document.getElementById('shipmentContent');
+  const receiverMap = document.getElementById('receiverMap');
+
+  // Show tracking immediately with 5-second delay for details
+  trackingDiv.style.display = 'block';
+  trackingDiv.innerHTML = '<div class="header">Tracking...</div>';
+  console.log('Tracking started for:', number);
+
+  setTimeout(() => {
+    if (number) {
+      let shipments = [];
+      try {
+        shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+      } catch (e) {
+        console.error('Invalid shipments JSON:', e);
+      }
+      const shipment = shipments.find(s => s.trackingNumber === number);
+      if (shipment) {
+        console.log('Shipment found:', shipment);
+        trackingDiv.innerHTML = '<div class="header">Tracking Shipment: ' + number + '</div>';
+        trackingDiv.innerHTML += `<div class="timeline">
+          ${shipment.timeline.map(event => `
+            <div class="timeline-event ${event.completed ? 'completed' : ''}">
+              <div class="tick"></div>
+              <div class="time">${event.time}</div>
+              <div class="description">${event.description} <div style="background:#ccc;padding:2px 5px;border-radius:3px;margin-top:3px;">${event.status}</div></div>
+            </div>
+          `).join('')}
+        </div>`;
+        // Update receiver map with red marker and clickable link
+        if (shipment.receiver && shipment.receiver.lat && shipment.receiver.lng) {
+          console.log('Updating map with lat:', shipment.receiver.lat, 'lng:', shipment.receiver.lng);
+          const address = encodeURIComponent(shipment.receiver.address || '');
+          const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d${(1 / Math.cos(shipment.receiver.lat * Math.PI / 180) * 156543.03392 * Math.cos(shipment.receiver.lat * Math.PI / 180) / Math.pow(2, 15))}!2d${shipment.receiver.lng}!3d${shipment.receiver.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x0!2s${address}!5e0!3m2!1sen!2sus!4v1695296400000&markers=color:red%7C${shipment.receiver.lat},${shipment.receiver.lng}`;
+          receiverMap.innerHTML = `<a href="https://www.google.com/maps?q=${shipment.receiver.lat},${shipment.receiver.lng}" target="_blank"><iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe></a>`;
+        } else {
+          console.log('No valid receiver coordinates found:', shipment.receiver);
+          receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+        }
+      } else {
+        trackingDiv.innerHTML = '<div class="header">Invalid tracking number.</div>';
+        console.log('No shipment found for:', number);
+      }
+    } else {
+      trackingDiv.innerHTML = '<div class="header">Please enter a tracking number.</div>';
+    }
+  }, 5000); // 5-second delay for tracking details
+
+  // Show content after an additional 5 seconds (total 10 seconds)
+  setTimeout(() => {
+    contentDiv.style.display = 'block';
+    if (number) {
+      let shipments = [];
+      try {
+        shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+      } catch (e) {
+        console.error('Invalid shipments JSON:', e);
+      }
+      const shipment = shipments.find(s => s.trackingNumber === number);
+      if (shipment) {
+        console.log('Loading content for shipment:', shipment);
+        contentDiv.innerHTML = `
+          <div class="header">Content of Shipment: ${shipment.content || 'Unknown'}</div>
+          <div class="details">
+            <label>Origin Area:</label><span>${shipment.origin || 'Unknown'}</span><br>
+            <label>Destination Area:</label><span>${shipment.destination || 'Unknown'}</span>
+          </div>
+          <div class="section-title">Sender's Details</div>
+          <div class="details">
+            <label>Name:</label><span>${shipment.sender.name || 'Unknown'}</span><br>
+            <label>Address:</label><span>${shipment.sender.address || 'Unknown'}</span>
+          </div>
+          <div class="section-title">Receiver's Details</div>
+          <div class="details">
+            <label>Name:</label><span>${shipment.receiver.name || 'Unknown'}</span><br>
+            <label>Address:</label><span>${shipment.receiver.address || 'Unknown'}</span><br>
+            <label>Mobile:</label><span>${shipment.receiver.mobile || 'Unknown'}</span>
+          </div>
+          <button class="print-btn" onclick="printInvoice('${number}')">Print Invoice</button>`;
+      } else {
+        contentDiv.innerHTML = '<div class="header">No content available for this tracking number.</div>';
+      }
+    }
+  }, 10000); // 10-second delay for content
+}
+
+// Print Invoice with Receipt Details and Logos
+function printInvoice(number) {
+  let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+  const shipment = shipments.find(s => s.trackingNumber === number);
+  if (shipment) {
+    const companyName = shipment.receipt?.companyName || 'Express Delivery Service';
+    const amount = shipment.receipt?.amount || '0.00';
+    const receiptContent = `
+      <html>
+      <head><title>Receipt - ${shipment.trackingNumber}</title>
+      <style>
+        body { font-family: Arial, sans-serif; margin: 20mm; }
+        .receipt { width: 80mm; margin: 0 auto; padding: 10mm; border: 1px solid #000; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .logos img { height: 30px; margin-right: 10px; }
+        .company-name { font-size: 18px; font-weight: bold; }
+        .details { font-size: 12px; margin: 5px 0; }
+        .total { font-size: 14px; font-weight: bold; margin-top: 10px; }
+      </style>
+      </head>
+      <body>
+      <div class="receipt">
+        <div class="header">
+          <div class="logos">
+            <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/delivery-truck.png" alt="Delivery Logo">
+            <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/airplane.png" alt="Airplane Logo">
+          </div>
+          <div class="company-name">${companyName}</div>
+        </div>
+        <div class="details">Tracking Number: ${shipment.trackingNumber}</div>
+        <div class="details">Content: ${shipment.content}</div>
+        <div class="details">Sender: ${shipment.sender.name}, ${shipment.sender.address}</div>
+        <div class="details">Receiver: ${shipment.receiver.name}, ${shipment.receiver.address}</div>
+        <div class="total">Amount: $${amount}</div>
+      </div>
+      </body>
+      </html>`;
+    const win = window.open('', '_blank');
+    win.document.write(receiptContent);
+    win.document.close();
+    win.print();
+  }
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+  loadReviews();
+  initMaps();
+});
 </script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
