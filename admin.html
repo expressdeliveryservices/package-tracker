@@ -97,8 +97,9 @@ th{background:#1e90ff;color:white;}
         <input type="number" id="newReceiverLng" step="0.0001" placeholder="Receiver Longitude" required>
       </div>
       <h3>Timeline</h3>
-      <textarea id="newTimeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"23 Sep 2025 07:30","description":"✅ Item arrived","status":"ON HOLD","completed":true}])' required></textarea>
+      <textarea id="newTimeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"22 Sep 2025 12:17","description":"✅ Item shipped","status":"IN TRANSIT","completed":true}])' required></textarea>
       <button id="generateTrackingCode" onclick="generateTrackingCode()">Generate Tracking Code</button>
+      <p>Send the generated tracking code to the recipient. They can use it on the public page to view details anytime.</p>
     </div>
 
     <h2>Edit Shipments</h2>
@@ -147,7 +148,7 @@ th{background:#1e90ff;color:white;}
         <input type="number" id="receiverLng" step="0.0001" value="30.3232" placeholder="Receiver Longitude">
       </div>
       <h3>Timeline</h3>
-      <textarea id="timeline" rows="4" placeholder="Enter timeline events as JSON array (e.g., [{&quot;time&quot;:&quot;23 Sep 2025 07:30&quot;,&quot;description&quot;:&quot;✅ Item arrived&quot;,&quot;status&quot;: &quot;ON HOLD&quot;,&quot;completed&quot;:true}])">[
+      <textarea id="timeline" rows="4" placeholder="Enter timeline events as JSON array (e.g., [{&quot;time&quot;:&quot;22 Sep 2025 12:17&quot;,&quot;description&quot;:&quot;✅ Item arrived&quot;,&quot;status&quot;: &quot;ON HOLD&quot;,&quot;completed&quot;:true}])">[
   {"time":"23 Sep 2025 07:30","description":"✅ Item has arrived at Vnukovo International Airport, Russia","status":"ON HOLD","completed":true},
   {"time":"22 Sep 2025 14:00","description":"☑️ Your item is on its way to Russia, London UK","status":"IN TRANSIT","completed":true}
 ]</textarea>
@@ -163,6 +164,7 @@ th{background:#1e90ff;color:white;}
 // Admin Credentials
 const ADMIN_EMAIL = "Expressdeliveryservice0016@gmail.com";
 const ADMIN_PASSWORD = "Umuojima";
+const COMPANY_NAME = "Express Delivery Service";
 
 // Login Function
 function login(){
@@ -240,7 +242,11 @@ function saveShipment(){
         lat: parseFloat(document.getElementById('receiverLat').value) || 59.9741,
         lng: parseFloat(document.getElementById('receiverLng').value) || 30.3232
       },
-      timeline: JSON.parse(document.getElementById('timeline').value.trim())
+      timeline: JSON.parse(document.getElementById('timeline').value.trim()),
+      receipt: {
+        companyName: localStorage.getItem('receiptCompanyName') || COMPANY_NAME,
+        amount: localStorage.getItem('receiptAmount') || '0.00'
+      }
     };
     let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
     const index = shipments.findIndex(s => s.trackingNumber === shipment.trackingNumber);
@@ -256,7 +262,7 @@ function saveShipment(){
   }
 }
 
-// Generate New Tracking Code with 3 letters and 9 numbers
+// Generate New Tracking Code with 3 letters and 9 numbers, load details
 function generateTrackingCode() {
   try {
     // Generate 3 random letters
@@ -281,7 +287,11 @@ function generateTrackingCode() {
         lat: parseFloat(document.getElementById('newReceiverLat').value),
         lng: parseFloat(document.getElementById('newReceiverLng').value)
       },
-      timeline: JSON.parse(document.getElementById('newTimeline').value.trim())
+      timeline: JSON.parse(document.getElementById('newTimeline').value.trim()),
+      receipt: {
+        companyName: COMPANY_NAME,
+        amount: '0.00' // Default amount, editable later
+      }
     };
 
     // Validate required fields
@@ -292,11 +302,29 @@ function generateTrackingCode() {
     }
 
     let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+    // Check for duplicate tracking number
+    if (shipments.some(s => s.trackingNumber === newTracking)) {
+      throw new Error("Tracking code already exists. Please try again.");
+    }
     shipments.push(shipment);
     localStorage.setItem('shipments', JSON.stringify(shipments));
 
+    // Load details into Edit Shipments section
+    document.getElementById('trackingNumber').value = newTracking;
+    document.getElementById('shipmentContent').value = shipment.content;
+    document.getElementById('shipmentOrigin').value = shipment.origin;
+    document.getElementById('shipmentDestination').value = shipment.destination;
+    document.getElementById('senderName').value = shipment.sender.name;
+    document.getElementById('senderAddress').value = shipment.sender.address;
+    document.getElementById('receiverName').value = shipment.receiver.name;
+    document.getElementById('receiverAddress').value = shipment.receiver.address;
+    document.getElementById('receiverMobile').value = shipment.receiver.mobile;
+    document.getElementById('receiverLat').value = shipment.receiver.lat;
+    document.getElementById('receiverLng').value = shipment.receiver.lng;
+    document.getElementById('timeline').value = JSON.stringify(shipment.timeline, null, 2);
+
     document.getElementById('newTrackingNumber').value = newTracking;
-    alert(`New tracking code generated: ${newTracking}. Use this on the public page to load details, including the updated receiver location.`);
+    alert(`New tracking code generated: ${newTracking}. Details loaded, and others can use it on the public page anytime without expiration.`);
   } catch (e) {
     alert(`Error: ${e.message}`);
   }
