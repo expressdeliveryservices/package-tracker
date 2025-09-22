@@ -245,6 +245,7 @@ th{background:#1e90ff;color:white;}
   {"time":"22 Sep 2025 14:00","description":"☑️ Your item is on its way to Russia, London UK","status":"IN TRANSIT","completed":true}
 ]</textarea>
       <button onclick="saveShipment()">Save Shipment</button>
+      <button style="background:#4CAF50;margin-top:15px;" onclick="downloadReceipt()">Download Receipt</button>
     </div>
 
     <button style="background:red;margin-top:15px;" onclick="logout()">Logout</button>
@@ -480,6 +481,87 @@ function generateTrackingCode(){
     alert(`New tracking code generated: ${newTracking}. Details loaded, and others can use it on the public page anytime without expiration.`);
   } catch (e) {
     alert(`Error: ${e.message}`);
+  }
+}
+
+// Download Receipt as HTML
+function downloadReceipt() {
+  try {
+    const trackingNumber = document.getElementById('trackingNumber').value.trim();
+    let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+    const shipment = shipments.find(s => s.trackingNumber === trackingNumber);
+
+    if (!shipment || !shipment.receipt) {
+      alert("No shipment or receipt data found for this tracking number!");
+      return;
+    }
+
+    const receipt = shipment.receipt;
+    const signatureStamp = localStorage.getItem('signatureStamp') || '';
+
+    // Create HTML content for the receipt
+    const receiptHTML = `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <title>Receipt - ${trackingNumber}</title>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 20px; }
+          .receipt { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ccc; }
+          h1 { color: #1e90ff; text-align: center; }
+          .details { margin-top: 20px; }
+          .details p { margin: 5px 0; }
+          .signature { margin-top: 20px; }
+          .signature img { max-width: 100px; }
+        </style>
+      </head>
+      <body>
+        <div class="receipt">
+          <h1>Receipt - Express Delivery Service</h1>
+          <div class="details">
+            <p><strong>Tracking Number:</strong> ${trackingNumber}</p>
+            <p><strong>Order ID:</strong> ${receipt.orderId || 'N/A'}</p>
+            <p><strong>Estimated Delivery Date:</strong> ${receipt.estDeliveryDate || 'N/A'}</p>
+            <p><strong>Payment Mode:</strong> ${receipt.paymentMode || 'N/A'}</p>
+            <p><strong>Mode of Transport:</strong> ${receipt.modeOfTransport || 'N/A'}</p>
+            <p><strong>Type of Shipment:</strong> ${receipt.typeOfShipment || 'N/A'}</p>
+            <p><strong>Quantity:</strong> ${receipt.quantity || 'N/A'}</p>
+            <p><strong>Official Stamp Date:</strong> ${receipt.officialStampDate || 'N/A'}</p>
+            <p><strong>Payment Method:</strong> ${receipt.paymentMethod || 'N/A'}</p>
+            <p><strong>Signed by:</strong> ${receipt.signedBy || 'N/A'}</p>
+            <p><strong>Amount:</strong> $${(receipt.amount || 0).toFixed(2)}</p>
+            <p><strong>Content:</strong> ${shipment.content || 'N/A'}</p>
+            <p><strong>Origin:</strong> ${shipment.origin || 'N/A'}</p>
+            <p><strong>Destination:</strong> ${shipment.destination || 'N/A'}</p>
+            <p><strong>Sender Name:</strong> ${shipment.sender.name || 'N/A'}</p>
+            <p><strong>Sender Address:</strong> ${shipment.sender.address || 'N/A'}</p>
+            <p><strong>Receiver Name:</strong> ${shipment.receiver.name || 'N/A'}</p>
+            <p><strong>Receiver Address:</strong> ${shipment.receiver.address || 'N/A'}</p>
+            <p><strong>Receiver Mobile:</strong> ${shipment.receiver.mobile || 'N/A'}</p>
+          </div>
+          <div class="signature">
+            ${signatureStamp ? `<img src="${signatureStamp}" alt="Signature Stamp">` : '<p>No signature stamp available</p>'}
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    // Create a Blob and trigger download
+    const blob = new Blob([receiptHTML], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Receipt_${trackingNumber}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    alert("Receipt downloaded successfully!");
+  } catch (e) {
+    alert(`Error generating receipt: ${e.message}`);
   }
 }
 
