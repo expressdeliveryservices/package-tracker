@@ -189,7 +189,6 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
   <div class="map-container">
     <div class="map-overlay">CURRENT LOCATION ON MAP</div>
     <div id="receiverMap" style="width:100%;height:300px;"></div>
-    <a id="googleMapsLink" href="https://maps.google.com/" target="_blank" style="display:block;text-align:center;margin-top:5px;">View on Google Maps</a>
   </div>
 </section>
 
@@ -322,8 +321,8 @@ function trackPackage(){
   const number = document.getElementById('trackingNumber').value.trim();
   const trackingDiv = document.getElementById('shipmentTracking');
   const contentDiv = document.getElementById('shipmentContent');
+  const receiptEdit = document.getElementById('receiptEdit');
   const receiverMap = document.getElementById('receiverMap');
-  const googleMapsLink = document.getElementById('googleMapsLink');
 
   // Show tracking immediately with 5-second delay for details
   trackingDiv.style.display = 'block';
@@ -354,28 +353,19 @@ function trackPackage(){
         // Update receiver map with red marker and clickable link
         if (shipment.receiver && shipment.receiver.lat && shipment.receiver.lng) {
           console.log('Updating map with lat:', shipment.receiver.lat, 'lng:', shipment.receiver.lng);
-          const lat = shipment.receiver.lat;
-          const lng = shipment.receiver.lng;
           const address = encodeURIComponent(shipment.receiver.address || '');
-          const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d${(1 / Math.cos(lat * Math.PI / 180) * 156543.03392 * Math.cos(lat * Math.PI / 180) / Math.pow(2, 15))}!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x0!2s${address}!5e0!3m2!1sen!2sus!4v1695296400000&markers=color:red%7C${lat},${lng}`;
-          receiverMap.innerHTML = `<iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
-          googleMapsLink.href = `https://maps.google.com/?q=${lat},${lng}`;
-          googleMapsLink.style.display = 'block';
+          const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d${(1 / Math.cos(shipment.receiver.lat * Math.PI / 180) * 156543.03392 * Math.cos(shipment.receiver.lat * Math.PI / 180) / Math.pow(2, 15))}!2d${shipment.receiver.lng}!3d${shipment.receiver.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x0!2s${address}!5e0!3m2!1sen!2sus!4v1695296400000&markers=color:red%7C${shipment.receiver.lat},${shipment.receiver.lng}`;
+          receiverMap.innerHTML = `<a href="https://www.google.com/maps?q=${shipment.receiver.lat},${shipment.receiver.lng}" target="_blank"><iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe></a>`;
         } else {
           console.log('No valid receiver coordinates found:', shipment.receiver);
           receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
-          googleMapsLink.style.display = 'none';
         }
       } else {
         trackingDiv.innerHTML = '<div class="header">Invalid tracking number.</div>';
         console.log('No shipment found for:', number);
-        receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
-        googleMapsLink.style.display = 'none';
       }
     } else {
       trackingDiv.innerHTML = '<div class="header">Please enter a tracking number.</div>';
-      receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
-      googleMapsLink.style.display = 'none';
     }
   }, 5000); // 5-second delay for tracking details
 
@@ -410,17 +400,10 @@ function trackPackage(){
             <label>Mobile:</label><span>${shipment.receiver.mobile || 'Unknown'}</span>
           </div>`;
         // Initialize receipt edit section
-        const receiptEdit = document.createElement('div');
-        receiptEdit.id = 'receiptEdit';
-        receiptEdit.className = 'receipt-edit';
-        receiptEdit.innerHTML = `
-          <h3>Edit Receipt</h3>
-          <label>Company Name:</label>
-          <input type="text" id="receiptCompanyName" value="${shipment.receipt?.companyName || 'Express Delivery Service'}">
-          <label>Amount:</label>
-          <input type="number" id="receiptAmount" step="0.01" value="${shipment.receipt?.amount || '0.00'}">
-          <button onclick="saveReceipt()">Save Receipt</button>`;
-        contentDiv.appendChild(receiptEdit);
+        document.getElementById('receiptCompanyName').value = shipment.receipt?.companyName || 'Express Delivery Service';
+        document.getElementById('receiptAmount').value = shipment.receipt?.amount || '0.00';
+        receiptEdit.style.display = 'block';
+        contentDiv.innerHTML += receiptEdit.outerHTML; // Append edited receipt form
         contentDiv.innerHTML += `<button class="print-btn" onclick="printInvoice('${number}')">Print Invoice</button>`;
       } else {
         contentDiv.innerHTML = '<div class="header">No content available for this tracking number.</div>';
