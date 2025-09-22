@@ -16,11 +16,13 @@ header .header-overlay p{font-size:1rem;max-width:700px;margin:0 auto;line-heigh
 .navbar{display:flex;justify-content:space-between;align-items:center;padding:15px;background:#f8f8f8;position:sticky;top:0;z-index:1000;border-bottom:1px solid #ddd;}
 .nav-links{display:flex;gap:15px;}
 .nav-links a{cursor:pointer;font-weight:bold;color:#1e90ff;}
+.nav-links a.admin-link{display:none;}
 .hamburger{display:flex;flex-direction:column;cursor:pointer;}
 .hamburger div{width:20px;height:2px;background-color:#1e90ff;margin:3px 0;transition:0.3s;}
 @media(max-width:768px){
   .nav-links{display:none;flex-direction:column;background:#f8f8f8;position:absolute;top:60px;right:0;width:200px;padding:15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);border-radius:0 0 5px 5px;}
   .nav-links.active{display:flex;}
+  .nav-links a.admin-link{display:block;}
   .hamburger{display:flex;}
   .navbar{flex-wrap:wrap;}
 }
@@ -51,9 +53,6 @@ section{padding:20px;scroll-margin-top:60px;}
 #supportPopup{display:none;position:fixed;bottom:20px;right:20px;background:#f8f8f8;padding:15px;border-radius:8px;box-shadow:0 0 10px #1e90ff;z-index:10000;color:#000;}
 #supportPopup input,#supportPopup textarea{width:100%;margin-bottom:8px;padding:6px;border-radius:3px;border:1px solid #ddd;background:#fff;color:#000;}
 #supportPopup button{padding:6px 12px;background-color:#1e90ff;color:white;border:none;border-radius:3px;cursor:pointer;}
-#reviewsBoard{margin-top:15px;padding:10px;border:1px solid #1e90ff;border-radius:5px;background:#fff;min-height:40px;display:flex;align-items:center;justify-content:center;position:relative;}
-.review{opacity:0;position:absolute;transition:opacity 1s ease-in-out;width:100%;text-align:center;font-size:1rem;}
-.review.show{opacity:1;position:relative;}
 .image-wall{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px;}
 .image-wall img,.image-wall video{width:100%;border-radius:5px;}
 .image-wall video{pointer-events:none;}
@@ -75,7 +74,7 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
     <a href="#services">Services</a>
     <a href="#track">Track Packages</a>
     <a href="#contact">Contact</a>
-    <a href="admin.html">Admin</a>
+    <a href="admin.html" class="admin-link">Admin</a>
   </div>
   <div class="hamburger" onclick="toggleMenu()">
     <div></div><div></div><div></div>
@@ -140,11 +139,6 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
       </video>
       <p class="desc">Watch our logistics process in action with this video showcasing our fleet. We ensure efficient operations and timely deliveries. Our team’s dedication shines through, providing a glimpse into the hard work behind every successful shipment, enhancing your trust in our services.</p>
     </div>
-  </div>
-
-  <h2 class="section-title">Customer Reviews</h2>
-  <div id="reviewsBoard">
-    <div class="review" id="review0">⭐ Loading reviews...</div>
   </div>
 
   <h2 class="section-title">Business Hours</h2>
@@ -227,7 +221,7 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
       <a href="#services">Services</a> | 
       <a href="#track">Track Packages</a> | 
       <a href="#contact">Contact</a> | 
-      <a href="admin.html">Admin</a>
+      <a href="admin.html" class="admin-link">Admin</a>
     </div>
     <div style="margin-top:10px;font-size:0.9rem;color:#555;">
       <span>Phone: +1 (941) 207-8626</span> | 
@@ -271,34 +265,6 @@ function subscribeNewsletter(){
 // Support Popup
 function openSupport(){document.getElementById('supportPopup').style.display='block';}
 function closeSupport(){document.getElementById('supportPopup').style.display='none';}
-
-// Customer Reviews Rotation
-function loadReviews(){
-  const reviewsBoard = document.getElementById('reviewsBoard');
-  let reviews = localStorage.getItem('customerReviews') ? localStorage.getItem('customerReviews').split('|') : [
-    '⭐ Alice Johnson: Excellent service! Fast and reliable.',
-    '⭐⭐ Michael Smith: Package arrived ahead of time.',
-    '⭐⭐⭐ Samantha Lee: Helpful and responsive support.',
-    '⭐⭐⭐⭐ John Doe: Amazing service, highly recommend!',
-    '⭐⭐⭐⭐⭐ Emily Davis: Professional and efficient delivery.'
-  ];
-  reviewsBoard.innerHTML = '';
-  reviews.forEach((review, index) => {
-    const reviewDiv = document.createElement('div');
-    reviewDiv.className = 'review';
-    reviewDiv.id = `review${index}`;
-    reviewDiv.innerText = review;
-    reviewsBoard.appendChild(reviewDiv);
-  });
-  let currentReview = 0;
-  function showReview(){
-    document.querySelectorAll('.review').forEach(r => r.classList.remove('show'));
-    document.getElementById(`review${currentReview}`).classList.add('show');
-    currentReview = (currentReview + 1) % reviews.length;
-  }
-  showReview();
-  setInterval(showReview, 5000);
-}
 
 // Google Translate
 function googleTranslateElementInit(){
@@ -401,7 +367,7 @@ function trackPackage(){
   }, 10000); // 10-second delay for content
 }
 
-// Print Invoice with Receipt Details and Logos
+// Print Invoice with Receipt Details and Logo
 function printInvoice(number) {
   let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
   const shipment = shipments.find(s => s.trackingNumber === number);
@@ -412,29 +378,40 @@ function printInvoice(number) {
       <html>
       <head><title>Receipt - ${shipment.trackingNumber}</title>
       <style>
-        body { font-family: Arial, sans-serif; margin: 20mm; }
-        .receipt { width: 80mm; margin: 0 auto; padding: 10mm; border: 1px solid #000; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .logos img { height: 30px; margin-right: 10px; }
-        .company-name { font-size: 18px; font-weight: bold; }
-        .details { font-size: 12px; margin: 5px 0; }
-        .total { font-size: 14px; font-weight: bold; margin-top: 10px; }
+        body { font-family: 'Times New Roman', Times, serif; margin: 20mm; background: #fff; }
+        .receipt { width: 80mm; margin: 0 auto; padding: 10mm; border: 2px solid #000; background: #fff; position: relative; }
+        .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); color: #d3d3d3; font-size: 20px; font-weight: bold; opacity: 0.3; z-index: 0; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #000; padding-bottom: 10px; position: relative; z-index: 1; }
+        .logo img { height: 50px; }
+        .company-name { font-size: 20px; font-weight: bold; text-align: left; }
+        .details { font-size: 12px; margin: 10px 0; line-height: 1.5; position: relative; z-index: 1; }
+        .details label { font-weight: bold; width: 120px; display: inline-block; }
+        .total { font-size: 14px; font-weight: bold; margin-top: 20px; border-top: 1px solid #000; padding-top: 10px; text-align: right; position: relative; z-index: 1; }
+        .footer { font-size: 10px; text-align: center; margin-top: 20px; color: #555; position: relative; z-index: 1; }
+        @media print {
+          body { margin: 0; }
+          .receipt { border: 1px solid #000; }
+        }
       </style>
       </head>
       <body>
       <div class="receipt">
+        <div class="watermark">CERTIFIED TRUE COPY</div>
         <div class="header">
-          <div class="logos">
-            <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/delivery-truck.png" alt="Delivery Logo">
-            <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/airplane.png" alt="Airplane Logo">
-          </div>
           <div class="company-name">${companyName}</div>
+          <div class="logo">
+            <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo">
+          </div>
         </div>
-        <div class="details">Tracking Number: ${shipment.trackingNumber}</div>
-        <div class="details">Content: ${shipment.content}</div>
-        <div class="details">Sender: ${shipment.sender.name}, ${shipment.sender.address}</div>
-        <div class="details">Receiver: ${shipment.receiver.name}, ${shipment.receiver.address}</div>
+        <div class="details">
+          <label>Tracking Number:</label><span>${shipment.trackingNumber}</span><br>
+          <label>Content:</label><span>${shipment.content || 'Unknown'}</span><br>
+          <label>Sender:</label><span>${shipment.sender.name}, ${shipment.sender.address}</span><br>
+          <label>Receiver:</label><span>${shipment.receiver.name}, ${shipment.receiver.address}</span><br>
+          <label>Date:</label><span>${new Date().toLocaleDateString()}</span><br>
+        </div>
         <div class="total">Amount: $${amount}</div>
+        <div class="footer">Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com</div>
       </div>
       </body>
       </html>`;
@@ -447,7 +424,6 @@ function printInvoice(number) {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-  loadReviews();
   initMaps();
 });
 </script>
