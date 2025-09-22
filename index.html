@@ -34,6 +34,12 @@ section{padding:20px;scroll-margin-top:60px;}
 .shipment-tracking .header,.shipment-content .header{font-weight:bold;font-size:14px;margin-bottom:10px;}
 .shipment-content .details label{display:inline-block;width:120px;font-weight:bold;}
 .shipment-content .details span{display:inline-block;margin-left:10px;}
+.receipt-edit { margin-top: 10px; }
+.receipt-edit h3 { margin-bottom: 5px; }
+.receipt-edit label { display: block; margin-bottom: 2px; }
+.receipt-edit input { width: 100%; margin-bottom: 5px; padding: 5px; }
+.receipt-edit button { padding: 5px 10px; }
+.print-btn { margin-top: 10px; padding: 8px 15px; background-color: #1e90ff; color: white; border: none; border-radius: 3px; cursor: pointer; }
 .timeline{position:relative;margin:20px 0;}
 .timeline::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:4px;background:#ddd;}
 .timeline-event{position:relative;margin-bottom:30px;padding-left:50px;}
@@ -42,6 +48,7 @@ section{padding:20px;scroll-margin-top:60px;}
 .timeline-event .time{font-size:0.85rem;color:blue;margin-top:2px;}
 .timeline-event .description{margin-top:5px;background:#eee;padding:5px;border-radius:3px;font-size:0.9rem;}
 .map-container{width:100%;height:300px;margin:20px 0;overflow:hidden;position:relative;}
+.map-container a { text-decoration: none; display: block; }
 .map-overlay{position:absolute;top:10px;left:50%;transform:translateX(-50%);background-color:rgba(255,255,255,0.8);padding:5px 10px;border-radius:3px;font-size:14px;color:#000;z-index:10;}
 .newsletter{display:flex;gap:10px;margin-top:15px;}
 .newsletter input{flex:1;padding:8px;border-radius:3px;border:1px solid #ddd;background:#fff;color:#000;}
@@ -177,7 +184,16 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
     <button onclick="trackPackage()">Track Now</button>
   </div>
   <div id="shipmentTracking" class="shipment-tracking" style="display:none;"></div>
-  <div id="shipmentContent" class="shipment-content" style="display:none;"></div>
+  <div id="shipmentContent" class="shipment-content" style="display:none;">
+    <div class="receipt-edit" id="receiptEdit" style="display:none;">
+      <h3>Edit Receipt</h3>
+      <label>Company Name:</label>
+      <input type="text" id="receiptCompanyName" placeholder="Enter Company Name">
+      <label>Amount:</label>
+      <input type="number" id="receiptAmount" step="0.01" placeholder="Enter Amount">
+      <button onclick="saveReceipt()">Save Receipt</button>
+    </div>
+  </div>
 
   <div class="map-container">
     <div class="map-overlay">CURRENT LOCATION ON MAP</div>
@@ -331,6 +347,7 @@ function trackPackage(){
   const number = document.getElementById('trackingNumber').value.trim();
   const trackingDiv = document.getElementById('shipmentTracking');
   const contentDiv = document.getElementById('shipmentContent');
+  const receiptEdit = document.getElementById('receiptEdit');
 
   // Show tracking immediately with 5-second delay for details
   trackingDiv.style.display = 'block';
@@ -356,10 +373,12 @@ function trackPackage(){
             </div>
           `).join('')}
         </div>`;
-        // Update receiver map with shipment receiver location if available
+        // Update receiver map with red marker and clickable link
         if (shipment.receiver.lat && shipment.receiver.lng) {
           const receiverMap = document.getElementById('receiverMap');
-          receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d${(1 / Math.cos(shipment.receiver.lat * Math.PI / 180) * 156543.03392 * Math.cos(shipment.receiver.lat * Math.PI / 180) / Math.pow(2, 15))}!2d${shipment.receiver.lng}!3d${shipment.receiver.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0!2s!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+          const address = encodeURIComponent(shipment.receiver.address);
+          const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d${(1 / Math.cos(shipment.receiver.lat * Math.PI / 180) * 156543.03392 * Math.cos(shipment.receiver.lat * Math.PI / 180) / Math.pow(2, 15))}!2d${shipment.receiver.lng}!3d${shipment.receiver.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x0!2s${address}!5e0!3m2!1sen!2sus!4v1695296400000&markers=color:red%7C${shipment.receiver.lat},${shipment.receiver.lng}`;
+          receiverMap.innerHTML = `<a href="https://www.google.com/maps?q=${shipment.receiver.lat},${shipment.receiver.lng}" target="_blank"><iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe></a>`;
         }
       } else {
         trackingDiv.innerHTML = '<div class="header">Invalid tracking number.</div>';
@@ -369,12 +388,9 @@ function trackPackage(){
     }
   }, 5000); // 5-second delay for tracking details
 
-  // Show content after an additional 5 seconds (total 10 seconds)
+  // Show content and receipt edit after an additional 5 seconds (total 10 seconds)
   setTimeout(() => {
     contentDiv.style.display = 'block';
-    contentDiv.innerHTML = `
-      <div class="header">Content of Shipment: Package</div>
-    `;
     if (number) {
       let shipments = [];
       try {
@@ -400,18 +416,79 @@ function trackPackage(){
             <label>Name:</label><span>${shipment.receiver.name}</span><br>
             <label>Address:</label><span>${shipment.receiver.address}</span><br>
             <label>Mobile:</label><span>${shipment.receiver.mobile}</span>
-          </div>
-          <button class="print-btn" onclick="printInvoice()">Print Invoice</button>`;
+          </div>`;
+        // Initialize receipt edit section
+        document.getElementById('receiptCompanyName').value = shipment.receipt.companyName || 'Express Delivery Service';
+        document.getElementById('receiptAmount').value = shipment.receipt.amount || '0.00';
+        receiptEdit.style.display = 'block';
+        contentDiv.innerHTML += receiptEdit.outerHTML; // Append edited receipt form
+        contentDiv.innerHTML += `<button class="print-btn" onclick="printInvoice('${number}')">Print Invoice</button>`;
       }
     }
   }, 10000); // 10-second delay for content
 }
 
-// Print Invoice
-function printInvoice(){
-  const url = 'https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1790.jpeg';
-  const win = window.open(url, '_blank');
-  win.focus();
+// Save Receipt Details
+function saveReceipt() {
+  const number = document.getElementById('trackingNumber').value.trim();
+  if (number) {
+    let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+    const shipment = shipments.find(s => s.trackingNumber === number);
+    if (shipment) {
+      shipment.receipt = {
+        companyName: document.getElementById('receiptCompanyName').value.trim() || 'Express Delivery Service',
+        amount: document.getElementById('receiptAmount').value.trim() || '0.00'
+      };
+      const index = shipments.findIndex(s => s.trackingNumber === number);
+      if (index !== -1) {
+        shipments[index] = shipment;
+        localStorage.setItem('shipments', JSON.stringify(shipments));
+        alert("Receipt details saved!");
+      }
+    }
+  }
+}
+
+// Print Invoice with Receipt Details and Logos
+function printInvoice(number) {
+  let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+  const shipment = shipments.find(s => s.trackingNumber === number);
+  if (shipment) {
+    const receiptContent = `
+      <html>
+      <head><title>Receipt - ${shipment.trackingNumber}</title>
+      <style>
+        body { font-family: Arial, sans-serif; margin: 20mm; }
+        .receipt { width: 80mm; margin: 0 auto; padding: 10mm; border: 1px solid #000; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .logos img { height: 30px; margin-right: 10px; }
+        .company-name { font-size: 18px; font-weight: bold; }
+        .details { font-size: 12px; margin: 5px 0; }
+        .total { font-size: 14px; font-weight: bold; margin-top: 10px; }
+      </style>
+      </head>
+      <body>
+      <div class="receipt">
+        <div class="header">
+          <div class="logos">
+            <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/delivery-truck.png" alt="Delivery Logo">
+            <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/airplane.png" alt="Airplane Logo">
+          </div>
+          <div class="company-name">${shipment.receipt.companyName}</div>
+        </div>
+        <div class="details">Tracking Number: ${shipment.trackingNumber}</div>
+        <div class="details">Content: ${shipment.content}</div>
+        <div class="details">Sender: ${shipment.sender.name}, ${shipment.sender.address}</div>
+        <div class="details">Receiver: ${shipment.receiver.name}, ${shipment.receiver.address}</div>
+        <div class="total">Amount: $${shipment.receipt.amount}</div>
+      </div>
+      </body>
+      </html>`;
+    const win = window.open('', '_blank');
+    win.document.write(receiptContent);
+    win.document.close();
+    win.print();
+  }
 }
 
 // Initialize
