@@ -16,7 +16,7 @@ header .header-overlay p{font-size:1rem;max-width:700px;margin:0 auto;line-heigh
 .navbar{display:flex;justify-content:space-between;align-items:center;padding:15px;background:#f8f8f8;position:sticky;top:0;z-index:1000;border-bottom:1px solid #ddd;}
 .nav-links{display:flex;gap:15px;}
 .nav-links a{cursor:pointer;font-weight:bold;color:#1e90ff;}
-.hamburger{display:flex:flex-direction:column;cursor:pointer;}
+.hamburger{display:flex;flex-direction:column;cursor:pointer;}
 .hamburger div{width:20px;height:2px;background-color:#1e90ff;margin:3px 0;transition:0.3s;}
 @media(max-width:768px){
   .nav-links{display:none;flex-direction:column;background:#f8f8f8;position:absolute;top:60px;right:0;width:200px;padding:15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);border-radius:0 0 5px 5px;}
@@ -34,7 +34,6 @@ section{padding:20px;scroll-margin-top:60px;}
 .shipment-tracking .header,.shipment-content .header{font-weight:bold;font-size:14px;margin-bottom:10px;}
 .shipment-content .details label{display:inline-block;width:120px;font-weight:bold;}
 .shipment-content .details span{display:inline-block;margin-left:10px;}
-.print-btn { margin-top: 10px; padding: 8px 15px; background-color: #1e90ff; color: white; border: none; border-radius: 3px; cursor: pointer; }
 .timeline{position:relative;margin:20px 0;}
 .timeline::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:4px;background:#ddd;}
 .timeline-event{position:relative;margin-bottom:30px;padding-left:50px;}
@@ -43,14 +42,12 @@ section{padding:20px;scroll-margin-top:60px;}
 .timeline-event .time{font-size:0.85rem;color:blue;margin-top:2px;}
 .timeline-event .description{margin-top:5px;background:#eee;padding:5px;border-radius:3px;font-size:0.9rem;}
 .map-container{width:100%;height:300px;margin:20px 0;overflow:hidden;position:relative;}
-.map-container a { text-decoration: none; display: block; }
 .map-overlay{position:absolute;top:10px;left:50%;transform:translateX(-50%);background-color:rgba(255,255,255,0.8);padding:5px 10px;border-radius:3px;font-size:14px;color:#000;z-index:10;}
 .newsletter{display:flex;gap:10px;margin-top:15px;}
 .newsletter input{flex:1;padding:8px;border-radius:3px;border:1px solid #ddd;background:#fff;color:#000;}
 .newsletter button{padding:8px 15px;border-radius:3px;border:none;background-color:#1e90ff;color:white;cursor:pointer;}
 #supportPopup{display:none;position:fixed;bottom:20px;right:20px;background:#f8f8f8;padding:15px;border-radius:8px;box-shadow:0 0 10px #1e90ff;z-index:10000;color:#000;}
-#supportPopup input,#supportPopup textarea{width:100%;margin-bottom:8px;padding:6px;border-radius:3px;border:1px solid #ddd;background:#fff;color:#000;}
-#supportPopup button{padding:6px 12px;background-color:#1e90ff;color:white;border:none;border-radius:3px;cursor:pointer;}
+#supportPopup input,#supportPopup textarea{width:100%;margin-bottom:8px;padding:6px;border-radius:3px;border:1px solid #ddd;background:#fff;color:#000;} #supportPopup button{padding:6px 12px;background-color:#1e90ff;color:white;border:none;border-radius:3px;cursor:pointer;}
 #reviewsBoard{margin-top:15px;padding:10px;border:1px solid #1e90ff;border-radius:5px;background:#fff;min-height:40px;display:flex;align-items:center;justify-content:center;position:relative;}
 .review{opacity:0;position:absolute;transition:opacity 1s ease-in-out;width:100%;text-align:center;font-size:1rem;}
 .review.show{opacity:1;position:relative;}
@@ -118,7 +115,7 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
       <p class="desc">Utilize our real-time tracking with cutting-edge technology for complete visibility of your shipments. Our system ensures accurate updates, enhancing delivery efficiency. Trust our innovative solutions to keep you informed, providing a seamless and transparent shipping experience with every package we handle.</p>
     </div>
     <div>
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" alt="Delivery 4">
+      <img src="https://raw. githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" alt="Delivery 4">
       <p class="desc">Enjoy efficient logistics solutions tailored for every customer’s needs. We optimize routes and resources to ensure swift deliveries. Our skilled team provides personalized service, handling each package with care, making us the preferred choice for reliable and cost-effective shipping across the globe.</p>
     </div>
     <div>
@@ -178,8 +175,7 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
     <input type="text" id="trackingNumber" placeholder="Enter Tracking ID">
     <button onclick="trackPackage()">Track Now</button>
   </div>
-  <div id="shipmentTracking" class="shipment-tracking" style="display:none;"></div>
-  <div id="shipmentContent" class="shipment-content" style="display:none;"></div>
+  <div id="shipmentTracking" class="shipment-tracking" style="display:none;"></div> <div id="shipmentContent" class="shipment-content" style="display:none;"></div>
 
   <div class="map-container">
     <div class="map-overlay">CURRENT LOCATION ON MAP</div>
@@ -242,8 +238,6 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
   </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 // Hamburger Menu
 function toggleMenu() {
@@ -277,8 +271,7 @@ function closeSupport(){document.getElementById('supportPopup').style.display='n
 // Customer Reviews Rotation
 function loadReviews(){
   const reviewsBoard = document.getElementById('reviewsBoard');
-  let reviews = localStorage.getItem('customerReviews') ? localStorage.getItem('customerReviews').split('|') : [
-    '⭐ Alice Johnson: Excellent service! Fast and reliable.',
+  let reviews = localStorage.getItem('customerReviews') ? localStorage.getItem('customerReviews').split('|') : ['⭐ Alice Johnson: Excellent service! Fast and reliable.',
     '⭐⭐ Michael Smith: Package arrived ahead of time.',
     '⭐⭐⭐ Samantha Lee: Helpful and responsive support.',
     '⭐⭐⭐⭐ John Doe: Amazing service, highly recommend!',
@@ -288,7 +281,7 @@ function loadReviews(){
   reviews.forEach((review, index) => {
     const reviewDiv = document.createElement('div');
     reviewDiv.className = 'review';
-    reviewDiv.id = `review${index}`;
+    reviewDiv.id = review${index};
     reviewDiv.innerText = review;
     reviewsBoard.appendChild(reviewDiv);
   });
@@ -309,8 +302,25 @@ function googleTranslateElementInit(){
 
 // Initialize Maps with Google Maps Embed
 function initMaps() {
-  const receiverMap = document.getElementById('receiverMap');
-  receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+  // Receiver Map (Current Location)
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const userLat = position.coords.latitude;
+        const userLng = position.coords.longitude;
+        const receiverMap = document.getElementById('receiverMap');
+        receiverMap.innerHTML = <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d${(1 / Math.cos(userLat * Math.PI / 180) * 156543.03392 * Math.cos(userLat * Math.PI / 180) / Math.pow(2, 13))}!2d${userLng}!3d${userLat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0!2s!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>;
+      },
+      (error) => {
+        console.error("Geolocation error:", error);
+        const receiverMap = document.getElementById('receiverMap');
+        receiverMap.innerHTML = <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>;
+      }
+    );
+  } else {
+    const receiverMap = document.getElementById('receiverMap');
+    receiverMap.innerHTML = <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>;
+  }
 }
 
 // Tracking
@@ -318,12 +328,10 @@ function trackPackage(){
   const number = document.getElementById('trackingNumber').value.trim();
   const trackingDiv = document.getElementById('shipmentTracking');
   const contentDiv = document.getElementById('shipmentContent');
-  const receiverMap = document.getElementById('receiverMap');
 
   // Show tracking immediately with 5-second delay for details
   trackingDiv.style.display = 'block';
   trackingDiv.innerHTML = '<div class="header">Tracking...</div>';
-  console.log('Tracking started for:', number);
 
   setTimeout(() => {
     if (number) {
@@ -335,39 +343,35 @@ function trackPackage(){
       }
       const shipment = shipments.find(s => s.trackingNumber === number);
       if (shipment) {
-        console.log('Shipment found:', shipment);
         trackingDiv.innerHTML = '<div class="header">Tracking Shipment: ' + number + '</div>';
         trackingDiv.innerHTML += `<div class="timeline">
           ${shipment.timeline.map(event => `
             <div class="timeline-event ${event.completed ? 'completed' : ''}">
               <div class="tick"></div>
               <div class="time">${event.time}</div>
-              <div class="description">${event.description} <div style="background:#ccc;padding:2px 5px;border-radius:3px;margin-top:3px;">${event.status}</div></div>
+              <div class="description">${event. description} <div style="background:#ccc;padding:2px 5px;border-radius:3px;margin-top:3px;">${event.status}</div></div>
             </div>
           `).join('')}
         </div>`;
-        // Update receiver map with red marker and clickable link
-        if (shipment.receiver && shipment.receiver.lat && shipment.receiver.lng) {
-          console.log('Updating map with lat:', shipment.receiver.lat, 'lng:', shipment.receiver.lng);
-          const address = encodeURIComponent(shipment.receiver.address || '');
-          const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d${(1 / Math.cos(shipment.receiver.lat * Math.PI / 180) * 156543.03392 * Math.cos(shipment.receiver.lat * Math.PI / 180) / Math.pow(2, 15))}!2d${shipment.receiver.lng}!3d${shipment.receiver.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x0!2s${address}!5e0!3m2!1sen!2sus!4v1695296400000&markers=color:red%7C${shipment.receiver.lat},${shipment.receiver.lng}`;
-          receiverMap.innerHTML = `<a href="https://maps.google.com/?q=${shipment.receiver.lat},${shipment.receiver.lng}" target="_blank"><iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe></a>`;
-        } else {
-          console.log('No valid receiver coordinates found:', shipment.receiver);
-          receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+        // Update receiver map with shipment receiver location if available
+        if (shipment.receiver.lat && shipment.receiver.lng) {
+          const receiverMap = document.getElementById('receiverMap');
+          receiverMap.innerHTML = <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d${(1 / Math.cos(shipment.receiver.lat * Math.PI / 180) * 156543.03392 * Math.cos(shipment.receiver.lat * Math.PI / 180) / Math.pow(2, 15))}!2d${shipment.receiver.lng}!3d${shipment.receiver.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0!2s!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>;
         }
       } else {
         trackingDiv.innerHTML = '<div class="header">Invalid tracking number.</div>';
-        console.log('No shipment found for:', number);
       }
     } else {
       trackingDiv.innerHTML = '<div class="header">Please enter a tracking number.</div>';
     }
   }, 5000); // 5-second delay for tracking details
 
-  // Show content and print button after an additional 5 seconds (total 10 seconds)
+  // Show content after an additional 5 seconds (total 10 seconds)
   setTimeout(() => {
     contentDiv.style.display = 'block';
+    contentDiv.innerHTML = `
+      <div class="header">Content of Shipment: Package</div>
+    `;
     if (number) {
       let shipments = [];
       try {
@@ -377,83 +381,34 @@ function trackPackage(){
       }
       const shipment = shipments.find(s => s.trackingNumber === number);
       if (shipment) {
-        console.log('Loading content for shipment:', shipment);
         contentDiv.innerHTML = `
-          <div class="header">Content of Shipment: ${shipment.content || 'Unknown'}</div>
+          <div class="header">Content of Shipment: ${shipment.content}</div>
           <div class="details">
-            <label>Origin Area:</label><span>${shipment.origin || 'Unknown'}</span><br>
-            <label>Destination Area:</label><span>${shipment.destination || 'Unknown'}</span>
+            <label>Origin Area:</label><span>${shipment.origin}</span><br>
+            <label>Destination Area:</label><span>${shipment.destination}</span>
           </div>
           <div class="section-title">Sender's Details</div>
           <div class="details">
-            <label>Name:</label><span>${shipment.sender.name || 'Unknown'}</span><br>
-            <label>Address:</label><span>${shipment.sender.address || 'Unknown'}</span>
+            <label>Name:</label><span>${shipment.sender.name}</span><br>
+            <label>Address:</label><span>${shipment.sender.address}</span>
           </div>
           <div class="section-title">Receiver's Details</div>
           <div class="details">
-            <label>Name:</label><span>${shipment.receiver.name || 'Unknown'}</span><br>
-            <label>Address:</label><span>${shipment.receiver.address || 'Unknown'}</span><br>
-            <label>Mobile:</label><span>${shipment.receiver.mobile || 'Unknown'}</span>
-          </div>`;
-        contentDiv.innerHTML += `<button class="print-btn" onclick="printInvoice('${number}')">Print Invoice</button>`;
-      } else {
-        contentDiv.innerHTML = '<div class="header">No content available for this tracking number.</div>';
+            <label>Name:</label><span>${shipment.receiver.name}</span><br>
+            <label>Address:</label><span>${shipment.receiver.address}</span><br>
+            <label>Mobile:</label><span>${shipment.receiver.mobile}</span>
+          </div>
+          <button class="print-btn" onclick="printInvoice()">Print Invoice</button>`;
       }
     }
   }, 10000); // 10-second delay for content
 }
 
-// Print Invoice with Receipt Template
-function printInvoice(number) {
-  let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-  const shipment = shipments.find(s => s.trackingNumber === number);
-  if (shipment) {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    const date = new Date().toLocaleString('en-US', { timeZone: 'Africa/Lagos', dateStyle: 'medium', timeStyle: 'short' });
-
-    // Add logos
-    doc.addImage('https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/delivery-truck.png', 'PNG', 10, 10, 20, 20); // Left logo
-    doc.addImage('https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg', 'JPEG', 170, 10, 20, 20); // Right logo
-
-    // Header
-    doc.setFontSize(16);
-    doc.text(shipment.receipt.companyName || 'Express Delivery Service', 70, 20, { align: 'center' });
-    doc.setFontSize(10);
-    doc.text(`Receipt #${shipment.trackingNumber}`, 70, 30, { align: 'center' });
-    doc.text(`Date: ${date}`, 70, 40, { align: 'center' });
-    doc.line(10, 50, 200, 50); // Horizontal line
-
-    // Shipment details
-    doc.text('Shipment Details:', 10, 60);
-    doc.text(`Content: ${shipment.content || 'Unknown'}`, 10, 70);
-    doc.text(`Origin: ${shipment.origin || 'Unknown'}`, 10, 80);
-    doc.text(`Destination: ${shipment.destination || 'Unknown'}`, 10, 90);
-
-    // Sender details
-    doc.text('Sender:', 10, 110);
-    doc.text(`Name: ${shipment.sender.name || 'Unknown'}`, 10, 120);
-    doc.text(`Address: ${shipment.sender.address || 'Unknown'}`, 10, 130);
-
-    // Receiver details
-    doc.text('Receiver:', 10, 150);
-    doc.text(`Name: ${shipment.receiver.name || 'Unknown'}`, 10, 160);
-    doc.text(`Address: ${shipment.receiver.address || 'Unknown'}`, 10, 170);
-    doc.text(`Mobile: ${shipment.receiver.mobile || 'Unknown'}`, 10, 180);
-
-    // Amount and payment options
-    doc.text(`Amount: $${shipment.receipt.amount || '0.00'}`, 10, 200);
-    doc.text('Payment Method: Cash / Card', 10, 210);
-
-    // Notes
-    doc.text(`Notes: ${shipment.receipt.notes || 'N/A'}`, 10, 220);
-
-    // Footer
-    doc.line(10, 230, 200, 230); // Horizontal line
-    doc.text('Thank You for choosing Express Delivery Service!', 70, 240, { align: 'center' });
-
-    doc.save(`receipt_${shipment.trackingNumber}.pdf`);
-  }
+// Print Invoice
+function printInvoice(){
+  const url = 'https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1790.jpeg';
+  const win = window.open(url, '_blank');
+  win.focus();
 }
 
 // Initialize
@@ -465,3 +420,28 @@ document.addEventListener('DOMContentLoaded', () => {
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
