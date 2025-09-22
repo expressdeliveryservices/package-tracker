@@ -16,7 +16,7 @@ header .header-overlay p{font-size:1rem;max-width:700px;margin:0 auto;line-heigh
 .navbar{display:flex;justify-content:space-between;align-items:center;padding:15px;background:#f8f8f8;position:sticky;top:0;z-index:1000;border-bottom:1px solid #ddd;}
 .nav-links{display:flex;gap:15px;}
 .nav-links a{cursor:pointer;font-weight:bold;color:#1e90ff;}
-.hamburger{display:flex;flex-direction:column;cursor:pointer;}
+.hamburger{display:flex:flex-direction:column;cursor:pointer;}
 .hamburger div{width:20px;height:2px;background-color:#1e90ff;margin:3px 0;transition:0.3s;}
 @media(max-width:768px){
   .nav-links{display:none;flex-direction:column;background:#f8f8f8;position:absolute;top:60px;right:0;width:200px;padding:15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);border-radius:0 0 5px 5px;}
@@ -34,11 +34,6 @@ section{padding:20px;scroll-margin-top:60px;}
 .shipment-tracking .header,.shipment-content .header{font-weight:bold;font-size:14px;margin-bottom:10px;}
 .shipment-content .details label{display:inline-block;width:120px;font-weight:bold;}
 .shipment-content .details span{display:inline-block;margin-left:10px;}
-.receipt-edit { margin-top: 10px; }
-.receipt-edit h3 { margin-bottom: 5px; }
-.receipt-edit label { display: block; margin-bottom: 2px; }
-.receipt-edit input { width: 100%; margin-bottom: 5px; padding: 5px; }
-.receipt-edit button { padding: 5px 10px; }
 .print-btn { margin-top: 10px; padding: 8px 15px; background-color: #1e90ff; color: white; border: none; border-radius: 3px; cursor: pointer; }
 .timeline{position:relative;margin:20px 0;}
 .timeline::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:4px;background:#ddd;}
@@ -189,7 +184,6 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
   <div class="map-container">
     <div class="map-overlay">CURRENT LOCATION ON MAP</div>
     <div id="receiverMap" style="width:100%;height:300px;"></div>
-    <a id="googleMapsLink" href="https://maps.google.com/" target="_blank" style="display:block;text-align:center;margin-top:5px;">View on Google Maps</a>
   </div>
 </section>
 
@@ -248,6 +242,8 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
   </div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 // Hamburger Menu
 function toggleMenu() {
@@ -323,7 +319,6 @@ function trackPackage(){
   const trackingDiv = document.getElementById('shipmentTracking');
   const contentDiv = document.getElementById('shipmentContent');
   const receiverMap = document.getElementById('receiverMap');
-  const googleMapsLink = document.getElementById('googleMapsLink');
 
   // Show tracking immediately with 5-second delay for details
   trackingDiv.style.display = 'block';
@@ -354,32 +349,23 @@ function trackPackage(){
         // Update receiver map with red marker and clickable link
         if (shipment.receiver && shipment.receiver.lat && shipment.receiver.lng) {
           console.log('Updating map with lat:', shipment.receiver.lat, 'lng:', shipment.receiver.lng);
-          const lat = shipment.receiver.lat;
-          const lng = shipment.receiver.lng;
           const address = encodeURIComponent(shipment.receiver.address || '');
-          const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d${(1 / Math.cos(lat * Math.PI / 180) * 156543.03392 * Math.cos(lat * Math.PI / 180) / Math.pow(2, 15))}!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x0!2s${address}!5e0!3m2!1sen!2sus!4v1695296400000&markers=color:red%7C${lat},${lng}`;
-          receiverMap.innerHTML = `<iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
-          googleMapsLink.href = `https://maps.google.com/?q=${lat},${lng}`;
-          googleMapsLink.style.display = 'block';
+          const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d${(1 / Math.cos(shipment.receiver.lat * Math.PI / 180) * 156543.03392 * Math.cos(shipment.receiver.lat * Math.PI / 180) / Math.pow(2, 15))}!2d${shipment.receiver.lng}!3d${shipment.receiver.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x0!2s${address}!5e0!3m2!1sen!2sus!4v1695296400000&markers=color:red%7C${shipment.receiver.lat},${shipment.receiver.lng}`;
+          receiverMap.innerHTML = `<a href="https://maps.google.com/?q=${shipment.receiver.lat},${shipment.receiver.lng}" target="_blank"><iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe></a>`;
         } else {
           console.log('No valid receiver coordinates found:', shipment.receiver);
           receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
-          googleMapsLink.style.display = 'none';
         }
       } else {
         trackingDiv.innerHTML = '<div class="header">Invalid tracking number.</div>';
         console.log('No shipment found for:', number);
-        receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
-        googleMapsLink.style.display = 'none';
       }
     } else {
       trackingDiv.innerHTML = '<div class="header">Please enter a tracking number.</div>';
-      receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
-      googleMapsLink.style.display = 'none';
     }
   }, 5000); // 5-second delay for tracking details
 
-  // Show content and receipt edit after an additional 5 seconds (total 10 seconds)
+  // Show content and print button after an additional 5 seconds (total 10 seconds)
   setTimeout(() => {
     contentDiv.style.display = 'block';
     if (number) {
@@ -409,18 +395,6 @@ function trackPackage(){
             <label>Address:</label><span>${shipment.receiver.address || 'Unknown'}</span><br>
             <label>Mobile:</label><span>${shipment.receiver.mobile || 'Unknown'}</span>
           </div>`;
-        // Initialize receipt edit section
-        const receiptEdit = document.createElement('div');
-        receiptEdit.id = 'receiptEdit';
-        receiptEdit.className = 'receipt-edit';
-        receiptEdit.innerHTML = `
-          <h3>Edit Receipt</h3>
-          <label>Company Name:</label>
-          <input type="text" id="receiptCompanyName" value="${shipment.receipt?.companyName || 'Express Delivery Service'}">
-          <label>Amount:</label>
-          <input type="number" id="receiptAmount" step="0.01" value="${shipment.receipt?.amount || '0.00'}">
-          <button onclick="saveReceipt()">Save Receipt</button>`;
-        contentDiv.appendChild(receiptEdit);
         contentDiv.innerHTML += `<button class="print-btn" onclick="printInvoice('${number}')">Print Invoice</button>`;
       } else {
         contentDiv.innerHTML = '<div class="header">No content available for this tracking number.</div>';
@@ -429,66 +403,56 @@ function trackPackage(){
   }, 10000); // 10-second delay for content
 }
 
-// Save Receipt Details
-function saveReceipt() {
-  const number = document.getElementById('trackingNumber').value.trim();
-  if (number) {
-    let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-    const shipment = shipments.find(s => s.trackingNumber === number);
-    if (shipment) {
-      shipment.receipt = {
-        companyName: document.getElementById('receiptCompanyName').value.trim() || 'Express Delivery Service',
-        amount: document.getElementById('receiptAmount').value.trim() || '0.00'
-      };
-      const index = shipments.findIndex(s => s.trackingNumber === number);
-      if (index !== -1) {
-        shipments[index] = shipment;
-        localStorage.setItem('shipments', JSON.stringify(shipments));
-        alert("Receipt details saved!");
-      }
-    }
-  }
-}
-
-// Print Invoice with Receipt Details and Logos
+// Print Invoice with Receipt Template
 function printInvoice(number) {
   let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
   const shipment = shipments.find(s => s.trackingNumber === number);
   if (shipment) {
-    const receiptContent = `
-      <html>
-      <head><title>Receipt - ${shipment.trackingNumber}</title>
-      <style>
-        body { font-family: Arial, sans-serif; margin: 20mm; }
-        .receipt { width: 80mm; margin: 0 auto; padding: 10mm; border: 1px solid #000; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .logos img { height: 30px; margin-right: 10px; }
-        .company-name { font-size: 18px; font-weight: bold; }
-        .details { font-size: 12px; margin: 5px 0; }
-        .total { font-size: 14px; font-weight: bold; margin-top: 10px; }
-      </style>
-      </head>
-      <body>
-      <div class="receipt">
-        <div class="header">
-          <div class="logos">
-            <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/delivery-truck.png" alt="Delivery Logo">
-            <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/airplane.png" alt="Airplane Logo">
-          </div>
-          <div class="company-name">${shipment.receipt.companyName}</div>
-        </div>
-        <div class="details">Tracking Number: ${shipment.trackingNumber}</div>
-        <div class="details">Content: ${shipment.content}</div>
-        <div class="details">Sender: ${shipment.sender.name}, ${shipment.sender.address}</div>
-        <div class="details">Receiver: ${shipment.receiver.name}, ${shipment.receiver.address}</div>
-        <div class="total">Amount: $${shipment.receipt.amount}</div>
-      </div>
-      </body>
-      </html>`;
-    const win = window.open('', '_blank');
-    win.document.write(receiptContent);
-    win.document.close();
-    win.print();
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const date = new Date().toLocaleString('en-US', { timeZone: 'Africa/Lagos', dateStyle: 'medium', timeStyle: 'short' });
+
+    // Add logos
+    doc.addImage('https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/delivery-truck.png', 'PNG', 10, 10, 20, 20); // Left logo
+    doc.addImage('https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg', 'JPEG', 170, 10, 20, 20); // Right logo
+
+    // Header
+    doc.setFontSize(16);
+    doc.text(shipment.receipt.companyName || 'Express Delivery Service', 70, 20, { align: 'center' });
+    doc.setFontSize(10);
+    doc.text(`Receipt #${shipment.trackingNumber}`, 70, 30, { align: 'center' });
+    doc.text(`Date: ${date}`, 70, 40, { align: 'center' });
+    doc.line(10, 50, 200, 50); // Horizontal line
+
+    // Shipment details
+    doc.text('Shipment Details:', 10, 60);
+    doc.text(`Content: ${shipment.content || 'Unknown'}`, 10, 70);
+    doc.text(`Origin: ${shipment.origin || 'Unknown'}`, 10, 80);
+    doc.text(`Destination: ${shipment.destination || 'Unknown'}`, 10, 90);
+
+    // Sender details
+    doc.text('Sender:', 10, 110);
+    doc.text(`Name: ${shipment.sender.name || 'Unknown'}`, 10, 120);
+    doc.text(`Address: ${shipment.sender.address || 'Unknown'}`, 10, 130);
+
+    // Receiver details
+    doc.text('Receiver:', 10, 150);
+    doc.text(`Name: ${shipment.receiver.name || 'Unknown'}`, 10, 160);
+    doc.text(`Address: ${shipment.receiver.address || 'Unknown'}`, 10, 170);
+    doc.text(`Mobile: ${shipment.receiver.mobile || 'Unknown'}`, 10, 180);
+
+    // Amount and payment options
+    doc.text(`Amount: $${shipment.receipt.amount || '0.00'}`, 10, 200);
+    doc.text('Payment Method: Cash / Card', 10, 210);
+
+    // Notes
+    doc.text(`Notes: ${shipment.receipt.notes || 'N/A'}`, 10, 220);
+
+    // Footer
+    doc.line(10, 230, 200, 230); // Horizontal line
+    doc.text('Thank You for choosing Express Delivery Service!', 70, 240, { align: 'center' });
+
+    doc.save(`receipt_${shipment.trackingNumber}.pdf`);
   }
 }
 
