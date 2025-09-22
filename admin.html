@@ -19,6 +19,12 @@ th,td{border:1px solid #ddd;padding:8px;text-align:left;}
 th{background:#1e90ff;color:white;}
 .shipment-form div{margin-bottom:10px;}
 #generateTrackingCode{background:#4CAF50;color:white;}
+/* Receipt Modal */
+#receiptModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;z-index:999;}
+#receiptContent{background:#fff;padding:20px;max-width:600px;width:90%;position:relative;box-shadow:0 0 10px rgba(0,0,0,0.3);}
+#receiptContent img{max-width:120px;display:block;margin:10px auto;}
+.closeReceipt{position:absolute;top:10px;right:15px;font-size:24px;cursor:pointer;color:#333;}
+.watermark{position:absolute;top:40%;left:10%;font-size:50px;color:rgba(0,0,0,0.1);transform:rotate(-30deg);z-index:0;}
 </style>
 </head>
 <body>
@@ -96,9 +102,18 @@ th{background:#1e90ff;color:white;}
         <label>Longitude:</label>
         <input type="number" id="receiverLng" step="0.0001" placeholder="Receiver Longitude" required>
       </div>
+      <div>
+        <label>Payment Method:</label>
+        <input type="text" id="newPaymentMethod" placeholder="e.g., Credit Card, PayPal" required>
+      </div>
+      <div>
+        <label>Amount:</label>
+        <input type="number" id="newAmount" placeholder="Amount in USD" required>
+      </div>
       <h3>Timeline</h3>
       <textarea id="newTimeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"22 Sep 2025 12:33","description":"✅ Item shipped","status":"IN TRANSIT","completed":true}])' required></textarea>
       <button id="generateTrackingCode" onclick="generateTrackingCode()">Generate Tracking Code</button>
+      <button onclick="openReceipt()">View Receipt</button>
       <p>Send the generated tracking code to the recipient. They can use it on the public page to view details anytime.</p>
     </div>
 
@@ -147,35 +162,50 @@ th{background:#1e90ff;color:white;}
         <label>Longitude:</label>
         <input type="number" id="receiverLng" step="0.0001" value="30.3232" placeholder="Receiver Longitude">
       </div>
+      <div>
+        <label>Payment Method:</label>
+        <input type="text" id="paymentMethod" value="Credit Card" placeholder="Payment Method">
+      </div>
+      <div>
+        <label>Amount:</label>
+        <input type="number" id="amount" value="120" placeholder="Amount in USD">
+      </div>
       <h3>Timeline</h3>
-      <textarea id="timeline" rows="4" placeholder="Enter timeline events as JSON array (e.g., [{&quot;time&quot;:&quot;22 Sep 2025 12:33&quot;,&quot;description&quot;:&quot;✅ Item arrived&quot;,&quot;status&quot;: &quot;ON HOLD&quot;,&quot;completed&quot;:true}])">[
+      <textarea id="timeline" rows="4" placeholder="Enter timeline events as JSON array" >[
   {"time":"23 Sep 2025 07:30","description":"✅ Item has arrived at Vnukovo International Airport, Russia","status":"ON HOLD","completed":true},
   {"time":"22 Sep 2025 14:00","description":"☑️ Your item is on its way to Russia, London UK","status":"IN TRANSIT","completed":true}
 ]</textarea>
       <button onclick="saveShipment()">Save Shipment</button>
-    </div>
-
-    <!-- Receipt Section -->
-    <h2>Shipment Receipt</h2>
-    <div class="shipment-form">
-      <div>
-        <label>Amount:</label>
-        <input type="number" id="receiptAmount" step="0.01" placeholder="Enter amount">
-      </div>
-      <div>
-        <label>Payment Method:</label>
-        <select id="receiptPaymentMethod">
-          <option value="Cash">Cash</option>
-          <option value="Card">Card</option>
-          <option value="Bank Transfer">Bank Transfer</option>
-        </select>
-      </div>
-      <button onclick="showReceipt(document.getElementById('trackingNumber').value)">View Receipt</button>
+      <button onclick="openReceipt()">View Receipt</button>
     </div>
 
     <button style="background:red;margin-top:15px;" onclick="logout()">Logout</button>
   </div>
 
+</div>
+
+<!-- Receipt Modal -->
+<div id="receiptModal">
+  <div id="receiptContent">
+    <span class="closeReceipt" onclick="closeReceipt()">×</span>
+    <div class="watermark">CERTIFIED TRUE COPY</div>
+    <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" alt="Company Logo">
+    <h2>Express Delivery Service</h2>
+    <p>Email: Expressdeliveryservice0016@gmail.com</p>
+    <p>Locations: China | London | USA</p>
+    <p><strong>Tracking Code:</strong> <span id="receiptTracking"></span></p>
+    <p><strong>Content:</strong> <span id="receiptContentText"></span></p>
+    <p><strong>Origin:</strong> <span id="receiptOrigin"></span> | <strong>Destination:</strong> <span id="receiptDestination"></span></p>
+    <p><strong>Sender:</strong> <span id="receiptSender"></span></p>
+    <p><strong>Receiver:</strong> <span id="receiptReceiver"></span> | <strong>Mobile:</strong> <span id="receiptMobile"></span></p>
+    <p><strong>Payment Method:</strong> <span id="receiptPayment"></span></p>
+    <p><strong>Amount:</strong> $<span id="receiptAmount"></span></p>
+    <!-- Signature -->
+    <div style="text-align:right;margin-top:20px;">
+      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/signature.png" alt="Signature" style="width:150px;opacity:0.9;">
+      <p style="margin-top:-10px;font-size:12px;color:#555;">Authorized Signature</p>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -213,22 +243,23 @@ function loadData(){
   const shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
   document.getElementById('newsletterList').value = newsletter.split(',').join('\n');
   document.getElementById('reviewsList').value = reviews.split('|').join('\n');
-  const shipment = shipments.find(s => s.trackingNumber === "ZWB-208345675");
-  if(shipment){
-    document.getElementById('shipmentContent').value = shipment.content || '';
-    document.getElementById('shipmentOrigin').value = shipment.origin || '';
-    document.getElementById('shipmentDestination').value = shipment.destination || '';
-    document.getElementById('senderName').value = shipment.sender.name || '';
-    document.getElementById('senderAddress').value = shipment.sender.address || '';
-    document.getElementById('receiverName').value = shipment.receiver.name || '';
-    document.getElementById('receiverAddress').value = shipment.receiver.address || '';
-    document.getElementById('receiverMobile').value = shipment.receiver.mobile || '';
-    document.getElementById('receiverLat').value = shipment.receiver.lat || 59.9741;
-    document.getElementById('receiverLng').value = shipment.receiver.lng || 30.3232;
-    document.getElementById('timeline').value = JSON.stringify(shipment.timeline, null, 2) || '[]';
-    // Pre-fill receipt fields
-    document.getElementById('receiptAmount').value = shipment.receipt.amount || '0.00';
-    document.getElementById('receiptPaymentMethod').value = shipment.receipt.paymentMethod || 'Cash';
+
+  if(shipments.length > 0){
+    const s = shipments[0];
+    document.getElementById('trackingNumber').value = s.trackingNumber;
+    document.getElementById('shipmentContent').value = s.content;
+    document.getElementById('shipmentOrigin').value = s.origin;
+    document.getElementById('shipmentDestination').value = s.destination;
+    document.getElementById('senderName').value = s.sender.name;
+    document.getElementById('senderAddress').value = s.sender.address;
+    document.getElementById('receiverName').value = s.receiver.name;
+    document.getElementById('receiverAddress').value = s.receiver.address;
+    document.getElementById('receiverMobile').value = s.receiver.mobile;
+    document.getElementById('receiverLat').value = s.receiver.lat;
+    document.getElementById('receiverLng').value = s.receiver.lng;
+    document.getElementById('paymentMethod').value = s.receipt.paymentMethod || '';
+    document.getElementById('amount').value = s.receipt.amount || '0.00';
+    document.getElementById('timeline').value = JSON.stringify(s.timeline, null, 2);
   }
 }
 
@@ -260,36 +291,31 @@ function saveShipment(){
         name: document.getElementById('receiverName').value.trim(),
         address: document.getElementById('receiverAddress').value.trim(),
         mobile: document.getElementById('receiverMobile').value.trim(),
-        lat: parseFloat(document.getElementById('receiverLat').value) || 59.9741,
-        lng: parseFloat(document.getElementById('receiverLng').value) || 30.3232
+        lat: parseFloat(document.getElementById('receiverLat').value) || 0,
+        lng: parseFloat(document.getElementById('receiverLng').value) || 0
       },
       timeline: JSON.parse(document.getElementById('timeline').value.trim()),
       receipt: {
         companyName: COMPANY_NAME,
-        amount: parseFloat(document.getElementById('receiptAmount').value) || '0.00',
-        paymentMethod: document.getElementById('receiptPaymentMethod').value || 'Cash'
+        paymentMethod: document.getElementById('paymentMethod').value.trim(),
+        amount: document.getElementById('amount').value.trim()
       }
     };
     let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
     const index = shipments.findIndex(s => s.trackingNumber === shipment.trackingNumber);
-    if(index !== -1){
-      shipments[index] = shipment;
-    } else {
-      shipments.push(shipment);
-    }
+    if(index !== -1){shipments[index] = shipment;} else {shipments.push(shipment);}
     localStorage.setItem('shipments', JSON.stringify(shipments));
-    alert("Shipment saved! The receiver location map on the public page will update with the new address.");
-  } catch (e) {
-    alert("Invalid data! Please check the timeline JSON or fields.");
-  }
+    alert("Shipment saved!");
+  } catch(e) {alert("Invalid data! Check timeline JSON or fields.");}
 }
 
 // Generate New Tracking Code
-function generateTrackingCode() {
-  try {
-    const letters = String.fromCharCode(...Array(3).fill().map(() => 65 + Math.floor(Math.random() * 26)));
-    const numbers = Math.floor(100000000 + Math.random() * 900000000).toString();
-    const newTracking = `${letters}${numbers}`;
+function generateTrackingCode(){
+  try{
+    const letters = String.fromCharCode(...Array(3).fill().map(()=>65+Math.floor(Math.random()*26)));
+    const numbers = Math.floor(100000000 + Math.random()*900000000).toString();
+    const newTracking = letters+numbers;
+
     const shipment = {
       trackingNumber: newTracking,
       content: document.getElementById('newShipmentContent').value.trim(),
@@ -307,23 +333,18 @@ function generateTrackingCode() {
         lng: parseFloat(document.getElementById('receiverLng').value)
       },
       timeline: JSON.parse(document.getElementById('newTimeline').value.trim()),
-      receipt: {
+      receipt:{
         companyName: COMPANY_NAME,
-        amount: '0.00',
-        paymentMethod: 'Cash'
+        paymentMethod: document.getElementById('newPaymentMethod').value.trim(),
+        amount: document.getElementById('newAmount').value.trim()
       }
     };
-    if (!shipment.content || !shipment.origin || !shipment.destination || !shipment.sender.name || !shipment.sender.address ||
-        !shipment.receiver.name || !shipment.receiver.address || !shipment.receiver.mobile || isNaN(shipment.receiver.lat) ||
-        isNaN(shipment.receiver.lng) || !shipment.timeline || shipment.timeline.length === 0) {
-      throw new Error("All fields are required and must be valid.");
-    }
+
     let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-    if (shipments.some(s => s.trackingNumber === newTracking)) {
-      throw new Error("Tracking code already exists. Please try again.");
-    }
     shipments.push(shipment);
     localStorage.setItem('shipments', JSON.stringify(shipments));
+
+    // Load in edit section
     document.getElementById('trackingNumber').value = newTracking;
     document.getElementById('shipmentContent').value = shipment.content;
     document.getElementById('shipmentOrigin').value = shipment.origin;
@@ -335,77 +356,30 @@ function generateTrackingCode() {
     document.getElementById('receiverMobile').value = shipment.receiver.mobile;
     document.getElementById('receiverLat').value = shipment.receiver.lat;
     document.getElementById('receiverLng').value = shipment.receiver.lng;
-    document.getElementById('timeline').value = JSON.stringify(shipment.timeline, null, 2);
+    document.getElementById('paymentMethod').value = shipment.receipt.paymentMethod;
+    document.getElementById('amount').value = shipment.receipt.amount;
+    document.getElementById('timeline').value = JSON.stringify(shipment.timeline,null,2);
     document.getElementById('newTrackingNumber').value = newTracking;
-    document.getElementById('receiptAmount').value = shipment.receipt.amount;
-    document.getElementById('receiptPaymentMethod').value = shipment.receipt.paymentMethod;
-    alert(`New tracking code generated: ${newTracking}.`);
-  } catch (e) {
-    alert(`Error: ${e.message}`);
-  }
+
+    alert(`New tracking code generated: ${newTracking}`);
+  } catch(e){alert("Error generating tracking code: "+e.message);}
 }
 
-// Show Receipt Function
-function showReceipt(trackingNumber) {
-  const shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-  const shipment = shipments.find(s => s.trackingNumber === trackingNumber);
-  if(!shipment) return alert("Shipment not found!");
-  const receiptWindow = window.open('', 'Receipt', 'width=900,height=700');
-  receiptWindow.document.write(`
-    <html>
-    <head>
-      <title>Receipt - ${shipment.trackingNumber}</title>
-      <style>
-        body { font-family: Arial, sans-serif; padding: 20px; position: relative; background: #fdfdfd; }
-        .watermark { position: absolute; top: 40%; left: 15%; font-size: 80px; color: rgba(200,200,200,0.2); transform: rotate(-30deg); pointer-events: none; user-select: none; }
-        .logo { width: 150px; }
-        h2 { color: #1e90ff; margin-bottom: 0; }
-        h3 { margin-bottom: 5px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background: #1e90ff; color: white; }
-        .section { margin-top: 15px; }
-        .company-info { margin-bottom: 10px; }
-      </style>
-    </head>
-    <body>
-      <div class="watermark">CERTIFIED TRUE COPY</div>
-      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1676.jpeg" class="logo">
-      <div class="company-info">
-        <h2>${shipment.receipt.companyName || COMPANY_NAME}</h2>
-        <p>Email: expressdeliveryservice0016@gmail.com</p>
-        <p>Locations: China | London | USA</p>
-      </div>
-      <div class="section">
-        <strong>Tracking Code:</strong> ${shipment.trackingNumber}<br>
-        <strong>Payment Method:</strong> ${shipment.receipt.paymentMethod}<br>
-        <strong>Amount:</strong> $${parseFloat(shipment.receipt.amount).toFixed(2)}
-      </div>
-      <div class="section">
-        <h3>Sender Details</h3>
-        <p>${shipment.sender.name}<br>${shipment.sender.address}</p>
-      </div>
-      <div class="section">
-        <h3>Receiver Details</h3>
-        <p>${shipment.receiver.name}<br>${shipment.receiver.address}<br>Mobile: ${shipment.receiver.mobile}</p>
-      </div>
-      <div class="section">
-        <h3>Shipment Details</h3>
-        <p>Content: ${shipment.content}<br>Origin: ${shipment.origin}<br>Destination: ${shipment.destination}</p>
-      </div>
-      <div class="section">
-        <h3>Timeline</h3>
-        <table>
-          <tr><th>Time</th><th>Status</th><th>Description</th></tr>
-          ${shipment.timeline.map(ev => `<tr><td>${ev.time}</td><td>${ev.status}</td><td>${ev.description}</td></tr>`).join('')}
-        </table>
-      </div>
-      <button onclick="window.print()" style="margin-top:20px;padding:10px 20px;background:#1e90ff;color:white;border:none;cursor:pointer;">Print Receipt</button>
-    </body>
-    </html>
-  `);
-  receiptWindow.document.close();
+// Open Receipt
+function openReceipt(){
+  const tracking = document.getElementById('trackingNumber').value;
+  document.getElementById('receiptTracking').innerText = tracking;
+  document.getElementById('receiptContentText').innerText = document.getElementById('shipmentContent').value;
+  document.getElementById('receiptOrigin').innerText = document.getElementById('shipmentOrigin').value;
+  document.getElementById('receiptDestination').innerText = document.getElementById('shipmentDestination').value;
+  document.getElementById('receiptSender').innerText = document.getElementById('senderName').value + ', ' + document.getElementById('senderAddress').value;
+  document.getElementById('receiptReceiver').innerText = document.getElementById('receiverName').value + ', ' + document.getElementById('receiverAddress').value;
+  document.getElementById('receiptMobile').innerText = document.getElementById('receiverMobile').value;
+  document.getElementById('receiptPayment').innerText = document.getElementById('paymentMethod').value;
+  document.getElementById('receiptAmount').innerText = document.getElementById('amount').value;
+  document.getElementById('receiptModal').style.display = 'flex';
 }
+function closeReceipt(){document.getElementById('receiptModal').style.display='none';}
 </script>
 
 </body>
