@@ -79,7 +79,7 @@ th { background: #1e90ff; color: white; }
       </div>
       <div>
         <label>Payment Mode:</label>
-        <input type="text" id="newPaymentMode" value="Online Payment" readonly>
+        <input type="text" id="newPaymentMode" placeholder="Enter payment mode (e.g., Credit Card, Bank Transfer)" required>
       </div>
       <div>
         <label>Mode of Transport:</label>
@@ -166,7 +166,7 @@ th { background: #1e90ff; color: white; }
       </div>
       <div>
         <label>Payment Mode:</label>
-        <input type="text" id="paymentMode" value="Online Payment" readonly>
+        <input type="text" id="paymentMode" placeholder="Enter payment mode (e.g., Credit Card, Bank Transfer)">
       </div>
       <div>
         <label>Mode of Transport:</label>
@@ -305,7 +305,7 @@ function loadShipment() {
     document.getElementById('typeOfShipment').value = '';
     document.getElementById('quantity').value = '';
     document.getElementById('officialStampDate').value = '';
-    document.getElementById('paymentMode').value = 'Online Payment';
+    document.getElementById('paymentMode').value = '';
     document.getElementById('shipmentContent').value = '';
     document.getElementById('shipmentOrigin').value = '';
     document.getElementById('shipmentDestination').value = '';
@@ -425,7 +425,7 @@ function saveShipment() {
         !shipment.receiver.mobile || isNaN(shipment.receiver.lat) || isNaN(shipment.receiver.lng) ||
         !shipment.orderId || !shipment.estDeliveryDate || !shipment.modeOfTransport ||
         !shipment.typeOfShipment || !shipment.quantity || !shipment.officialStampDate ||
-        isNaN(shipment.receipt.amount)) {
+        !shipment.paymentMode || isNaN(shipment.receipt.amount)) {
       throw new Error("All fields are required and must be valid.");
     }
 
@@ -488,7 +488,7 @@ function generateTrackingCode() {
         !shipment.receiver.mobile || isNaN(shipment.receiver.lat) || isNaN(shipment.receiver.lng) ||
         !shipment.orderId || !shipment.estDeliveryDate || !shipment.modeOfTransport ||
         !shipment.typeOfShipment || !shipment.quantity || !shipment.officialStampDate ||
-        isNaN(shipment.receipt.amount)) {
+        !shipment.paymentMode || isNaN(shipment.receipt.amount)) {
       throw new Error("All fields are required and must be valid.");
     }
 
