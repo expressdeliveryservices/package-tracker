@@ -22,7 +22,6 @@ th { background: #1e90ff; color: white; }
 #generateTrackingCode { background: #4CAF50; color: white; }
 #signaturePreview img { max-width: 100px; height: auto; margin-top: 10px; border: 1px solid #ddd; border-radius: 3px; }
 #signaturePreview p { font-size: 12px; color: #555; }
-#signedByGeoTrust, #newSignedByGeoTrust { color: red; }
 </style>
 </head>
 <body>
@@ -97,14 +96,6 @@ th { background: #1e90ff; color: white; }
       <div>
         <label>Official Stamp Date:</label>
         <input type="date" id="newOfficialStampDate" placeholder="Official Stamp Date" required>
-      </div>
-      <div>
-        <label>Payment Method:</label>
-        <input type="text" id="newPaymentMethod" value="Visa and PayPal" readonly>
-      </div>
-      <div>
-        <label>Signed by:</label>
-        <input type="text" id="newSignedByGeoTrust" value="GeoTrust" readonly style="color:red;">
       </div>
       <div>
         <label>Content:</label>
@@ -192,14 +183,6 @@ th { background: #1e90ff; color: white; }
       <div>
         <label>Official Stamp Date:</label>
         <input type="date" id="officialStampDate" placeholder="Official Stamp Date">
-      </div>
-      <div>
-        <label>Payment Method:</label>
-        <input type="text" id="paymentMethod" value="Visa and PayPal" readonly>
-      </div>
-      <div>
-        <label>Signed by:</label>
-        <input type="text" id="signedByGeoTrust" value="GeoTrust" readonly style="color:red;">
       </div>
       <div>
         <label>Content:</label>
@@ -322,6 +305,7 @@ function loadShipment() {
     document.getElementById('typeOfShipment').value = '';
     document.getElementById('quantity').value = '';
     document.getElementById('officialStampDate').value = '';
+    document.getElementById('paymentMode').value = 'Online Payment';
     document.getElementById('shipmentContent').value = '';
     document.getElementById('shipmentOrigin').value = '';
     document.getElementById('shipmentDestination').value = '';
@@ -348,8 +332,6 @@ function loadShipment() {
     document.getElementById('quantity').value = shipment.quantity || '';
     document.getElementById('officialStampDate').value = shipment.officialStampDate || '';
     document.getElementById('paymentMode').value = shipment.paymentMode || 'Online Payment';
-    document.getElementById('paymentMethod').value = shipment.paymentMethod || 'Visa and PayPal';
-    document.getElementById('signedByGeoTrust').value = shipment.signedBy || 'GeoTrust';
     document.getElementById('shipmentContent').value = shipment.content || '';
     document.getElementById('shipmentOrigin').value = shipment.origin || '';
     document.getElementById('shipmentDestination').value = shipment.destination || '';
@@ -417,9 +399,7 @@ function saveShipment() {
       typeOfShipment: document.getElementById('typeOfShipment').value.trim(),
       quantity: document.getElementById('quantity').value.trim(),
       paymentMode: document.getElementById('paymentMode').value.trim(),
-      paymentMethod: document.getElementById('paymentMethod').value.trim(),
       officialStampDate: document.getElementById('officialStampDate').value.trim(),
-      signedBy: document.getElementById('signedByGeoTrust').value.trim(),
       officialStamp: localStorage.getItem('signatureStamp') || '',
       sender: {
         name: document.getElementById('senderName').value.trim(),
@@ -482,9 +462,7 @@ function generateTrackingCode() {
       typeOfShipment: document.getElementById('newTypeOfShipment').value.trim(),
       quantity: document.getElementById('newQuantity').value.trim(),
       paymentMode: document.getElementById('newPaymentMode').value.trim(),
-      paymentMethod: document.getElementById('newPaymentMethod').value.trim(),
       officialStampDate: document.getElementById('newOfficialStampDate').value.trim(),
-      signedBy: document.getElementById('newSignedByGeoTrust').value.trim(),
       officialStamp: localStorage.getItem('signatureStamp') || '',
       sender: {
         name: document.getElementById('newSenderName').value.trim(),
@@ -531,8 +509,6 @@ function generateTrackingCode() {
     document.getElementById('quantity').value = shipment.quantity;
     document.getElementById('officialStampDate').value = shipment.officialStampDate;
     document.getElementById('paymentMode').value = shipment.paymentMode;
-    document.getElementById('paymentMethod').value = shipment.paymentMethod;
-    document.getElementById('signedByGeoTrust').value = shipment.signedBy;
     document.getElementById('shipmentContent').value = shipment.content;
     document.getElementById('shipmentOrigin').value = shipment.origin;
     document.getElementById('shipmentDestination').value = shipment.destination;
