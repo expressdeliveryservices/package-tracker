@@ -8,7 +8,7 @@
 body{margin:0;font-family:Arial,sans-serif;background:#fff;color:#000;scroll-behavior:smooth;}
 a{color:#1e90ff;text-decoration:none;}
 h1,h2,h3,h4,h5,h6{color:#1e90ff;margin:0;}
-header{position:relation;height:400px;overflow:hidden;}
+header{position:relative;height:400px;overflow:hidden;}
 header video{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;pointer-events:none;}
 header .header-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;z-index:2;color:#fff;text-shadow:2px 2px 8px rgba(0,0,0,0.7);}
 header .header-overlay h1{font-size:2.5rem;font-weight:bold;letter-spacing:2px;margin-bottom:10px;}
@@ -32,17 +32,17 @@ section{padding:20px;scroll-margin-top:60px;}
 .tracking input{flex:1;padding:8px;border:1px solid #ddd;border-radius:3px;background:#fff;color:#1e90ff;font-size:0.9rem;}
 .tracking input::placeholder{text-transform:uppercase;font-size:0.8rem;color:#999;}
 .tracking button{padding:8px 15px;border:none;border-radius:3px;background-color:#1e90ff;color:white;cursor:pointer;}
-.shipment-tracking,.shipment-content{max-width:500px;margin:10px auto;padding:5mm;font-family:'Times New Roman',Times,serif;font-size:10px;border:2px solid #000;background:#fff;}
-.shipment-tracking .header,.shipment-content .header{font-weight:bold;font-size:18px;margin-bottom:5px;text-align:center;}
-.shipment-content .details label{display:inline-block;width:100px;font-weight:bold;}
-.shipment-content .details span{display:inline-block;margin-left:5px;}
-.shipment-content .signature-img{max-width:80px;height:auto;margin-top:5px;}
-.shipment-content .section-title{font-size:12px;font-weight:bold;margin:5px 0;padding-bottom:3px;}
-.shipment-content .total{font-size:12px;font-weight:bold;margin-top:10px;padding-top:5px;text-align:right;}
-.shipment-content .footer{font-size:8px;text-align:center;margin-top:10px;color:#555;}
+.shipment-tracking,.shipment-content{max-width:500px;margin:10px auto;padding:3mm;font-family:'Times New Roman',Times,serif;font-size:8px;border:2px solid #000;background:#fff;letter-spacing:0.5px;width:70mm;}
+.shipment-tracking .header,.shipment-content .header{font-weight:bold;font-size:14px;margin-bottom:3px;text-align:center;}
+.shipment-content .details label{display:inline-block;width:70px;font-weight:bold;}
+.shipment-content .details span{display:inline-block;margin-left:3px;}
+.shipment-content .signature-img{max-width:60px;height:auto;margin-top:3px;}
+.shipment-content .section-title{font-size:10px;font-weight:bold;margin:3px 0;padding-bottom:2px;}
+.shipment-content .total{font-size:10px;font-weight:bold;margin-top:7px;padding-top:3px;text-align:right;}
+.shipment-content .footer{font-size:6px;text-align:center;margin-top:7px;color:#555;}
 .shipment-content .ash-color{color:#666;}
 .shipment-content .accent-blue{color:#1e90ff;}
-.print-btn{margin-top:5px;padding:6px 12px;background-color:#1e90ff;color:white;border:none;border-radius:3px;cursor:pointer;}
+.print-btn{margin-top:3px;padding:5px 10px;background-color:#1e90ff;color:white;border:none;border-radius:3px;cursor:pointer;}
 .timeline{position:relative;margin:20px 0;}
 .timeline::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:4px;background:#ddd;}
 .timeline-event{position:relative;margin-bottom:30px;padding-left:50px;}
@@ -51,7 +51,7 @@ section{padding:20px;scroll-margin-top:60px;}
 .timeline-event .time{font-size:0.85rem;color:blue;margin-top:2px;}
 .timeline-event .description{margin-top:5px;background:#eee;padding:5px;border-radius:3px;font-size:0.9rem;}
 .map-container{width:100%;height:300px;margin:20px 0;overflow:hidden;position:relative;}
-.map-container a {text-decoration:none;display:block;}
+.map-container a{text-decoration:none;display:block;}
 .map-overlay{position:absolute;top:10px;left:50%;transform:translateX(-50%);background-color:rgba(255,255,255,0.8);padding:5px 10px;border-radius:3px;font-size:14px;color:#000;z-index:10;}
 .newsletter{display:flex;gap:10px;margin-top:15px;}
 .newsletter input{flex:1;padding:8px;border-radius:3px;border:1px solid #ddd;background:#fff;color:#000;}
@@ -188,35 +188,35 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
       <div class="testimonial">
         <div class="quote-icon"></div>
         <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1843.jpeg" alt="Testimonial 1">
-        <p class="name">Sarah Thompson</p>
+        <p class="name">David Wilson</p>
         <p class="rating"></p>
         <p class="desc">Express Delivery exceeded expectations! Package arrived early, intact, with great tracking. Reliable service!</p>
       </div>
       <div class="testimonial">
         <div class="quote-icon"></div>
         <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1844.jpeg" alt="Testimonial 2">
-        <p class="name">James Rodriguez</p>
+        <p class="name">Mark Johnson</p>
         <p class="rating"></p>
         <p class="desc">Thrilled with Express Delivery! On-time international shipment, accurate tracking, responsive support. Highly recommend!</p>
       </div>
       <div class="testimonial">
         <div class="quote-icon"></div>
         <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1846.jpeg" alt="Testimonial 3">
-        <p class="name">Emily Chen</p>
+        <p class="name">Steven Lee</p>
         <p class="rating"></p>
         <p class="desc">Express Delivery made shipping easy. Fragile package arrived perfectly, with live tracking. Great service!</p>
       </div>
       <div class="testimonial">
         <div class="quote-icon"></div>
         <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1847.jpeg" alt="Testimonial 4">
-        <p class="name">Michael Patel</p>
+        <p class="name">Andrew Patel</p>
         <p class="rating"></p>
         <p class="desc">Outstanding! Urgent package delivered fast, with accurate tracking. Express Delivery prioritizes customers!</p>
       </div>
       <div class="testimonial">
         <div class="quote-icon"></div>
         <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1845.jpeg" alt="Testimonial 5">
-        <p class="name">Laura Bennett</p>
+        <p class="name">Thomas Clark</p>
         <p class="rating"></p>
         <p class="desc">Fantastic service! Swift, secure delivery with constant tracking updates. Express Delivery is trustworthy!</p>
       </div>
@@ -478,54 +478,54 @@ function trackPackage(){
         const paymentProviders = shipment.receipt?.paymentProviders || 'Visa, PayPal, Mastercard';
         contentDiv.innerHTML = `
           <div style="position:relative;">
-            <div class="watermark" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-45deg);color:#a9a9a9;font-size:24px;font-weight:bold;opacity:0.5;z-index:0;">CERTIFIED TRUE COPY</div>
+            <div class="watermark" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-45deg);color:#a9a9a9;font-size:20px;font-weight:bold;opacity:0.5;z-index:0;">CERTIFIED TRUE COPY</div>
             <div class="header">${companyName}</div>
-            <div style="text-align:center;margin-bottom:5px;">
-              <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo" style="height:40px;">
+            <div style="text-align:center;margin-bottom:3px;">
+              <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo" style="height:30px;">
             </div>
-            <div class="section-title">Shipment Details</div>
+            <div class="section-title">Shipment</div>
             <div class="details">
-              <label>Tracking Number:</label><span>${shipment.trackingNumber}</span><br>
-              <label>Order ID:</label><span>${shipment.orderId || 'N/A'}</span><br>
-              <label>Content:</label><span>${shipment.content || 'Unknown'}</span><br>
-              <label>Origin:</label><span>${shipment.origin || 'Unknown'}</span><br>
-              <label>Destination:</label><span>${shipment.destination || 'Unknown'}</span><br>
-              <label>Est. Delivery:</label><span>${shipment.estDeliveryDate || 'N/A'}</span><br>
-              <label>Transport Mode:</label><span>${shipment.modeOfTransport || 'N/A'}</span><br>
-              <label>Shipment Type:</label><span>${shipment.typeOfShipment || 'N/A'}</span><br>
-              <label>Quantity:</label><span>${shipment.quantity || 'N/A'}</span><br>
+              <label>Track#:</label><span>${shipment.trackingNumber}</span>
+              <label>Ord ID:</label><span>${shipment.orderId || 'N/A'}</span>
+              <label>Cont:</label><span>${shipment.content || 'Unknown'}</span>
+              <label>Orig:</label><span>${shipment.origin || 'Unknown'}</span>
+              <label>Dest:</label><span>${shipment.destination || 'Unknown'}</span>
+              <label>Est Del:</label><span>${shipment.estDeliveryDate || 'N/A'}</span>
+              <label>Trans:</label><span>${shipment.modeOfTransport || 'N/A'}</span>
+              <label>Type:</label><span>${shipment.typeOfShipment || 'N/A'}</span>
+              <label>Qty:</label><span>${shipment.quantity || 'N/A'}</span>
             </div>
-            <div class="section-title">Payment Details</div>
+            <div class="section-title">Payment</div>
             <div class="details">
-              <label>Amount:</label><span>$${amount}</span><br>
-              <label>Payment Mode:</label><span>${shipment.paymentMode || 'N/A'}</span><br>
-              <label>Payment Method:</label><span>${shipment.paymentMethod || 'N/A'}</span><br>
-              <label>Secured by:</label><span class="ash-color">${securedBy} ✈️</span><br>
-              <label></label><span>${sslProtection}</span><br>
-              <label>Providers:</label><span class="accent-blue">${paymentProviders.replace('Visa', 'Visa 💳').replace('PayPal', 'PayPal 🅿️').replace('Mastercard', 'Mastercard 💳')}</span><br>
-              <label></label><span class="accent-blue">Safe Shopping 🔒</span><br>
+              <label>Amt:</label><span>$${amount}</span>
+              <label>Pay:</label><span>${shipment.paymentMode || 'N/A'}</span>
+              <label>Meth:</label><span>${shipment.paymentMethod || 'N/A'}</span>
+              <label>Sec by:</label><span class="ash-color">${securedBy} ✈️</span>
+              <label></label><span>${sslProtection}</span>
+              <label>Prov:</label><span class="accent-blue">${paymentProviders.replace('Visa', 'Visa 💳').replace('PayPal', 'PayPal 🅿️').replace('Mastercard', 'Mastercard 💳')}</span>
+              <label></label><span class="accent-blue">Safe Shopping 🔒</span>
             </div>
-            <div class="section-title">Sender's Details</div>
+            <div class="section-title">Sender</div>
             <div class="details">
-              <label>Name:</label><span>${shipment.sender.name || 'Unknown'}</span><br>
-              <label>Address:</label><span>${shipment.sender.address || 'Unknown'}</span>
+              <label>Name:</label><span>${shipment.sender.name || 'Unknown'}</span>
+              <label>Addr:</label><span>${shipment.sender.address || 'Unknown'}</span>
             </div>
-            <div class="section-title">Receiver's Details</div>
+            <div class="section-title">Recvr</div>
             <div class="details">
-              <label>Name:</label><span>${shipment.receiver.name || 'Unknown'}</span><br>
-              <label>Address:</label><span>${shipment.receiver.address || 'Unknown'}</span><br>
-              <label>Mobile:</label><span>${shipment.receiver.mobile || 'N/A'}</span>
+              <label>Name:</label><span>${shipment.receiver.name || 'Unknown'}</span>
+              <label>Addr:</label><span>${shipment.receiver.address || 'Unknown'}</span>
+              <label>Mob:</label><span>${shipment.receiver.mobile || 'N/A'}</span>
             </div>
-            <div class="section-title">Authentication</div>
+            <div class="section-title">Auth</div>
             <div class="details">
-              <label>Signed by:</label><span>${shipment.signedBy || 'N/A'}</span><br>
-              <label>Stamp Date:</label><span>${shipment.officialStampDate || 'N/A'}</span><br>
-              <label>Signature Stamp:</label><span>${signatureStamp ? `<img src="${signatureStamp}" class="signature-img" alt="Signature Stamp">` : 'N/A'}</span><br>
+              <label>Sign:</label><span>${shipment.signedBy || 'N/A'}</span>
+              <label>Date:</label><span>${shipment.officialStampDate || 'N/A'}</span>
+              <label>Stamp:</label><span>${signatureStamp ? `<img src="${signatureStamp}" class="signature-img" alt="Signature Stamp">` : 'N/A'}</span>
             </div>
-            <div class="total">Total Amount: $${amount}</div>
+            <div class="total">Total: $${amount}</div>
             <div class="footer">
               Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
-              Issued on: ${new Date().toLocaleDateString()}
+              Issued: ${new Date().toLocaleDateString()}
             </div>
           </div>
           <button class="print-btn" onclick="printInvoice('${number}')">Print Invoice</button>`;
@@ -553,18 +553,18 @@ function printInvoice(number) {
       <html>
       <head><title>Receipt - ${shipment.trackingNumber}</title>
       <style>
-        body {font-family:'Times New Roman',Times,serif;margin:10mm;background:#fff;}
-        .receipt {width:80mm;margin:0 auto;padding:5mm;border:2px solid #000;background:#fff;position:relative;}
-        .watermark {position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-45deg);color:#a9a9a9;font-size:24px;font-weight:bold;opacity:0.5;z-index:0;}
-        .header {font-size:18px;font-weight:bold;text-align:center;margin-bottom:5px;}
-        .logo {text-align:center;margin-bottom:5px;}
-        .logo img {height:40px;}
-        .section-title {font-size:12px;font-weight:bold;margin:5px 0;padding-bottom:3px;}
-        .details {font-size:10px;margin:5px 0;line-height:1.2;}
-        .details label {font-weight:bold;width:100px;display:inline-block;}
-        .details img {max-width:80px;height:auto;}
-        .total {font-size:12px;font-weight:bold;margin-top:10px;padding-top:5px;text-align:right;}
-        .footer {font-size:8px;text-align:center;margin-top:10px;color:#555;}
+        body {font-family:'Times New Roman',Times,serif;margin:6mm;background:#fff;}
+        .receipt {width:70mm;margin:0 auto;padding:3mm;border:2px solid #000;background:#fff;position:relative;}
+        .watermark {position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-45deg);color:#a9a9a9;font-size:20px;font-weight:bold;opacity:0.5;z-index:0;}
+        .header {font-size:14px;font-weight:bold;text-align:center;margin-bottom:3px;}
+        .logo {text-align:center;margin-bottom:3px;}
+        .logo img {height:30px;}
+        .section-title {font-size:10px;font-weight:bold;margin:3px 0;padding-bottom:2px;}
+        .details {font-size:8px;margin:3px 0;line-height:1.0;letter-spacing:0.5px;}
+        .details label {font-weight:bold;width:70px;display:inline-block;}
+        .details img {max-width:60px;height:auto;}
+        .total {font-size:10px;font-weight:bold;margin-top:7px;padding-top:3px;text-align:right;}
+        .footer {font-size:6px;text-align:center;margin-top:7px;color:#555;}
         .ash-color {color:#666;}
         .accent-blue {color:#1e90ff;}
         @media print {body {margin:0;}.receipt {border:1px solid #000;}}
@@ -577,49 +577,49 @@ function printInvoice(number) {
         <div class="logo">
           <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo">
         </div>
-        <div class="section-title">Shipment Details</div>
+        <div class="section-title">Shipment</div>
         <div class="details">
-          <label>Tracking Number:</label><span>${shipment.trackingNumber}</span><br>
-          <label>Order ID:</label><span>${shipment.orderId || 'N/A'}</span><br>
-          <label>Content:</label><span>${shipment.content || 'Unknown'}</span><br>
-          <label>Origin:</label><span>${shipment.origin || 'Unknown'}</span><br>
-          <label>Destination:</label><span>${shipment.destination || 'Unknown'}</span><br>
-          <label>Est. Delivery:</label><span>${shipment.estDeliveryDate || 'N/A'}</span><br>
-          <label>Transport Mode:</label><span>${shipment.modeOfTransport || 'N/A'}</span><br>
-          <label>Shipment Type:</label><span>${shipment.typeOfShipment || 'N/A'}</span><br>
-          <label>Quantity:</label><span>${shipment.quantity || 'N/A'}</span><br>
+          <label>Track#:</label><span>${shipment.trackingNumber}</span>
+          <label>Ord ID:</label><span>${shipment.orderId || 'N/A'}</span>
+          <label>Cont:</label><span>${shipment.content || 'Unknown'}</span>
+          <label>Orig:</label><span>${shipment.origin || 'Unknown'}</span>
+          <label>Dest:</label><span>${shipment.destination || 'Unknown'}</span>
+          <label>Est Del:</label><span>${shipment.estDeliveryDate || 'N/A'}</span>
+          <label>Trans:</label><span>${shipment.modeOfTransport || 'N/A'}</span>
+          <label>Type:</label><span>${shipment.typeOfShipment || 'N/A'}</span>
+          <label>Qty:</label><span>${shipment.quantity || 'N/A'}</span>
         </div>
-        <div class="section-title">Payment Details</div>
+        <div class="section-title">Payment</div>
         <div class="details">
-          <label>Amount:</label><span>$${amount}</span><br>
-          <label>Payment Mode:</label><span>${shipment.paymentMode || 'N/A'}</span><br>
-          <label>Payment Method:</label><span>${shipment.paymentMethod || 'N/A'}</span><br>
-          <label>Secured by:</label><span class="ash-color">${securedBy} ✈️</span><br>
-          <label></label><span>${sslProtection}</span><br>
-          <label>Providers:</label><span class="accent-blue">${paymentProviders.replace('Visa', 'Visa 💳').replace('PayPal', 'PayPal 🅿️').replace('Mastercard', 'Mastercard 💳')}</span><br>
-          <label></label><span class="accent-blue">Safe Shopping 🔒</span><br>
+          <label>Amt:</label><span>$${amount}</span>
+          <label>Pay:</label><span>${shipment.paymentMode || 'N/A'}</span>
+          <label>Meth:</label><span>${shipment.paymentMethod || 'N/A'}</span>
+          <label>Sec by:</label><span class="ash-color">${securedBy} ✈️</span>
+          <label></label><span>${sslProtection}</span>
+          <label>Prov:</label><span class="accent-blue">${paymentProviders.replace('Visa', 'Visa 💳').replace('PayPal', 'PayPal 🅿️').replace('Mastercard', 'Mastercard 💳')}</span>
+          <label></label><span class="accent-blue">Safe Shopping 🔒</span>
         </div>
-        <div class="section-title">Sender's Details</div>
+        <div class="section-title">Sender</div>
         <div class="details">
-          <label>Name:</label><span>${shipment.sender.name || 'Unknown'}</span><br>
-          <label>Address:</label><span>${shipment.sender.address || 'Unknown'}</span>
+          <label>Name:</label><span>${shipment.sender.name || 'Unknown'}</span>
+          <label>Addr:</label><span>${shipment.sender.address || 'Unknown'}</span>
         </div>
-        <div class="section-title">Receiver's Details</div>
+        <div class="section-title">Recvr</div>
         <div class="details">
-          <label>Name:</label><span>${shipment.receiver.name || 'Unknown'}</span><br>
-          <label>Address:</label><span>${shipment.receiver.address || 'Unknown'}</span><br>
-          <label>Mobile:</label><span>${shipment.receiver.mobile || 'N/A'}</span>
+          <label>Name:</label><span>${shipment.receiver.name || 'Unknown'}</span>
+          <label>Addr:</label><span>${shipment.receiver.address || 'Unknown'}</span>
+          <label>Mob:</label><span>${shipment.receiver.mobile || 'N/A'}</span>
         </div>
-        <div class="section-title">Authentication</div>
+        <div class="section-title">Auth</div>
         <div class="details">
-          <label>Signed by:</label><span>${shipment.signedBy || 'N/A'}</span><br>
-          <label>Stamp Date:</label><span>${shipment.officialStampDate || 'N/A'}</span><br>
-          ${signatureStamp ? `<label>Signature Stamp:</label><span><img src="${signatureStamp}" alt="Signature Stamp"></span>` : '<label>Signature Stamp:</label><span>N/A</span>'}<br>
+          <label>Sign:</label><span>${shipment.signedBy || 'N/A'}</span>
+          <label>Date:</label><span>${shipment.officialStampDate || 'N/A'}</span>
+          <label>Stamp:</label><span>${signatureStamp ? `<img src="${signatureStamp}" alt="Signature Stamp">` : 'N/A'}</span>
         </div>
-        <div class="total">Total Amount: $${amount}</div>
+        <div class="total">Total: $${amount}</div>
         <div class="footer">
           Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
-          Issued on: ${new Date().toLocaleDateString()}
+          Issued: ${new Date().toLocaleDateString()}
         </div>
       </div>
       </body>
@@ -638,8 +638,8 @@ function printInvoice(number) {
     html2pdf()
       .set({
         filename: `Receipt_${shipment.trackingNumber}.pdf`,
-        margin: [10, 10, 10, 10],
-        html2canvas: {scale: 2},
+        margin: [6, 6, 6, 6],
+        html2canvas: {scale: 3},
         jsPDF: {unit:'mm',format:'a4',orientation:'portrait'}
       })
       .from(element)
