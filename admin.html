@@ -3,534 +3,436 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard - Express Delivery</title>
+<title>Express Delivery Service</title>
 <style>
-body { font-family: Arial, sans-serif; background: #f0f2f5; color: #000; margin: 0; padding: 0; }
-header { background: #1e90ff; color: white; padding: 15px; text-align: center; }
-.container { max-width: 1000px; margin: 20px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-input, textarea, select, button { margin: 5px 0; padding: 8px; width: 100%; border-radius: 3px; border: 1px solid #ccc; font-size: 14px; }
-input[readonly] { background: #e0e0e0; cursor: not-allowed; }
-button { background: #1e90ff; color: white; border: none; cursor: pointer; }
-button:hover { background: #1565c0; }
-h2, h3 { color: #1e90ff; margin-top: 0; }
-.section { margin-bottom: 30px; }
-label { font-weight: bold; }
-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-th { background: #1e90ff; color: white; }
-.shipment-form div { margin-bottom: 10px; }
-#generateTrackingCode { background: #4CAF50; color: white; }
-#signaturePreview img { max-width: 100px; height: auto; margin-top: 10px; border: 1px solid #ddd; border-radius: 3px; }
-#signaturePreview p { font-size: 12px; color: #555; }
+body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f0f2f5; color: #333; }
+header { background: #1e90ff; color: white; padding: 15px 20px; position: relative; }
+.header-content { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
+.header-content h1 { margin: 0; font-size: 24px; }
+.nav-links { display: flex; gap: 20px; }
+.nav-links a { color: white; text-decoration: none; font-size: 16px; }
+.nav-links a:hover { text-decoration: underline; }
+.hamburger { display: none; flex-direction: column; cursor: pointer; }
+.hamburger div { width: 25px; height: 3px; background: white; margin: 2px 0; }
+@media (max-width: 768px) {
+  .nav-links { display: none; flex-direction: column; position: absolute; top: 60px; left: 0; background: #1e90ff; width: 100%; padding: 10px 0; }
+  .nav-links.active { display: flex; }
+  .hamburger { display: flex; }
+  .hamburger.open div:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+  .hamburger.open div:nth-child(2) { opacity: 0; }
+  .hamburger.open div:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+}
+.container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
+.hero { text-align: center; padding: 40px 20px; background: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+.hero h2 { color: #1e90ff; margin-top: 0; }
+.hero input { padding: 10px; width: 200px; margin: 10px 5px; border: 1px solid #ccc; border-radius: 5px; }
+.hero button { padding: 10px 20px; background: #1e90ff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+.hero button:hover { background: #1565c0; }
+#shipmentTracking, #shipmentContent { display: none; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin: 20px 0; }
+.header { font-size: 18px; font-weight: bold; color: #1e90ff; margin-bottom: 10px; }
+.timeline { margin-top: 10px; }
+.timeline-event { display: flex; align-items: flex-start; margin-bottom: 15px; position: relative; padding-left: 30px; }
+.timeline-event .tick { width: 12px; height: 12px; background: #ccc; border-radius: 50%; position: absolute; left: 0; top: 5px; }
+.timeline-event.completed .tick { background: #4CAF50; }
+.timeline-event .time { font-size: 14px; font-weight: bold; min-width: 120px; }
+.timeline-event .description { font-size: 14px; }
+.timeline-event .description div { display: inline-block; }
+#shipmentContent { position: relative; }
+.watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); color: #a9a9a9; font-size: 40px; font-weight: bold; opacity: 0.3; z-index: 0; }
+#shipmentContent .header { display: flex; justify-content: space-between; align-items: center; }
+.company-name { font-size: 24px; font-weight: bold; color: #1e90ff; }
+.logo img { height: 50px; }
+.section-title { font-size: 18px; font-weight: bold; margin: 20px 0 10px; padding-bottom: 5px; border-bottom: 2px solid #1e90ff; }
+.details { display: grid; grid-template-columns: 150px 1fr; gap: 10px; font-size: 16px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background: #fafafa; }
+.details label { font-weight: bold; color: #333; }
+.details span { color: #555; }
+.details img.signature-img { max-width: 100px; height: auto; vertical-align: middle; }
+.details img.payment-img { max-width: 50px; height: auto; margin-top: 5px; }
+.total { font-size: 18px; font-weight: bold; margin-top: 20px; text-align: right; color: #1e90ff; }
+.footer { font-size: 12px; text-align: center; margin-top: 20px; color: #555; border-top: 1px solid #ddd; padding-top: 10px; }
+.print-btn { display: block; margin: 20px auto; padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; }
+.print-btn:hover { background: #45a049; }
+#receiverMap { margin: 20px 0; }
+.testimonial-section { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin: 20px 0; }
+.testimonial-section h2 { color: #1e90ff; text-align: center; }
+.testimonial-wall { display: flex; overflow: hidden; position: relative; width: 100%; }
+.testimonial { min-width: 100%; padding: 20px; box-sizing: border-box; text-align: center; transition: transform 0.5s ease; }
+.testimonial p { font-style: italic; margin: 0; }
+.newsletter { background: #1e90ff; color: white; padding: 20px; text-align: center; border-radius: 8px; margin: 20px 0; }
+.newsletter input { padding: 10px; width: 200px; margin: 10px 5px; border: none; border-radius: 5px; }
+.newsletter button { padding: 10px 20px; background: white; color: #1e90ff; border: none; border-radius: 5px; cursor: pointer; }
+.newsletter button:hover { background: #f0f0f0; }
+.support-btn { position: fixed; bottom: 20px; right: 20px; background: #1e90ff; color: white; padding: 10px 20px; border-radius: 50px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+.support-btn:hover { background: #1565c0; }
+.support-popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.5); z-index: 1000; width: 300px; }
+.support-popup h3 { margin-top: 0; color: #1e90ff; }
+.support-popup input, .support-popup textarea { width: 100%; margin: 10px 0; padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+.support-popup button { padding: 8px 16px; background: #1e90ff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+.support-popup button:hover { background: #1565c0; }
+.overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Admin Dashboard</h1>
+  <div class="header-content">
+    <h1>Express Delivery Service</h1>
+    <div class="hamburger" onclick="toggleMenu()">
+      <div></div><div></div><div></div>
+    </div>
+    <div class="nav-links" id="navLinks">
+      <a href="#home">Home</a>
+      <a href="#tracking">Tracking</a>
+      <a href="#testimonials">Testimonials</a>
+      <a href="#newsletter">Newsletter</a>
+      <a href="admin.html">Admin</a>
+    </div>
+  </div>
 </header>
 
 <div class="container">
-
-  <!-- Login Section -->
-  <div class="section" id="loginSection">
-    <h2>Login</h2>
-    <label>Email:</label>
-    <input type="email" id="adminEmail" placeholder="Enter admin email" required>
-    <label>Password:</label>
-    <input type="password" id="adminPassword" placeholder="Enter password" required>
-    <button onclick="login()">Login</button>
-    <p id="loginMessage" style="color:red;"></p>
+  <div class="hero" id="home">
+    <h2>Track Your Package</h2>
+    <input type="text" id="trackingNumber" placeholder="Enter Tracking Number">
+    <button onclick="trackPackage()">Track</button>
   </div>
 
-  <!-- Dashboard Section -->
-  <div class="section" id="dashboardSection" style="display:none;">
-    
-    <h2>Edit Newsletter Subscribers</h2>
-    <textarea id="newsletterList" rows="5" placeholder="Enter one email per line"></textarea>
-    <button onclick="saveNewsletter()">Save Newsletter</button>
+  <div id="shipmentTracking"></div>
+  <div id="receiverMap"></div>
+  <div id="shipmentContent"></div>
 
-    <h2>Edit Customer Reviews</h2>
-    <textarea id="reviewsList" rows="5" placeholder="Enter one review per line"></textarea>
-    <button onclick="saveReviews()">Save Reviews</button>
-
-    <h2>Upload Signature Stamp</h2>
-    <div class="section">
-      <label>Signature Stamp Image:</label>
-      <input type="file" id="signatureStamp" accept="image/*">
-      <div id="signaturePreview"></div>
-      <button onclick="saveSignatureStamp()">Save Signature Stamp</button>
+  <div class="testimonial-section" id="testimonials">
+    <h2>What Our Customers Say</h2>
+    <div class="testimonial-wall">
+      <div class="testimonial"><p>"Fast and reliable delivery!"</p></div>
+      <div class="testimonial"><p>"Best service I've used!"</p></div>
+      <div class="testimonial"><p>"My package arrived on time!"</p></div>
     </div>
-
-    <h2>Generate New Tracking Code</h2>
-    <div class="shipment-form">
-      <input type="text" id="newTrackingNumber" placeholder="Tracking code will be generated" readonly>
-      <div>
-        <label>Amount ($):</label>
-        <input type="number" id="newShipmentAmount" step="0.01" placeholder="Enter shipment amount" required>
-      </div>
-      <div>
-        <label>Order ID:</label>
-        <input type="text" id="newOrderId" placeholder="Enter order ID" required>
-      </div>
-      <div>
-        <label>Est. Delivery Date:</label>
-        <input type="date" id="newEstDeliveryDate" placeholder="Select estimated delivery date" required>
-      </div>
-      <div>
-        <label>Payment Mode:</label>
-        <input type="text" id="newPaymentMode" placeholder="Enter payment mode (e.g., Credit Card, Bank Transfer)" required>
-      </div>
-      <div>
-        <label>Mode of Transport:</label>
-        <input type="text" id="newModeOfTransport" placeholder="Enter mode of transport (e.g., Air, Sea)" required>
-      </div>
-      <div>
-        <label>Type of Shipment:</label>
-        <input type="text" id="newTypeOfShipment" placeholder="Enter shipment type (e.g., Express, Standard)" required>
-      </div>
-      <div>
-        <label>Quantity:</label>
-        <input type="text" id="newQuantity" placeholder="Enter quantity (e.g., 2 boxes)" required>
-      </div>
-      <div>
-        <label>Official Stamp Date:</label>
-        <input type="date" id="newOfficialStampDate" placeholder="Select official stamp date" required>
-      </div>
-      <div>
-        <label>Content:</label>
-        <input type="text" id="newShipmentContent" placeholder="Enter shipment content" required>
-      </div>
-      <div>
-        <label>Origin:</label>
-        <input type="text" id="newShipmentOrigin" placeholder="Enter origin area" required>
-      </div>
-      <div>
-        <label>Destination:</label>
-        <input type="text" id="newShipmentDestination" placeholder="Enter destination area" required>
-      </div>
-      <h3>Sender Details</h3>
-      <div>
-        <label>Name:</label>
-        <input type="text" id="newSenderName" placeholder="Enter sender name" required>
-      </div>
-      <div>
-        <label>Address:</label>
-        <input type="text" id="newSenderAddress" placeholder="Enter sender address" required>
-      </div>
-      <h3>Receiver Details</h3>
-      <div>
-        <label>Name:</label>
-        <input type="text" id="newReceiverName" placeholder="Enter receiver name" required>
-      </div>
-      <div>
-        <label>Address:</label>
-        <input type="text" id="newReceiverAddress" placeholder="Enter receiver address" required>
-      </div>
-      <div>
-        <label>Mobile:</label>
-        <input type="text" id="newReceiverMobile" placeholder="Enter receiver mobile" required>
-      </div>
-      <div>
-        <label>Latitude:</label>
-        <input type="number" id="newReceiverLat" step="0.0001" placeholder="Enter receiver latitude" required>
-      </div>
-      <div>
-        <label>Longitude:</label>
-        <input type="number" id="newReceiverLng" step="0.0001" placeholder="Enter receiver longitude" required>
-      </div>
-      <h3>Timeline</h3>
-      <textarea id="newTimeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"23 Sep 2025 07:30","description":"Item arrived","status":"ON HOLD","completed":true}])' required></textarea>
-      <button id="generateTrackingCode" onclick="generateTrackingCode()">Generate Tracking Code</button>
-      <p>Send the generated tracking code to the recipient for tracking on the public page.</p>
-    </div>
-
-    <h2>Edit Shipments</h2>
-    <div class="shipment-form">
-      <label>Select Shipment:</label>
-      <select id="shipmentSelect" onchange="loadShipment()">
-        <option value="">Select a shipment</option>
-      </select>
-      <input type="text" id="trackingNumber" placeholder="Tracking Number" readonly>
-      <div>
-        <label>Amount ($):</label>
-        <input type="number" id="shipmentAmount" step="0.01" placeholder="Enter shipment amount">
-      </div>
-      <div>
-        <label>Order ID:</label>
-        <input type="text" id="orderId" placeholder="Enter order ID">
-      </div>
-      <div>
-        <label>Est. Delivery Date:</label>
-        <input type="date" id="estDeliveryDate" placeholder="Select estimated delivery date">
-      </div>
-      <div>
-        <label>Payment Mode:</label>
-        <input type="text" id="paymentMode" placeholder="Enter payment mode (e.g., Credit Card, Bank Transfer)">
-      </div>
-      <div>
-        <label>Mode of Transport:</label>
-        <input type="text" id="modeOfTransport" placeholder="Enter mode of transport">
-      </div>
-      <div>
-        <label>Type of Shipment:</label>
-        <input type="text" id="typeOfShipment" placeholder="Enter shipment type">
-      </div>
-      <div>
-        <label>Quantity:</label>
-        <input type="text" id="quantity" placeholder="Enter quantity">
-      </div>
-      <div>
-        <label>Official Stamp Date:</label>
-        <input type="date" id="officialStampDate" placeholder="Select official stamp date">
-      </div>
-      <div>
-        <label>Content:</label>
-        <input type="text" id="shipmentContent" placeholder="Enter shipment content">
-      </div>
-      <div>
-        <label>Origin:</label>
-        <input type="text" id="shipmentOrigin" placeholder="Enter origin area">
-      </div>
-      <div>
-        <label>Destination:</label>
-        <input type="text" id="shipmentDestination" placeholder="Enter destination area">
-      </div>
-      <h3>Sender Details</h3>
-      <div>
-        <label>Name:</label>
-        <input type="text" id="senderName" placeholder="Enter sender name">
-      </div>
-      <div>
-        <label>Address:</label>
-        <input type="text" id="senderAddress" placeholder="Enter sender address">
-      </div>
-      <h3>Receiver Details</h3>
-      <div>
-        <label>Name:</label>
-        <input type="text" id="receiverName" placeholder="Enter receiver name">
-      </div>
-      <div>
-        <label>Address:</label>
-        <input type="text" id="receiverAddress" placeholder="Enter receiver address">
-      </div>
-      <div>
-        <label>Mobile:</label>
-        <input type="text" id="receiverMobile" placeholder="Enter receiver mobile">
-      </div>
-      <div>
-        <label>Latitude:</label>
-        <input type="number" id="receiverLat" step="0.0001" placeholder="Enter receiver latitude">
-      </div>
-      <div>
-        <label>Longitude:</label>
-        <input type="number" id="receiverLng" step="0.0001" placeholder="Enter receiver longitude">
-      </div>
-      <h3>Timeline</h3>
-      <textarea id="timeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"23 Sep 2025 07:30","description":"Item arrived","status":"ON HOLD","completed":true}])'></textarea>
-      <button onclick="saveShipment()">Save Shipment</button>
-    </div>
-
-    <button style="background:red;margin-top:15px;" onclick="logout()">Logout</button>
   </div>
 
+  <div class="newsletter" id="newsletter">
+    <h2>Stay Updated</h2>
+    <input type="email" id="newsletterEmail" placeholder="Enter your email">
+    <button onclick="subscribeNewsletter()">Subscribe</button>
+  </div>
 </div>
 
+<div class="support-btn" onclick="openSupport()">Support</div>
+<div class="overlay" id="overlay"></div>
+<div class="support-popup" id="supportPopup">
+  <h3>Contact Support</h3>
+  <input type="text" id="supportName" placeholder="Your Name">
+  <input type="email" id="supportEmail" placeholder="Your Email">
+  <textarea id="supportMessage" rows="4" placeholder="Your Message"></textarea>
+  <button onclick="closeSupport()">Submit</button>
+</div>
+
+<div id="google_translate_element" style="position: fixed; bottom: 20px; left: 20px;"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
-// Admin Credentials
-const ADMIN_EMAIL = "Expressdeliveryservice0016@gmail.com";
-const ADMIN_PASSWORD = "Umuojima";
-const COMPANY_NAME = "Express Delivery Service";
+// Hamburger Menu
+function toggleMenu() {
+  const navLinks = document.getElementById('navLinks');
+  navLinks.classList.toggle('active');
+  const hamburger = document.querySelector('.hamburger');
+  hamburger.classList.toggle('open');
+}
 
-// Login Function
-function login() {
-  const email = document.getElementById('adminEmail').value.trim();
-  const pass = document.getElementById('adminPassword').value.trim();
-  if (email === ADMIN_EMAIL && pass === ADMIN_PASSWORD) {
-    document.getElementById('loginSection').style.display = 'none';
-    document.getElementById('dashboardSection').style.display = 'block';
-    loadData();
+// Newsletter
+function subscribeNewsletter() {
+  const email = document.getElementById('newsletterEmail').value.trim();
+  if (!email) {
+    alert('Please enter a valid email address.');
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    alert('Please enter a valid email format.');
+    return;
+  }
+  let emails = localStorage.getItem('newsletterEmails') ? localStorage.getItem('newsletterEmails').split(',') : [];
+  if (!emails.includes(email)) {
+    emails.push(email);
+    localStorage.setItem('newsletterEmails', emails.join(','));
+    alert('Thank you! Updates will be sent to ' + email);
   } else {
-    document.getElementById('loginMessage').innerText = "Invalid email or password!";
+    alert('This email is already subscribed.');
   }
 }
 
-// Logout Function
-function logout() {
-  document.getElementById('loginSection').style.display = 'block';
-  document.getElementById('dashboardSection').style.display = 'none';
-  document.getElementById('adminEmail').value = '';
-  document.getElementById('adminPassword').value = '';
-  document.getElementById('loginMessage').innerText = '';
+// Support Popup
+function openSupport() {
+  document.getElementById('supportPopup').style.display = 'block';
+  document.getElementById('overlay').style.display = 'block';
+}
+function closeSupport() {
+  document.getElementById('supportPopup').style.display = 'none';
+  document.getElementById('overlay').style.display = 'none';
 }
 
-// Load existing data from localStorage
-function loadData() {
-  const newsletter = localStorage.getItem('newsletterEmails') || '';
-  const reviews = localStorage.getItem('customerReviews') || '';
-  const shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-  document.getElementById('newsletterList').value = newsletter.split(',').join('\n');
-  document.getElementById('reviewsList').value = reviews.split('|').join('\n');
+// Google Translate
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
+}
 
-  // Populate shipment dropdown
-  const shipmentSelect = document.getElementById('shipmentSelect');
-  shipmentSelect.innerHTML = '<option value="">Select a shipment</option>';
-  shipments.forEach(shipment => {
-    const option = document.createElement('option');
-    option.value = shipment.trackingNumber;
-    option.text = `${shipment.trackingNumber} - ${shipment.content}`;
-    shipmentSelect.appendChild(option);
-  });
+// Initialize Maps
+function initMaps() {
+  const receiverMap = document.getElementById('receiverMap');
+  receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+}
 
-  // Load signature stamp preview
-  const signatureStamp = localStorage.getItem('signatureStamp');
-  const preview = document.getElementById('signaturePreview');
-  if (signatureStamp) {
-    preview.innerHTML = `<img src="${signatureStamp}" alt="Signature Stamp"><p>Current signature stamp</p>`;
-  } else {
-    preview.innerHTML = `<p>No signature stamp uploaded</p>`;
+// Testimonial Slide Animation
+function rotateTestimonials() {
+  const testimonialWall = document.querySelector('.testimonial-wall');
+  const totalTestimonials = document.querySelectorAll('.testimonial').length;
+  let currentIndex = 0;
+
+  function showTestimonial(index) {
+    testimonialWall.style.transform = `translateX(-${index * 100}%)`;
   }
+
+  setInterval(() => {
+    currentIndex = (currentIndex + 1) % totalTestimonials;
+    showTestimonial(currentIndex);
+  }, 5000);
 }
 
-// Load selected shipment data
-function loadShipment() {
-  const trackingNumber = document.getElementById('shipmentSelect').value;
-  if (!trackingNumber) {
-    // Clear form with placeholders
-    document.getElementById('trackingNumber').value = '';
-    document.getElementById('shipmentAmount').value = '';
-    document.getElementById('orderId').value = '';
-    document.getElementById('estDeliveryDate').value = '';
-    document.getElementById('modeOfTransport').value = '';
-    document.getElementById('typeOfShipment').value = '';
-    document.getElementById('quantity').value = '';
-    document.getElementById('officialStampDate').value = '';
-    document.getElementById('paymentMode').value = '';
-    document.getElementById('shipmentContent').value = '';
-    document.getElementById('shipmentOrigin').value = '';
-    document.getElementById('shipmentDestination').value = '';
-    document.getElementById('senderName').value = '';
-    document.getElementById('senderAddress').value = '';
-    document.getElementById('receiverName').value = '';
-    document.getElementById('receiverAddress').value = '';
-    document.getElementById('receiverMobile').value = '';
-    document.getElementById('receiverLat').value = '';
-    document.getElementById('receiverLng').value = '';
-    document.getElementById('timeline').value = '';
+// Tracking
+function trackPackage() {
+  const number = document.getElementById('trackingNumber').value.trim();
+  const trackingDiv = document.getElementById('shipmentTracking');
+  const contentDiv = document.getElementById('shipmentContent');
+  const receiverMap = document.getElementById('receiverMap');
+
+  if (!number) {
+    alert('Please enter a tracking number.');
     return;
   }
 
-  const shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-  const shipment = shipments.find(s => s.trackingNumber === trackingNumber);
-  if (shipment) {
-    document.getElementById('trackingNumber').value = shipment.trackingNumber;
-    document.getElementById('shipmentAmount').value = shipment.receipt.amount;
-    document.getElementById('orderId').value = shipment.orderId;
-    document.getElementById('estDeliveryDate').value = shipment.estDeliveryDate;
-    document.getElementById('modeOfTransport').value = shipment.modeOfTransport;
-    document.getElementById('typeOfShipment').value = shipment.typeOfShipment;
-    document.getElementById('quantity').value = shipment.quantity;
-    document.getElementById('officialStampDate').value = shipment.officialStampDate;
-    document.getElementById('paymentMode').value = shipment.paymentMode;
-    document.getElementById('shipmentContent').value = shipment.content;
-    document.getElementById('shipmentOrigin').value = shipment.origin;
-    document.getElementById('shipmentDestination').value = shipment.destination;
-    document.getElementById('senderName').value = shipment.sender.name;
-    document.getElementById('senderAddress').value = shipment.sender.address;
-    document.getElementById('receiverName').value = shipment.receiver.name;
-    document.getElementById('receiverAddress').value = shipment.receiver.address;
-    document.getElementById('receiverMobile').value = shipment.receiver.mobile;
-    document.getElementById('receiverLat').value = shipment.receiver.lat;
-    document.getElementById('receiverLng').value = shipment.receiver.lng;
-    document.getElementById('timeline').value = JSON.stringify(shipment.timeline, null, 2);
-  }
-}
+  trackingDiv.style.display = 'block';
+  trackingDiv.innerHTML = '<div class="header">Tracking...</div>';
 
-// Save Signature Stamp
-function saveSignatureStamp() {
-  const fileInput = document.getElementById('signatureStamp');
-  const preview = document.getElementById('signaturePreview');
-  if (fileInput.files.length > 0) {
-    const file = fileInput.files[0];
-    if (file.type.startsWith('image/') && file.size <= 2 * 1024 * 1024) { // Limit to 2MB
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const base64Image = e.target.result;
-        localStorage.setItem('signatureStamp', base64Image);
-        preview.innerHTML = `<img src="${base64Image}" alt="Signature Stamp"><p>Current signature stamp</p>`;
-        alert("Signature stamp saved successfully!");
-      };
-      reader.readAsDataURL(file);
-    } else {
-      alert("Please upload a valid image file (max 2MB).");
-    }
+  let shipments = [];
+  try {
+    shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+  } catch (e) {
+    console.error('Invalid shipments JSON:', e);
+    trackingDiv.innerHTML = '<div class="header">Error retrieving shipment data.</div>';
+    return;
+  }
+
+  const shipment = shipments.find(s => s.trackingNumber === number);
+  if (shipment && shipment.receiver && shipment.receiver.lat && shipment.receiver.lng) {
+    const address = encodeURIComponent(shipment.receiver.address);
+    const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d${(1 / Math.cos(shipment.receiver.lat * Math.PI / 180) * 156543.03392 * Math.cos(shipment.receiver.lat * Math.PI / 180) / Math.pow(2, 15))}!2d${shipment.receiver.lng}!3d${shipment.receiver.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x0!2s${address}!5e0!3m2!1sen!2sus!4v1695296400000&markers=color:red%7C${shipment.receiver.lat},${shipment.receiver.lng}`;
+    receiverMap.innerHTML = `<a href="https://www.google.com/maps?q=${shipment.receiver.lat},${shipment.receiver.lng}" target="_blank"><iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe></a>`;
   } else {
-    alert("Please select an image to upload.");
+    receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
   }
-}
 
-// Save Functions
-function saveNewsletter() {
-  const emails = document.getElementById('newsletterList').value.split('\n').map(e => e.trim()).filter(Boolean);
-  localStorage.setItem('newsletterEmails', emails.join(','));
-  alert("Newsletter emails saved!");
-}
-
-function saveReviews() {
-  const reviews = document.getElementById('reviewsList').value.split('\n').map(e => e.trim()).filter(Boolean);
-  localStorage.setItem('customerReviews', reviews.join('|'));
-  alert("Customer reviews saved!");
-}
-
-function saveShipment() {
-  try {
-    const trackingNumber = document.getElementById('trackingNumber').value.trim();
-    if (!trackingNumber) {
-      throw new Error("Please select a shipment to edit.");
-    }
-    const shipment = {
-      trackingNumber: trackingNumber,
-      content: document.getElementById('shipmentContent').value.trim(),
-      origin: document.getElementById('shipmentOrigin').value.trim(),
-      destination: document.getElementById('shipmentDestination').value.trim(),
-      orderId: document.getElementById('orderId').value.trim(),
-      estDeliveryDate: document.getElementById('estDeliveryDate').value.trim(),
-      modeOfTransport: document.getElementById('modeOfTransport').value.trim(),
-      typeOfShipment: document.getElementById('typeOfShipment').value.trim(),
-      quantity: document.getElementById('quantity').value.trim(),
-      paymentMode: document.getElementById('paymentMode').value.trim(),
-      officialStampDate: document.getElementById('officialStampDate').value.trim(),
-      officialStamp: localStorage.getItem('signatureStamp') || '',
-      sender: {
-        name: document.getElementById('senderName').value.trim(),
-        address: document.getElementById('senderAddress').value.trim()
-      },
-      receiver: {
-        name: document.getElementById('receiverName').value.trim(),
-        address: document.getElementById('receiverAddress').value.trim(),
-        mobile: document.getElementById('receiverMobile').value.trim(),
-        lat: parseFloat(document.getElementById('receiverLat').value),
-        lng: parseFloat(document.getElementById('receiverLng').value)
-      },
-      timeline: JSON.parse(document.getElementById('timeline').value.trim() || '[]'),
-      receipt: {
-        companyName: COMPANY_NAME,
-        amount: parseFloat(document.getElementById('shipmentAmount').value)
+  setTimeout(() => {
+    if (shipment) {
+      trackingDiv.innerHTML = '<div class="header">Tracking Shipment: ' + number + '</div>';
+      if (shipment.timeline && shipment.timeline.length > 0) {
+        trackingDiv.innerHTML += `<div class="timeline">
+          ${shipment.timeline.map(event => `
+            <div class="timeline-event ${event.completed ? 'completed' : ''}">
+              <div class="tick"></div>
+              <div class="time">${event.time}</div>
+              <div class="description">${event.description} <div style="background:#ccc;padding:2px 5px;border-radius:3px;margin-top:3px;">${event.status}</div></div>
+            </div>
+          `).join('')}
+        </div>`;
+      } else {
+        trackingDiv.innerHTML += '<div class="timeline"><div class="timeline-event"><div class="tick"></div><div class="description">No tracking status available.</div></div></div>';
       }
-    };
-
-    // Validate required fields
-    if (!shipment.content || !shipment.origin || !shipment.destination || !shipment.sender.name ||
-        !shipment.sender.address || !shipment.receiver.name || !shipment.receiver.address ||
-        !shipment.receiver.mobile || isNaN(shipment.receiver.lat) || isNaN(shipment.receiver.lng) ||
-        !shipment.orderId || !shipment.estDeliveryDate || !shipment.modeOfTransport ||
-        !shipment.typeOfShipment || !shipment.quantity || !shipment.officialStampDate ||
-        !shipment.paymentMode || isNaN(shipment.receipt.amount)) {
-      throw new Error("All fields are required and must be valid.");
-    }
-
-    let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-    const index = shipments.findIndex(s => s.trackingNumber === shipment.trackingNumber);
-    if (index !== -1) {
-      shipments[index] = shipment;
     } else {
-      shipments.push(shipment);
+      trackingDiv.innerHTML = '<div class="header">Invalid tracking number.</div>';
+      contentDiv.style.display = 'none';
+      receiverMap.innerHTML = '';
     }
-    localStorage.setItem('shipments', JSON.stringify(shipments));
-    alert("Shipment saved successfully! Changes will reflect on the public page receipt.");
-    loadData(); // Refresh dropdown
-  } catch (e) {
-    alert(`Error: ${e.message}`);
-  }
+  }, 5000);
+
+  setTimeout(() => {
+    contentDiv.style.display = 'block';
+    if (shipment) {
+      const companyName = shipment.receipt.companyName;
+      const amount = shipment.receipt.amount.toFixed(2);
+      contentDiv.innerHTML = `
+        <div style="position:relative;">
+          <div class="watermark">CERTIFIED TRUE COPY</div>
+          <div class="header">
+            <div class="company-name">${companyName}</div>
+            <div class="logo">
+              <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo">
+            </div>
+          </div>
+          <div class="section-title">Shipment Details</div>
+          <div class="details">
+            <label>Tracking Number:</label><span>${shipment.trackingNumber}</span>
+            <label>Order ID:</label><span>${shipment.orderId}</span>
+            <label>Content:</label><span>${shipment.content}</span>
+            <label>Origin:</label><span>${shipment.origin}</span>
+            <label>Destination:</label><span>${shipment.destination}</span>
+            <label>Est. Delivery:</label><span>${shipment.estDeliveryDate}</span>
+            <label>Mode of Transport:</label><span>${shipment.modeOfTransport}</span>
+            <label>Type of Shipment:</label><span>${shipment.typeOfShipment}</span>
+            <label>Quantity:</label><span>${shipment.quantity}</span>
+          </div>
+          <div class="section-title">Payment Details</div>
+          <div class="details">
+            <label>Amount:</label><span>$${amount}</span>
+            <label>Payment Mode:</label><span>${shipment.paymentMode}</span>
+            <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1860.jpeg" class="payment-img" alt="Payment Icon">
+          </div>
+          <div class="section-title">Sender Details</div>
+          <div class="details">
+            <label>Name:</label><span>${shipment.sender.name}</span>
+            <label>Address:</label><span>${shipment.sender.address}</span>
+          </div>
+          <div class="section-title">Receiver Details</div>
+          <div class="details">
+            <label>Name:</label><span>${shipment.receiver.name}</span>
+            <label>Address:</label><span>${shipment.receiver.address}</span>
+            <label>Mobile:</label><span>${shipment.receiver.mobile}</span>
+          </div>
+          <div class="section-title">Authorization</div>
+          <div class="details">
+            <label>Stamp Date:</label><span>${shipment.officialStampDate}</span>
+            ${shipment.officialStamp ? `<label>Stamp:</label><span><img src="${shipment.officialStamp}" class="signature-img" alt="Signature Stamp"></span>` : ''}
+          </div>
+          <div class="total">Total: $${amount}</div>
+          <div class="footer">
+            Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
+            Issued: September 23, 2025, 10:05 AM WAT
+          </div>
+        </div>
+        <button class="print-btn" onclick="printInvoice('${number}')">Print Invoice</button>`;
+    } else {
+      contentDiv.innerHTML = '<div class="header">No shipment found for this tracking number.</div>';
+    }
+  }, 10000);
 }
 
-// Generate New Tracking Code
-function generateTrackingCode() {
-  try {
-    const letters = String.fromCharCode(...Array(3).fill().map(() => 65 + Math.floor(Math.random() * 26)));
-    const numbers = Math.floor(100000000 + Math.random() * 900000000).toString();
-    const newTracking = `${letters}-${numbers}`;
-
-    const shipment = {
-      trackingNumber: newTracking,
-      content: document.getElementById('newShipmentContent').value.trim(),
-      origin: document.getElementById('newShipmentOrigin').value.trim(),
-      destination: document.getElementById('newShipmentDestination').value.trim(),
-      orderId: document.getElementById('newOrderId').value.trim(),
-      estDeliveryDate: document.getElementById('newEstDeliveryDate').value.trim(),
-      modeOfTransport: document.getElementById('newModeOfTransport').value.trim(),
-      typeOfShipment: document.getElementById('newTypeOfShipment').value.trim(),
-      quantity: document.getElementById('newQuantity').value.trim(),
-      paymentMode: document.getElementById('newPaymentMode').value.trim(),
-      officialStampDate: document.getElementById('newOfficialStampDate').value.trim(),
-      officialStamp: localStorage.getItem('signatureStamp') || '',
-      sender: {
-        name: document.getElementById('newSenderName').value.trim(),
-        address: document.getElementById('newSenderAddress').value.trim()
-      },
-      receiver: {
-        name: document.getElementById('newReceiverName').value.trim(),
-        address: document.getElementById('newReceiverAddress').value.trim(),
-        mobile: document.getElementById('newReceiverMobile').value.trim(),
-        lat: parseFloat(document.getElementById('newReceiverLat').value),
-        lng: parseFloat(document.getElementById('newReceiverLng').value)
-      },
-      timeline: JSON.parse(document.getElementById('newTimeline').value.trim() || '[]'),
-      receipt: {
-        companyName: COMPANY_NAME,
-        amount: parseFloat(document.getElementById('newShipmentAmount').value)
-      }
-    };
-
-    // Validate required fields
-    if (!shipment.content || !shipment.origin || !shipment.destination || !shipment.sender.name ||
-        !shipment.sender.address || !shipment.receiver.name || !shipment.receiver.address ||
-        !shipment.receiver.mobile || isNaN(shipment.receiver.lat) || isNaN(shipment.receiver.lng) ||
-        !shipment.orderId || !shipment.estDeliveryDate || !shipment.modeOfTransport ||
-        !shipment.typeOfShipment || !shipment.quantity || !shipment.officialStampDate ||
-        !shipment.paymentMode || isNaN(shipment.receipt.amount)) {
-      throw new Error("All fields are required and must be valid.");
-    }
-
-    let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-    if (shipments.some(s => s.trackingNumber === newTracking)) {
-      throw new Error("Tracking code already exists. Please try again.");
-    }
-    shipments.push(shipment);
-    localStorage.setItem('shipments', JSON.stringify(shipments));
-
-    // Load new shipment into edit form
-    document.getElementById('trackingNumber').value = newTracking;
-    document.getElementById('shipmentAmount').value = shipment.receipt.amount;
-    document.getElementById('orderId').value = shipment.orderId;
-    document.getElementById('estDeliveryDate').value = shipment.estDeliveryDate;
-    document.getElementById('modeOfTransport').value = shipment.modeOfTransport;
-    document.getElementById('typeOfShipment').value = shipment.typeOfShipment;
-    document.getElementById('quantity').value = shipment.quantity;
-    document.getElementById('officialStampDate').value = shipment.officialStampDate;
-    document.getElementById('paymentMode').value = shipment.paymentMode;
-    document.getElementById('shipmentContent').value = shipment.content;
-    document.getElementById('shipmentOrigin').value = shipment.origin;
-    document.getElementById('shipmentDestination').value = shipment.destination;
-    document.getElementById('senderName').value = shipment.sender.name;
-    document.getElementById('senderAddress').value = shipment.sender.address;
-    document.getElementById('receiverName').value = shipment.receiver.name;
-    document.getElementById('receiverAddress').value = shipment.receiver.address;
-    document.getElementById('receiverMobile').value = shipment.receiver.mobile;
-    document.getElementById('receiverLat').value = shipment.receiver.lat;
-    document.getElementById('receiverLng').value = shipment.receiver.lng;
-    document.getElementById('timeline').value = JSON.stringify(shipment.timeline, null, 2);
-
-    document.getElementById('newTrackingNumber').value = newTracking;
-    alert(`New tracking code generated: ${newTracking}. Details saved and loaded for editing. Changes will reflect on the public page receipt.`);
-    loadData(); // Refresh dropdown
-  } catch (e) {
-    alert(`Error: ${e.message}`);
+// Print Invoice
+function printInvoice(number) {
+  let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+  const shipment = shipments.find(s => s.trackingNumber === number);
+  if (!shipment) {
+    alert('No shipment found for this tracking number.');
+    return;
   }
+
+  const companyName = shipment.receipt.companyName;
+  const amount = shipment.receipt.amount.toFixed(2);
+  const receiptContent = `
+    <html>
+    <head><title>Receipt - ${shipment.trackingNumber}</title>
+    <style>
+      body { font-family: 'Times New Roman', Times, serif; margin: 2mm; background: #fff; }
+      .receipt { width: 70mm; margin: 0 auto; padding: 2mm; border: 1px solid #000; background: #fff; position: relative; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+      .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); color: #a9a9a9; font-size: 16px; font-weight: bold; opacity: 0.4; z-index: 0; }
+      .header { font-size: 10px; font-weight: bold; margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; }
+      .company-name { font-size: 10px; font-weight: bold; }
+      .logo img { height: 25px; }
+      .section-title { font-size: 9px; font-weight: bold; margin: 2px 0; padding-bottom: 1px; border-bottom: 1px solid #000; }
+      .details { font-size: 7px; margin: 2px 0; line-height: 1.2; letter-spacing: 0.5px; padding: 3px; border: 1px solid #ddd; border-radius: 3px; }
+      .details label { font-weight: bold; width: 90px; display: inline-block; }
+      .details img { max-width: 50px; height: auto; margin-top: 2px; }
+      .total { font-size: 9px; font-weight: bold; margin-top: 5px; padding-top: 2px; text-align: right; }
+      .footer { font-size: 5px; text-align: center; margin-top: 5px; color: #555; }
+      @media print { body { margin: 0; } .receipt { border: 1px solid #000; } }
+    </style>
+    </head>
+    <body>
+    <div class="receipt">
+      <div class="watermark">CERTIFIED TRUE COPY</div>
+      <div class="header">
+        <div class="company-name">${companyName}</div>
+        <div class="logo">
+          <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo">
+        </div>
+      </div>
+      <div class="section-title">Shipment Details</div>
+      <div class="details">
+        <label>Tracking Number:</label><span>${shipment.trackingNumber}</span>
+        <label>Order ID:</label><span>${shipment.orderId}</span>
+        <label>Content:</label><span>${shipment.content}</span>
+        <label>Origin:</label><span>${shipment.origin}</span>
+        <label>Destination:</label><span>${shipment.destination}</span>
+        <label>Est. Delivery:</label><span>${shipment.estDeliveryDate}</span>
+        <label>Mode of Transport:</label><span>${shipment.modeOfTransport}</span>
+        <label>Type of Shipment:</label><span>${shipment.typeOfShipment}</span>
+        <label>Quantity:</label><span>${shipment.quantity}</span>
+      </div>
+      <div class="section-title">Payment Details</div>
+      <div class="details">
+        <label>Amount:</label><span>$${amount}</span>
+        <label>Payment Mode:</label><span>${shipment.paymentMode}</span>
+        <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1860.jpeg" class="payment-img" alt="Payment Icon">
+      </div>
+      <div class="section-title">Sender Details</div>
+      <div class="details">
+        <label>Name:</label><span>${shipment.sender.name}</span>
+        <label>Address:</label><span>${shipment.sender.address}</span>
+      </div>
+      <div class="section-title">Receiver Details</div>
+      <div class="details">
+        <label>Name:</label><span>${shipment.receiver.name}</span>
+        <label>Address:</label><span>${shipment.receiver.address}</span>
+        <label>Mobile:</label><span>${shipment.receiver.mobile}</span>
+      </div>
+      <div class="section-title">Authorization</div>
+      <div class="details">
+        <label>Stamp Date:</label><span>${shipment.officialStampDate}</span>
+        ${shipment.officialStamp ? `<label>Stamp:</label><span><img src="${shipment.officialStamp}" class="signature-img" alt="Signature Stamp"></span>` : ''}
+      </div>
+      <div class="total">Total: $${amount}</div>
+      <div class="footer">
+        Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
+        Issued: September 23, 2025, 10:05 AM WAT
+      </div>
+    </div>
+    </body>
+    </html>`;
+
+  // Open print dialog
+  const win = window.open('', '_blank');
+  if (win) {
+    win.document.write(receiptContent);
+    win.document.close();
+    win.print();
+  } else {
+    alert('Popup blocked. Please allow popups to print the invoice.');
+  }
+
+  // Generate PDF
+  const element = document.createElement('div');
+  element.innerHTML = receiptContent.replace(/<html>.*<body>/s, '').replace(/<\/body><\/html>/, '');
+  document.body.appendChild(element);
+  html2pdf()
+    .set({
+      filename: `Receipt_${shipment.trackingNumber}.pdf`,
+      margin: [2, 2, 2, 2],
+      html2canvas: { scale: 3, useCORS: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    })
+    .from(element)
+    .save()
+    .then(() => {
+      document.body.removeChild(element);
+    })
+    .catch(err => {
+      console.error('PDF generation failed:', err);
+      alert('Failed to generate PDF. Please try again.');
+    });
 }
 
-document.addEventListener('DOMContentLoaded', loadData);
+document.addEventListener('DOMContentLoaded', () => {
+  initMaps();
+  rotateTestimonials();
+});
 </script>
-
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
