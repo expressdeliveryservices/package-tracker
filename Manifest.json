@@ -1,0 +1,21 @@
+{
+  "name": "Express Delivery Admin",
+  "short_name": "Admin Dashboard",
+  "description": "Admin dashboard for Express Delivery Service",
+  "start_url": "./admin.html",
+  "display": "standalone",
+  "background_color": "#f0f2f5",
+  "theme_color": "#1e90ff",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/main/IMG_1855.jpeg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/main/IMG_1855.jpeg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
