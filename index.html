@@ -16,11 +16,13 @@ header .header-overlay p { font-size: 1rem; max-width: 700px; margin: 0 auto; li
 .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #f8f8f8; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #ddd; }
 .nav-links { display: flex; gap: 15px; }
 .nav-links a { cursor: pointer; font-weight: bold; color: #1e90ff; }
+.nav-links a.admin-link { display: none; }
 .hamburger { display: none; flex-direction: column; cursor: pointer; }
 .hamburger div { width: 20px; height: 2px; background-color: #1e90ff; margin: 3px 0; }
 @media (max-width: 768px) {
   .nav-links { display: none; flex-direction: column; background: #f8f8f8; position: absolute; top: 60px; right: 0; width: 200px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 0 0 5px 5px; }
   .nav-links.active { display: flex; }
+  .nav-links a.admin-link { display: block; }
   .hamburger { display: flex; }
 }
 section { padding: 20px; scroll-margin-top: 60px; }
@@ -129,6 +131,7 @@ footer { background: #f8f8f8; text-align: center; padding: 15px; color: #1e90ff;
     <a href="#services">Services</a>
     <a href="#track">Track Packages</a>
     <a href="#contact">Contact</a>
+    <a href="admin.html" class="admin-link">Admin</a>
   </div>
   <div class="hamburger" onclick="toggleMenu()">
     <div></div><div></div><div></div>
@@ -332,7 +335,8 @@ footer { background: #f8f8f8; text-align: center; padding: 15px; color: #1e90ff;
       <a href="#about">About</a> | 
       <a href="#services">Services</a> | 
       <a href="#track">Track Packages</a> | 
-      <a href="#contact">Contact</a>
+      <a href="#contact">Contact</a> | 
+      <a href="admin.html" class="admin-link">Admin</a>
     </div>
     <div style="margin-top:10px;font-size:0.9rem;color:#555;">
       <span>Phone: +1 (941) 207-8626</span> | 
@@ -517,7 +521,7 @@ function trackPackage() {
           <div class="total">Total: $${amount}</div>
           <div class="footer">
             Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
-            Issued: September 29, 2025, 10:29 PM WAT
+            Issued: September 23, 2025, 08:35 AM WAT
           </div>
         </div>
         <button class="print-btn" onclick="printInvoice('${number}')">Print Invoice</button>`;
@@ -607,7 +611,7 @@ function printInvoice(number) {
       <div class="total">Total: $${amount}</div>
       <div class="footer">
         Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
-        Issued: September 29, 2025, 10:29 PM WAT
+        Issued: September 23, 2025, 08:35 AM WAT
       </div>
     </div>
     </body>
