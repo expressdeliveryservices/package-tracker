@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard - Express Delivery</title>
-<style>
-body { font-family: Arial, sans-serif; background: #f0f2f5; color: #000; margin: 0; padding: 0; }
-header { background: #1e90ff; color: white; padding: 15px; text-align: center; }
-.container { max-width: 1000px; margin: 20px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-input, textarea, select, button { margin: 5px 0; padding: 8px; width: 100%; border-radius: 3px; border: 1px solid #ccc; font-size: 14px; }
-input[readonly] { background: #e0e0e0; cursor: not-allowed; }
-button { background: #1e90ff; color: white; border: none; cursor: pointer; }
-button:hover { background: #1565c0; }
-h2, h3 { color: #1e90ff; margin-top: 0; }
-.section { margin-bottom: 30px; }
-label { font-weight: bold; }
-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-th { background: #1e90ff; color: white; }
-.shipment-form div { margin-bottom: 10px; }
-#generateTrackingCode { background: #4CAF50; color: white; }
-#signaturePreview img { max-width: 100px; height: auto; margin-top: 10px; border: 1px solid #ddd; border-radius: 3px; }
-#signaturePreview p { font-size: 12px; color: #555; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Express Delivery</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f0f2f5; color: #000; margin: 0; padding: 0; }
+    header { background: #1e90ff; color: white; padding: 15px; text-align: center; }
+    .container { max-width: 1000px; margin: 20px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    input, textarea, select, button { margin: 5px 0; padding: 8px; width: 100%; border-radius: 3px; border: 1px solid #ccc; font-size: 14px; }
+    input[readonly] { background: #e0e0e0; cursor: not-allowed; }
+    button { background: #1e90ff; color: white; border: none; cursor: pointer; }
+    button:hover { background: #1565c0; }
+    h2, h3 { color: #1e90ff; margin-top: 0; }
+    .section { margin-bottom: 30px; }
+    label { font-weight: bold; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background: #1e90ff; color: white; }
+    .shipment-form div { margin-bottom: 10px; }
+    #generateTrackingCode { background: #4CAF50; color: white; }
+    #signaturePreview img { max-width: 100px; height: auto; margin-top: 10px; border: 1px solid #ddd; border-radius: 3px; }
+    #signaturePreview p { font-size: 12px; color: #555; }
+  </style>
 </head>
 <body>
 
@@ -46,14 +46,6 @@ th { background: #1e90ff; color: white; }
   <!-- Dashboard Section -->
   <div class="section" id="dashboardSection" style="display:none;">
     
-    <h2>Edit Newsletter Subscribers</h2>
-    <textarea id="newsletterList" rows="5" placeholder="Enter one email per line"></textarea>
-    <button onclick="saveNewsletter()">Save Newsletter</button>
-
-    <h2>Edit Customer Reviews</h2>
-    <textarea id="reviewsList" rows="5" placeholder="Enter one review per line"></textarea>
-    <button onclick="saveReviews()">Save Reviews</button>
-
     <h2>Upload Signature Stamp</h2>
     <div class="section">
       <label>Signature Stamp Image:</label>
@@ -266,11 +258,7 @@ function logout() {
 
 // Load existing data from localStorage
 function loadData() {
-  const newsletter = localStorage.getItem('newsletterEmails') || '';
-  const reviews = localStorage.getItem('customerReviews') || '';
   const shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-  document.getElementById('newsletterList').value = newsletter.split(',').join('\n');
-  document.getElementById('reviewsList').value = reviews.split('|').join('\n');
 
   // Populate shipment dropdown
   const shipmentSelect = document.getElementById('shipmentSelect');
@@ -369,19 +357,7 @@ function saveSignatureStamp() {
   }
 }
 
-// Save Functions
-function saveNewsletter() {
-  const emails = document.getElementById('newsletterList').value.split('\n').map(e => e.trim()).filter(Boolean);
-  localStorage.setItem('newsletterEmails', emails.join(','));
-  alert("Newsletter emails saved!");
-}
-
-function saveReviews() {
-  const reviews = document.getElementById('reviewsList').value.split('\n').map(e => e.trim()).filter(Boolean);
-  localStorage.setItem('customerReviews', reviews.join('|'));
-  alert("Customer reviews saved!");
-}
-
+// Save Shipment
 function saveShipment() {
   try {
     const trackingNumber = document.getElementById('trackingNumber').value.trim();
