@@ -1,117 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Express Delivery Service</title>
-  <style>
-    body { margin: 0; font-family: Arial, sans-serif; background: #fff; color: #000; scroll-behavior: smooth; }
-    a { color: #1e90ff; text-decoration: none; }
-    h1, h2, h3, h4, h5, h6 { color: #1e90ff; margin: 0; }
-    header { position: relative; height: 400px; overflow: hidden; }
-    header video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
-    header .header-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 2; color: #fff; text-shadow: 2px 2px 8px rgba(0,0,0,0.7); }
-    header .header-overlay h1 { font-size: 2.5rem; font-weight: bold; letter-spacing: 2px; margin-bottom: 10px; }
-    header .header-overlay p { font-size: 1rem; max-width: 700px; margin: 0 auto; line-height: 1.4; }
-    .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #f8f8f8; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #ddd; }
-    .nav-links { display: flex; gap: 15px; }
-    .nav-links a { cursor: pointer; font-weight: bold; color: #1e90ff; }
-    .hamburger { display: none; flex-direction: column; cursor: pointer; }
-    .hamburger div { width: 20px; height: 2px; background-color: #1e90ff; margin: 3px 0; }
-    @media (max-width: 768px) {
-      .nav-links { display: none; flex-direction: column; background: #f8f8f8; position: absolute; top: 60px; right: 0; width: 200px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 0 0 5px 5px; }
-      .nav-links.active { display: flex; }
-      .hamburger { display: flex; }
-    }
-    section { padding: 20px; scroll-margin-top: 60px; }
-    .section-title { font-size: 1.5rem; margin-bottom: 15px; color: #1e90ff; }
-    .tracking { display: flex; gap: 10px; margin-bottom: 15px; }
-    .tracking input { flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 3px; background: #fff; color: #1e90ff; font-size: 0.9rem; }
-    .tracking input::placeholder { text-transform: uppercase; font-size: 0.8rem; color: #999; }
-    .tracking button { padding: 8px 15px; border: none; border-radius: 3px; background-color: #1e90ff; color: white; cursor: pointer; }
-    .shipment-tracking, .shipment-content { max-width: 500px; margin: 10px auto; font-family: 'Times New Roman', Times, serif; }
-    .shipment-tracking .header, .shipment-content .header { font-weight: bold; font-size: 10px; margin-bottom: 2px; text-align: center; }
-    .shipment-content { padding: 2mm; font-size: 7px; border: 1px solid #000; background: #fff; letter-spacing: 0.5px; width: 70mm; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: relative; }
-    .shipment-content .header { display: flex; justify-content: space-between; align-items: center; }
-    .shipment-content .header .company-name { font-size: 10px; font-weight: bold; }
-    .shipment-content .header .logo img { height: 25px; }
-    .shipment-content .details { margin: 2px 0; padding: 3px; border: 1px solid #ddd; border-radius: 3px; }
-    .shipment-content .details label { display: inline-block; width: 90px; font-weight: bold; }
-    .shipment-content .details span { display: inline-block; margin-left: 2px; }
-    .shipment-content .signature-img, .shipment-content .payment-img { max-width: 50px; height: auto; margin-top: 2px; }
-    .shipment-content .section-title { font-size: 9px; font-weight: bold; margin: 2px 0; padding-bottom: 1px; border-bottom: 1px solid #000; }
-    .shipment-content .total { font-size: 9px; font-weight: bold; margin-top: 5px; padding-top: 2px; text-align: right; }
-    .shipment-content .footer { font-size: 5px; text-align: center; margin-top: 5px; color: #555; }
-    .shipment-content .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); color: #a9a9a9; font-size: 16px; font-weight: bold; opacity: 0.4; z-index: 0; }
-    .print-btn { margin-top: 5px; padding: 5px 10px; background-color: #1e90ff; color: white; border: none; border-radius: 3px; cursor: pointer; }
-    .timeline { position: relative; margin: 20px 0; }
-    .timeline::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 4px; background: #ddd; }
-    .timeline-event { position: relative; margin-bottom: 30px; padding-left: 50px; }
-    .timeline-event .tick { position: absolute; left: 10px; top: 0; width: 20px; height: 20px; border-radius: 50%; border: 4px solid green; background: #fff; }
-    .timeline-event.completed .tick { background: green; box-shadow: 0 0 5px #090; }
-    .timeline-event .time { font-size: 0.85rem; color: blue; margin-top: 2px; }
-    .timeline-event .description { margin-top: 5px; background: #eee; padding: 5px; border-radius: 3px; font-size: 0.9rem; }
-    .map-container { width: 100%; height: 300px; margin: 20px 0; overflow: hidden; position: relative; }
-    .map-container a { text-decoration: none; display: block; }
-    .map-overlay { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background-color: rgba(255,255,255,0.8); padding: 5px 10px; border-radius: 3px; font-size: 14px; color: #000; z-index: 10; }
-    .newsletter { display: flex; gap: 10px; margin-top: 15px; }
-    .newsletter input { flex: 1; padding: 8px; border-radius: 3px; border: 1px solid #ddd; background: #fff; color: #000; }
-    .newsletter button { padding: 8px 15px; border-radius: 3px; border: none; background-color: #1e90ff; color: white; cursor: pointer; }
-    #supportPopup { display: none; position: fixed; bottom: 20px; right: 20px; background: #f8f8f8; padding: 15px; border-radius: 8px; box-shadow: 0 0 10px #1e90ff; z-index: 10000; color: #000; }
-    #supportPopup input, #supportPopup textarea { width: 100%; margin-bottom: 8px; padding: 6px; border-radius: 3px; border: 1px solid #ddd; background: #fff; color: #000; }
-    #supportPopup button { padding: 6px 12px; background-color: #1e90ff; color: white; border: none; border-radius: 3px; cursor: pointer; }
-    .image-wall { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
-    .image-wall img, .image-wall video { width: 100%; border-radius: 5px; }
-    .image-wall video { pointer-events: none; }
-    .image-wall .desc { margin-top: 8px; font-size: 0.85rem; color: #555; line-height: 1.4; }
-    .testimonial-container { max-width: 500px; margin: 20px auto; overflow: hidden; }
-    .testimonial-container:hover .testimonial-wall { animation-play-state: paused; }
-    .testimonial-wall { display: flex; width: 100%; transform: translateX(0); transition: transform 0.5s ease-in-out; animation: slide 25s infinite; }
-    .testimonial-wall .testimonial { flex: 0 0 100%; min-width: 100%; padding: 15px; background: #f8f8f8; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 1px solid #ddd; text-align: center; }
-    .testimonial-wall img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 10px; border: 2px solid #1e90ff; }
-    .testimonial-wall .desc { font-size: 0.85rem; color: #333; line-height: 1.4; font-style: italic; margin: 0 auto 8px; }
-    .testimonial-wall .name { font-weight: bold; color: #1e90ff; font-size: 0.95rem; margin-bottom: 5px; }
-    .testimonial-wall .rating { font-size: 0.75rem; color: #ffd700; margin-bottom: 8px; }
-    .testimonial-wall .rating::before { content: '★★★★★'; }
-    .testimonial-wall .quote-icon::before { content: '"'; font-size: 1.5rem; color: #1e90ff; opacity: 0.2; position: absolute; top: 10px; left: 10px; }
-    @keyframes slide {
-      0%, 20% { transform: translateX(0); }
-      25%, 45% { transform: translateX(-100%); }
-      50%, 70% { transform: translateX(-200%); }
-      75%, 95% { transform: translateX(-300%); }
-      100% { transform: translateX(-400%); }
-    }
-    .business-hours-container { max-width: 500px; margin: 20px auto; padding: 20px; background: #f8f8f8; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 1px solid #ddd; text-align: center; }
-    .business-hours-container .section-title { font-size: 1.5rem; margin-bottom: 15px; color: #1e90ff; }
-    .business-hours-container .hours-list { font-size: 0.9rem; color: #333; line-height: 1.5; }
-    .business-hours-container .hours-list span { display: block; margin: 5px 0; }
-    .business-hours-container .open-hours { color: #00ff00; animation: blink 1s infinite; font-weight: bold; }
-    .about-container { max-width: 500px; margin: 20px auto; padding: 20px; background: #f8f8f8; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 1px solid #ddd; text-align: center; }
-    .about-container .section-title { font-size: 1.5rem; margin-bottom: 15px; color: #1e90ff; }
-    .about-container .desc { font-size: 0.9rem; color: #333; line-height: 1.5; margin-bottom: 10px; }
-    .about-container .icon::before { content: '🌐'; font-size: 2rem; color: #1e90ff; opacity: 0.2; display: block; margin-bottom: 10px; }
-    .services-container { max-width: 500px; margin: 20px auto; padding: 20px; background: #f8f8f8; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 1px solid #ddd; text-align: center; }
-    .services-container .section-title { font-size: 1.5rem; margin-bottom: 15px; color: #1e90ff; }
-    .services-container .services-list { font-size: 0.9rem; color: #333; line-height: 1.5; margin-bottom: 10px; }
-    .services-container .desc { font-size: 0.9rem; color: #333; line-height: 1.5; }
-    .services-container .icon::before { content: '🚚'; font-size: 2rem; color: #1e90ff; opacity: 0.2; display: block; margin-bottom: 10px; }
-    .contact-container { max-width: 500px; margin: 20px auto; padding: 20px; background: #f8f8f8; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 1px solid #ddd; text-align: center; }
-    .contact-container .section-title { font-size: 1.5rem; margin-bottom: 15px; color: #1e90ff; }
-    .contact-container .contact-details { font-size: 0.9rem; color: #333; line-height: 1.5; margin-bottom: 10px; }
-    .contact-container .contact-details p { margin: 5px 0; }
-    .contact-container .icon::before { content: '📞'; font-size: 2rem; color: #1e90ff; opacity: 0.2; display: block; margin-bottom: 10px; }
-    @media (max-width: 500px) {
-      .testimonial-container, .business-hours-container, .about-container, .services-container, .contact-container { max-width: 90%; }
-      .testimonial-wall .testimonial, .business-hours-container, .about-container, .services-container, .contact-container { padding: 12px; }
-      .testimonial-wall img { width: 60px; height: 60px; }
-      .testimonial-wall .desc, .business-hours-container .hours-list, .about-container .desc, .services-container .desc, .services-container .services-list, .contact-container .contact-details { font-size: 0.8rem; }
-      .testimonial-wall .name { font-size: 0.9rem; }
-      .testimonial-wall .rating { font-size: 0.7rem; }
-      .testimonial-wall .quote-icon::before { font-size: 1.2rem; }
-    }
-    @keyframes blink { 0%, 50%, 100% { opacity: 1; } 25%, 75% { opacity: 0; } }
-    footer { background: #f8f8f8; text-align: center; padding: 15px; color: #1e90ff; border-top: 1px solid #ddd; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Express Delivery Service</title>
+<style>
+body { margin: 0; font-family: Arial, sans-serif; background: #fff; color: #000; scroll-behavior: smooth; }
+a { color: #1e90ff; text-decoration: none; }
+h1, h2, h3, h4, h5, h6 { color: #1e90ff; margin: 0; }
+header { position: relative; height: 400px; overflow: hidden; }
+header video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+header .header-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 2; color: #fff; text-shadow: 2px 2px 8px rgba(0,0,0,0.7); }
+header .header-overlay h1 { font-size: 2.5rem; font-weight: bold; letter-spacing: 2px; margin-bottom: 10px; }
+header .header-overlay p { font-size: 1rem; max-width: 700px; margin: 0 auto; line-height: 1.4; }
+.navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #f8f8f8; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #ddd; }
+.nav-links { display: flex; gap: 15px; }
+.nav-links a { cursor: pointer; font-weight: bold; color: #1e90ff; }
+.hamburger { display: none; flex-direction: column; cursor: pointer; }
+.hamburger div { width: 20px; height: 2px; background-color: #1e90ff; margin: 3px 0; }
+@media (max-width: 768px) {
+  .nav-links { display: none; flex-direction: column; background: #f8f8f8; position: absolute; top: 60px; right: 0; width: 200px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 0 0 5px 5px; }
+  .nav-links.active { display: flex; }
+  .hamburger { display: flex; }
+}
+section { padding: 20px; scroll-margin-top: 60px; }
+.section-title { font-size: 1.5rem; margin-bottom: 15px; color: #1e90ff; }
+.tracking { display: flex; gap: 10px; margin-bottom: 15px; }
+.tracking input { flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 3px; background: #fff; color: #1e90ff; font-size: 0.9rem; }
+.tracking input::placeholder { text-transform: uppercase; font-size: 0.8rem; color: #999; }
+.tracking button { padding: 8px 15px; border: none; border-radius: 3px; background-color: #1e90ff; color: white; cursor: pointer; }
+.shipment-tracking, .shipment-content { max-width: 500px; margin: 10px auto; font-family: 'Times New Roman', Times, serif; }
+.shipment-tracking .header, .shipment-content .header { font-weight: bold; font-size: 10px; margin-bottom: 2px; text-align: center; }
+.shipment-content { padding: 2mm; font-size: 7px; border: 1px solid #000; background: #fff; letter-spacing: 0.5px; width: 70mm; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: relative; }
+.shipment-content .header { display: flex; justify-content: space-between; align-items: center; }
+.shipment-content .header .company-name { font-size: 10px; font-weight: bold; }
+.shipment-content .header .logo img { height: 25px; }
+.shipment-content .details { margin: 2px 0; padding: 3px; border: 1px solid #ddd; border-radius: 3px; }
+.shipment-content .details label { display: inline-block; width: 90px; font-weight: bold; }
+.shipment-content .details span { display: inline-block; margin-left: 2px; }
+.shipment-content .signature-img, .shipment-content .payment-img { max-width: 50px; height: auto; margin-top: 2px; }
+.shipment-content .section-title { font-size: 9px; font-weight: bold; margin: 2px 0; padding-bottom: 1px; border-bottom: 1px solid #000; }
+.shipment-content .total { font-size: 9px; font-weight: bold; margin-top: 5px; padding-top: 2px; text-align: right; }
+.shipment-content .footer { font-size: 5px; text-align: center; margin-top: 5px; color: #555; }
+.shipment-content .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); color: #a9a9a9; font-size: 16px; font-weight: bold; opacity: 0.4; z-index: 0; }
+.print-btn { margin-top: 5px; padding: 5px 10px; background-color: #1e90ff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+.timeline { position: relative; margin: 20px 0; }
+.timeline::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 4px; background: #ddd; }
+.timeline-event { position: relative; margin-bottom: 30px; padding-left: 50px; }
+.timeline-event .tick { position: absolute; left: 10px; top: 0; width: 20px; height: 20px; border-radius: 50%; border: 4px solid green; background: #fff; }
+.timeline-event.completed .tick { background: green; box-shadow: 0 0 5px #090; }
+.timeline-event .time { font-size: 0.85rem; color: blue; margin-top: 2px; }
+.timeline-event .description { margin-top: 5px; background: #eee; padding: 5px; border-radius: 3px; font-size: 0.9rem; }
+.map-container { width: 100%; height: 300px; margin: 20px 0; overflow: hidden; position: relative; }
+.map-container a { text-decoration: none; display: block; }
+.map-overlay { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background-color: rgba(255,255,255,0.8); padding: 5px 10px; border-radius: 3px; font-size: 14px; color: #000; z-index: 10; }
+.newsletter { display: flex; gap: 10px; margin-top: 15px; }
+.newsletter input { flex: 1; padding: 8px; border-radius: 3px; border: 1px solid #ddd; background: #fff; color: #000; }
+.newsletter button { padding: 8px 15px; border-radius: 3px; border: none; background-color: #1e90ff; color: white; cursor: pointer; }
+#supportPopup { display: none; position: fixed; bottom: 20px; right: 20px; background: #f8f8f8; padding: 15px; border-radius: 8px; box-shadow: 0 0 10px #1e90ff; z-index: 10000; color: #000; }
+#supportPopup input, #supportPopup textarea { width: 100%; margin-bottom: 8px; padding: 6px; border-radius: 3px; border: 1px solid #ddd; background: #fff; color: #000; }
+#supportPopup button { padding: 6px 12px; background-color: #1e90ff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+.image-wall { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+.image-wall img, .image-wall video { width: 100%; border-radius: 5px; }
+.image-wall video { pointer-events: none; }
+.image-wall .desc { margin-top: 8px; font-size: 0.85rem; color: #555; line-height: 1.4; }
+.testimonial-container { max-width: 500px; margin: 20px auto; overflow: hidden; }
+.testimonial-container:hover .testimonial-wall { animation-play-state: paused; }
+.testimonial-wall { display: flex; width: 100%; transform: translateX(0); transition: transform 0.5s ease-in-out; animation: slide 25s infinite; }
+.testimonial-wall .testimonial { flex: 0 0 100%; min-width: 100%; padding: 15px; background: #f8f8f8; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 1px solid #ddd; text-align: center; }
+.testimonial-wall img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 10px; border: 2px solid #1e90ff; }
+.testimonial-wall .desc { font-size: 0.85rem; color: #333; line-height: 1.4; font-style: italic; margin: 0 auto 8px; }
+.testimonial-wall .name { font-weight: bold; color: #1e90ff; font-size: 0.95rem; margin-bottom: 5px; }
+.testimonial-wall .rating { font-size: 0.75rem; color: #ffd700; margin-bottom: 8px; }
+.testimonial-wall .rating::before { content: '★★★★★'; }
+.testimonial-wall .quote-icon::before { content: '"'; font-size: 1.5rem; color: #1e90ff; opacity: 0.2; position: absolute; top: 10px; left: 10px; }
+@keyframes slide {
+  0%, 20% { transform: translateX(0); }
+  25%, 45% { transform: translateX(-100%); }
+  50%, 70% { transform: translateX(-200%); }
+  75%, 95% { transform: translateX(-300%); }
+  100% { transform: translateX(-400%); }
+}
+.business-hours-container { max-width: 500px; margin: 20px auto; padding: 20px; background: #f8f8f8; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 1px solid #ddd; text-align: center; }
+.business-hours-container .section-title { font-size: 1.5rem; margin-bottom: 15px; color: #1e90ff; }
+.business-hours-container .hours-list { font-size: 0.9rem; color: #333; line-height: 1.5; }
+.business-hours-container .hours-list span { display: block; margin: 5px 0; }
+.business-hours-container .open-hours { color: #00ff00; animation: blink 1s infinite; font-weight: bold; }
+.about-container { max-width: 500px; margin: 20px auto; padding: 20px; background: #f8f8f8; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 1px solid #ddd; text-align: center; }
+.about-container .section-title { font-size: 1.5rem; margin-bottom: 15px; color: #1e90ff; }
+.about-container .desc { font-size: 0.9rem; color: #333; line-height: 1.5; margin-bottom: 10px; }
+.about-container .icon::before { content: '🌐'; font-size: 2rem; color: #1e90ff; opacity: 0.2; display: block; margin-bottom: 10px; }
+.services-container { max-width: 500px; margin: 20px auto; padding: 20px; background: #f8f8f8; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 1px solid #ddd; text-align: center; }
+.services-container .section-title { font-size: 1.5rem; margin-bottom: 15px; color: #1e90ff; }
+.services-container .services-list { font-size: 0.9rem; color: #333; line-height: 1.5; margin-bottom: 10px; }
+.services-container .desc { font-size: 0.9rem; color: #333; line-height: 1.5; }
+.services-container .icon::before { content: '🚚'; font-size: 2rem; color: #1e90ff; opacity: 0.2; display: block; margin-bottom: 10px; }
+.contact-container { max-width: 500px; margin: 20px auto; padding: 20px; background: #f8f8f8; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 1px solid #ddd; text-align: center; }
+.contact-container .section-title { font-size: 1.5rem; margin-bottom: 15px; color: #1e90ff; }
+.contact-container .contact-details { font-size: 0.9rem; color: #333; line-height: 1.5; margin-bottom: 10px; }
+.contact-container .contact-details p { margin: 5px 0; }
+.contact-container .icon::before { content: '📞'; font-size: 2rem; color: #1e90ff; opacity: 0.2; display: block; margin-bottom: 10px; }
+@media (max-width: 500px) {
+  .testimonial-container, .business-hours-container, .about-container, .services-container, .contact-container { max-width: 90%; }
+  .testimonial-wall .testimonial, .business-hours-container, .about-container, .services-container, .contact-container { padding: 12px; }
+  .testimonial-wall img { width: 60px; height: 60px; }
+  .testimonial-wall .desc, .business-hours-container .hours-list, .about-container .desc, .services-container .desc, .services-container .services-list, .contact-container .contact-details { font-size: 0.8rem; }
+  .testimonial-wall .name { font-size: 0.9rem; }
+  .testimonial-wall .rating { font-size: 0.7rem; }
+  .testimonial-wall .quote-icon::before { font-size: 1.2rem; }
+}
+@keyframes blink { 0%, 50%, 100% { opacity: 1; } 25%, 75% { opacity: 0; } }
+footer { background: #f8f8f8; text-align: center; padding: 15px; color: #1e90ff; border-top: 1px solid #ddd; }
+</style>
 </head>
 <body>
 <noscript>
@@ -517,7 +517,7 @@ function trackPackage() {
           <div class="total">Total: $${amount}</div>
           <div class="footer">
             Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
-            Issued: September 23, 2025, 08:35 AM WAT
+            Issued: September 29, 2025, 10:29 PM WAT
           </div>
         </div>
         <button class="print-btn" onclick="printInvoice('${number}')">Print Invoice</button>`;
@@ -607,7 +607,7 @@ function printInvoice(number) {
       <div class="total">Total: $${amount}</div>
       <div class="footer">
         Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
-        Issued: September 23, 2025, 08:35 AM WAT
+        Issued: September 29, 2025, 10:29 PM WAT
       </div>
     </div>
     </body>
