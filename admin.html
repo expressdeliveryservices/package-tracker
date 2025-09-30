@@ -26,7 +26,7 @@
     #generateTrackingCode { background: #4CAF50; color: white; }
     #signaturePreview img { max-width: 100px; height: auto; margin-top: 10px; border: 1px solid #ddd; border-radius: 3px; }
     #signaturePreview p { font-size: 12px; color: #555; }
-    #errorMessage { color: red; display: none; }
+    #errorMessage { color: red; display: none; margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -143,7 +143,7 @@
           <input type="number" id="newReceiverLng" step="0.0001" placeholder="Enter receiver longitude" required>
         </div>
         <h3>Timeline</h3>
-        <textarea id="newTimeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"23 Sep 2025 07:30","description":"Item arrived","status":"ON HOLD","completed":true}])' required></textarea>
+        <textarea id="newTimeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"30 Sep 2025 01:00","description":"Item shipped","status":"SHIPPED","completed":true}])' required></textarea>
         <button id="generateTrackingCode" onclick="generateTrackingCode()">Generate Tracking Code</button>
         <p>Send the generated tracking code to the recipient for tracking on the public page.</p>
         <p id="errorMessage"></p>
@@ -239,7 +239,7 @@
           <input type="number" id="receiverLng" step="0.0001" placeholder="Enter receiver longitude">
         </div>
         <h3>Timeline</h3>
-        <textarea id="timeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"23 Sep 2025 07:30","description":"Item arrived","status":"ON HOLD","completed":true}])'></textarea>
+        <textarea id="timeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"30 Sep 2025 01:00","description":"Item shipped","status":"SHIPPED","completed":true}])'></textarea>
         <button onclick="saveShipment()">Save Shipment</button>
         <p id="errorMessage"></p>
       </div>
@@ -278,7 +278,7 @@
         };
         request.onerror = (event) => {
           console.error("IndexedDB initialization failed:", event.target.error);
-          document.getElementById("errorMessage").textContent = "Failed to initialize database. Please try again.";
+          document.getElementById("errorMessage").textContent = "Failed to initialize database. Some features may be unavailable.";
           document.getElementById("errorMessage").style.display = "block";
           reject(event.target.error);
         };
@@ -324,6 +324,8 @@
           };
           tx.onerror = () => {
             console.error("Migration error:", tx.error);
+            document.getElementById("errorMessage").textContent = "Error migrating data.";
+            document.getElementById("errorMessage").style.display = "block";
             reject(tx.error);
           };
         });
@@ -449,6 +451,7 @@
           const numbers = Math.floor(100000000 + Math.random() * 900000000).toString();
           newTracking = `${letters}-${numbers}`;
           const request = await storeCheck.get(newTracking);
+          await new Promise((resolve) => { txCheck.oncomplete = resolve; });
           isUnique = !request.result;
         }
 
@@ -712,12 +715,23 @@
         await migrateLocalStorageToIndexedDB();
         if ("serviceWorker" in navigator) {
           navigator.serviceWorker.register("sw.js").then((reg) => {
-            console.log("Service worker registered:", reg);
+            console.log("Service worker registered:", reg.scope);
+            if (reg.installing) {
+              console.log("Service worker installing");
+            } else if (reg.waiting) {
+              console.log("Service worker installed, waiting");
+            } else if (reg.active) {
+              console.log("Service worker active");
+            }
           }).catch((err) => {
-            console.error("Service worker registration failed:", err);
-            document.getElementById("errorMessage").textContent = "Offline support may be limited.";
+            console.error("Service worker registration failed:", err.message);
+            document.getElementById("errorMessage").textContent = `Offline support may be limited: ${err.message}`;
             document.getElementById("errorMessage").style.display = "block";
           });
+        } else {
+          console.warn("Service workers not supported");
+          document.getElementById("errorMessage").textContent = "Offline support not available in this browser.";
+          document.getElementById("errorMessage").style.display = "block";
         }
       } catch (e) {
         console.error("Initialization error:", e);
