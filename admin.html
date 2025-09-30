@@ -5,24 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Dashboard - Express Delivery</title>
 <style>
-body { font-family: Arial, sans-serif; background: #f0f2f5; color: #000; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 0; }
 header { background: #1e90ff; color: white; padding: 15px; text-align: center; }
 .container { max-width: 1000px; margin: 20px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
 input, textarea, select, button { margin: 5px 0; padding: 8px; width: 100%; border-radius: 3px; border: 1px solid #ccc; font-size: 14px; }
-input[readonly] { background: #e0e0e0; cursor: not-allowed; }
 button { background: #1e90ff; color: white; border: none; cursor: pointer; }
 button:hover { background: #1565c0; }
 h2, h3 { color: #1e90ff; margin-top: 0; }
 .section { margin-bottom: 30px; }
 label { font-weight: bold; }
-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-th { background: #1e90ff; color: white; }
-.shipment-form div { margin-bottom: 10px; }
-#generateTrackingCode { background: #4CAF50; color: white; }
-#signaturePreview img { max-width: 100px; height: auto; margin-top: 10px; border: 1px solid #ddd; border-radius: 3px; }
-#signaturePreview p { font-size: 12px; color: #555; }
-#signedByGeoTrust, #newSignedByGeoTrust { color: red; }
 </style>
 </head>
 <body>
@@ -40,197 +31,75 @@ th { background: #1e90ff; color: white; }
     <input type="email" id="adminEmail" placeholder="Enter admin email">
     <label>Password:</label>
     <input type="password" id="adminPassword" placeholder="Enter password">
-    <button onclick="login()">Login</button>
+    <button id="loginBtn">Login</button>
     <p id="loginMessage" style="color:red;"></p>
   </div>
 
   <!-- Dashboard Section -->
   <div class="section" id="dashboardSection" style="display:none;">
-
     <h2>Upload Signature Stamp</h2>
-    <div class="section">
-      <label>Signature Stamp Image:</label>
-      <input type="file" id="signatureStamp" accept="image/*">
-      <div id="signaturePreview"></div>
-      <button onclick="saveSignatureStamp()">Save Signature Stamp</button>
-    </div>
+    <input type="file" id="signatureStamp" accept="image/*">
+    <div id="signaturePreview"></div>
+    <button onclick="saveSignatureStamp()">Save Signature Stamp</button>
 
     <h2>Generate New Tracking Code</h2>
-    <div class="shipment-form">
-      <input type="text" id="newTrackingNumber" placeholder="New Tracking Code will be generated" readonly>
-      <div>
-        <label>Amount ($):</label>
-        <input type="number" id="newShipmentAmount" step="0.01" placeholder="Shipment Amount" required>
-      </div>
-      <div>
-        <label>Order ID:</label>
-        <input type="text" id="newOrderId" placeholder="Order ID" required>
-      </div>
-      <div>
-        <label>Est. Delivery Date:</label>
-        <input type="date" id="newEstDeliveryDate" placeholder="Estimated Delivery Date" required>
-      </div>
-      <div>
-        <label>Payment Mode:</label>
-        <input type="text" id="newPaymentMode" placeholder="Payment Mode (e.g., Online, Cash)" required>
-      </div>
-      <div>
-        <label>Payment Method:</label>
-        <input type="text" id="newPaymentMethod" placeholder="Payment Method (e.g., Credit card, Bank transfer)" required>
-      </div>
-      <div>
-        <label>Mode of Transport:</label>
-        <input type="text" id="newModeOfTransport" placeholder="Mode of Transport (e.g., Air, Sea)" required>
-      </div>
-      <div>
-        <label>Type of Shipment:</label>
-        <input type="text" id="newTypeOfShipment" placeholder="Type of Shipment (e.g., Express, Standard)" required>
-      </div>
-      <div>
-        <label>Quantity:</label>
-        <input type="text" id="newQuantity" placeholder="Quantity (e.g., 2 boxes)" required>
-      </div>
-      <div>
-        <label>Official Stamp Date:</label>
-        <input type="date" id="newOfficialStampDate" placeholder="Official Stamp Date" required>
-      </div>
-      <div>
-        <label>Content:</label>
-        <input type="text" id="newShipmentContent" placeholder="Shipment Content" required>
-      </div>
-      <div>
-        <label>Origin:</label>
-        <input type="text" id="newShipmentOrigin" placeholder="Origin Area" required>
-      </div>
-      <div>
-        <label>Destination:</label>
-        <input type="text" id="newShipmentDestination" placeholder="Destination Area" required>
-      </div>
-      <h3>Sender Details</h3>
-      <div>
-        <label>Name:</label>
-        <input type="text" id="newSenderName" placeholder="Sender Name" required>
-      </div>
-      <div>
-        <label>Address:</label>
-        <input type="text" id="newSenderAddress" placeholder="Sender Address" required>
-      </div>
-      <h3>Receiver Details</h3>
-      <div>
-        <label>Name:</label>
-        <input type="text" id="newReceiverName" placeholder="Receiver Name" required>
-      </div>
-      <div>
-        <label>Address:</label>
-        <input type="text" id="newReceiverAddress" placeholder="Receiver Address" required>
-      </div>
-      <div>
-        <label>Mobile:</label>
-        <input type="text" id="newReceiverMobile" placeholder="Receiver Mobile" required>
-      </div>
-      <div>
-        <label>Latitude:</label>
-        <input type="number" id="newReceiverLat" step="0.0001" placeholder="Receiver Latitude" required>
-      </div>
-      <div>
-        <label>Longitude:</label>
-        <input type="number" id="newReceiverLng" step="0.0001" placeholder="Receiver Longitude" required>
-      </div>
-      <h3>Timeline</h3>
-      <textarea id="newTimeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"22 Sep 2025 12:33","description":"✅ Item shipped","status":"IN TRANSIT","completed":true}])' required></textarea>
-      <button id="generateTrackingCode" onclick="generateTrackingCode()">Generate Tracking Code</button>
-      <p>Send the generated tracking code to the recipient. They can use it on the public page to view details anytime.</p>
-    </div>
+    <input type="text" id="newTrackingNumber" placeholder="New Tracking Code will be generated" readonly>
+    <input type="text" id="newShipmentContent" placeholder="Shipment Content" required>
+    <input type="text" id="newShipmentOrigin" placeholder="Origin Area" required>
+    <input type="text" id="newShipmentDestination" placeholder="Destination Area" required>
+    <input type="text" id="newOrderId" placeholder="Order ID" required>
+    <input type="date" id="newEstDeliveryDate" placeholder="Estimated Delivery Date" required>
+    <input type="text" id="newModeOfTransport" placeholder="Mode of Transport (e.g., Air, Sea)" required>
+    <input type="text" id="newTypeOfShipment" placeholder="Type of Shipment (e.g., Express, Standard)" required>
+    <input type="text" id="newQuantity" placeholder="Quantity (e.g., 2 boxes)" required>
+    <input type="date" id="newOfficialStampDate" placeholder="Official Stamp Date" required>
+
+    <h3>Sender Details</h3>
+    <input type="text" id="newSenderName" placeholder="Sender Name" required>
+    <input type="text" id="newSenderAddress" placeholder="Sender Address" required>
+
+    <h3>Receiver Details</h3>
+    <input type="text" id="newReceiverName" placeholder="Receiver Name" required>
+    <input type="text" id="newReceiverAddress" placeholder="Receiver Address" required>
+    <input type="text" id="newReceiverMobile" placeholder="Receiver Mobile" required>
+    <input type="number" id="newReceiverLat" step="0.0001" placeholder="Receiver Latitude" required>
+    <input type="number" id="newReceiverLng" step="0.0001" placeholder="Receiver Longitude" required>
+
+    <h3>Timeline</h3>
+    <textarea id="newTimeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"22 Sep 2025 12:33","description":"✅ Item shipped","status":"IN TRANSIT","completed":true}])' required></textarea>
+
+    <button onclick="generateTrackingCode()">Generate Tracking Code</button>
 
     <h2>Edit Shipments</h2>
-    <div class="shipment-form">
-      <label>Select Shipment:</label>
-      <select id="shipmentSelect" onchange="loadShipment()">
-        <option value="">Select a shipment</option>
-      </select>
-      <input type="text" id="trackingNumber" placeholder="Tracking Number" readonly>
-      <div>
-        <label>Amount ($):</label>
-        <input type="number" id="shipmentAmount" step="0.01" placeholder="Shipment Amount">
-      </div>
-      <div>
-        <label>Order ID:</label>
-        <input type="text" id="orderId" placeholder="Order ID">
-      </div>
-      <div>
-        <label>Est. Delivery Date:</label>
-        <input type="date" id="estDeliveryDate" placeholder="Estimated Delivery Date">
-      </div>
-      <div>
-        <label>Payment Mode:</label>
-        <input type="text" id="paymentMode" placeholder="Payment Mode">
-      </div>
-      <div>
-        <label>Payment Method:</label>
-        <input type="text" id="paymentMethod" placeholder="Payment Method">
-      </div>
-      <div>
-        <label>Mode of Transport:</label>
-        <input type="text" id="modeOfTransport" placeholder="Mode of Transport">
-      </div>
-      <div>
-        <label>Type of Shipment:</label>
-        <input type="text" id="typeOfShipment" placeholder="Type of Shipment">
-      </div>
-      <div>
-        <label>Quantity:</label>
-        <input type="text" id="quantity" placeholder="Quantity">
-      </div>
-      <div>
-        <label>Official Stamp Date:</label>
-        <input type="date" id="officialStampDate" placeholder="Official Stamp Date">
-      </div>
-      <div>
-        <label>Content:</label>
-        <input type="text" id="shipmentContent" placeholder="Shipment Content">
-      </div>
-      <div>
-        <label>Origin:</label>
-        <input type="text" id="shipmentOrigin" placeholder="Origin Area">
-      </div>
-      <div>
-        <label>Destination:</label>
-        <input type="text" id="shipmentDestination" placeholder="Destination Area">
-      </div>
-      <h3>Sender Details</h3>
-      <div>
-        <label>Name:</label>
-        <input type="text" id="senderName" placeholder="Sender Name">
-      </div>
-      <div>
-        <label>Address:</label>
-        <input type="text" id="senderAddress" placeholder="Sender Address">
-      </div>
-      <h3>Receiver Details</h3>
-      <div>
-        <label>Name:</label>
-        <input type="text" id="receiverName" placeholder="Receiver Name">
-      </div>
-      <div>
-        <label>Address:</label>
-        <input type="text" id="receiverAddress" placeholder="Receiver Address">
-      </div>
-      <div>
-        <label>Mobile:</label>
-        <input type="text" id="receiverMobile" placeholder="Receiver Mobile">
-      </div>
-      <div>
-        <label>Latitude:</label>
-        <input type="number" id="receiverLat" step="0.0001" placeholder="Receiver Latitude">
-      </div>
-      <div>
-        <label>Longitude:</label>
-        <input type="number" id="receiverLng" step="0.0001" placeholder="Receiver Longitude">
-      </div>
-      <h3>Timeline</h3>
-      <textarea id="timeline" rows="4" placeholder='Enter timeline events as JSON array'></textarea>
-      <button onclick="saveShipment()">Save Shipment</button>
-    </div>
+    <select id="shipmentSelect" onchange="loadShipment()">
+      <option value="">Select a shipment</option>
+    </select>
+    <input type="text" id="trackingNumber" placeholder="Tracking Number" readonly>
+    <input type="text" id="shipmentContent" placeholder="Shipment Content">
+    <input type="text" id="shipmentOrigin" placeholder="Origin Area">
+    <input type="text" id="shipmentDestination" placeholder="Destination Area">
+    <input type="text" id="orderId" placeholder="Order ID">
+    <input type="date" id="estDeliveryDate" placeholder="Estimated Delivery Date">
+    <input type="text" id="modeOfTransport" placeholder="Mode of Transport">
+    <input type="text" id="typeOfShipment" placeholder="Type of Shipment">
+    <input type="text" id="quantity" placeholder="Quantity">
+    <input type="date" id="officialStampDate" placeholder="Official Stamp Date">
+
+    <h3>Sender Details</h3>
+    <input type="text" id="senderName" placeholder="Sender Name">
+    <input type="text" id="senderAddress" placeholder="Sender Address">
+
+    <h3>Receiver Details</h3>
+    <input type="text" id="receiverName" placeholder="Receiver Name">
+    <input type="text" id="receiverAddress" placeholder="Receiver Address">
+    <input type="text" id="receiverMobile" placeholder="Receiver Mobile">
+    <input type="number" id="receiverLat" step="0.0001" placeholder="Receiver Latitude">
+    <input type="number" id="receiverLng" step="0.0001" placeholder="Receiver Longitude">
+
+    <h3>Timeline</h3>
+    <textarea id="timeline" rows="4" placeholder='Enter timeline events as JSON array'></textarea>
+
+    <button onclick="saveShipment()">Save Shipment</button>
 
     <button style="background:red;margin-top:15px;" onclick="logout()">Logout</button>
   </div>
@@ -238,15 +107,15 @@ th { background: #1e90ff; color: white; }
 </div>
 
 <script>
+const COMPANY_NAME = "Express Delivery Service";
 const ADMIN_EMAIL = "Expressdeliveryservice0016@gmail.com";
 const ADMIN_PASSWORD = "Umuojima";
-const COMPANY_NAME = "Express Delivery Service";
 
 // Login/Logout
 function login() {
   const email = document.getElementById('adminEmail').value.trim();
   const pass = document.getElementById('adminPassword').value.trim();
-  if (email === ADMIN_EMAIL && pass === ADMIN_PASSWORD) {
+  if(email === ADMIN_EMAIL && pass === ADMIN_PASSWORD){
     document.getElementById('loginSection').style.display = 'none';
     document.getElementById('dashboardSection').style.display = 'block';
     loadData();
@@ -254,6 +123,7 @@ function login() {
     document.getElementById('loginMessage').innerText = "Invalid email or password!";
   }
 }
+
 function logout() {
   document.getElementById('loginSection').style.display = 'block';
   document.getElementById('dashboardSection').style.display = 'none';
@@ -262,73 +132,72 @@ function logout() {
   document.getElementById('loginMessage').innerText = '';
 }
 
-// Load Data
-function loadData() {
-  const newsletter = localStorage.getItem('newsletterEmails') || '';
-  const reviews = localStorage.getItem('customerReviews') || '';
-  const shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-  document.getElementById('newsletterList')?.value = newsletter.split(',').join('\n');
-  document.getElementById('reviewsList')?.value = reviews.split('|').join('\n');
-
-  // Populate shipment dropdown
-  const shipmentSelect = document.getElementById('shipmentSelect');
-  shipmentSelect.innerHTML = '<option value="">Select a shipment</option>';
-  shipments.forEach(s => {
-    const opt = document.createElement('option');
-    opt.value = s.trackingNumber;
-    opt.text = `${s.trackingNumber} - ${s.content || 'Unknown'}`;
-    shipmentSelect.appendChild(opt);
-  });
-
-  // Load signature stamp preview
-  const signatureStamp = localStorage.getItem('signatureStamp');
-  const preview = document.getElementById('signaturePreview');
-  if (signatureStamp) {
-    preview.innerHTML = `<img src="${signatureStamp}" alt="Signature Stamp"><p>Current signature stamp</p>`;
-  } else {
-    preview.innerHTML = `<p>No signature stamp uploaded</p>`;
-  }
-}
-
-// Load selected shipment
-function loadShipment() {
-  const trackingNumber = document.getElementById('shipmentSelect').value;
-  if (!trackingNumber) return;
-  const shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-  const shipment = shipments.find(s => s.trackingNumber === trackingNumber);
-  if (!shipment) return;
-  const fields = ['trackingNumber','shipmentAmount','orderId','estDeliveryDate','paymentMode','paymentMethod','modeOfTransport','typeOfShipment','quantity','officialStampDate','shipmentContent','shipmentOrigin','shipmentDestination','senderName','senderAddress','receiverName','receiverAddress','receiverMobile','receiverLat','receiverLng','timeline'];
-  fields.forEach(f => {
-    if(document.getElementById(f)) {
-      if(f==='timeline') document.getElementById(f).value = JSON.stringify(shipment.timeline || [], null, 2);
-      else document.getElementById(f).value = shipment[f] || shipment.receipt?.amount || shipment.sender?.name || shipment.receiver?.name || '';
-    }
-  });
-}
-
-// Save Signature Stamp
+// Signature Stamp
 function saveSignatureStamp() {
   const fileInput = document.getElementById('signatureStamp');
   const preview = document.getElementById('signaturePreview');
-  if (fileInput.files.length > 0) {
+  if(fileInput.files.length > 0){
     const file = fileInput.files[0];
-    if (file.type.startsWith('image/') && file.size <= 2*1024*1024) {
+    if(file.type.startsWith('image/') && file.size <= 2*1024*1024){
       const reader = new FileReader();
       reader.onload = e => {
-        localStorage.setItem('signatureStamp', e.target.result);
-        preview.innerHTML = `<img src="${e.target.result}" alt="Signature Stamp"><p>Current signature stamp</p>`;
+        const base64Image = e.target.result;
+        localStorage.setItem('signatureStamp', base64Image);
+        preview.innerHTML = `<img src="${base64Image}" alt="Signature Stamp" style="max-width:100px;"><p>Current signature stamp</p>`;
         alert("Signature stamp saved successfully!");
-      };
+      }
       reader.readAsDataURL(file);
-    } else alert("Please upload a valid image file (max 2MB).");
-  } else alert("Please select an image to upload.");
+    } else alert("Please upload a valid image (max 2MB).");
+  } else alert("Select an image to upload.");
 }
 
-// Save Shipment
-function saveShipment() {
+// Load/Save Shipments
+function loadData() {
+  const shipments = JSON.parse(localStorage.getItem('shipments')||'[]');
+  const shipmentSelect = document.getElementById('shipmentSelect');
+  shipmentSelect.innerHTML = '<option value="">Select a shipment</option>';
+  shipments.forEach(s => {
+    const option = document.createElement('option');
+    option.value = s.trackingNumber;
+    option.text = `${s.trackingNumber} - ${s.content || 'Unknown'}`;
+    shipmentSelect.appendChild(option);
+  });
+
+  const signatureStamp = localStorage.getItem('signatureStamp');
+  const preview = document.getElementById('signaturePreview');
+  preview.innerHTML = signatureStamp ? `<img src="${signatureStamp}" alt="Signature Stamp" style="max-width:100px;"><p>Current signature stamp</p>` : `<p>No signature stamp uploaded</p>`;
+}
+
+function loadShipment(){
+  const trackingNumber = document.getElementById('shipmentSelect').value;
+  if(!trackingNumber) return;
+  const shipments = JSON.parse(localStorage.getItem('shipments')||'[]');
+  const s = shipments.find(sh => sh.trackingNumber===trackingNumber);
+  if(!s) return;
+  document.getElementById('trackingNumber').value = s.trackingNumber || '';
+  document.getElementById('shipmentContent').value = s.content || '';
+  document.getElementById('shipmentOrigin').value = s.origin || '';
+  document.getElementById('shipmentDestination').value = s.destination || '';
+  document.getElementById('orderId').value = s.orderId || '';
+  document.getElementById('estDeliveryDate').value = s.estDeliveryDate || '';
+  document.getElementById('modeOfTransport').value = s.modeOfTransport || '';
+  document.getElementById('typeOfShipment').value = s.typeOfShipment || '';
+  document.getElementById('quantity').value = s.quantity || '';
+  document.getElementById('officialStampDate').value = s.officialStampDate || '';
+  document.getElementById('senderName').value = s.sender.name || '';
+  document.getElementById('senderAddress').value = s.sender.address || '';
+  document.getElementById('receiverName').value = s.receiver.name || '';
+  document.getElementById('receiverAddress').value = s.receiver.address || '';
+  document.getElementById('receiverMobile').value = s.receiver.mobile || '';
+  document.getElementById('receiverLat').value = s.receiver.lat || '';
+  document.getElementById('receiverLng').value = s.receiver.lng || '';
+  document.getElementById('timeline').value = JSON.stringify(s.timeline||[],null,2);
+}
+
+function saveShipment(){
   try {
     const trackingNumber = document.getElementById('trackingNumber').value.trim();
-    if(!trackingNumber) throw new Error("Please select a shipment to edit.");
+    if(!trackingNumber) throw new Error("Select a shipment to edit.");
     const shipment = {
       trackingNumber,
       content: document.getElementById('shipmentContent').value.trim(),
@@ -339,37 +208,37 @@ function saveShipment() {
       modeOfTransport: document.getElementById('modeOfTransport').value.trim(),
       typeOfShipment: document.getElementById('typeOfShipment').value.trim(),
       quantity: document.getElementById('quantity').value.trim(),
-      paymentMode: document.getElementById('paymentMode').value.trim(),
-      paymentMethod: document.getElementById('paymentMethod').value.trim(),
       officialStampDate: document.getElementById('officialStampDate').value.trim(),
-      signedBy: document.getElementById('signedByGeoTrust')?.value || 'GeoTrust',
-      officialStamp: localStorage.getItem('signatureStamp') || '',
-      sender: { name: document.getElementById('senderName').value.trim(), address: document.getElementById('senderAddress').value.trim() },
-      receiver: { 
+      officialStamp: localStorage.getItem('signatureStamp')||'',
+      sender:{
+        name: document.getElementById('senderName').value.trim(),
+        address: document.getElementById('senderAddress').value.trim()
+      },
+      receiver:{
         name: document.getElementById('receiverName').value.trim(),
         address: document.getElementById('receiverAddress').value.trim(),
         mobile: document.getElementById('receiverMobile').value.trim(),
-        lat: parseFloat(document.getElementById('receiverLat').value) || 0,
-        lng: parseFloat(document.getElementById('receiverLng').value) || 0
+        lat: parseFloat(document.getElementById('receiverLat').value)||0,
+        lng: parseFloat(document.getElementById('receiverLng').value)||0
       },
-      timeline: JSON.parse(document.getElementById('timeline').value.trim() || '[]'),
-      receipt: { companyName: COMPANY_NAME, amount: parseFloat(document.getElementById('shipmentAmount').value) || 0.00 }
+      timeline: JSON.parse(document.getElementById('timeline').value.trim()||'[]')
     };
-    let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-    const index = shipments.findIndex(s => s.trackingNumber === shipment.trackingNumber);
-    if(index!==-1) shipments[index]=shipment; else shipments.push(shipment);
-    localStorage.setItem('shipments', JSON.stringify(shipments));
-    alert("Shipment saved successfully! Changes will reflect on the public page receipt.");
+    let shipments = JSON.parse(localStorage.getItem('shipments')||'[]');
+    const index = shipments.findIndex(s=>s.trackingNumber===trackingNumber);
+    if(index!==-1) shipments[index]=shipment;
+    else shipments.push(shipment);
+    localStorage.setItem('shipments',JSON.stringify(shipments));
+    alert("Shipment saved!");
     loadData();
-  } catch(e) { alert(`Error: ${e.message}`); }
+  } catch(e){ alert(`Error: ${e.message}`); }
 }
 
-// Generate Tracking Code
-function generateTrackingCode() {
-  try {
-    const letters = String.fromCharCode(...Array(3).fill().map(() => 65+Math.floor(Math.random()*26)));
+function generateTrackingCode(){
+  try{
+    const letters = String.fromCharCode(...Array(3).fill().map(()=>65+Math.floor(Math.random()*26)));
     const numbers = Math.floor(100000000+Math.random()*900000000).toString();
     const newTracking = `${letters}-${numbers}`;
+
     const shipment = {
       trackingNumber: newTracking,
       content: document.getElementById('newShipmentContent').value.trim(),
@@ -380,33 +249,36 @@ function generateTrackingCode() {
       modeOfTransport: document.getElementById('newModeOfTransport').value.trim(),
       typeOfShipment: document.getElementById('newTypeOfShipment').value.trim(),
       quantity: document.getElementById('newQuantity').value.trim(),
-      paymentMode: document.getElementById('newPaymentMode').value.trim(),
-      paymentMethod: document.getElementById('newPaymentMethod').value.trim(),
       officialStampDate: document.getElementById('newOfficialStampDate').value.trim(),
-      signedBy: document.getElementById('newSignedByGeoTrust')?.value || 'GeoTrust',
-      officialStamp: localStorage.getItem('signatureStamp') || '',
-      sender: { name: document.getElementById('newSenderName').value.trim(), address: document.getElementById('newSenderAddress').value.trim() },
-      receiver: { 
+      officialStamp: localStorage.getItem('signatureStamp')||'',
+      sender:{
+        name: document.getElementById('newSenderName').value.trim(),
+        address: document.getElementById('newSenderAddress').value.trim()
+      },
+      receiver:{
         name: document.getElementById('newReceiverName').value.trim(),
         address: document.getElementById('newReceiverAddress').value.trim(),
         mobile: document.getElementById('newReceiverMobile').value.trim(),
-        lat: parseFloat(document.getElementById('newReceiverLat').value) || 0,
-        lng: parseFloat(document.getElementById('newReceiverLng').value) || 0
+        lat: parseFloat(document.getElementById('newReceiverLat').value)||0,
+        lng: parseFloat(document.getElementById('newReceiverLng').value)||0
       },
-      timeline: JSON.parse(document.getElementById('newTimeline').value.trim() || '[]'),
-      receipt: { companyName: COMPANY_NAME, amount: parseFloat(document.getElementById('newShipmentAmount').value) || 0.00 }
+      timeline: JSON.parse(document.getElementById('newTimeline').value.trim()||'[]')
     };
-    let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-    if(shipments.some(s=>s.trackingNumber===newTracking)) throw new Error("Tracking code exists, try again.");
+
+    let shipments = JSON.parse(localStorage.getItem('shipments')||'[]');
     shipments.push(shipment);
-    localStorage.setItem('shipments', JSON.stringify(shipments));
+    localStorage.setItem('shipments',JSON.stringify(shipments));
+
     document.getElementById('newTrackingNumber').value = newTracking;
-    alert(`New tracking code generated: ${newTracking}. Saved and ready for editing.`);
+    alert(`Tracking code generated: ${newTracking}`);
     loadData();
-  } catch(e) { alert(`Error: ${e.message}`); }
+  } catch(e){ alert(`Error: ${e.message}`);}
 }
 
-document.addEventListener('DOMContentLoaded', loadData);
+document.addEventListener('DOMContentLoaded',function(){
+  document.getElementById('loginBtn').addEventListener('click',login);
+  document.getElementById('logoutBtn').addEventListener('click',logout);
+});
 </script>
 
 </body>
