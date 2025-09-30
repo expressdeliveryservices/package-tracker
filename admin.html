@@ -1,376 +1,409 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Admin Panel - Express Delivery</title>
-  <style>
-    :root{
-      --primary:#0b76ff;
-      --primary-dark:#065fcc;
-      --bg:#f4f7fb;
-      --card:#ffffff;
-      --muted:#6b7280;
-      --border:#e6eefc;
-    }
-    *{box-sizing:border-box}
-    body{
-      font-family: Inter, "Segoe UI", Arial, sans-serif;
-      margin:0;
-      background:var(--bg);
-      color:#1f2937;
-      -webkit-font-smoothing:antialiased;
-    }
-    header{
-      background:linear-gradient(90deg,var(--primary),var(--primary-dark));
-      color:#fff;
-      padding:18px 20px;
-      text-align:center;
-      font-weight:700;
-      letter-spacing:0.4px;
-      box-shadow:0 2px 8px rgba(11,118,255,0.08);
-    }
-    .wrap{max-width:1150px;margin:28px auto;padding:20px;background:var(--card);border-radius:10px;box-shadow:0 6px 20px rgba(16,24,40,0.06);}
-    .top-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
-    #shipmentSelect{flex:1;min-width:260px;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:14px}
-    .controls {display:flex;gap:8px}
-    .btn{padding:10px 14px;border-radius:8px;border:0;cursor:pointer;font-weight:600}
-    .btn-primary{background:var(--primary);color:#fff}
-    .btn-primary:hover{background:var(--primary-dark)}
-    .btn-secondary{background:#f3f6fb;color:#0b76ff;border:1px solid var(--border)}
-    .layout{display:grid;grid-template-columns:1fr 420px;gap:18px}
-    .card{padding:14px;background:#fff;border-radius:8px;border:1px solid #f0f4ff}
-    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    label{display:block;font-size:13px;color:var(--primary-dark);font-weight:600;margin-bottom:6px}
-    input[type="text"],input[type="number"],input[type="date"],select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);font-size:14px;background:#fff}
-    textarea{min-height:110px;resize:vertical}
-    .full {grid-column:1 / -1}
-    .stamp-block{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
-    #stampPreview{max-width:200px;border-radius:6px;border:1px solid var(--border);display:none}
-    .muted{color:var(--muted);font-size:13px;margin-top:6px}
-    .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:12px}
-    .output{margin-top:18px;padding:12px;background:#f3f7ff;border-radius:8px;border:1px solid #e6f0ff;font-family:monospace;font-size:13px;white-space:pre-wrap;color:#0b3b6f}
-    .download {margin-left:auto}
-    .hint{font-size:13px;color:var(--muted);margin-top:6px}
-    @media (max-width:980px){ .layout{grid-template-columns:1fr} .form-grid{grid-template-columns:1fr} #stampPreview{max-width:140px} }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Admin Panel - Express Delivery</title>
+<style>
+:root{
+  --primary:#0b76ff;
+  --primary-dark:#065fcc;
+  --bg:#f4f7fb;
+  --card:#ffffff;
+  --muted:#6b7280;
+  --border:#e6eefc;
+}
+*{box-sizing:border-box}
+body{
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  margin:0;
+  background:var(--bg);
+  color:#1f2937;
+  -webkit-font-smoothing:antialiased;
+}
+header{
+  background:linear-gradient(90deg,var(--primary),var(--primary-dark));
+  color:#fff;
+  padding:18px 20px;
+  text-align:center;
+  font-weight:700;
+  letter-spacing:0.4px;
+  box-shadow:0 2px 8px rgba(11,118,255,0.08);
+}
+.wrap{max-width:1150px;margin:28px auto;padding:20px;background:var(--card);border-radius:10px;box-shadow:0 6px 20px rgba(16,24,40,0.06);}
+.top-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+#shipmentSelect{flex:1;min-width:260px;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:14px}
+.controls {display:flex;gap:8px;flex-wrap:wrap;}
+.btn{padding:10px 14px;border-radius:8px;border:0;cursor:pointer;font-weight:600}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark)}
+.btn-secondary{background:#f3f6fb;color:#0b76ff;border:1px solid var(--border)}
+.layout{display:grid;grid-template-columns:1fr 420px;gap:18px}
+.card{padding:14px;background:#fff;border-radius:8px;border:1px solid #f0f4ff}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{display:block;font-size:13px;color:var(--primary-dark);font-weight:600;margin-bottom:6px}
+input[type="text"],input[type="number"],input[type="date"],select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);font-size:14px;background:#fff}
+textarea{min-height:110px;resize:vertical}
+.full {grid-column:1 / -1}
+.stamp-block{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+#stampPreview{max-width:200px;border-radius:6px;border:1px solid var(--border);display:none}
+.muted{color:var(--muted);font-size:13px;margin-top:6px}
+.actions{display:flex;gap:10px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.output{margin-top:18px;padding:12px;background:#f3f7ff;border-radius:8px;border:1px solid #e6f0ff;font-family:monospace;font-size:13px;white-space:pre-wrap;color:#0b3b6f}
+.download {margin-left:auto}
+.hint{font-size:13px;color:var(--muted);margin-top:6px}
+@media (max-width:980px){ .layout{grid-template-columns:1fr} .form-grid{grid-template-columns:1fr} #stampPreview{max-width:140px} }
+</style>
 </head>
 <body>
-  <header>Express Delivery — Admin Panel</header>
+<header>Express Delivery — Admin Panel</header>
+<div class="wrap">
 
-  <div class="wrap">
-    <div class="top-row">
-      <select id="shipmentSelect">
-        <option value="">-- Select a shipment --</option>
-      </select>
+  <!-- Top Row: shipment select + controls -->
+  <div class="top-row">
+    <select id="shipmentSelect">
+      <option value="">-- Select a shipment --</option>
+    </select>
 
-      <div class="controls">
-        <button class="btn btn-primary" onclick="generateShipment()">Generate New</button>
-        <button class="btn btn-secondary" onclick="updateShipment()">Update Selected</button>
-        <button class="btn btn-secondary download" onclick="downloadShipments()">Download JSON</button>
-      </div>
-    </div>
-
-    <div class="layout">
-      <!-- LEFT: form -->
-      <div class="card">
-        <h3 style="margin:0 0 10px 0;color:var(--primary-dark)">Shipment Details</h3>
-        <form id="shipmentForm" onsubmit="return false;">
-          <div class="form-grid">
-            <!-- Sender -->
-            <div>
-              <label for="newSender">Sender Name</label>
-              <input id="newSender" type="text" placeholder="Sender full name">
-            </div>
-            <div>
-              <label for="newSenderAddress">Sender Address</label>
-              <input id="newSenderAddress" type="text" placeholder="Sender address">
-            </div>
-
-            <!-- Receiver -->
-            <div>
-              <label for="newReceiver">Receiver Name</label>
-              <input id="newReceiver" type="text" placeholder="Receiver full name">
-            </div>
-            <div>
-              <label for="newReceiverMobile">Receiver Mobile</label>
-              <input id="newReceiverMobile" type="text" placeholder="e.g. +79931234567">
-            </div>
-
-            <div>
-              <label for="newAddress">Receiver Address</label>
-              <input id="newAddress" type="text" placeholder="Receiver address">
-            </div>
-            <div>
-              <label for="newAmount">Amount ($)</label>
-              <input id="newAmount" type="number" placeholder="0.00" step="0.01">
-            </div>
-
-            <div>
-              <label for="newOrderId">Order ID</label>
-              <input id="newOrderId" type="text" placeholder="Order ID">
-            </div>
-
-            <div>
-              <label for="newEstDeliveryDate">Est. Delivery Date</label>
-              <input id="newEstDeliveryDate" type="date">
-            </div>
-
-            <div>
-              <label for="newPaymentMode">Payment Mode</label>
-              <select id="newPaymentMode">
-                <option value="">Select payment mode</option>
-                <option value="Cash">Cash</option>
-                <option value="Card">Card</option>
-                <option value="Bank Transfer">Bank Transfer</option>
-                <option value="PayPal">PayPal</option>
-              </select>
-            </div>
-
-            <div>
-              <label for="newModeOfTransport">Mode of Transport</label>
-              <select id="newModeOfTransport">
-                <option value="">Select mode</option>
-                <option value="Air">Air</option>
-                <option value="Sea">Sea</option>
-                <option value="Land">Land</option>
-              </select>
-            </div>
-
-            <div>
-              <label for="newTypeOfShipment">Type of Shipment</label>
-              <input id="newTypeOfShipment" type="text" placeholder="e.g. Documents">
-            </div>
-            <div>
-              <label for="newQuantity">Quantity</label>
-              <input id="newQuantity" type="number" placeholder="1">
-            </div>
-            <div>
-              <label for="newOfficialStampDate">Official Stamp Date</label>
-              <input id="newOfficialStampDate" type="date">
-            </div>
-            <div>
-              <label for="newLat">Latitude</label>
-              <input id="newLat" type="text" placeholder="e.g. 59.9741">
-            </div>
-            <div>
-              <label for="newLng">Longitude</label>
-              <input id="newLng" type="text" placeholder="e.g. 30.3232">
-            </div>
-
-            <!-- Content -->
-            <div class="full">
-              <label for="newContent">Content</label>
-              <textarea id="newContent" placeholder="Shipment content (description)"></textarea>
-            </div>
-
-            <!-- Timeline -->
-            <div class="full">
-              <label for="newTimeline">Timeline (JSON array)</label>
-              <textarea id="newTimeline" placeholder='[{"time":"22 Sep 2025 12:33","description":"Item shipped","status":"IN TRANSIT","completed":true}]'></textarea>
-              <div class="hint">Enter timeline as a JSON array. Use valid JSON.</div>
-            </div>
-          </div>
-
-          <div class="actions" style="margin-top:14px;">
-            <button class="btn btn-primary" type="button" onclick="generateShipment()">Generate New</button>
-            <button class="btn btn-secondary" type="button" onclick="updateShipment()">Update Selected</button>
-          </div>
-        </form>
-      </div>
-
-      <!-- RIGHT: stamp + preview + output -->
-      <aside class="card">
-        <h3 style="margin:0 0 10px 0;color:var(--primary-dark)">Stamp / Preview</h3>
-        <div class="stamp-block">
-          <label for="stampUpload">Upload Signature Stamp (PNG / JPG)</label>
-          <input id="stampUpload" type="file" accept="image/*">
-          <div style="display:flex;gap:8px;align-items:center;">
-            <img id="stampPreview" alt="Stamp preview">
-            <div style="flex:1">
-              <button class="btn btn-secondary" onclick="clearStamp()" type="button">Remove Stamp</button>
-              <div class="muted">Uploaded stamp will be saved into the shipment as base64 image (officialStamp).</div>
-            </div>
-          </div>
-
-          <hr style="width:100%;margin:12px 0;border:none;border-top:1px solid var(--border)">
-
-          <h4 style="margin:6px 0;color:var(--primary-dark)">Preview / JSON</h4>
-          <div id="output" class="output">No action yet — generate or select a shipment to edit.</div>
-        </div>
-      </aside>
+    <div class="controls">
+      <button class="btn btn-primary" onclick="generateShipment()">Generate New</button>
+      <button class="btn btn-secondary" onclick="updateShipment()">Update Selected</button>
+      <button class="btn btn-secondary" onclick="clearForm()">Clear Form</button>
+      <button class="btn btn-secondary" onclick="downloadShipments()">Download JSON</button>
+      <input type="file" id="loadJSONFile" accept=".json" style="padding:6px;border:1px solid var(--border);border-radius:6px;">
     </div>
   </div>
 
-  <script>
-    let shipments = [];
-    let selectedIndex = "";
-    let currentStampData = "";
-    const prefixes = ["AWE","EXP","TRK","DEL"];
+  <div class="layout">
 
-    // Load shipments from localStorage first
-    async function loadShipments() {
-      const saved = localStorage.getItem("shipments");
-      if(saved){
-        try { shipments = JSON.parse(saved); } 
-        catch(e){ shipments=[]; console.warn("Invalid localStorage data, starting empty."); }
-      } else {
-        // fallback: load from server
-        try{
-          const resp = await fetch("https://expressdeliveryservices.github.io/shipments.json");
-          shipments = resp.ok ? await resp.json() : [];
-        } catch(e){ shipments=[]; }
-      }
+    <!-- LEFT: Form -->
+    <div class="card">
+      <h3 style="margin:0 0 10px 0;color:var(--primary-dark)">Shipment Details</h3>
+      <form id="shipmentForm" onsubmit="return false;">
+        <div class="form-grid">
+          <!-- Sender -->
+          <div>
+            <label for="newSender">Sender Name</label>
+            <input id="newSender" type="text" placeholder="Sender full name">
+          </div>
+          <div>
+            <label for="newSenderAddress">Sender Address</label>
+            <input id="newSenderAddress" type="text" placeholder="Sender address">
+          </div>
+
+          <!-- Receiver -->
+          <div>
+            <label for="newReceiver">Receiver Name</label>
+            <input id="newReceiver" type="text" placeholder="Receiver full name">
+          </div>
+          <div>
+            <label for="newReceiverMobile">Receiver Mobile</label>
+            <input id="newReceiverMobile" type="text" placeholder="e.g. +79931234567">
+          </div>
+
+          <div>
+            <label for="newAddress">Receiver Address</label>
+            <input id="newAddress" type="text" placeholder="Receiver address">
+          </div>
+          <div>
+            <label for="newAmount">Amount ($)</label>
+            <input id="newAmount" type="number" placeholder="0.00" step="0.01">
+          </div>
+
+          <div>
+            <label for="newOrderId">Order ID</label>
+            <input id="newOrderId" type="text" placeholder="Order ID">
+          </div>
+
+          <div>
+            <label for="newEstDeliveryDate">Est. Delivery Date</label>
+            <input id="newEstDeliveryDate" type="date">
+          </div>
+
+          <div>
+            <label for="newPaymentMode">Payment Mode</label>
+            <select id="newPaymentMode">
+              <option value="">Select payment mode</option>
+              <option value="Cash">Cash</option>
+              <option value="Card">Card</option>
+              <option value="Bank Transfer">Bank Transfer</option>
+              <option value="PayPal">PayPal</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="newModeOfTransport">Mode of Transport</label>
+            <select id="newModeOfTransport">
+              <option value="">Select mode</option>
+              <option value="Air">Air</option>
+              <option value="Sea">Sea</option>
+              <option value="Land">Land</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="newTypeOfShipment">Type of Shipment</label>
+            <input id="newTypeOfShipment" type="text" placeholder="e.g. Documents">
+          </div>
+          <div>
+            <label for="newQuantity">Quantity</label>
+            <input id="newQuantity" type="number" placeholder="1">
+          </div>
+          <div>
+            <label for="newOfficialStampDate">Official Stamp Date</label>
+            <input id="newOfficialStampDate" type="date">
+          </div>
+          <div>
+            <label for="newLat">Latitude</label>
+            <input id="newLat" type="text" placeholder="e.g. 59.9741">
+          </div>
+          <div>
+            <label for="newLng">Longitude</label>
+            <input id="newLng" type="text" placeholder="e.g. 30.3232">
+          </div>
+
+          <!-- Content -->
+          <div class="full">
+            <label for="newContent">Content</label>
+            <textarea id="newContent" placeholder="Shipment content (description)"></textarea>
+          </div>
+
+          <!-- Timeline -->
+          <div class="full">
+            <label for="newTimeline">Timeline (JSON array)</label>
+            <textarea id="newTimeline" placeholder='[{"time":"22 Sep 2025 12:33","description":"Item shipped","status":"IN TRANSIT","completed":true}]'></textarea>
+            <div class="hint">Enter timeline as a JSON array. Use valid JSON.</div>
+          </div>
+        </div>
+
+        <div class="actions" style="margin-top:14px;">
+          <button class="btn btn-primary" type="button" onclick="generateShipment()">Generate New</button>
+          <button class="btn btn-secondary" type="button" onclick="updateShipment()">Update Selected</button>
+          <button class="btn btn-secondary" type="button" onclick="clearForm()">Clear Form</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- RIGHT: Stamp + Preview + Output -->
+    <aside class="card">
+      <h3 style="margin:0 0 10px 0;color:var(--primary-dark)">Stamp / Preview</h3>
+      <div class="stamp-block">
+        <label for="stampUpload">Upload Signature Stamp (PNG / JPG)</label>
+        <input id="stampUpload" type="file" accept="image/*">
+        <div style="display:flex;gap:8px;align-items:center;">
+          <img id="stampPreview" alt="Stamp preview">
+          <div style="flex:1">
+            <button class="btn btn-secondary" onclick="clearStamp()" type="button">Remove Stamp</button>
+            <div class="muted">Uploaded stamp will be saved into the shipment as base64 image (officialStamp).</div>
+          </div>
+        </div>
+
+        <hr style="width:100%;margin:12px 0;border:none;border-top:1px solid var(--border)">
+        <h4 style="margin:6px 0;color:var(--primary-dark)">Preview / JSON</h4>
+        <div id="output" class="output">No action yet — generate or select a shipment to edit.</div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+let shipments=JSON.parse(localStorage.getItem("shipments")||"[]");
+let selectedIndex="";
+let currentStampData="";
+
+// Helper: Random tracking number
+function generateTrackingNumber(){
+  const prefixes=["AWE","EXP","TRK","DEL","ZWB"];
+  const prefix=prefixes[Math.floor(Math.random()*prefixes.length)];
+  const number=Math.floor(100000 + Math.random()*900000);
+  return `${prefix}-${number}`;
+}
+
+// Refresh dropdown
+function refreshShipmentSelect(selectTracking=""){
+  const sel=document.getElementById("shipmentSelect");
+  sel.innerHTML='<option value="">-- Select a shipment --</option>';
+  shipments.forEach((s,i)=>{
+    const receiverInfo=s.receiver?.name?s.receiver.name:"No Name";
+    const mobileInfo=s.receiver?.mobile?` (${s.receiver.mobile})`:"";
+    const opt=document.createElement("option");
+    opt.value=i;
+    opt.textContent=`${s.trackingNumber} — ${receiverInfo}${mobileInfo}`;
+    sel.appendChild(opt);
+  });
+  if(selectTracking){
+    const idx=shipments.findIndex(s=>s.trackingNumber===selectTracking);
+    if(idx!==-1) sel.value=idx;
+    selectedIndex=sel.value;
+  }
+}
+
+// Load shipment for edit
+function loadShipmentForEdit(){
+  selectedIndex=document.getElementById("shipmentSelect").value;
+  if(selectedIndex===""){ clearForm(); return; }
+  const s=shipments[selectedIndex];
+  document.getElementById("newSender").value=s.sender?.name||"";
+  document.getElementById("newSenderAddress").value=s.sender?.address||"";
+  document.getElementById("newReceiver").value=s.receiver?.name||"";
+  document.getElementById("newReceiverMobile").value=s.receiver?.mobile||"";
+  document.getElementById("newAddress").value=s.receiver?.address||"";
+  document.getElementById("newLat").value=s.receiver?.lat||"";
+  document.getElementById("newLng").value=s.receiver?.lng||"";
+
+  document.getElementById("newAmount").value=s.receipt?.amount||"";
+  document.getElementById("newOrderId").value=s.receipt?.orderId||"";
+  document.getElementById("newEstDeliveryDate").value=s.receipt?.estDeliveryDate||"";
+  document.getElementById("newPaymentMode").value=s.receipt?.paymentMode||"";
+  document.getElementById("newModeOfTransport").value=s.receipt?.modeOfTransport||"";
+  document.getElementById("newTypeOfShipment").value=s.receipt?.typeOfShipment||"";
+  document.getElementById("newQuantity").value=s.receipt?.quantity||"";
+  document.getElementById("newOfficialStampDate").value=s.receipt?.officialStampDate||"";
+
+  document.getElementById("newContent").value=s.content||"";
+  document.getElementById("newTimeline").value=JSON.stringify(s.timeline||[],null,2);
+
+  currentStampData=s.officialStamp||"";
+  const img=document.getElementById("stampPreview");
+  if(currentStampData){ img.src=currentStampData; img.style.display="block"; }
+  else { img.src=""; img.style.display="none"; }
+
+  showOutput(`Loaded shipment: ${s.trackingNumber}\n\n`+JSON.stringify(s,null,2));
+}
+
+// Build shipment from form
+function buildShipment(trackingNumber){
+  let timeline=[];
+  const timelineRaw=document.getElementById("newTimeline").value.trim();
+  if(timelineRaw){
+    try{
+      timeline=JSON.parse(timelineRaw);
+      if(!Array.isArray(timeline)){ alert("Timeline must be a JSON array."); return null; }
+    }catch(e){ alert("Invalid timeline JSON."); return null; }
+  }
+
+  return {
+    trackingNumber,
+    sender:{
+      name:document.getElementById("newSender").value.trim(),
+      address:document.getElementById("newSenderAddress").value.trim()
+    },
+    receiver:{
+      name:document.getElementById("newReceiver").value.trim(),
+      mobile:document.getElementById("newReceiverMobile").value.trim(),
+      address:document.getElementById("newAddress").value.trim(),
+      lat:document.getElementById("newLat").value.trim(),
+      lng:document.getElementById("newLng").value.trim()
+    },
+    receipt:{
+      amount:document.getElementById("newAmount").value||"0",
+      orderId:document.getElementById("newOrderId").value.trim(),
+      estDeliveryDate:document.getElementById("newEstDeliveryDate").value,
+      paymentMode:document.getElementById("newPaymentMode").value||"Not selected",
+      modeOfTransport:document.getElementById("newModeOfTransport").value,
+      typeOfShipment:document.getElementById("newTypeOfShipment").value.trim(),
+      quantity:document.getElementById("newQuantity").value||"1",
+      officialStampDate:document.getElementById("newOfficialStampDate").value
+    },
+    content:document.getElementById("newContent").value.trim()||"No description",
+    timeline,
+    officialStamp:currentStampData||""
+  };
+}
+
+// Generate new shipment
+function generateShipment(){
+  const trackingNumber=generateTrackingNumber();
+  const s=buildShipment(trackingNumber);
+  if(!s) return;
+  shipments.push(s);
+  localStorage.setItem("shipments",JSON.stringify(shipments));
+  refreshShipmentSelect(trackingNumber);
+  showOutput("Generated new shipment:\n\n"+JSON.stringify(s,null,2));
+}
+
+// Update shipment
+function updateShipment(){
+  selectedIndex=document.getElementById("shipmentSelect").value;
+  if(selectedIndex===""){ alert("Please select a shipment to update."); return; }
+  const trackingNumber=shipments[selectedIndex].trackingNumber;
+  const s=buildShipment(trackingNumber);
+  if(!s) return;
+  shipments[selectedIndex]=s;
+  localStorage.setItem("shipments",JSON.stringify(shipments));
+  refreshShipmentSelect(trackingNumber);
+  showOutput("Updated shipment:\n\n"+JSON.stringify(s,null,2));
+}
+
+// Show JSON output
+function showOutput(text){ document.getElementById("output").textContent=text; }
+
+// Clear form
+function clearForm(){
+  document.getElementById("shipmentForm").reset();
+  document.getElementById("newTimeline").value="";
+  document.getElementById("newContent").value="";
+  document.getElementById("newSenderAddress").value="";
+  document.getElementById("newReceiverMobile").value="";
+  clearStamp();
+  showOutput("Form cleared.");
+}
+
+// Stamp handling
+function handleStampUpload(evt){
+  const file=evt.target.files && evt.target.files[0];
+  if(!file) return;
+  if(!file.type.startsWith("image/")){ alert("Please upload an image file."); return; }
+  const reader=new FileReader();
+  reader.onload=function(e){
+    currentStampData=e.target.result;
+    const img=document.getElementById("stampPreview");
+    img.src=currentStampData;
+    img.style.display="block";
+    showOutput("Stamp uploaded (preview). Will be saved as 'officialStamp'.");
+  };
+  reader.readAsDataURL(file);
+}
+function clearStamp(){ currentStampData=""; document.getElementById("stampUpload").value=""; const img=document.getElementById("stampPreview"); img.src=""; img.style.display="none"; showOutput("Stamp removed."); }
+
+// Download shipments JSON
+function downloadShipments(){
+  const data=JSON.stringify(shipments,null,2);
+  const blob=new Blob([data],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download="shipments.json";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+// Load shipments from local JSON file
+document.getElementById("loadJSONFile").addEventListener("change",function(e){
+  const file=e.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      const json=JSON.parse(ev.target.result);
+      if(!Array.isArray(json)) throw new Error("Invalid JSON array");
+      shipments=json;
+      localStorage.setItem("shipments",JSON.stringify(shipments));
       refreshShipmentSelect();
-    }
+      showOutput("Loaded shipments from file.");
+    }catch(err){ alert("Invalid JSON file."); }
+  };
+  reader.readAsText(file);
+});
 
-    function saveShipments(){ localStorage.setItem("shipments",JSON.stringify(shipments)); }
-
-    function refreshShipmentSelect(selectTracking=""){
-      const sel=document.getElementById("shipmentSelect");
-      sel.innerHTML='<option value="">-- Select a shipment --</option>';
-      shipments.forEach((s,i)=>{
-        const receiverInfo = s.receiver?.name ? s.receiver.name : "No Name";
-        const mobileInfo = s.receiver?.mobile ? ` (${s.receiver.mobile})` : "";
-        const opt=document.createElement("option");
-        opt.value=i;
-        opt.textContent=`${s.trackingNumber} — ${receiverInfo}${mobileInfo}`;
-        sel.appendChild(opt);
-      });
-      if(selectTracking){
-        const idx=shipments.findIndex(s=>s.trackingNumber===selectTracking);
-        if(idx!==-1) sel.value=idx;
-        selectedIndex=sel.value;
-      }
-    }
-
-    function loadShipmentForEdit(){
-      selectedIndex=document.getElementById("shipmentSelect").value;
-      if(selectedIndex===""){ clearForm(); return; }
-      const s=shipments[selectedIndex];
-      document.getElementById("newSender").value=s.sender?.name||"";
-      document.getElementById("newSenderAddress").value=s.sender?.address||"";
-      document.getElementById("newReceiver").value=s.receiver?.name||"";
-      document.getElementById("newReceiverMobile").value=s.receiver?.mobile||"";
-      document.getElementById("newAddress").value=s.receiver?.address||"";
-      document.getElementById("newAmount").value=s.receipt?.amount||"";
-      document.getElementById("newOrderId").value=s.receipt?.orderId||"";
-      document.getElementById("newEstDeliveryDate").value=s.receipt?.estDeliveryDate||"";
-      document.getElementById("newPaymentMode").value=s.receipt?.paymentMode||"";
-      document.getElementById("newModeOfTransport").value=s.receipt?.modeOfTransport||"";
-      document.getElementById("newTypeOfShipment").value=s.receipt?.typeOfShipment||"";
-      document.getElementById("newQuantity").value=s.receipt?.quantity||"";
-      document.getElementById("newOfficialStampDate").value=s.receipt?.officialStampDate||"";
-      document.getElementById("newLat").value=s.receiver?.lat||"";
-      document.getElementById("newLng").value=s.receiver?.lng||"";
-      document.getElementById("newContent").value=s.content||"";
-      document.getElementById("newTimeline").value=JSON.stringify(s.timeline||[],null,2);
-
-      currentStampData=s.officialStamp||"";
-      const img=document.getElementById("stampPreview");
-      if(currentStampData){ img.src=currentStampData; img.style.display="block"; } 
-      else { img.src=""; img.style.display="none"; }
-
-      showOutput(`Loaded shipment: ${s.trackingNumber}\n\n`+JSON.stringify(s,null,2));
-    }
-
-    function buildShipment(trackingNumber){
-      let timeline=[];
-      const timelineRaw=document.getElementById("newTimeline").value.trim();
-      if(timelineRaw){
-        try { timeline=JSON.parse(timelineRaw); if(!Array.isArray(timeline)){ alert("Timeline must be a JSON array."); return null; } }
-        catch(e){ alert("Invalid timeline JSON."); return null; }
-      }
-      return {
-        trackingNumber,
-        sender:{name:document.getElementById("newSender").value.trim(), address:document.getElementById("newSenderAddress").value.trim()},
-        receiver:{
-          name:document.getElementById("newReceiver").value.trim(),
-          mobile:document.getElementById("newReceiverMobile").value.trim(),
-          address:document.getElementById("newAddress").value.trim(),
-          lat:document.getElementById("newLat").value.trim(),
-          lng:document.getElementById("newLng").value.trim()
-        },
-        receipt:{
-          amount:document.getElementById("newAmount").value,
-          orderId:document.getElementById("newOrderId").value.trim(),
-          estDeliveryDate:document.getElementById("newEstDeliveryDate").value,
-          paymentMode:document.getElementById("newPaymentMode").value,
-          modeOfTransport:document.getElementById("newModeOfTransport").value,
-          typeOfShipment:document.getElementById("newTypeOfShipment").value.trim(),
-          quantity:document.getElementById("newQuantity").value,
-          officialStampDate:document.getElementById("newOfficialStampDate").value
-        },
-        timeline,
-        content:document.getElementById("newContent").value.trim(),
-        officialStamp:currentStampData||""
-      };
-    }
-
-    function getNextTrackingNumber(prefix){
-      const numbers=shipments.filter(s=>s.trackingNumber.startsWith(prefix+"-"))
-                               .map(s=>parseInt(s.trackingNumber.split("-")[1],10))
-                               .filter(n=>!isNaN(n));
-      const nextNumber = numbers.length ? Math.max(...numbers)+1 : 1;
-      return `${prefix}-${String(nextNumber).padStart(6,"0")}`;
-    }
-
-    function generateShipment(){
-      const prefix=prefixes[Math.floor(Math.random()*prefixes.length)];
-      const trackingNumber=getNextTrackingNumber(prefix);
-      const s=buildShipment(trackingNumber);
-      if(!s) return;
-      shipments.push(s);
-      saveShipments();
-      refreshShipmentSelect(trackingNumber);
-      showOutput("Generated new shipment:\n\n"+JSON.stringify(s,null,2));
-      const sel=document.getElementById("shipmentSelect");
-      const idx=shipments.findIndex(x=>x.trackingNumber===trackingNumber);
-      if(idx!==-1){ sel.value=idx; selectedIndex=idx; }
-    }
-
-    function updateShipment(){
-      selectedIndex=document.getElementById("shipmentSelect").value;
-      if(selectedIndex===""){ alert("Please select a shipment to update."); return; }
-      const trackingNumber=shipments[selectedIndex].trackingNumber;
-      const s=buildShipment(trackingNumber);
-      if(!s) return;
-      shipments[selectedIndex]=s;
-      saveShipments();
-      refreshShipmentSelect(trackingNumber);
-      showOutput("Updated shipment:\n\n"+JSON.stringify(s,null,2));
-    }
-
-    function handleStampUpload(evt){
-      const file=evt.target.files && evt.target.files[0];
-      if(!file) return;
-      if(!file.type.startsWith("image/")){ alert("Please upload an image file."); return; }
-      const reader=new FileReader();
-      reader.onload=function(e){
-        currentStampData=e.target.result;
-        const img=document.getElementById("stampPreview");
-        img.src=currentStampData; img.style.display="block";
-        showOutput("Stamp uploaded (preview shown). It will be saved into the shipment as 'officialStamp'.");
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function clearStamp(){ currentStampData=""; document.getElementById("stampUpload").value=""; const img=document.getElementById("stampPreview"); img.src=""; img.style.display="none"; showOutput("Stamp removed from current edit (not yet saved). Save or generate to persist changes."); }
-    function showOutput(text){ document.getElementById("output").textContent=text; }
-    function clearForm(){ document.getElementById("shipmentForm").reset(); document.getElementById("newTimeline").value=""; document.getElementById("newContent").value=""; document.getElementById("newSenderAddress").value=""; document.getElementById("newReceiverMobile").value=""; clearStamp(); showOutput("Form cleared."); }
-
-    function downloadShipments(){
-      const data=JSON.stringify(shipments,null,2);
-      const blob=new Blob([data],{type:"application/json"});
-      const url=URL.createObjectURL(blob);
-      const a=document.createElement("a"); a.href=url; a.download="shipments.json"; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-    }
-
-    document.addEventListener("DOMContentLoaded",()=>{
-      document.getElementById("stampUpload").addEventListener("change",handleStampUpload);
-      document.getElementById("shipmentSelect").addEventListener("change",loadShipmentForEdit);
-      loadShipments();
-    });
-  </script>
+// Init
+document.addEventListener("DOMContentLoaded",()=>{
+  document.getElementById("stampUpload").addEventListener("change",handleStampUpload);
+  document.getElementById("shipmentSelect").addEventListener("change",loadShipmentForEdit);
+  refreshShipmentSelect();
+});
+</script>
 </body>
 </html>
