@@ -1,22 +1,32 @@
 [
   {
-    "tracking_number": "Fetch data details from admin.html generated tracking number",
-    "sender": "Fetch data details from admin.html generated tracking number",
-    "receiver": "Fetch data details from admin.html generated tracking number",
+    "tracking_number": "EXP100001",
+    "sender": "John Doe",
+    "receiver": "Jane Smith",
     "status": "In Transit",
-    "origin": "Fetch data details from admin.html generated tracking number",
-    "destination": "Fetch data details from admin.html generated tracking number",
-    "expected_delivery": "Fetch data details from admin.html generated tracking number",
+    "origin": "Lagos",
+    "destination": "Abuja",
+    "expected_delivery": "2025-10-05",
     "extended_description": "Fragile items. Handle with care."
   },
   {
-    "tracking_number": "Fetch data details from admin.html generated tracking number",
-    "sender": "Fetch data details from admin.html generated tracking number",
-    "receiver": "Fetch data details from admin.html generated tracking number",
+    "tracking_number": "EXP100002",
+    "sender": "Alice Johnson",
+    "receiver": "Bob Williams",
     "status": "Delivered",
-    "origin": "Fetch data details from admin.html generated tracking number",
-    "destination": "Fetch data details from admin.html generated tracking number",
-    "expected_delivery": "Fetch data details from admin.html generated tracking number",
+    "origin": "Port Harcourt",
+    "destination": "Enugu",
+    "expected_delivery": "2025-10-02",
     "extended_description": "Delivered successfully at front door."
+  },
+  {
+    "tracking_number": "EXP100003",
+    "sender": "Michael Brown",
+    "receiver": "Sara Davis",
+    "status": "Out for Delivery",
+    "origin": "Kano",
+    "destination": "Kaduna",
+    "expected_delivery": "2025-10-04",
+    "extended_description": "Handle with care. Leave at reception if not home."
   }
 ]
