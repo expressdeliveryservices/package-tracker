@@ -5,100 +5,122 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Express Delivery Service</title>
 <style>
-body{margin:0;font-family:Arial,sans-serif;background:#fff;color:#000;scroll-behavior:smooth;}
-a{color:#1e90ff;text-decoration:none;}
-h1,h2,h3,h4,h5,h6{color:#1e90ff;margin:0;}
-header{position:relative;height:400px;overflow:hidden;}
-header video{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;pointer-events:none;}
-header .header-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;z-index:2;color:#fff;text-shadow:2px 2px 8px rgba(0,0,0,0.7);}
-header .header-overlay h1{font-size:2.5rem;font-weight:bold;letter-spacing:2px;margin-bottom:10px;}
-header .header-overlay p{font-size:1rem;max-width:700px;margin:0 auto;line-height:1.4;}
-.navbar{display:flex;justify-content:space-between;align-items:center;padding:15px;background:#f8f8f8;position:sticky;top:0;z-index:1000;border-bottom:1px solid #ddd;}
-.nav-links{display:flex;gap:15px;}
-.nav-links a{cursor:pointer;font-weight:bold;color:#1e90ff;}
-.nav-links a.admin-link{display:none;}
-.hamburger{display:flex;flex-direction:column;cursor:pointer;}
-.hamburger div{width:20px;height:2px;background-color:#1e90ff;margin:3px 0;}
-@media(max-width:768px){
-  .nav-links{display:none;flex-direction:column;background:#f8f8f8;position:absolute;top:60px;right:0;width:200px;padding:15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);border-radius:0 0 5px 5px;}
-  .nav-links.active{display:flex;}
-  .nav-links a.admin-link{display:block;}
-  .hamburger{display:flex;}
-  .navbar{flex-wrap:wrap;}
+body { margin: 0; font-family: Arial, sans-serif; background: #fff; color: #000; scroll-behavior: smooth; }
+a { color: #1e90ff; text-decoration: none; }
+h1, h2, h3, h4, h5, h6 { color: #1e90ff; margin: 0; }
+header { position: relative; height: 400px; overflow: hidden; }
+header video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+header .header-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 2; color: #fff; text-shadow: 2px 2px 8px rgba(0,0,0,0.7); }
+header .header-overlay h1 { font-size: 2.5rem; font-weight: bold; letter-spacing: 2px; margin-bottom: 10px; }
+header .header-overlay p { font-size: 1rem; max-width: 700px; margin: 0 auto; line-height: 1.4; }
+.navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #f8f8f8; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #ddd; }
+.nav-links { display: flex; gap: 15px; }
+.nav-links a { cursor: pointer; font-weight: bold; color: #1e90ff; }
+.nav-links a.admin-link { display: none; }
+.hamburger { display: none; flex-direction: column; cursor: pointer; }
+.hamburger div { width: 20px; height: 2px; background-color: #1e90ff; margin: 3px 0; }
+@media (max-width: 768px) {
+  .nav-links { display: none; flex-direction: column; background: #f8f8f8; position: absolute; top: 60px; right: 0; width: 200px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 0 0 5px 5px; }
+  .nav-links.active { display: flex; }
+  .nav-links a.admin-link { display: block; }
+  .hamburger { display: flex; }
 }
-section{padding:20px;scroll-margin-top:60px;}
-.section-title{font-size:1.5rem;margin-bottom:15px;color:#1e90ff;}
-.tracking{display:flex;gap:10px;margin-bottom:15px;}
-.tracking input{flex:1;padding:8px;border:1px solid #ddd;border-radius:3px;background:#fff;color:#000;font-size:0.9rem;}
-.tracking input::placeholder{text-transform:uppercase;font-size:0.8rem;}
-.tracking button{padding:8px 15px;border:none;border-radius:3px;background-color:#1e90ff;color:white;cursor:pointer;}
-.shipment-tracking,.shipment-content{max-width:500px;margin:10px auto;padding:15px;font-family:'Courier New',Courier,monospace;font-size:12px;border:1px solid #000;background:#fff;}
-.shipment-tracking .header,.shipment-content .header{font-weight:bold;font-size:14px;margin-bottom:10px;}
-.shipment-content .details label{display:inline-block;width:120px;font-weight:bold;}
-.shipment-content .details span{display:inline-block;margin-left:10px;}
-.print-btn,.download-btn {margin-top:10px;margin-right:10px;padding:8px 15px;background-color:#1e90ff;color:white;border:none;border-radius:3px;cursor:pointer;}
-.timeline{position:relative;margin:20px 0;}
-.timeline::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:4px;background:#ddd;}
-.timeline-event{position:relative;margin-bottom:30px;padding-left:50px;}
-.timeline-event .tick{position:absolute;left:10px;top:0;width:20px;height:20px;border-radius:50%;border:4px solid green;background:#fff;}
-.timeline-event.completed .tick{background:green;box-shadow:0 0 5px #090;}
-.timeline-event .time{font-size:0.85rem;color:blue;margin-top:2px;}
-.timeline-event .description{margin-top:5px;background:#eee;padding:5px;border-radius:3px;font-size:0.9rem;}
-.map-container{width:100%;height:300px;margin:20px 0;overflow:hidden;position:relative;}
-.map-container a {text-decoration:none;display:block;}
-.map-overlay{position:absolute;top:10px;left:50%;transform:translateX(-50%);background-color:rgba(255,255,255,0.8);padding:5px 10px;border-radius:3px;font-size:14px;color:#000;z-index:10;}
-.newsletter{display:flex;gap:10px;margin-top:15px;}
-.newsletter input{flex:1;padding:8px;border-radius:3px;border:1px solid #ddd;background:#fff;color:#000;}
-.newsletter button{padding:8px 15px;border-radius:3px;border:none;background-color:#1e90ff;color:white;cursor:pointer;}
-#supportPopup{display:none;position:fixed;bottom:20px;right:20px;background:#f8f8f8;padding:15px;border-radius:8px;box-shadow:0 0 10px #1e90ff;z-index:10000;color:#000;}
-#supportPopup input,#supportPopup textarea{width:100%;margin-bottom:8px;padding:6px;border-radius:3px;border:1px solid #ddd;background:#fff;color:#000;}
-#supportPopup button{padding:6px 12px;background-color:#1e90ff;color:white;border:none;border-radius:3px;cursor:pointer;}
-.image-wall{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px;}
-.image-wall img,.image-wall video{width:100%;border-radius:5px;}
-.image-wall video{pointer-events:none;}
-.image-wall .desc{margin-top:8px;font-size:0.85rem;color:#555;line-height:1.4;}
-.testimonial-container{max-width:500px;margin:20px auto;overflow:hidden;}
-.testimonial-wall{display:flex;width:100%;transform:translateX(0);transition:transform 0.5s ease-in-out;}
-.testimonial-wall .testimonial{flex:0 0 100%;min-width:100%;padding:15px;background:#f8f8f8;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.1);border:1px solid #ddd;text-align:center;}
-.testimonial-wall img{width:80px;height:80px;border-radius:50%;object-fit:cover;margin:0 auto 10px;border:2px solid #1e90ff;}
-.testimonial-wall .desc{font-size:0.85rem;color:#333;line-height:1.4;font-style:italic;margin:0 auto 8px;}
-.testimonial-wall .name{font-weight:bold;color:#1e90ff;font-size:0.95rem;margin-bottom:5px;}
-.testimonial-wall .rating{font-size:0.75rem;color:#ffd700;margin-bottom:8px;}
-.testimonial-wall .rating::before{content:'★★★★★';}
-.testimonial-wall .quote-icon::before{content:'"';font-size:1.5rem;color:#1e90ff;opacity:0.2;position:absolute;top:10px;left:10px;}
-.business-hours-container{max-width:500px;margin:20px auto;padding:20px;background:#f8f8f8;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.1);border:1px solid #ddd;text-align:center;}
-.business-hours-container .section-title{font-size:1.5rem;margin-bottom:15px;color:#1e90ff;}
-.business-hours-container .hours-list{font-size:0.9rem;color:#333;line-height:1.5;}
-.business-hours-container .hours-list span{display:block;margin:5px 0;}
-.business-hours-container .open-hours{color:#00ff00;animation:blink 1s infinite;font-weight:bold;}
-.about-container{max-width:500px;margin:20px auto;padding:20px;background:#f8f8f8;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.1);border:1px solid #ddd;text-align:center;}
-.about-container .section-title{font-size:1.5rem;margin-bottom:15px;color:#1e90ff;}
-.about-container .desc{font-size:0.9rem;color:#333;line-height:1.5;margin-bottom:10px;}
-.about-container .icon::before{content:'🌐';font-size:2rem;color:#1e90ff;opacity:0.2;display:block;margin-bottom:10px;}
-.services-container{max-width:500px;margin:20px auto;padding:20px;background:#f8f8f8;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.1);border:1px solid #ddd;text-align:center;}
-.services-container .section-title{font-size:1.5rem;margin-bottom:15px;color:#1e90ff;}
-.services-container .services-list{font-size:0.9rem;color:#333;line-height:1.5;margin-bottom:10px;}
-.services-container .desc{font-size:0.9rem;color:#333;line-height:1.5;}
-.services-container .icon::before{content:'🚚';font-size:2rem;color:#1e90ff;opacity:0.2;display:block;margin-bottom:10px;}
-.contact-container{max-width:500px;margin:20px auto;padding:20px;background:#f8f8f8;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.1);border:1px solid #ddd;text-align:center;}
-.contact-container .section-title{font-size:1.5rem;margin-bottom:15px;color:#1e90ff;}
-.contact-container .contact-details{font-size:0.9rem;color:#333;line-height:1.5;margin-bottom:10px;}
-.contact-container .contact-details p{margin:5px 0;}
-.contact-container .icon::before{content:'📞';font-size:2rem;color:#1e90ff;opacity:0.2;display:block;margin-bottom:10px;}
-@media(max-width:500px){
-  .testimonial-container,.business-hours-container,.about-container,.services-container,.contact-container{max-width:90%;}
-  .testimonial-wall .testimonial,.business-hours-container,.about-container,.services-container,.contact-container{padding:12px;}
-  .testimonial-wall img{width:60px;height:60px;}
-  .testimonial-wall .desc,.business-hours-container .hours-list,.about-container .desc,.services-container .desc,.services-container .services-list,.contact-container .contact-details{font-size:0.8rem;}
-  .testimonial-wall .name{font-size:0.9rem;}
-  .testimonial-wall .rating{font-size:0.7rem;}
-  .testimonial-wall .quote-icon::before{font-size:1.2rem;}
+section { padding: 20px; scroll-margin-top: 60px; }
+.section-title { font-size: 1.5rem; margin-bottom: 15px; color: #1e90ff; }
+.tracking { display: flex; gap: 10px; margin-bottom: 15px; }
+.tracking input { flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 3px; background: #fff; color: #1e90ff; font-size: 0.9rem; }
+.tracking input::placeholder { text-transform: uppercase; font-size: 0.8rem; color: #999; }
+.tracking button { padding: 8px 15px; border: none; border-radius: 3px; background-color: #1e90ff; color: white; cursor: pointer; }
+.shipment-tracking, .shipment-content { max-width: 500px; margin: 10px auto; font-family: 'Times New Roman', Times, serif; }
+.shipment-tracking .header, .shipment-content .header { font-weight: bold; font-size: 10px; margin-bottom: 2px; text-align: center; }
+.shipment-content { padding: 2mm; font-size: 7px; border: 1px solid #000; background: #fff; letter-spacing: 0.5px; width: 70mm; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: relative; }
+.shipment-content .header { display: flex; justify-content: space-between; align-items: center; }
+.shipment-content .header .company-name { font-size: 10px; font-weight: bold; }
+.shipment-content .header .logo img { height: 25px; }
+.shipment-content .details { margin: 2px 0; padding: 3px; border: 1px solid #ddd; border-radius: 3px; }
+.shipment-content .details label { display: inline-block; width: 90px; font-weight: bold; }
+.shipment-content .details span { display: inline-block; margin-left: 2px; }
+.shipment-content .signature-img, .shipment-content .payment-img { max-width: 50px; height: auto; margin-top: 2px; }
+.shipment-content .section-title { font-size: 9px; font-weight: bold; margin: 2px 0; padding-bottom: 1px; border-bottom: 1px solid #000; }
+.shipment-content .total { font-size: 9px; font-weight: bold; margin-top: 5px; padding-top: 2px; text-align: right; }
+.shipment-content .footer { font-size: 5px; text-align: center; margin-top: 5px; color: #555; }
+.shipment-content .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); color: #a9a9a9; font-size: 16px; font-weight: bold; opacity: 0.4; z-index: 0; }
+.print-btn { margin-top: 5px; padding: 5px 10px; background-color: #1e90ff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+.timeline { position: relative; margin: 20px 0; }
+.timeline::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 4px; background: #ddd; }
+.timeline-event { position: relative; margin-bottom: 30px; padding-left: 50px; }
+.timeline-event .tick { position: absolute; left: 10px; top: 0; width: 20px; height: 20px; border-radius: 50%; border: 4px solid green; background: #fff; }
+.timeline-event.completed .tick { background: green; box-shadow: 0 0 5px #090; }
+.timeline-event .time { font-size: 0.85rem; color: blue; margin-top: 2px; }
+.timeline-event .description { margin-top: 5px; background: #eee; padding: 5px; border-radius: 3px; font-size: 0.9rem; }
+.map-container { width: 100%; height: 300px; margin: 20px 0; overflow: hidden; position: relative; }
+.map-container a { text-decoration: none; display: block; }
+.map-overlay { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background-color: rgba(255,255,255,0.8); padding: 5px 10px; border-radius: 3px; font-size: 14px; color: #000; z-index: 10; }
+.newsletter { display: flex; gap: 10px; margin-top: 15px; }
+.newsletter input { flex: 1; padding: 8px; border-radius: 3px; border: 1px solid #ddd; background: #fff; color: #000; }
+.newsletter button { padding: 8px 15px; border-radius: 3px; border: none; background-color: #1e90ff; color: white; cursor: pointer; }
+#supportPopup { display: none; position: fixed; bottom: 20px; right: 20px; background: #f8f8f8; padding: 15px; border-radius: 8px; box-shadow: 0 0 10px #1e90ff; z-index: 10000; color: #000; }
+#supportPopup input, #supportPopup textarea { width: 100%; margin-bottom: 8px; padding: 6px; border-radius: 3px; border: 1px solid #ddd; background: #fff; color: #000; }
+#supportPopup button { padding: 6px 12px; background-color: #1e90ff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+.image-wall { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+.image-wall img, .image-wall video { width: 100%; border-radius: 5px; }
+.image-wall video { pointer-events: none; }
+.image-wall .desc { margin-top: 8px; font-size: 0.85rem; color: #555; line-height: 1.4; }
+.testimonial-container { max-width: 500px; margin: 20px auto; overflow: hidden; }
+.testimonial-container:hover .testimonial-wall { animation-play-state: paused; }
+.testimonial-wall { display: flex; width: 100%; transform: translateX(0); transition: transform 0.5s ease-in-out; animation: slide 25s infinite; }
+.testimonial-wall .testimonial { flex: 0 0 100%; min-width: 100%; padding: 15px; background: #f8f8f8; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 1px solid #ddd; text-align: center; }
+.testimonial-wall img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 10px; border: 2px solid #1e90ff; }
+.testimonial-wall .desc { font-size: 0.85rem; color: #333; line-height: 1.4; font-style: italic; margin: 0 auto 8px; }
+.testimonial-wall .name { font-weight: bold; color: #1e90ff; font-size: 0.95rem; margin-bottom: 5px; }
+.testimonial-wall .rating { font-size: 0.75rem; color: #ffd700; margin-bottom: 8px; }
+.testimonial-wall .rating::before { content: '★★★★★'; }
+.testimonial-wall .quote-icon::before { content: '"'; font-size: 1.5rem; color: #1e90ff; opacity: 0.2; position: absolute; top: 10px; left: 10px; }
+@keyframes slide {
+  0%, 20% { transform: translateX(0); }
+  25%, 45% { transform: translateX(-100%); }
+  50%, 70% { transform: translateX(-200%); }
+  75%, 95% { transform: translateX(-300%); }
+  100% { transform: translateX(-400%); }
 }
-@keyframes blink{0%,50%,100%{opacity:1;}25%,75%{opacity:0;}}
-footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-top:1px solid #ddd;}
+.business-hours-container { max-width: 500px; margin: 20px auto; padding: 20px; background: #f8f8f8; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 1px solid #ddd; text-align: center; }
+.business-hours-container .section-title { font-size: 1.5rem; margin-bottom: 15px; color: #1e90ff; }
+.business-hours-container .hours-list { font-size: 0.9rem; color: #333; line-height: 1.5; }
+.business-hours-container .hours-list span { display: block; margin: 5px 0; }
+.business-hours-container .open-hours { color: #00ff00; animation: blink 1s infinite; font-weight: bold; }
+.about-container { max-width: 500px; margin: 20px auto; padding: 20px; background: #f8f8f8; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 1px solid #ddd; text-align: center; }
+.about-container .section-title { font-size: 1.5rem; margin-bottom: 15px; color: #1e90ff; }
+.about-container .desc { font-size: 0.9rem; color: #333; line-height: 1.5; margin-bottom: 10px; }
+.about-container .icon::before { content: '🌐'; font-size: 2rem; color: #1e90ff; opacity: 0.2; display: block; margin-bottom: 10px; }
+.services-container { max-width: 500px; margin: 20px auto; padding: 20px; background: #f8f8f8; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 1px solid #ddd; text-align: center; }
+.services-container .section-title { font-size: 1.5rem; margin-bottom: 15px; color: #1e90ff; }
+.services-container .services-list { font-size: 0.9rem; color: #333; line-height: 1.5; margin-bottom: 10px; }
+.services-container .desc { font-size: 0.9rem; color: #333; line-height: 1.5; }
+.services-container .icon::before { content: '🚚'; font-size: 2rem; color: #1e90ff; opacity: 0.2; display: block; margin-bottom: 10px; }
+.contact-container { max-width: 500px; margin: 20px auto; padding: 20px; background: #f8f8f8; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 1px solid #ddd; text-align: center; }
+.contact-container .section-title { font-size: 1.5rem; margin-bottom: 15px; color: #1e90ff; }
+.contact-container .contact-details { font-size: 0.9rem; color: #333; line-height: 1.5; margin-bottom: 10px; }
+.contact-container .contact-details p { margin: 5px 0; }
+.contact-container .icon::before { content: '📞'; font-size: 2rem; color: #1e90ff; opacity: 0.2; display: block; margin-bottom: 10px; }
+@media (max-width: 500px) {
+  .testimonial-container, .business-hours-container, .about-container, .services-container, .contact-container { max-width: 90%; }
+  .testimonial-wall .testimonial, .business-hours-container, .about-container, .services-container, .contact-container { padding: 12px; }
+  .testimonial-wall img { width: 60px; height: 60px; }
+  .testimonial-wall .desc, .business-hours-container .hours-list, .about-container .desc, .services-container .desc, .services-container .services-list, .contact-container .contact-details { font-size: 0.8rem; }
+  .testimonial-wall .name { font-size: 0.9rem; }
+  .testimonial-wall .rating { font-size: 0.7rem; }
+  .testimonial-wall .quote-icon::before { font-size: 1.2rem; }
+}
+@keyframes blink { 0%, 50%, 100% { opacity: 1; } 25%, 75% { opacity: 0; } }
+footer { background: #f8f8f8; text-align: center; padding: 15px; color: #1e90ff; border-top: 1px solid #ddd; }
 </style>
 </head>
 <body>
+<noscript>
+  <div style="text-align: center; padding: 20px; background: #ffe6e6; color: #d32f2f;">
+    JavaScript is disabled in your browser. Please enable JavaScript to use features like Google Maps, tracking, and invoice generation.
+  </div>
+</noscript>
 
 <!-- Navbar -->
 <div class="navbar">
@@ -109,7 +131,7 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
     <a href="#services">Services</a>
     <a href="#track">Track Packages</a>
     <a href="#contact">Contact</a>
-    <a href="admin.html" class="admin-link">Admin</a>
+  
   </div>
   <div class="hamburger" onclick="toggleMenu()">
     <div></div><div></div><div></div>
@@ -133,7 +155,7 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
   <h2 class="section-title">Subscribe Now</h2>
   <p>Don’t miss our updates! Get subscribed today!</p>
   <div class="newsletter">
-    <input type="email" id="newsletterEmail" placeholder="Enter your email">
+    <input type="email" id="newsletterEmail" placeholder="Enter your email" required>
     <button onclick="subscribeNewsletter()">Subscribe</button>
   </div>
 
@@ -182,35 +204,35 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
       <div class="testimonial">
         <div class="quote-icon"></div>
         <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1843.jpeg" alt="Testimonial 1">
-        <p class="name">Sarah Thompson</p>
+        <p class="name">David Wilson</p>
         <p class="rating"></p>
         <p class="desc">Express Delivery exceeded expectations! Package arrived early, intact, with great tracking. Reliable service!</p>
       </div>
       <div class="testimonial">
         <div class="quote-icon"></div>
         <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1844.jpeg" alt="Testimonial 2">
-        <p class="name">James Rodriguez</p>
+        <p class="name">Mark Johnson</p>
         <p class="rating"></p>
         <p class="desc">Thrilled with Express Delivery! On-time international shipment, accurate tracking, responsive support. Highly recommend!</p>
       </div>
       <div class="testimonial">
         <div class="quote-icon"></div>
         <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1846.jpeg" alt="Testimonial 3">
-        <p class="name">Emily Chen</p>
+        <p class="name">Steven Lee</p>
         <p class="rating"></p>
         <p class="desc">Express Delivery made shipping easy. Fragile package arrived perfectly, with live tracking. Great service!</p>
       </div>
       <div class="testimonial">
         <div class="quote-icon"></div>
         <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1847.jpeg" alt="Testimonial 4">
-        <p class="name">Michael Patel</p>
+        <p class="name">Andrew Patel</p>
         <p class="rating"></p>
         <p class="desc">Outstanding! Urgent package delivered fast, with accurate tracking. Express Delivery prioritizes customers!</p>
       </div>
       <div class="testimonial">
         <div class="quote-icon"></div>
         <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1845.jpeg" alt="Testimonial 5">
-        <p class="name">Laura Bennett</p>
+        <p class="name">Thomas Clark</p>
         <p class="rating"></p>
         <p class="desc">Fantastic service! Swift, secure delivery with constant tracking updates. Express Delivery is trustworthy!</p>
       </div>
@@ -259,12 +281,11 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
 <section id="track">
   <h2 class="section-title">Track Your Package</h2>
   <div class="tracking">
-    <input type="text" id="trackingNumber" placeholder="Enter Tracking ID">
+    <input type="text" id="trackingNumber" placeholder="Enter Tracking ID" required>
     <button onclick="trackPackage()">Track Now</button>
   </div>
   <div id="shipmentTracking" class="shipment-tracking" style="display:none;"></div>
   <div id="shipmentContent" class="shipment-content" style="display:none;"></div>
-
   <div class="map-container">
     <div class="map-overlay">CURRENT LOCATION ON MAP</div>
     <div id="receiverMap" style="width:100%;height:300px;"></div>
@@ -341,32 +362,36 @@ function toggleMenu() {
 }
 
 // Newsletter
-function subscribeNewsletter(){
+function subscribeNewsletter() {
   const email = document.getElementById('newsletterEmail').value.trim();
-  if(email){
-    let emails = localStorage.getItem('newsletterEmails') ? localStorage.getItem('newsletterEmails').split(',') : [];
-    if(!emails.includes(email)){
-      emails.push(email);
-      localStorage.setItem('newsletterEmails', emails.join(','));
-      alert("Thank you! Updates will be sent to " + email);
-    }else{
-      alert("This email is already subscribed.");
-    }
-  }else{
-    alert("Please enter your email.");
+  if (!email) {
+    alert('Please enter a valid email address.');
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    alert('Please enter a valid email format.');
+    return;
+  }
+  let emails = localStorage.getItem('newsletterEmails') ? localStorage.getItem('newsletterEmails').split(',') : [];
+  if (!emails.includes(email)) {
+    emails.push(email);
+    localStorage.setItem('newsletterEmails', emails.join(','));
+    alert('Thank you! Updates will be sent to ' + email);
+  } else {
+    alert('This email is already subscribed.');
   }
 }
 
 // Support Popup
-function openSupport(){document.getElementById('supportPopup').style.display='block';}
-function closeSupport(){document.getElementById('supportPopup').style.display='none';}
+function openSupport() { document.getElementById('supportPopup').style.display = 'block'; }
+function closeSupport() { document.getElementById('supportPopup').style.display = 'none'; }
 
 // Google Translate
-function googleTranslateElementInit(){
-  new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
 }
 
-// Initialize Maps with Google Maps Embed
+// Initialize Maps
 function initMaps() {
   const receiverMap = document.getElementById('receiverMap');
   receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
@@ -375,213 +400,253 @@ function initMaps() {
 // Testimonial Slide Animation
 function rotateTestimonials() {
   const testimonialWall = document.querySelector('.testimonial-wall');
-  const testimonials = document.querySelectorAll('.testimonial');
-  const totalTestimonials = testimonials.length;
+  const totalTestimonials = document.querySelectorAll('.testimonial').length;
   let currentIndex = 0;
 
   function showTestimonial(index) {
     testimonialWall.style.transform = `translateX(-${index * 100}%)`;
   }
 
-  showTestimonial(currentIndex);
   setInterval(() => {
     currentIndex = (currentIndex + 1) % totalTestimonials;
     showTestimonial(currentIndex);
-  }, 5000); // Slide every 5 seconds
+  }, 5000);
 }
 
 // Tracking
-function trackPackage(){
+function trackPackage() {
   const number = document.getElementById('trackingNumber').value.trim();
   const trackingDiv = document.getElementById('shipmentTracking');
   const contentDiv = document.getElementById('shipmentContent');
   const receiverMap = document.getElementById('receiverMap');
 
+  if (!number) {
+    alert('Please enter a tracking number.');
+    return;
+  }
+
   trackingDiv.style.display = 'block';
   trackingDiv.innerHTML = '<div class="header">Tracking...</div>';
-  console.log('Tracking started for:', number);
 
-  if (number) {
-    let shipments = [];
-    try {
-      shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-    } catch (e) {
-      console.error('Invalid shipments JSON:', e);
-    }
-    const shipment = shipments.find(s => s.trackingNumber === number);
-    if (shipment && shipment.receiver && shipment.receiver.lat && shipment.receiver.lng) {
-      console.log('Updating map with lat:', shipment.receiver.lat, 'lng:', shipment.receiver.lng);
-      const address = encodeURIComponent(shipment.receiver.address || '');
-      const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d${(1 / Math.cos(shipment.receiver.lat * Math.PI / 180) * 156543.03392 * Math.cos(shipment.receiver.lat * Math.PI / 180) / Math.pow(2, 15))}!2d${shipment.receiver.lng}!3d${shipment.receiver.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x0!2s${address}!5e0!3m2!1sen!2sus!4v1695296400000&markers=color:red%7C${shipment.receiver.lat},${shipment.receiver.lng}`;
-      receiverMap.innerHTML = `<a href="https://www.google.com/maps?q=${shipment.receiver.lat},${shipment.receiver.lng}" target="_blank"><iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe></a>`;
-    } else {
-      console.log('No valid receiver coordinates found:', shipment?.receiver);
-      receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2us!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
-    }
+  let shipments = [];
+  try {
+    shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+  } catch (e) {
+    console.error('Invalid shipments JSON:', e);
+    trackingDiv.innerHTML = '<div class="header">Error retrieving shipment data.</div>';
+    return;
+  }
+
+  const shipment = shipments.find(s => s.trackingNumber === number);
+  if (shipment && shipment.receiver && shipment.receiver.lat && shipment.receiver.lng) {
+    const address = encodeURIComponent(shipment.receiver.address || '');
+    const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d${(1 / Math.cos(shipment.receiver.lat * Math.PI / 180) * 156543.03392 * Math.cos(shipment.receiver.lat * Math.PI / 180) / Math.pow(2, 15))}!2d${shipment.receiver.lng}!3d${shipment.receiver.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x0!2s${address}!5e0!3m2!1sen!2sus!4v1695296400000&markers=color:red%7C${shipment.receiver.lat},${shipment.receiver.lng}`;
+    receiverMap.innerHTML = `<a href="https://www.google.com/maps?q=${shipment.receiver.lat},${shipment.receiver.lng}" target="_blank"><iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe></a>`;
   } else {
-    receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2us!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+    receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
   }
 
   setTimeout(() => {
-    if (number) {
-      let shipments = [];
-      try {
-        shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-      } catch (e) {
-        console.error('Invalid shipments JSON:', e);
-      }
-      const shipment = shipments.find(s => s.trackingNumber === number);
-      if (shipment) {
-        console.log('Shipment found:', shipment);
-        trackingDiv.innerHTML = '<div class="header">Tracking Shipment: ' + number + '</div>';
+    if (shipment) {
+      trackingDiv.innerHTML = '<div class="header">Tracking Shipment: ' + number + '</div>';
+      if (shipment.timeline && shipment.timeline.length > 0) {
         trackingDiv.innerHTML += `<div class="timeline">
           ${shipment.timeline.map(event => `
             <div class="timeline-event ${event.completed ? 'completed' : ''}">
               <div class="tick"></div>
-              <div class="time">${event.time}</div>
-              <div class="description">${event.description} <div style="background:#ccc;padding:2px 5px;border-radius:3px;margin-top:3px;">${event.status}</div></div>
+              <div class="time">${event.time || 'N/A'}</div>
+              <div class="description">${event.description || 'No description'} <div style="background:#ccc;padding:2px 5px;border-radius:3px;margin-top:3px;">${event.status || 'Unknown'}</div></div>
             </div>
           `).join('')}
         </div>`;
       } else {
-        trackingDiv.innerHTML = '<div class="header">Invalid tracking number.</div>';
-        console.log('No shipment found for:', number);
+        trackingDiv.innerHTML += '<div class="timeline"><div class="timeline-event"><div class="tick"></div><div class="description">No tracking status available.</div></div></div>';
       }
     } else {
-      trackingDiv.innerHTML = '<div class="header">Please enter a tracking number.</div>';
+      trackingDiv.innerHTML = '<div class="header">Invalid tracking number.</div>';
     }
   }, 5000);
 
   setTimeout(() => {
     contentDiv.style.display = 'block';
-    if (number) {
-      let shipments = [];
-      try {
-        shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-      } catch (e) {
-        console.error('Invalid shipments JSON:', e);
-      }
-      const shipment = shipments.find(s => s.trackingNumber === number);
-      if (shipment) {
-        console.log('Loading content for shipment:', shipment);
-        contentDiv.innerHTML = `
-          <div class="header">Content of Shipment: ${shipment.content || 'Unknown'}</div>
-          <div class="details">
-            <label>Origin Area:</label><span>${shipment.origin || 'Unknown'}</span><br>
-            <label>Destination Area:</label><span>${shipment.destination || 'Unknown'}</span>
+    if (shipment) {
+      const companyName = shipment.receipt?.companyName || 'Express Delivery Service';
+      const amount = shipment.receipt?.amount || '0.00';
+      const signatureStamp = shipment.officialStamp || '';
+      contentDiv.innerHTML = `
+        <div style="position:relative;">
+          <div class="watermark">CERTIFIED TRUE COPY</div>
+          <div class="header">
+            <div class="company-name">${companyName}</div>
+            <div class="logo">
+              <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo">
+            </div>
           </div>
-          <div class="section-title">Sender's Details</div>
+          <div class="section-title">Shipment</div>
           <div class="details">
-            <label>Name:</label><span>${shipment.sender.name || 'Unknown'}</span><br>
+            <label>Tracking Number:</label><span>${shipment.trackingNumber}</span>
+            <label>Order ID:</label><span>${shipment.orderId || 'N/A'}</span>
+            <label>Content:</label><span>${shipment.content || 'Unknown'}</span>
+            <label>Origin:</label><span>${shipment.origin || 'Unknown'}</span>
+            <label>Destination:</label><span>${shipment.destination || 'Unknown'}</span>
+            <label>Est. Delivery:</label><span>${shipment.estDeliveryDate || 'N/A'}</span>
+            <label>Transport Mode:</label><span>${shipment.modeOfTransport || 'N/A'}</span>
+            <label>Shipment Type:</label><span>${shipment.typeOfShipment || 'N/A'}</span>
+            <label>Quantity:</label><span>${shipment.quantity || 'N/A'}</span>
+          </div>
+          <div class="section-title">Payment</div>
+          <div class="details">
+            <label>Amount:</label><span>$${amount}</span>
+            <label>Payment Mode:</label><span>${shipment.paymentMode || 'N/A'}</span>
+            <label>Payment Method:</label><span>${shipment.paymentMethod || 'N/A'}</span>
+            <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1860.jpeg" class="payment-img" alt="Payment Icon">
+          </div>
+          <div class="section-title">Sender</div>
+          <div class="details">
+            <label>Name:</label><span>${shipment.sender.name || 'Unknown'}</span>
             <label>Address:</label><span>${shipment.sender.address || 'Unknown'}</span>
           </div>
-          <div class="section-title">Receiver's Details</div>
+          <div class="section-title">Receiver</div>
           <div class="details">
-            <label>Name:</label><span>${shipment.receiver.name || 'Unknown'}</span><br>
-            <label>Address:</label><span>${shipment.receiver.address || 'Unknown'}</span><br>
-            <label>Mobile:</label><span>${shipment.receiver.mobile || 'Unknown'}</span>
+            <label>Name:</label><span>${shipment.receiver.name || 'Unknown'}</span>
+            <label>Address:</label><span>${shipment.receiver.address || 'Unknown'}</span>
+            <label>Mobile:</label><span>${shipment.receiver.mobile || 'N/A'}</span>
           </div>
-          <button class="print-btn" onclick="printInvoice('${number}')">Print Invoice</button>
-          <button class="download-btn" onclick="downloadInvoice('${number}')">Download Invoice as PDF</button>`;
-      } else {
-        contentDiv.innerHTML = '<div class="header">No content available for this tracking number.</div>';
-      }
+          <div class="section-title">Authorization</div>
+          <div class="details">
+            <label>Signed by:</label><span>${shipment.signedBy || 'N/A'}</span>
+            <label>Stamp Date:</label><span>${shipment.officialStampDate || 'N/A'}</span>
+            <label>Stamp:</label><span>${signatureStamp ? `<img src="${signatureStamp}" class="signature-img" alt="Signature Stamp">` : 'N/A'}</span>
+          </div>
+          <div class="total">Total: $${amount}</div>
+          <div class="footer">
+            Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
+            Issued: September 23, 2025, 08:35 AM WAT
+          </div>
+        </div>
+        <button class="print-btn" onclick="printInvoice('${number}')">Print Invoice</button>`;
+    } else {
+      contentDiv.innerHTML = '<div class="header">No content available for this tracking number.</div>';
     }
   }, 10000);
 }
 
+// Print Invoice
 function printInvoice(number) {
   let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
   const shipment = shipments.find(s => s.trackingNumber === number);
-  if (shipment) {
-    const companyName = shipment.receipt?.companyName || 'Express Delivery Service';
-    const amount = shipment.receipt?.amount || '0.00';
-    const receiptContent = `
-      <html>
-      <head><title>Receipt - ${shipment.trackingNumber}</title>
-      <style>
-        body {font-family:'Times New Roman',Times,serif;margin:20mm;background:#fff;}
-        .receipt {width:80mm;margin:0 auto;padding:10mm;border:2px solid #000;background:#fff;position:relative;}
-        .watermark {position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-45deg);color:#d3d3d3;font-size:20px;font-weight:bold;opacity:0.3;z-index:0;}
-        .header {display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:1px solid #000;padding-bottom:10px;position:relative;z-index:1;}
-        .logo img {height:50px;}
-        .company-name {font-size:20px;font-weight:bold;text-align:left;}
-        .details {font-size:12px;margin:10px 0;line-height:1.5;position:relative;z-index:1;}
-        .details label {font-weight:bold;width:120px;display:inline-block;}
-        .total {font-size:14px;font-weight:bold;margin-top:20px;border-top:1px solid #000;padding-top:10px;text-align:right;position:relative;z-index:1;}
-        .footer {font-size:10px;text-align:center;margin-top:20px;color:#555;position:relative;z-index:1;}
-        @media print {body {margin:0;}.receipt {border:1px solid #000;}}
-      </style>
-      </head>
-      <body>
-      <div class="receipt">
-        <div class="watermark">CERTIFIED TRUE COPY</div>
-        <div class="header">
-          <div class="company-name">${companyName}</div>
-          <div class="logo">
-            <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo">
-          </div>
+  if (!shipment) {
+    alert('No shipment found for this tracking number.');
+    return;
+  }
+
+  const companyName = shipment.receipt?.companyName || 'Express Delivery Service';
+  const amount = shipment.receipt?.amount || '0.00';
+  const signatureStamp = shipment.officialStamp || '';
+
+  const receiptContent = `
+    <html>
+    <head><title>Receipt - ${shipment.trackingNumber}</title>
+    <style>
+      body { font-family: 'Times New Roman', Times, serif; margin: 2mm; background: #fff; }
+      .receipt { width: 70mm; margin: 0 auto; padding: 2mm; border: 1px solid #000; background: #fff; position: relative; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+      .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); color: #a9a9a9; font-size: 16px; font-weight: bold; opacity: 0.4; z-index: 0; }
+      .header { font-size: 10px; font-weight: bold; margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; }
+      .company-name { font-size: 10px; font-weight: bold; }
+      .logo img { height: 25px; }
+      .section-title { font-size: 9px; font-weight: bold; margin: 2px 0; padding-bottom: 1px; border-bottom: 1px solid #000; }
+      .details { font-size: 7px; margin: 2px 0; line-height: 1.2; letter-spacing: 0.5px; padding: 3px; border: 1px solid #ddd; border-radius: 3px; }
+      .details label { font-weight: bold; width: 90px; display: inline-block; }
+      .details img { max-width: 50px; height: auto; margin-top: 2px; }
+      .total { font-size: 9px; font-weight: bold; margin-top: 5px; padding-top: 2px; text-align: right; }
+      .footer { font-size: 5px; text-align: center; margin-top: 5px; color: #555; }
+      @media print { body { margin: 0; } .receipt { border: 1px solid #000; } }
+    </style>
+    </head>
+    <body>
+    <div class="receipt">
+      <div class="watermark">CERTIFIED TRUE COPY</div>
+      <div class="header">
+        <div class="company-name">${companyName}</div>
+        <div class="logo">
+          <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo">
         </div>
-        <div class="details">
-          <label>Tracking Number:</label><span>${shipment.trackingNumber}</span><br>
-          <label>Content:</label><span>${shipment.content || 'Unknown'}</span><br>
-          <label>Sender:</label><span>${shipment.sender.name}, ${shipment.sender.address}</span><br>
-          <label>Receiver:</label><span>${shipment.receiver.name}, ${shipment.receiver.address}, ${shipment.receiver.mobile || 'Unknown'}</span><br>
-          <label>Date:</label><span>${new Date().toLocaleDateString()}</span><br>
-        </div>
-        <div class="total">Amount: $${amount}</div>
-        <div class="footer">Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com</div>
       </div>
-      </body>
-      </html>`;
-    const win = window.open('', '_blank');
+      <div class="section-title">Shipment Details</div>
+      <div class="details">
+        <label>Tracking Number:</label><span>${shipment.trackingNumber}</span>
+        <label>Order ID:</label><span>${shipment.orderId || 'N/A'}</span>
+        <label>Content:</label><span>${shipment.content || 'Unknown'}</span>
+        <label>Origin:</label><span>${shipment.origin || 'Unknown'}</span>
+        <label>Destination:</label><span>${shipment.destination || 'Unknown'}</span>
+        <label>Est. Delivery:</label><span>${shipment.estDeliveryDate || 'N/A'}</span>
+        <label>Mode of Transport:</label><span>${shipment.modeOfTransport || 'N/A'}</span>
+        <label>Type of Shipment:</label><span>${shipment.typeOfShipment || 'N/A'}</span>
+        <label>Quantity:</label><span>${shipment.quantity || 'N/A'}</span>
+      </div>
+      <div class="section-title">Payment Details</div>
+      <div class="details">
+        <label>Amount:</label><span>$${amount}</span>
+        <label>Payment Mode:</label><span>${shipment.paymentMode || 'N/A'}</span>
+        <label>Payment Method:</label><span>${shipment.paymentMethod || 'N/A'}</span>
+        <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1860.jpeg" class="payment-img" alt="Payment Icon">
+      </div>
+      <div class="section-title">Sender Details</div>
+      <div class="details">
+        <label>Name:</label><span>${shipment.sender.name || 'Unknown'}</span>
+        <label>Address:</label><span>${shipment.sender.address || 'Unknown'}</span>
+      </div>
+      <div class="section-title">Receiver Details</div>
+      <div class="details">
+        <label>Name:</label><span>${shipment.receiver.name || 'Unknown'}</span>
+        <label>Address:</label><span>${shipment.receiver.address || 'Unknown'}</span>
+        <label>Mobile:</label><span>${shipment.receiver.mobile || 'N/A'}</span>
+      </div>
+      <div class="section-title">Authorization</div>
+      <div class="details">
+        <label>Signed by:</label><span>${shipment.signedBy || 'N/A'}</span>
+        <label>Stamp Date:</label><span>${shipment.officialStampDate || 'N/A'}</span>
+        <label>Stamp:</label><span>${signatureStamp ? `<img src="${signatureStamp}" class="signature-img" alt="Signature Stamp">` : 'N/A'}</span>
+      </div>
+      <div class="total">Total: $${amount}</div>
+      <div class="footer">
+        Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
+        Issued: September 23, 2025, 08:35 AM WAT
+      </div>
+    </div>
+    </body>
+    </html>`;
+
+  // Open print dialog
+  const win = window.open('', '_blank');
+  if (win) {
     win.document.write(receiptContent);
     win.document.close();
     win.print();
+  } else {
+    alert('Popup blocked. Please allow popups to print the invoice.');
   }
-}
 
-function downloadInvoice(number) {
-  let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-  const shipment = shipments.find(s => s.trackingNumber === number);
-  if (shipment) {
-    const companyName = shipment.receipt?.companyName || 'Express Delivery Service';
-    const amount = shipment.receipt?.amount || '0.00';
-    const receiptContent = `
-      <div class="receipt" style="font-family:'Times New Roman',Times,serif;width:80mm;margin:0 auto;padding:10mm;border:2px solid #000;background:#fff;position:relative;">
-        <div class="watermark" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-45deg);color:#d3d3d3;font-size:20px;font-weight:bold;opacity:0.3;z-index:0;">CERTIFIED TRUE COPY</div>
-        <div class="header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:1px solid #000;padding-bottom:10px;position:relative;z-index:1;">
-          <div class="company-name" style="font-size:20px;font-weight:bold;text-align:left;">${companyName}</div>
-          <div class="logo">
-            <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo" style="height:50px;">
-          </div>
-        </div>
-        <div class="details" style="font-size:12px;margin:10px 0;line-height:1.5;position:relative;z-index:1;">
-          <label style="font-weight:bold;width:120px;display:inline-block;">Tracking Number:</label><span>${shipment.trackingNumber}</span><br>
-          <label style="font-weight:bold;width:120px;display:inline-block;">Content:</label><span>${shipment.content || 'Unknown'}</span><br>
-          <label style="font-weight:bold;width:120px;display:inline-block;">Sender:</label><span>${shipment.sender.name}, ${shipment.sender.address}</span><br>
-          <label style="font-weight:bold;width:120px;display:inline-block;">Receiver:</label><span>${shipment.receiver.name}, ${shipment.receiver.address}, ${shipment.receiver.mobile || 'Unknown'}</span><br>
-          <label style="font-weight:bold;width:120px;display:inline-block;">Date:</label><span>${new Date().toLocaleDateString()}</span><br>
-        </div>
-        <div class="total" style="font-size:14px;font-weight:bold;margin-top:20px;border-top:1px solid #000;padding-top:10px;text-align:right;position:relative;z-index:1;">Amount: $${amount}</div>
-        <div class="footer" style="font-size:10px;text-align:center;margin-top:20px;color:#555;position:relative;z-index:1;">Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com</div>
-      </div>`;
-    const element = document.createElement('div');
-    element.innerHTML = receiptContent;
-    document.body.appendChild(element);
-    html2pdf()
-      .set({
-        filename: `Receipt_${shipment.trackingNumber}.pdf`,
-        margin: [20, 20, 20, 20],
-        html2canvas: {scale: 2},
-        jsPDF: {unit:'mm',format:'a4',orientation:'portrait'}
-      })
-      .from(element)
-      .save()
-      .then(() => {
-        document.body.removeChild(element);
-      });
-  }
+  // Generate PDF
+  const element = document.createElement('div');
+  element.innerHTML = receiptContent.replace(/<html>.*<body>/s, '').replace(/<\/body><\/html>/, '');
+  document.body.appendChild(element);
+  html2pdf()
+    .set({
+      filename: `Receipt_${shipment.trackingNumber}.pdf`,
+      margin: [2, 2, 2, 2],
+      html2canvas: { scale: 3, useCORS: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    })
+    .from(element)
+    .save()
+    .then(() => {
+      document.body.removeChild(element);
+    })
+    .catch(err => {
+      console.error('PDF generation failed:', err);
+      alert('Failed to generate PDF. Please try again.');
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
