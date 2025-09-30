@@ -143,7 +143,7 @@
           <input type="number" id="newReceiverLng" step="0.0001" placeholder="Enter receiver longitude" required>
         </div>
         <h3>Timeline</h3>
-        <textarea id="newTimeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"30 Sep 2025 01:00","description":"Item shipped","status":"SHIPPED","completed":true}])' required></textarea>
+        <textarea id="newTimeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"30 Sep 2025 02:00","description":"Item shipped","status":"SHIPPED","completed":true}])' required></textarea>
         <button id="generateTrackingCode" onclick="generateTrackingCode()">Generate Tracking Code</button>
         <p>Send the generated tracking code to the recipient for tracking on the public page.</p>
         <p id="errorMessage"></p>
@@ -239,7 +239,7 @@
           <input type="number" id="receiverLng" step="0.0001" placeholder="Enter receiver longitude">
         </div>
         <h3>Timeline</h3>
-        <textarea id="timeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"30 Sep 2025 01:00","description":"Item shipped","status":"SHIPPED","completed":true}])'></textarea>
+        <textarea id="timeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"30 Sep 2025 02:00","description":"Item shipped","status":"SHIPPED","completed":true}])'></textarea>
         <button onclick="saveShipment()">Save Shipment</button>
         <p id="errorMessage"></p>
       </div>
@@ -250,7 +250,7 @@
 
   <script>
     const DB_NAME = "ExpressDeliveryDB";
-    const DB_VERSION = 1;
+    const DB_VERSION = 2; // Incremented to force database reset if corrupted
     const SHIPMENTS_STORE = "shipments";
     const SETTINGS_STORE = "settings";
     const ADMIN_EMAIL = "Expressdeliveryservice0016@gmail.com";
@@ -264,21 +264,25 @@
         const request = indexedDB.open(DB_NAME, DB_VERSION);
         request.onupgradeneeded = (event) => {
           db = event.target.result;
-          if (!db.objectStoreNames.contains(SHIPMENTS_STORE)) {
-            db.createObjectStore(SHIPMENTS_STORE, { keyPath: "trackingNumber" });
+          console.log("Upgrading IndexedDB to version", DB_VERSION);
+          // Clear existing stores to prevent corruption
+          if (db.objectStoreNames.contains(SHIPMENTS_STORE)) {
+            db.deleteObjectStore(SHIPMENTS_STORE);
           }
-          if (!db.objectStoreNames.contains(SETTINGS_STORE)) {
-            db.createObjectStore(SETTINGS_STORE, { keyPath: "key" });
+          if (db.objectStoreNames.contains(SETTINGS_STORE)) {
+            db.deleteObjectStore(SETTINGS_STORE);
           }
+          db.createObjectStore(SHIPMENTS_STORE, { keyPath: "trackingNumber" });
+          db.createObjectStore(SETTINGS_STORE, { keyPath: "key" });
         };
         request.onsuccess = (event) => {
           db = event.target.result;
-          console.log("IndexedDB initialized successfully");
+          console.log("IndexedDB opened successfully");
           resolve(db);
         };
         request.onerror = (event) => {
-          console.error("IndexedDB initialization failed:", event.target.error);
-          document.getElementById("errorMessage").textContent = "Failed to initialize database. Some features may be unavailable.";
+          console.error("IndexedDB open failed:", event.target.error);
+          document.getElementById("errorMessage").textContent = `Failed to open database: ${event.target.error.message}. Please refresh.`;
           document.getElementById("errorMessage").style.display = "block";
           reject(event.target.error);
         };
@@ -324,7 +328,7 @@
           };
           tx.onerror = () => {
             console.error("Migration error:", tx.error);
-            document.getElementById("errorMessage").textContent = "Error migrating data.";
+            document.getElementById("errorMessage").textContent = `Migration error: ${tx.error.message}`;
             document.getElementById("errorMessage").style.display = "block";
             reject(tx.error);
           };
@@ -355,6 +359,9 @@
 
     async function loadData() {
       try {
+        if (!db) {
+          throw new Error("Database not initialized. Please refresh the page.");
+        }
         const tx = db.transaction([SHIPMENTS_STORE, SETTINGS_STORE], "readonly");
         const shipmentStore = tx.objectStore(SHIPMENTS_STORE);
         const settingsStore = tx.objectStore(SETTINGS_STORE);
@@ -368,14 +375,14 @@
           shipments.forEach((shipment) => {
             const option = document.createElement("option");
             option.value = shipment.trackingNumber;
-            option.text = `${shipment.trackingNumber} - ${shipment.content}`;
+            option.text = `${shipment.trackingNumber} - ${shipment.content || "No content"}`;
             shipmentSelect.appendChild(option);
           });
-          console.log("Shipments loaded:", shipments);
+          console.log("Shipments loaded:", shipments.length);
         };
         shipmentRequest.onerror = () => {
           console.error("Error loading shipments:", shipmentRequest.error);
-          document.getElementById("errorMessage").textContent = "Error loading shipments.";
+          document.getElementById("errorMessage").textContent = `Error loading shipments: ${shipmentRequest.error.message}`;
           document.getElementById("errorMessage").style.display = "block";
         };
 
@@ -389,13 +396,20 @@
           } else {
             preview.innerHTML = `<p>No signature stamp uploaded</p>`;
           }
+          console.log("Signature stamp loaded");
         };
         signatureRequest.onerror = () => {
           console.error("Error loading signature stamp:", signatureRequest.error);
+          document.getElementById("signaturePreview").innerHTML = `<p>Error loading signature stamp: ${signatureRequest.error.message}</p>`;
         };
+
+        await new Promise((resolve, reject) => {
+          tx.oncomplete = resolve;
+          tx.onerror = () => reject(tx.error);
+        });
       } catch (e) {
-        console.error("Load data error:", e);
-        document.getElementById("errorMessage").textContent = "Error loading data. Please try again.";
+        console.error("Load data error:", e.message);
+        document.getElementById("errorMessage").textContent = `Error loading data: ${e.message}. Please refresh or clear browser data.`;
         document.getElementById("errorMessage").style.display = "block";
       }
     }
@@ -421,13 +435,13 @@
                 };
                 tx.onerror = () => {
                   console.error("Error saving signature stamp:", tx.error);
-                  alert("Error saving signature stamp.");
+                  alert(`Error saving signature stamp: ${tx.error.message}`);
                   reject(tx.error);
                 };
               });
             } catch (e) {
               console.error("Signature save error:", e);
-              alert("Error saving signature stamp.");
+              alert(`Error saving signature stamp: ${e.message}`);
             }
           };
           reader.readAsDataURL(file);
@@ -450,9 +464,17 @@
           const letters = String.fromCharCode(...Array(3).fill().map(() => 65 + Math.floor(Math.random() * 26)));
           const numbers = Math.floor(100000000 + Math.random() * 900000000).toString();
           newTracking = `${letters}-${numbers}`;
-          const request = await storeCheck.get(newTracking);
-          await new Promise((resolve) => { txCheck.oncomplete = resolve; });
-          isUnique = !request.result;
+          const request = storeCheck.get(newTracking);
+          await new Promise((resolve) => {
+            request.onsuccess = () => {
+              isUnique = !request.result;
+              resolve();
+            };
+            request.onerror = () => {
+              console.error("Error checking tracking number:", request.error);
+              resolve();
+            };
+          });
         }
 
         const shipment = {
@@ -535,7 +557,7 @@
           };
           tx.onerror = () => {
             console.error("Error saving shipment:", tx.error);
-            alert("Error saving shipment.");
+            alert(`Error saving shipment: ${tx.error.message}`);
             reject(tx.error);
           };
         });
@@ -607,7 +629,7 @@
           };
           tx.onerror = () => {
             console.error("Error saving shipment:", tx.error);
-            alert("Error saving shipment.");
+            alert(`Error saving shipment: ${tx.error.message}`);
             reject(tx.error);
           };
         });
@@ -665,8 +687,8 @@
             document.getElementById("quantity").value = shipment.quantity;
             document.getElementById("officialStampDate").value = shipment.officialStampDate;
             document.getElementById("paymentMode").value = shipment.paymentMode;
-            document.getElementById("paymentMethod").value = shipment.paymentMethod;
-            document.getElementById("signedBy").value = shipment.signedBy;
+            document.getElementById("paymentMethod").value = shipment.paymentMethod || "";
+            document.getElementById("signedBy").value = shipment.signedBy || "";
             document.getElementById("shipmentContent").value = shipment.content;
             document.getElementById("shipmentOrigin").value = shipment.origin;
             document.getElementById("shipmentDestination").value = shipment.destination;
@@ -685,12 +707,12 @@
         };
         request.onerror = () => {
           console.error("Error loading shipment:", request.error);
-          document.getElementById("errorMessage").textContent = "Error loading shipment.";
+          document.getElementById("errorMessage").textContent = `Error loading shipment: ${request.error.message}`;
           document.getElementById("errorMessage").style.display = "block";
         };
       } catch (e) {
         console.error("Load shipment error:", e);
-        document.getElementById("errorMessage").textContent = "Error loading shipment.";
+        document.getElementById("errorMessage").textContent = `Error loading shipment: ${e.message}`;
         document.getElementById("errorMessage").style.display = "block";
       }
     }
@@ -734,8 +756,8 @@
           document.getElementById("errorMessage").style.display = "block";
         }
       } catch (e) {
-        console.error("Initialization error:", e);
-        document.getElementById("errorMessage").textContent = "Error initializing dashboard. Please refresh.";
+        console.error("Initialization error:", e.message);
+        document.getElementById("errorMessage").textContent = `Error initializing dashboard: ${e.message}. Please refresh or clear browser data.`;
         document.getElementById("errorMessage").style.display = "block";
       }
     });
