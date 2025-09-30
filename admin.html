@@ -3,79 +3,199 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard</title>
+<title>Admin Dashboard - Express Delivery</title>
 <style>
-body { font-family: Arial, sans-serif; padding: 20px; background:#f0f2f5; }
+body { font-family: Arial, sans-serif; padding: 20px; background: #f0f2f5; }
 input, textarea, select, button { margin:5px 0; padding:8px; width:100%; }
 button { cursor:pointer; background:#1e90ff; color:white; border:none; }
 button:hover { background:#1565c0; }
+.stamp-preview { max-width:80px; margin-top:5px; }
 </style>
 </head>
 <body>
 
 <h2>Admin Dashboard - Express Delivery</h2>
 
-<h3>Generate Shipment</h3>
+<h3>Generate New Shipment</h3>
 <div>
   <input type="text" id="newTrackingNumber" placeholder="Tracking Code" readonly>
-  <input type="text" id="newSender" placeholder="Sender Name" required>
-  <input type="text" id="newReceiver" placeholder="Receiver Name" required>
-  <input type="text" id="newOrigin" placeholder="Origin" required>
-  <input type="text" id="newDestination" placeholder="Destination" required>
-  <input type="text" id="newStatus" placeholder="Status (In Transit, Delivered)" required>
-  <input type="date" id="newExpectedDelivery" placeholder="Expected Delivery" required>
+  <input type="text" id="newSender" placeholder="Sender Name">
+  <input type="text" id="newReceiver" placeholder="Receiver Name">
+  <input type="text" id="newOrigin" placeholder="Origin">
+  <input type="text" id="newDestination" placeholder="Destination">
+  <input type="text" id="newStatus" placeholder="Status (In Transit, Delivered)">
+  <input type="date" id="newExpectedDelivery">
   <textarea id="newExtendedDescription" placeholder="Notes / Description"></textarea>
+
+  <!-- Optional Fields -->
+  <textarea id="newTimeline" placeholder='Timeline JSON (e.g., [{"time":"23 Sep 2025 07:30","description":"✅ Item has arrived","status":"ON HOLD","completed":true}])'></textarea>
+  <select id="newPaymentMode">
+    <option value="">Payment Mode</option>
+    <option value="Credit Card">Credit Card</option>
+    <option value="Debit Card">Debit Card</option>
+    <option value="Bank Transfer">Bank Transfer</option>
+    <option value="Cash">Cash</option>
+    <option value="Mobile Payment">Mobile Payment</option>
+  </select>
+  <input type="file" id="stampUpload" accept="image/*">
+  <img id="stampPreview" class="stamp-preview" alt="">
+  <input type="text" id="newTransportMode" placeholder="Transport Mode (Air, Sea, Road)">
+  <input type="text" id="newQuantity" placeholder="Quantity (e.g., 2 boxes)">
+  <input type="text" id="newShipmentType" placeholder="Shipment Type (Express, Standard)">
+  <input type="number" id="newAmount" placeholder="Amount ($)" step="0.01">
+
   <button onclick="generateShipment()">Generate Shipment</button>
   <button onclick="downloadShipments()">Download shipments.json</button>
 </div>
 
+<hr>
+
+<h3>Saved Shipments (Click to Edit)</h3>
+<select id="shipmentSelect" onchange="loadShipment()">
+  <option value="">Select a shipment</option>
+</select>
+
+<button onclick="saveEditedShipment()">Save Changes</button>
+
 <script>
-// Generate a new tracking code
+// Load saved shipments
+function loadShipmentList() {
+  const shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+  const select = document.getElementById('shipmentSelect');
+  select.innerHTML = '<option value="">Select a shipment</option>';
+  shipments.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s.tracking_number;
+    opt.text = `${s.tracking_number} - ${s.sender} to ${s.receiver}`;
+    select.appendChild(opt);
+  });
+}
+loadShipmentList();
+
+// Generate tracking code
 function generateTrackingCode() {
   const letters = String.fromCharCode(...Array(3).fill().map(() => 65 + Math.floor(Math.random()*26)));
   const numbers = Math.floor(100000 + Math.random()*900000);
   return `${letters}-${numbers}`;
 }
 
-// Generate shipment and store in localStorage
+// Generate shipment
 function generateShipment() {
   const trackingNumber = generateTrackingCode();
+
+  // Handle optional stamp image
+  const stampInput = document.getElementById('stampUpload');
+  let stampData = "";
+  if (stampInput.files.length > 0) {
+    const file = stampInput.files[0];
+    const reader = new FileReader();
+    reader.onload = e => {
+      stampData = e.target.result;
+      saveShipment(trackingNumber, stampData);
+    };
+    reader.readAsDataURL(file);
+  } else {
+    saveShipment(trackingNumber, stampData);
+  }
+}
+
+// Save new shipment
+function saveShipment(trackingNumber, stampData) {
   const shipment = {
     tracking_number: trackingNumber,
     sender: document.getElementById('newSender').value.trim(),
     receiver: document.getElementById('newReceiver').value.trim(),
-    status: document.getElementById('newStatus').value.trim(),
     origin: document.getElementById('newOrigin').value.trim(),
     destination: document.getElementById('newDestination').value.trim(),
+    status: document.getElementById('newStatus').value.trim(),
     expected_delivery: document.getElementById('newExpectedDelivery').value,
-    extended_description: document.getElementById('newExtendedDescription').value.trim()
+    extended_description: document.getElementById('newExtendedDescription').value.trim(),
+    timeline: JSON.parse(document.getElementById('newTimeline').value.trim() || '[]'),
+    payment_mode: document.getElementById('newPaymentMode').value,
+    stamp: stampData,
+    transport_mode: document.getElementById('newTransportMode').value.trim(),
+    quantity: document.getElementById('newQuantity').value.trim(),
+    shipment_type: document.getElementById('newShipmentType').value.trim(),
+    amount: parseFloat(document.getElementById('newAmount').value) || 0
   };
-
-  if (!shipment.sender || !shipment.receiver || !shipment.origin || !shipment.destination) {
-    alert("Fill all required fields!");
-    return;
-  }
 
   let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
   shipments.push(shipment);
   localStorage.setItem('shipments', JSON.stringify(shipments));
   document.getElementById('newTrackingNumber').value = trackingNumber;
   alert(`Shipment generated: ${trackingNumber}`);
+  loadShipmentList();
 }
 
-// Export shipments.json
+// Load shipment into form for editing
+function loadShipment() {
+  const tracking = document.getElementById('shipmentSelect').value;
+  if (!tracking) return;
+  const shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+  const shipment = shipments.find(s => s.tracking_number === tracking);
+  if (!shipment) return;
+
+  document.getElementById('newTrackingNumber').value = shipment.tracking_number;
+  document.getElementById('newSender').value = shipment.sender;
+  document.getElementById('newReceiver').value = shipment.receiver;
+  document.getElementById('newOrigin').value = shipment.origin;
+  document.getElementById('newDestination').value = shipment.destination;
+  document.getElementById('newStatus').value = shipment.status;
+  document.getElementById('newExpectedDelivery').value = shipment.expected_delivery;
+  document.getElementById('newExtendedDescription').value = shipment.extended_description;
+  document.getElementById('newTimeline').value = JSON.stringify(shipment.timeline || [], null,2);
+  document.getElementById('newPaymentMode').value = shipment.payment_mode || '';
+  document.getElementById('stampPreview').src = shipment.stamp || '';
+  document.getElementById('newTransportMode').value = shipment.transport_mode || '';
+  document.getElementById('newQuantity').value = shipment.quantity || '';
+  document.getElementById('newShipmentType').value = shipment.shipment_type || '';
+  document.getElementById('newAmount').value = shipment.amount || 0;
+}
+
+// Save edited shipment
+function saveEditedShipment() {
+  const trackingNumber = document.getElementById('newTrackingNumber').value;
+  if (!trackingNumber) return alert("No shipment selected.");
+  let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+  const index = shipments.findIndex(s => s.tracking_number === trackingNumber);
+  if (index === -1) return alert("Shipment not found.");
+
+  const shipment = {
+    tracking_number: trackingNumber,
+    sender: document.getElementById('newSender').value.trim(),
+    receiver: document.getElementById('newReceiver').value.trim(),
+    origin: document.getElementById('newOrigin').value.trim(),
+    destination: document.getElementById('newDestination').value.trim(),
+    status: document.getElementById('newStatus').value.trim(),
+    expected_delivery: document.getElementById('newExpectedDelivery').value,
+    extended_description: document.getElementById('newExtendedDescription').value.trim(),
+    timeline: JSON.parse(document.getElementById('newTimeline').value.trim() || '[]'),
+    payment_mode: document.getElementById('newPaymentMode').value,
+    stamp: document.getElementById('stampPreview').src || '',
+    transport_mode: document.getElementById('newTransportMode').value.trim(),
+    quantity: document.getElementById('newQuantity').value.trim(),
+    shipment_type: document.getElementById('newShipmentType').value.trim(),
+    amount: parseFloat(document.getElementById('newAmount').value) || 0
+  };
+
+  shipments[index] = shipment;
+  localStorage.setItem('shipments', JSON.stringify(shipments));
+  alert("Shipment updated!");
+  loadShipmentList();
+}
+
+// Download shipments.json
 function downloadShipments() {
   const shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-  if (!shipments.length) return alert("No shipments available to download.");
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(shipments, null, 2));
+  if (!shipments.length) return alert("No shipments to download.");
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(shipments,null,2));
   const dlAnchor = document.createElement('a');
-  dlAnchor.setAttribute("href", dataStr);
-  dlAnchor.setAttribute("download", "shipments.json");
+  dlAnchor.href = dataStr;
+  dlAnchor.download = "shipments.json";
   document.body.appendChild(dlAnchor);
   dlAnchor.click();
   dlAnchor.remove();
 }
 </script>
-
 </body>
 </html>
