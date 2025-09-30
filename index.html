@@ -346,14 +346,28 @@
     // keep shipments variable global to be used by printInvoice
     let shipments = [];
 
-    // Load shipments from localStorage with enhanced compatibility and graceful failures
-    function loadShipments() {
-      try {
-        if (!window.localStorage) {
-          console.warn('localStorage not supported in this environment.');
-          shipments = [];
-          return;
-        }
+ <script>
+let shipments = [];
+
+// NEW loadShipments (server-based)
+async function loadShipments() {
+  try {
+    const response = await fetch('https://expressdeliveryservices.github.io/shipments.json');
+    if (!response.ok) throw new Error('Failed to fetch shipment data');
+    shipments = await response.json();
+    console.log('Shipments loaded:', shipments);
+  } catch (e) {
+    console.error('Error fetching shipments:', e);
+    alert('Unable to load shipment data. Please try again later.');
+    shipments = [];
+  }
+}
+
+// ✅ Call it right after definition
+loadShipments();
+
+// ... keep the rest of your tracking/search functions (trackShipment, renderTimeline, etc.)
+</script>
         const stored = localStorage.getItem('shipments');
         shipments = stored ? JSON.parse(stored) : [];
         // Ensure shipments is an array
