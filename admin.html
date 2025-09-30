@@ -78,21 +78,30 @@
 
         <form id="shipmentForm" onsubmit="return false;">
           <div class="form-grid">
+            <!-- Sender -->
             <div>
-              <label for="newSender">Sender</label>
-              <input id="newSender" type="text" placeholder="Sender name">
+              <label for="newSender">Sender Name</label>
+              <input id="newSender" type="text" placeholder="Sender full name">
+            </div>
+            <div>
+              <label for="newSenderAddress">Sender Address</label>
+              <input id="newSenderAddress" type="text" placeholder="Sender address">
             </div>
 
+            <!-- Receiver -->
             <div>
-              <label for="newReceiver">Receiver</label>
-              <input id="newReceiver" type="text" placeholder="Receiver name">
+              <label for="newReceiver">Receiver Name</label>
+              <input id="newReceiver" type="text" placeholder="Receiver full name">
+            </div>
+            <div>
+              <label for="newReceiverMobile">Receiver Mobile</label>
+              <input id="newReceiverMobile" type="text" placeholder="e.g. +79931234567">
             </div>
 
             <div>
               <label for="newAddress">Receiver Address</label>
-              <input id="newAddress" type="text" placeholder="Address">
+              <input id="newAddress" type="text" placeholder="Receiver address">
             </div>
-
             <div>
               <label for="newAmount">Amount ($)</label>
               <input id="newAmount" type="number" placeholder="0.00" step="0.01">
@@ -133,38 +142,34 @@
               <label for="newTypeOfShipment">Type of Shipment</label>
               <input id="newTypeOfShipment" type="text" placeholder="e.g. Documents">
             </div>
-
             <div>
               <label for="newQuantity">Quantity</label>
               <input id="newQuantity" type="number" placeholder="1">
             </div>
-
             <div>
               <label for="newOfficialStampDate">Official Stamp Date</label>
               <input id="newOfficialStampDate" type="date">
             </div>
-
             <div>
               <label for="newLat">Latitude</label>
               <input id="newLat" type="text" placeholder="e.g. 59.9741">
             </div>
-
             <div>
               <label for="newLng">Longitude</label>
               <input id="newLng" type="text" placeholder="e.g. 30.3232">
             </div>
 
-            <!-- content (kept above timeline as requested) -->
+            <!-- Content -->
             <div class="full">
               <label for="newContent">Content</label>
               <textarea id="newContent" placeholder="Shipment content (description)"></textarea>
             </div>
 
-            <!-- timeline moved to bottom (full width) -->
+            <!-- Timeline -->
             <div class="full">
-              <label for="newTimeline">Timeline (JSON array) — placed at the bottom</label>
+              <label for="newTimeline">Timeline (JSON array)</label>
               <textarea id="newTimeline" placeholder='[{"time":"22 Sep 2025 12:33","description":"Item shipped","status":"IN TRANSIT","completed":true}]'></textarea>
-              <div class="hint">Enter timeline as a JSON array. Example above. Use valid JSON.</div>
+              <div class="hint">Enter timeline as a JSON array. Use valid JSON.</div>
             </div>
           </div>
 
@@ -178,7 +183,6 @@
       <!-- RIGHT: stamp + preview + output -->
       <aside class="card">
         <h3 style="margin:0 0 10px 0;color:var(--primary-dark)">Stamp / Preview</h3>
-
         <div class="stamp-block">
           <label for="stampUpload">Upload Signature Stamp (PNG / JPG)</label>
           <input id="stampUpload" type="file" accept="image/*">
@@ -202,18 +206,14 @@
   <script>
     let shipments = [];
     let selectedIndex = "";
-    let currentStampData = ""; // base64 DataURL of uploaded stamp
+    let currentStampData = "";
+    const prefixes = ["AWE", "EXP", "TRK", "DEL"];
 
-    // Initialize - load shipments.json (server hosted)
     async function loadShipments() {
       try {
         const resp = await fetch("https://expressdeliveryservices.github.io/shipments.json");
-        if (!resp.ok) throw new Error("Failed to fetch shipments.json");
-        shipments = await resp.json();
-      } catch (e) {
-        console.warn("Could not fetch shipments.json - starting with empty list", e);
-        shipments = [];
-      }
+        shipments = resp.ok ? await resp.json() : [];
+      } catch (e) { shipments = []; }
       refreshShipmentSelect();
     }
 
@@ -221,13 +221,13 @@
       const sel = document.getElementById("shipmentSelect");
       sel.innerHTML = '<option value="">-- Select a shipment --</option>';
       shipments.forEach((s, i) => {
+        const receiverInfo = s.receiver?.name ? s.receiver.name : "No Name";
+        const mobileInfo = s.receiver?.mobile ? ` (${s.receiver.mobile})` : "";
         const opt = document.createElement("option");
         opt.value = i;
-        opt.textContent = `${s.trackingNumber} ${s.receiver?.name ? "— " + s.receiver.name : ""}`;
+        opt.textContent = `${s.trackingNumber} — ${receiverInfo}${mobileInfo}`;
         sel.appendChild(opt);
       });
-
-      // if requested, select the new tracking number
       if (selectTracking) {
         const idx = shipments.findIndex(s => s.trackingNumber === selectTracking);
         if (idx !== -1) sel.value = idx;
@@ -235,17 +235,14 @@
       }
     }
 
-    // Load selected shipment into the form
     function loadShipmentForEdit() {
       selectedIndex = document.getElementById("shipmentSelect").value;
-      if (selectedIndex === "") {
-        clearForm();
-        return;
-      }
-
+      if (selectedIndex === "") { clearForm(); return; }
       const s = shipments[selectedIndex];
       document.getElementById("newSender").value = s.sender?.name || "";
+      document.getElementById("newSenderAddress").value = s.sender?.address || "";
       document.getElementById("newReceiver").value = s.receiver?.name || "";
+      document.getElementById("newReceiverMobile").value = s.receiver?.mobile || "";
       document.getElementById("newAddress").value = s.receiver?.address || "";
       document.getElementById("newAmount").value = s.receipt?.amount || "";
       document.getElementById("newOrderId").value = s.receipt?.orderId || "";
@@ -260,43 +257,28 @@
       document.getElementById("newContent").value = s.content || "";
       document.getElementById("newTimeline").value = JSON.stringify(s.timeline || [], null, 2);
 
-      // load stamp preview if exists
       currentStampData = s.officialStamp || "";
       const img = document.getElementById("stampPreview");
-      if (currentStampData) {
-        img.src = currentStampData;
-        img.style.display = "block";
-      } else {
-        img.src = "";
-        img.style.display = "none";
-      }
+      if (currentStampData) { img.src = currentStampData; img.style.display = "block"; }
+      else { img.src = ""; img.style.display = "none"; }
 
-      // show JSON preview
       showOutput(`Loaded shipment: ${s.trackingNumber}\n\n` + JSON.stringify(s, null, 2));
     }
 
-    // Build shipment object from form values
     function buildShipment(trackingNumber) {
       let timeline = [];
       const timelineRaw = document.getElementById("newTimeline").value.trim();
       if (timelineRaw) {
-        try {
-          timeline = JSON.parse(timelineRaw);
-          if (!Array.isArray(timeline)) {
-            alert("Timeline must be a JSON array.");
-            return null;
-          }
-        } catch (e) {
-          alert("Invalid timeline JSON. Fix it before saving.");
-          return null;
-        }
+        try { timeline = JSON.parse(timelineRaw); if (!Array.isArray(timeline)) { alert("Timeline must be a JSON array."); return null; } }
+        catch (e) { alert("Invalid timeline JSON."); return null; }
       }
 
       return {
         trackingNumber,
-        sender: { name: document.getElementById("newSender").value.trim() },
-        receiver: {
+        sender: { name: document.getElementById("newSender").value.trim(), address: document.getElementById("newSenderAddress").value.trim() },
+        receiver: { 
           name: document.getElementById("newReceiver").value.trim(),
+          mobile: document.getElementById("newReceiverMobile").value.trim(),
           address: document.getElementById("newAddress").value.trim(),
           lat: document.getElementById("newLat").value.trim(),
           lng: document.getElementById("newLng").value.trim()
@@ -313,99 +295,72 @@
         },
         timeline,
         content: document.getElementById("newContent").value.trim(),
-        officialStamp: currentStampData || "" // base64 data URL of uploaded image
+        officialStamp: currentStampData || ""
       };
     }
 
-    // Generate new shipment and add to shipments array
-    function generateShipment() {
-      const trackingNumber = "TRK" + Math.floor(100000 + Math.random() * 900000);
-      const s = buildShipment(trackingNumber);
-      if (!s) return; // invalid timeline handling
-      shipments.push(s);
-      refreshShipmentSelect(trackingNumber);
-      showOutput("Generated new shipment:\n\n" + JSON.stringify(s, null, 2));
-      // select the newly created option
-      const idx = shipments.findIndex(x => x.trackingNumber === trackingNumber);
-      if (idx !== -1) {
-        document.getElementById("shipmentSelect").value = idx;
-        selectedIndex = idx;
-      }
+    function getNextTrackingNumber(prefix) {
+      const numbers = shipments.filter(s => s.trackingNumber.startsWith(prefix + "-")).map(s => parseInt(s.trackingNumber.split("-")[1],10)).filter(n => !isNaN(n));
+      const nextNumber = numbers.length ? Math.max(...numbers)+1 : 1;
+      return `${prefix}-${String(nextNumber).padStart(6,"0")}`;
     }
 
-    // Update selected shipment (overwrite)
-    function updateShipment() {
-      selectedIndex = document.getElementById("shipmentSelect").value;
-      if (selectedIndex === "") {
-        alert("Please select a shipment to update.");
-        return;
-      }
-      const trackingNumber = shipments[selectedIndex].trackingNumber;
+    function generateShipment() {
+      const prefix = prefixes[Math.floor(Math.random()*prefixes.length)];
+      const trackingNumber = getNextTrackingNumber(prefix);
       const s = buildShipment(trackingNumber);
       if (!s) return;
-      shipments[selectedIndex] = s;
+      shipments.push(s);
       refreshShipmentSelect(trackingNumber);
-      showOutput("Updated shipment:\n\n" + JSON.stringify(s, null, 2));
+      showOutput("Generated new shipment:\n\n" + JSON.stringify(s,null,2));
+      const sel = document.getElementById("shipmentSelect");
+      const idx = shipments.findIndex(x => x.trackingNumber===trackingNumber);
+      if(idx!==-1){ sel.value = idx; selectedIndex = idx; }
     }
 
-    // File upload handler for stamp
-    document.addEventListener("DOMContentLoaded", () => {
-      const upload = document.getElementById("stampUpload");
-      upload.addEventListener("change", handleStampUpload);
+    function updateShipment() {
+      selectedIndex = document.getElementById("shipmentSelect").value;
+      if(selectedIndex===""){ alert("Please select a shipment to update."); return; }
+      const trackingNumber = shipments[selectedIndex].trackingNumber;
+      const s = buildShipment(trackingNumber);
+      if(!s) return;
+      shipments[selectedIndex]=s;
+      refreshShipmentSelect(trackingNumber);
+      showOutput("Updated shipment:\n\n" + JSON.stringify(s,null,2));
+    }
+
+    document.addEventListener("DOMContentLoaded",()=>{
+      const upload=document.getElementById("stampUpload");
+      upload.addEventListener("change",handleStampUpload);
+      document.getElementById("shipmentSelect").addEventListener("change",loadShipmentForEdit);
       loadShipments();
     });
 
-    function handleStampUpload(evt) {
+    function handleStampUpload(evt){
       const file = evt.target.files && evt.target.files[0];
-      if (!file) return;
-      if (!file.type.startsWith("image/")) {
-        alert("Please upload an image file.");
-        return;
-      }
+      if(!file) return;
+      if(!file.type.startsWith("image/")){ alert("Please upload an image file."); return; }
       const reader = new FileReader();
-      reader.onload = function(e) {
-        currentStampData = e.target.result; // base64 Data URL
+      reader.onload = function(e){
+        currentStampData = e.target.result;
         const img = document.getElementById("stampPreview");
-        img.src = currentStampData;
-        img.style.display = "block";
+        img.src = currentStampData; img.style.display="block";
         showOutput("Stamp uploaded (preview shown). It will be saved into the shipment as 'officialStamp'.");
       };
       reader.readAsDataURL(file);
     }
 
-    function clearStamp() {
-      currentStampData = "";
-      document.getElementById("stampUpload").value = "";
-      const img = document.getElementById("stampPreview");
-      img.src = "";
-      img.style.display = "none";
-      showOutput("Stamp removed from current edit (not yet saved). Save or generate to persist changes.");
-    }
+    function clearStamp(){ currentStampData=""; document.getElementById("stampUpload").value=""; const img=document.getElementById("stampPreview"); img.src=""; img.style.display="none"; showOutput("Stamp removed from current edit (not yet saved). Save or generate to persist changes."); }
+    function showOutput(text){ document.getElementById("output").textContent=text; }
+    function clearForm(){ document.getElementById("shipmentForm").reset(); document.getElementById("newTimeline").value=""; document.getElementById("newContent").value=""; document.getElementById("newSenderAddress").value=""; document.getElementById("newReceiverMobile").value=""; clearStamp(); showOutput("Form cleared."); }
 
-    function showOutput(text) {
-      document.getElementById("output").textContent = text;
-    }
-
-    function clearForm() {
-      document.getElementById("shipmentForm").reset();
-      document.getElementById("newTimeline").value = "";
-      document.getElementById("newContent").value = "";
-      clearStamp();
-      showOutput("Form cleared.");
-    }
-
-    // Download shipments array as JSON file
-    function downloadShipments() {
-      const data = JSON.stringify(shipments, null, 2);
-      const blob = new Blob([data], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "shipments.json";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
+    function downloadShipments(){
+      const data=JSON.stringify(shipments,null,2);
+      const blob=new Blob([data],{type:"application/json"});
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement("a");
+      a.href=url; a.download="shipments.json";
+      document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
     }
   </script>
 </body>
