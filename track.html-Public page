@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track Shipment</title>
+<style>
+body { font-family: Arial, sans-serif; padding:20px; }
+input, button { padding:10px; margin:5px 0; width:100%; }
+#result { margin-top:20px; }
+</style>
+</head>
+<body>
+
+<h2>Track Your Shipment</h2>
+<input type="text" id="trackingNumber" placeholder="Enter Tracking Number">
+<button onclick="trackPackage()">Track</button>
+<div id="result"></div>
+
+<script>
+async function trackPackage() {
+  const tn = document.getElementById('trackingNumber').value.trim();
+  if (!tn) return alert("Enter a tracking number");
+
+  try {
+    const response = await fetch('https://expressdeliveryservices.github.io/package-tracker/admin/shipments.json');
+    if (!response.ok) throw new Error("Failed to fetch shipment data");
+
+    const data = await response.json();
+    const shipment = data.find(s => s.tracking_number.toUpperCase() === tn.toUpperCase());
+    const resultDiv = document.getElementById('result');
+
+    if (!shipment) {
+      resultDiv.innerHTML = "<p>Tracking number not found.</p>";
+      return;
+    }
+
+    resultDiv.innerHTML = `
+      <h3>Shipment Details</h3>
+      <p><strong>Tracking Number:</strong> ${shipment.tracking_number}</p>
+      <p><strong>Sender:</strong> ${shipment.sender}</p>
+      <p><strong>Receiver:</strong> ${shipment.receiver}</p>
+      <p><strong>Status:</strong> ${shipment.status}</p>
+      <p><strong>Origin:</strong> ${shipment.origin}</p>
+      <p><strong>Destination:</strong> ${shipment.destination}</p>
+      <p><strong>Expected Delivery:</strong> ${shipment.expected_delivery}</p>
+      <p><strong>Note:</strong> ${shipment.extended_description}</p>
+    `;
+  } catch (err) {
+    console.error(err);
+    document.getElementById('result').innerHTML = "<p>Error fetching shipment data. Try again later.</p>";
+  }
+}
+</script>
+
+</body>
+</html>
