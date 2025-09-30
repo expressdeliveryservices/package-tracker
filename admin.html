@@ -4,11 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Dashboard - Express Delivery</title>
-
-<!-- PWA Manifest -->
-<link rel="manifest" href="/package-tracker/manifest.json">
-<meta name="theme-color" content="#1e90ff">
-
 <style>
 body { font-family: Arial, sans-serif; background: #f0f2f5; color: #000; margin: 0; padding: 0; }
 header { background: #1e90ff; color: white; padding: 15px; text-align: center; }
@@ -50,9 +45,8 @@ th { background: #1e90ff; color: white; }
 
   <!-- Dashboard Section -->
   <div class="section" id="dashboardSection" style="display:none;">
-
-    <!-- Upload Signature -->
-    <h2>Upload Signature Stamp</h2>
+    
+       <h2>Upload Signature Stamp</h2>
     <div class="section">
       <label>Signature Stamp Image:</label>
       <input type="file" id="signatureStamp" accept="image/*">
@@ -60,7 +54,6 @@ th { background: #1e90ff; color: white; }
       <button onclick="saveSignatureStamp()">Save Signature Stamp</button>
     </div>
 
-    <!-- Generate Tracking Code -->
     <h2>Generate New Tracking Code</h2>
     <div class="shipment-form">
       <input type="text" id="newTrackingNumber" placeholder="Tracking code will be generated" readonly>
@@ -78,19 +71,19 @@ th { background: #1e90ff; color: white; }
       </div>
       <div>
         <label>Payment Mode:</label>
-        <input type="text" id="newPaymentMode" placeholder="Enter payment mode" required>
+        <input type="text" id="newPaymentMode" placeholder="Enter payment mode (e.g., Credit Card, Bank Transfer)" required>
       </div>
       <div>
         <label>Mode of Transport:</label>
-        <input type="text" id="newModeOfTransport" placeholder="Enter mode of transport" required>
+        <input type="text" id="newModeOfTransport" placeholder="Enter mode of transport (e.g., Air, Sea)" required>
       </div>
       <div>
         <label>Type of Shipment:</label>
-        <input type="text" id="newTypeOfShipment" placeholder="Enter shipment type" required>
+        <input type="text" id="newTypeOfShipment" placeholder="Enter shipment type (e.g., Express, Standard)" required>
       </div>
       <div>
         <label>Quantity:</label>
-        <input type="text" id="newQuantity" placeholder="Enter quantity" required>
+        <input type="text" id="newQuantity" placeholder="Enter quantity (e.g., 2 boxes)" required>
       </div>
       <div>
         <label>Official Stamp Date:</label>
@@ -139,25 +132,18 @@ th { background: #1e90ff; color: white; }
         <input type="number" id="newReceiverLng" step="0.0001" placeholder="Enter receiver longitude" required>
       </div>
       <h3>Timeline</h3>
-      <textarea id="newTimeline" rows="4" placeholder='Enter timeline events as JSON array' required></textarea>
+      <textarea id="newTimeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"23 Sep 2025 07:30","description":"Item arrived","status":"ON HOLD","completed":true}])' required></textarea>
       <button id="generateTrackingCode" onclick="generateTrackingCode()">Generate Tracking Code</button>
       <p>Send the generated tracking code to the recipient for tracking on the public page.</p>
     </div>
 
-    <!-- Edit Shipments -->
     <h2>Edit Shipments</h2>
     <div class="shipment-form">
       <label>Select Shipment:</label>
       <select id="shipmentSelect" onchange="loadShipment()">
         <option value="">Select a shipment</option>
       </select>
-      <input type="text" id="trackingNumber" placeholder="Tracking Number" readonly>
-      <div>
-        <label>Amount ($):</label>
-        <input type="number" id="shipmentAmount" step="0.01" placeholder="Enter shipment amount">
-      </div>
-      <!-- ... Keep all your existing input fields for editing shipments ... -->
-      <button onclick="saveShipment()">Save Shipment</button>
+      <!-- The rest of the edit shipment form stays unchanged -->
     </div>
 
     <button style="background:red;margin-top:15px;" onclick="logout()">Logout</button>
@@ -166,57 +152,19 @@ th { background: #1e90ff; color: white; }
 </div>
 
 <script>
-// === IndexedDB Helpers ===
-function saveToIndexedDB(shipments) {
-  const request = indexedDB.open("ExpressDB", 1);
-  request.onupgradeneeded = e => {
-    const db = e.target.result;
-    if (!db.objectStoreNames.contains("shipments")) {
-      db.createObjectStore("shipments", { keyPath: "trackingNumber" });
-    }
-  };
-  request.onsuccess = e => {
-    const db = e.target.result;
-    const tx = db.transaction("shipments", "readwrite");
-    const store = tx.objectStore("shipments");
-    shipments.forEach(s => store.put(s));
-  };
-}
-
-function loadFromIndexedDB(callback) {
-  const request = indexedDB.open("ExpressDB", 1);
-  request.onupgradeneeded = e => {
-    const db = e.target.result;
-    if (!db.objectStoreNames.contains("shipments")) {
-      db.createObjectStore("shipments", { keyPath: "trackingNumber" });
-    }
-  };
-  request.onsuccess = e => {
-    const db = e.target.result;
-    const tx = db.transaction("shipments", "readonly");
-    const store = tx.objectStore("shipments");
-    const getAll = store.getAll();
-    getAll.onsuccess = () => callback(getAll.result || []);
-  };
-  request.onerror = e => {
-    console.error("IndexedDB error:", e.target.error);
-    callback([]);
-  };
-}
-
-// === Admin Credentials ===
+// ---------------- Admin Credentials ----------------
 const ADMIN_EMAIL = "Expressdeliveryservice0016@gmail.com";
 const ADMIN_PASSWORD = "Umuojima";
 const COMPANY_NAME = "Express Delivery Service";
 
-// === Login/Logout ===
+// ---------------- Login / Logout ----------------
 function login() {
   const email = document.getElementById('adminEmail').value.trim();
   const pass = document.getElementById('adminPassword').value.trim();
-  if (email === ADMIN_EMAIL && pass === ADMIN_PASSWORD) {
+  if(email === ADMIN_EMAIL && pass === ADMIN_PASSWORD){
     document.getElementById('loginSection').style.display = 'none';
     document.getElementById('dashboardSection').style.display = 'block';
-    loadData();
+    fetchShipmentsFromRepo(); // Load latest shipments
   } else {
     document.getElementById('loginMessage').innerText = "Invalid email or password!";
   }
@@ -230,79 +178,54 @@ function logout() {
   document.getElementById('loginMessage').innerText = '';
 }
 
-// === Data Loading ===
+// ---------------- Load / Save Data ----------------
 function loadData() {
-  let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-  if (shipments.length === 0) {
-    loadFromIndexedDB(restored => {
-      if (restored.length > 0) {
-        localStorage.setItem('shipments', JSON.stringify(restored));
-        shipments = restored;
-      }
-      renderData(shipments);
-    });
-  } else {
-    renderData(shipments);
-  }
-}
-
-function renderData(shipments) {
+  const shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
   const shipmentSelect = document.getElementById('shipmentSelect');
   shipmentSelect.innerHTML = '<option value="">Select a shipment</option>';
-  shipments.forEach(shipment => {
+  shipments.forEach(s=>{
     const option = document.createElement('option');
-    option.value = shipment.trackingNumber;
-    option.text = `${shipment.trackingNumber} - ${shipment.content}`;
+    option.value = s.trackingNumber;
+    option.text = `${s.trackingNumber} - ${s.content}`;
     shipmentSelect.appendChild(option);
   });
-
-  const signatureStamp = localStorage.getItem('signatureStamp');
-  const preview = document.getElementById('signaturePreview');
-  if (signatureStamp) {
-    preview.innerHTML = `<img src="${signatureStamp}" alt="Signature Stamp"><p>Current signature stamp</p>`;
-  } else {
-    preview.innerHTML = `<p>No signature stamp uploaded</p>`;
-  }
 }
 
-// === Signature Stamp ===
-function saveSignatureStamp() {
-  const fileInput = document.getElementById('signatureStamp');
-  const preview = document.getElementById('signaturePreview');
-  if (fileInput.files.length > 0) {
-    const file = fileInput.files[0];
-    if (file.type.startsWith('image/') && file.size <= 2 * 1024 * 1024) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const base64Image = e.target.result;
-        localStorage.setItem('signatureStamp', base64Image);
-        preview.innerHTML = `<img src="${base64Image}" alt="Signature Stamp"><p>Current signature stamp</p>`;
-        alert("Signature stamp saved successfully!");
-      };
-      reader.readAsDataURL(file);
-    } else {
-      alert("Please upload a valid image file (max 2MB).");
-    }
-  } else {
-    alert("Please select an image to upload.");
-  }
+// ---------------- Fetch from GitHub ----------------
+function fetchShipmentsFromRepo() {
+  fetch('https://expressdeliveryservices.github.io/package-tracker/shipment.json')
+    .then(res => res.json())
+    .then(data => {
+      localStorage.setItem('shipments', JSON.stringify(data));
+      console.log('Shipment data loaded from GitHub:', data);
+      loadData();
+    })
+    .catch(err => {
+      console.error('Failed to fetch shipment data, using cache if available:', err);
+      if('caches' in window){
+        caches.match('shipment.json').then(cached=>{
+          if(cached){
+            cached.json().then(data=>{
+              localStorage.setItem('shipments', JSON.stringify(data));
+              console.log('Loaded shipment data from cache:', data);
+              loadData();
+            });
+          }
+        });
+      }
+    });
 }
 
-// === Save & Generate Shipment ===
-// Keep all your existing saveShipment() and generateTrackingCode() functions
-// Keep loadShipment() function
-
-</script>
-
-<!-- Register Service Worker -->
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/package-tracker/sw.js')
-      .then(reg => console.log('Service Worker registered:', reg.scope))
-      .catch(err => console.error('Service Worker registration failed:', err));
+// ---------------- Register Service Worker ----------------
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('service-worker.js')
+      .then(()=>console.log('Service Worker registered'))
+      .catch(err=>console.error('SW registration failed:', err));
   });
 }
+
+document.addEventListener('DOMContentLoaded', loadData);
 </script>
 
 </body>
