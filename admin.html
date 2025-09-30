@@ -219,7 +219,7 @@ th { background: #1e90ff; color: white; }
         <input type="number" id="receiverLng" step="0.0001" placeholder="Enter receiver longitude">
       </div>
       <h3>Timeline</h3>
-      <textarea id="timeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"23 Sep 2025 07:30","description":"Item arrived","status":"ON HOLD","completed":true}])'></textarea>
+      <textarea id="timeline" rows="4" placeholder='Enter timeline events as JSON array'></textarea>
       <button onclick="saveShipment()">Save Shipment</button>
     </div>
 
@@ -229,12 +229,50 @@ th { background: #1e90ff; color: white; }
 </div>
 
 <script>
-// Admin Credentials
+// === IndexedDB Helpers ===
+function saveToIndexedDB(shipments) {
+  const request = indexedDB.open("ExpressDB", 1);
+  request.onupgradeneeded = e => {
+    const db = e.target.result;
+    if (!db.objectStoreNames.contains("shipments")) {
+      db.createObjectStore("shipments", { keyPath: "trackingNumber" });
+    }
+  };
+  request.onsuccess = e => {
+    const db = e.target.result;
+    const tx = db.transaction("shipments", "readwrite");
+    const store = tx.objectStore("shipments");
+    shipments.forEach(s => store.put(s));
+  };
+}
+
+function loadFromIndexedDB(callback) {
+  const request = indexedDB.open("ExpressDB", 1);
+  request.onupgradeneeded = e => {
+    const db = e.target.result;
+    if (!db.objectStoreNames.contains("shipments")) {
+      db.createObjectStore("shipments", { keyPath: "trackingNumber" });
+    }
+  };
+  request.onsuccess = e => {
+    const db = e.target.result;
+    const tx = db.transaction("shipments", "readonly");
+    const store = tx.objectStore("shipments");
+    const getAll = store.getAll();
+    getAll.onsuccess = () => callback(getAll.result || []);
+  };
+  request.onerror = e => {
+    console.error("IndexedDB error:", e.target.error);
+    callback([]);
+  };
+}
+
+// === Admin Credentials ===
 const ADMIN_EMAIL = "Expressdeliveryservice0016@gmail.com";
 const ADMIN_PASSWORD = "Umuojima";
 const COMPANY_NAME = "Express Delivery Service";
 
-// Login Function
+// === Login ===
 function login() {
   const email = document.getElementById('adminEmail').value.trim();
   const pass = document.getElementById('adminPassword').value.trim();
@@ -246,8 +284,6 @@ function login() {
     document.getElementById('loginMessage').innerText = "Invalid email or password!";
   }
 }
-
-// Logout Function
 function logout() {
   document.getElementById('loginSection').style.display = 'block';
   document.getElementById('dashboardSection').style.display = 'none';
@@ -256,15 +292,22 @@ function logout() {
   document.getElementById('loginMessage').innerText = '';
 }
 
-// Load existing data from localStorage
+// === Data Loading ===
 function loadData() {
-  const newsletter = localStorage.getItem('newsletterEmails') || '';
-  const reviews = localStorage.getItem('customerReviews') || '';
-  const shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-  document.getElementById('newsletterList').value = newsletter.split(',').join('\n');
-  document.getElementById('reviewsList').value = reviews.split('|').join('\n');
-
-  // Populate shipment dropdown
+  let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+  if (shipments.length === 0) {
+    loadFromIndexedDB(restored => {
+      if (restored.length > 0) {
+        localStorage.setItem('shipments', JSON.stringify(restored));
+        shipments = restored;
+      }
+      renderData(shipments);
+    });
+  } else {
+    renderData(shipments);
+  }
+}
+function renderData(shipments) {
   const shipmentSelect = document.getElementById('shipmentSelect');
   shipmentSelect.innerHTML = '<option value="">Select a shipment</option>';
   shipments.forEach(shipment => {
@@ -273,8 +316,6 @@ function loadData() {
     option.text = `${shipment.trackingNumber} - ${shipment.content}`;
     shipmentSelect.appendChild(option);
   });
-
-  // Load signature stamp preview
   const signatureStamp = localStorage.getItem('signatureStamp');
   const preview = document.getElementById('signaturePreview');
   if (signatureStamp) {
@@ -284,67 +325,13 @@ function loadData() {
   }
 }
 
-// Load selected shipment data
-function loadShipment() {
-  const trackingNumber = document.getElementById('shipmentSelect').value;
-  if (!trackingNumber) {
-    // Clear form with placeholders
-    document.getElementById('trackingNumber').value = '';
-    document.getElementById('shipmentAmount').value = '';
-    document.getElementById('orderId').value = '';
-    document.getElementById('estDeliveryDate').value = '';
-    document.getElementById('modeOfTransport').value = '';
-    document.getElementById('typeOfShipment').value = '';
-    document.getElementById('quantity').value = '';
-    document.getElementById('officialStampDate').value = '';
-    document.getElementById('paymentMode').value = '';
-    document.getElementById('shipmentContent').value = '';
-    document.getElementById('shipmentOrigin').value = '';
-    document.getElementById('shipmentDestination').value = '';
-    document.getElementById('senderName').value = '';
-    document.getElementById('senderAddress').value = '';
-    document.getElementById('receiverName').value = '';
-    document.getElementById('receiverAddress').value = '';
-    document.getElementById('receiverMobile').value = '';
-    document.getElementById('receiverLat').value = '';
-    document.getElementById('receiverLng').value = '';
-    document.getElementById('timeline').value = '';
-    return;
-  }
-
-  const shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-  const shipment = shipments.find(s => s.trackingNumber === trackingNumber);
-  if (shipment) {
-    document.getElementById('trackingNumber').value = shipment.trackingNumber;
-    document.getElementById('shipmentAmount').value = shipment.receipt.amount;
-    document.getElementById('orderId').value = shipment.orderId;
-    document.getElementById('estDeliveryDate').value = shipment.estDeliveryDate;
-    document.getElementById('modeOfTransport').value = shipment.modeOfTransport;
-    document.getElementById('typeOfShipment').value = shipment.typeOfShipment;
-    document.getElementById('quantity').value = shipment.quantity;
-    document.getElementById('officialStampDate').value = shipment.officialStampDate;
-    document.getElementById('paymentMode').value = shipment.paymentMode;
-    document.getElementById('shipmentContent').value = shipment.content;
-    document.getElementById('shipmentOrigin').value = shipment.origin;
-    document.getElementById('shipmentDestination').value = shipment.destination;
-    document.getElementById('senderName').value = shipment.sender.name;
-    document.getElementById('senderAddress').value = shipment.sender.address;
-    document.getElementById('receiverName').value = shipment.receiver.name;
-    document.getElementById('receiverAddress').value = shipment.receiver.address;
-    document.getElementById('receiverMobile').value = shipment.receiver.mobile;
-    document.getElementById('receiverLat').value = shipment.receiver.lat;
-    document.getElementById('receiverLng').value = shipment.receiver.lng;
-    document.getElementById('timeline').value = JSON.stringify(shipment.timeline, null, 2);
-  }
-}
-
-// Save Signature Stamp
+// === Signature Stamp ===
 function saveSignatureStamp() {
   const fileInput = document.getElementById('signatureStamp');
   const preview = document.getElementById('signaturePreview');
   if (fileInput.files.length > 0) {
     const file = fileInput.files[0];
-    if (file.type.startsWith('image/') && file.size <= 2 * 1024 * 1024) { // Limit to 2MB
+    if (file.type.startsWith('image/') && file.size <= 2 * 1024 * 1024) {
       const reader = new FileReader();
       reader.onload = function(e) {
         const base64Image = e.target.result;
@@ -361,27 +348,13 @@ function saveSignatureStamp() {
   }
 }
 
-// Save Functions
-function saveNewsletter() {
-  const emails = document.getElementById('newsletterList').value.split('\n').map(e => e.trim()).filter(Boolean);
-  localStorage.setItem('newsletterEmails', emails.join(','));
-  alert("Newsletter emails saved!");
-}
-
-function saveReviews() {
-  const reviews = document.getElementById('reviewsList').value.split('\n').map(e => e.trim()).filter(Boolean);
-  localStorage.setItem('customerReviews', reviews.join('|'));
-  alert("Customer reviews saved!");
-}
-
+// === Save Shipment ===
 function saveShipment() {
   try {
     const trackingNumber = document.getElementById('trackingNumber').value.trim();
-    if (!trackingNumber) {
-      throw new Error("Please select a shipment to edit.");
-    }
+    if (!trackingNumber) throw new Error("Please select a shipment to edit.");
     const shipment = {
-      trackingNumber: trackingNumber,
+      trackingNumber,
       content: document.getElementById('shipmentContent').value.trim(),
       origin: document.getElementById('shipmentOrigin').value.trim(),
       destination: document.getElementById('shipmentDestination').value.trim(),
@@ -393,10 +366,7 @@ function saveShipment() {
       paymentMode: document.getElementById('paymentMode').value.trim(),
       officialStampDate: document.getElementById('officialStampDate').value.trim(),
       officialStamp: localStorage.getItem('signatureStamp') || '',
-      sender: {
-        name: document.getElementById('senderName').value.trim(),
-        address: document.getElementById('senderAddress').value.trim()
-      },
+      sender: { name: document.getElementById('senderName').value.trim(), address: document.getElementById('senderAddress').value.trim() },
       receiver: {
         name: document.getElementById('receiverName').value.trim(),
         address: document.getElementById('receiverAddress').value.trim(),
@@ -405,46 +375,27 @@ function saveShipment() {
         lng: parseFloat(document.getElementById('receiverLng').value)
       },
       timeline: JSON.parse(document.getElementById('timeline').value.trim() || '[]'),
-      receipt: {
-        companyName: COMPANY_NAME,
-        amount: parseFloat(document.getElementById('shipmentAmount').value)
-      }
+      receipt: { companyName: COMPANY_NAME, amount: parseFloat(document.getElementById('shipmentAmount').value) }
     };
-
-    // Validate required fields
-    if (!shipment.content || !shipment.origin || !shipment.destination || !shipment.sender.name ||
-        !shipment.sender.address || !shipment.receiver.name || !shipment.receiver.address ||
-        !shipment.receiver.mobile || isNaN(shipment.receiver.lat) || isNaN(shipment.receiver.lng) ||
-        !shipment.orderId || !shipment.estDeliveryDate || !shipment.modeOfTransport ||
-        !shipment.typeOfShipment || !shipment.quantity || !shipment.officialStampDate ||
-        !shipment.paymentMode || isNaN(shipment.receipt.amount)) {
-      throw new Error("All fields are required and must be valid.");
-    }
-
     let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
     const index = shipments.findIndex(s => s.trackingNumber === shipment.trackingNumber);
-    if (index !== -1) {
-      shipments[index] = shipment;
-    } else {
-      shipments.push(shipment);
-    }
+    if (index !== -1) shipments[index] = shipment; else shipments.push(shipment);
     localStorage.setItem('shipments', JSON.stringify(shipments));
-    alert("Shipment saved successfully! Changes will reflect on the public page receipt.");
-    loadData(); // Refresh dropdown
-  } catch (e) {
-    alert(`Error: ${e.message}`);
-  }
+    saveToIndexedDB(shipments);
+    alert("Shipment saved successfully!");
+    loadData();
+  } catch (e) { alert(`Error: ${e.message}`); }
 }
 
-// Generate New Tracking Code
+// === Generate New Tracking Code ===
 function generateTrackingCode() {
   try {
     const letters = String.fromCharCode(...Array(3).fill().map(() => 65 + Math.floor(Math.random() * 26)));
-    const numbers = Math.floor(100000000 + Math.random() * 900000000).toString();
-    const newTracking = `${letters}-${numbers}`;
-
+    const digits = String(Math.floor(Math.random() * 1e10)).padStart(10, '0');
+    const trackingNumber = letters + digits;
+    document.getElementById('newTrackingNumber').value = trackingNumber;
     const shipment = {
-      trackingNumber: newTracking,
+      trackingNumber,
       content: document.getElementById('newShipmentContent').value.trim(),
       origin: document.getElementById('newShipmentOrigin').value.trim(),
       destination: document.getElementById('newShipmentDestination').value.trim(),
@@ -456,10 +407,7 @@ function generateTrackingCode() {
       paymentMode: document.getElementById('newPaymentMode').value.trim(),
       officialStampDate: document.getElementById('newOfficialStampDate').value.trim(),
       officialStamp: localStorage.getItem('signatureStamp') || '',
-      sender: {
-        name: document.getElementById('newSenderName').value.trim(),
-        address: document.getElementById('newSenderAddress').value.trim()
-      },
+      sender: { name: document.getElementById('newSenderName').value.trim(), address: document.getElementById('newSenderAddress').value.trim() },
       receiver: {
         name: document.getElementById('newReceiverName').value.trim(),
         address: document.getElementById('newReceiverAddress').value.trim(),
@@ -468,60 +416,56 @@ function generateTrackingCode() {
         lng: parseFloat(document.getElementById('newReceiverLng').value)
       },
       timeline: JSON.parse(document.getElementById('newTimeline').value.trim() || '[]'),
-      receipt: {
-        companyName: COMPANY_NAME,
-        amount: parseFloat(document.getElementById('newShipmentAmount').value)
-      }
+      receipt: { companyName: COMPANY_NAME, amount: parseFloat(document.getElementById('newShipmentAmount').value) }
     };
-
-    // Validate required fields
-    if (!shipment.content || !shipment.origin || !shipment.destination || !shipment.sender.name ||
-        !shipment.sender.address || !shipment.receiver.name || !shipment.receiver.address ||
-        !shipment.receiver.mobile || isNaN(shipment.receiver.lat) || isNaN(shipment.receiver.lng) ||
-        !shipment.orderId || !shipment.estDeliveryDate || !shipment.modeOfTransport ||
-        !shipment.typeOfShipment || !shipment.quantity || !shipment.officialStampDate ||
-        !shipment.paymentMode || isNaN(shipment.receipt.amount)) {
-      throw new Error("All fields are required and must be valid.");
-    }
-
     let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-    if (shipments.some(s => s.trackingNumber === newTracking)) {
-      throw new Error("Tracking code already exists. Please try again.");
-    }
     shipments.push(shipment);
     localStorage.setItem('shipments', JSON.stringify(shipments));
-
-    // Load new shipment into edit form
-    document.getElementById('trackingNumber').value = newTracking;
-    document.getElementById('shipmentAmount').value = shipment.receipt.amount;
-    document.getElementById('orderId').value = shipment.orderId;
-    document.getElementById('estDeliveryDate').value = shipment.estDeliveryDate;
-    document.getElementById('modeOfTransport').value = shipment.modeOfTransport;
-    document.getElementById('typeOfShipment').value = shipment.typeOfShipment;
-    document.getElementById('quantity').value = shipment.quantity;
-    document.getElementById('officialStampDate').value = shipment.officialStampDate;
-    document.getElementById('paymentMode').value = shipment.paymentMode;
-    document.getElementById('shipmentContent').value = shipment.content;
-    document.getElementById('shipmentOrigin').value = shipment.origin;
-    document.getElementById('shipmentDestination').value = shipment.destination;
-    document.getElementById('senderName').value = shipment.sender.name;
-    document.getElementById('senderAddress').value = shipment.sender.address;
-    document.getElementById('receiverName').value = shipment.receiver.name;
-    document.getElementById('receiverAddress').value = shipment.receiver.address;
-    document.getElementById('receiverMobile').value = shipment.receiver.mobile;
-    document.getElementById('receiverLat').value = shipment.receiver.lat;
-    document.getElementById('receiverLng').value = shipment.receiver.lng;
-    document.getElementById('timeline').value = JSON.stringify(shipment.timeline, null, 2);
-
-    document.getElementById('newTrackingNumber').value = newTracking;
-    alert(`New tracking code generated: ${newTracking}. Details saved and loaded for editing. Changes will reflect on the public page receipt.`);
-    loadData(); // Refresh dropdown
-  } catch (e) {
-    alert(`Error: ${e.message}`);
-  }
+    saveToIndexedDB(shipments);
+    alert(`Tracking code generated: ${trackingNumber}`);
+    loadData();
+  } catch (e) { alert(`Error: ${e.message}`); }
 }
 
-document.addEventListener('DOMContentLoaded', loadData);
+// === Load Shipment into Form ===
+function loadShipment() {
+  const trackingNumber = document.getElementById('shipmentSelect').value;
+  if (!trackingNumber) return;
+  const shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+  const shipment = shipments.find(s => s.trackingNumber === trackingNumber);
+  if (!shipment) return;
+  document.getElementById('trackingNumber').value = shipment.trackingNumber;
+  document.getElementById('shipmentContent').value = shipment.content;
+  document.getElementById('shipmentOrigin').value = shipment.origin;
+  document.getElementById('shipmentDestination').value = shipment.destination;
+  document.getElementById('orderId').value = shipment.orderId;
+  document.getElementById('estDeliveryDate').value = shipment.estDeliveryDate;
+  document.getElementById('modeOfTransport').value = shipment.modeOfTransport;
+  document.getElementById('typeOfShipment').value = shipment.typeOfShipment;
+  document.getElementById('quantity').value = shipment.quantity;
+  document.getElementById('paymentMode').value = shipment.paymentMode;
+  document.getElementById('officialStampDate').value = shipment.officialStampDate;
+  document.getElementById('senderName').value = shipment.sender.name;
+  document.getElementById('senderAddress').value = shipment.sender.address;
+  document.getElementById('receiverName').value = shipment.receiver.name;
+  document.getElementById('receiverAddress').value = shipment.receiver.address;
+  document.getElementById('receiverMobile').value = shipment.receiver.mobile;
+  document.getElementById('receiverLat').value = shipment.receiver.lat;
+  document.getElementById('receiverLng').value = shipment.receiver.lng;
+  document.getElementById('timeline').value = JSON.stringify(shipment.timeline, null, 2);
+  document.getElementById('shipmentAmount').value = shipment.receipt.amount;
+}
+</script>
+
+<!-- Register Service Worker -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then(reg => console.log('Service Worker registered:', reg.scope))
+      .catch(err => console.error('Service Worker registration failed:', err));
+  });
+}
 </script>
 
 </body>
