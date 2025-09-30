@@ -353,14 +353,22 @@
 // Shipment Data
 let shipments = [];
 
-// Load shipments from localStorage
+// Load shipments from localStorage with enhanced compatibility
 function loadShipments() {
   try {
-    shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-    console.log('Shipments loaded from localStorage:', shipments);
+    // Check if localStorage is available
+    if (!window.localStorage) {
+      console.error('localStorage is not supported in this browser.');
+      shipments = [];
+      return;
+    }
+    const storedData = localStorage.getItem('shipments');
+    shipments = storedData ? JSON.parse(storedData) : [];
+    console.log('Shipments loaded from localStorage:', shipments); // Debug log
   } catch (e) {
     console.error('Error loading shipments from localStorage:', e);
-    alert('Unable to load shipment data. Please try again later.');
+    shipments = [];
+    alert('Unable to load shipment data due to an error. Please ensure data is saved in this browser or try again.');
   }
 }
 
@@ -436,7 +444,7 @@ function trackPackage() {
 
   const filtered = shipments.filter(s => s.trackingNumber.toLowerCase() === number.toLowerCase());
   if (filtered.length === 0) {
-    alert('No shipment found with this tracking number.');
+    alert('No shipment found with this tracking number. Please ensure the tracking data is saved in this browser.');
     trackingDiv.style.display = 'none';
     contentDiv.style.display = 'none';
     return;
@@ -529,7 +537,7 @@ function trackPackage() {
           <div class="total">Total: $${amount}</div>
           <div class="footer">
             Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
-            Issued: September 30, 2025, 11:17 AM WAT
+            Issued: September 30, 2025, 11:51 AM WAT
           </div>
         </div>
         <button class="print-btn" onclick="printInvoice('${number}')">Print Invoice</button>`;
@@ -618,7 +626,7 @@ function printInvoice(number) {
       <div class="total">Total: $${amount}</div>
       <div class="footer">
         Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
-        Issued: September 30, 2025, 11:17 AM WAT
+        Issued: September 30, 2025, 11:51 AM WAT
       </div>
     </div>
     </body>
@@ -660,5 +668,3 @@ document.addEventListener('DOMContentLoaded', () => {
   rotateTestimonials();
 });
 </script>
-</body>
-</html>
