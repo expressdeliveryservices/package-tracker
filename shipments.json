@@ -1,0 +1,22 @@
+[
+  {
+    "tracking_number": "Fetch data details from admin.html generated tracking number",
+    "sender": "Fetch data details from admin.html generated tracking number",
+    "receiver": "Fetch data details from admin.html generated tracking number",
+    "status": "In Transit",
+    "origin": "Fetch data details from admin.html generated tracking number",
+    "destination": "Fetch data details from admin.html generated tracking number",
+    "expected_delivery": "Fetch data details from admin.html generated tracking number",
+    "extended_description": "Fragile items. Handle with care."
+  },
+  {
+    "tracking_number": "Fetch data details from admin.html generated tracking number",
+    "sender": "Fetch data details from admin.html generated tracking number",
+    "receiver": "Fetch data details from admin.html generated tracking number",
+    "status": "Delivered",
+    "origin": "Fetch data details from admin.html generated tracking number",
+    "destination": "Fetch data details from admin.html generated tracking number",
+    "expected_delivery": "Fetch data details from admin.html generated tracking number",
+    "extended_description": "Delivered successfully at front door."
+  }
+]
