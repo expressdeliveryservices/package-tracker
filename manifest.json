@@ -1,7 +1,8 @@
 {
   "name": "Express Delivery Admin",
   "short_name": "ExpressAdmin",
-  "start_url": "admin.html",
+  "start_url": "/package-tracker/admin.html",
+  "scope": "/package-tracker/",
   "display": "standalone",
   "background_color": "#f0f2f5",
   "theme_color": "#1e90ff",
