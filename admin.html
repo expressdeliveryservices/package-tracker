@@ -1,9 +1,3 @@
-Admin dashboard 
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,7 +22,6 @@ th{background:#1e90ff;color:white;}
 #generateTrackingCode{background:#4CAF50;color:white;}
 #signaturePreview img{max-width:100px;height:auto;margin-top:10px;border:1px solid #ddd;border-radius:3px;}
 #signaturePreview p{font-size:12px;color:#555;}
-#signedByGeoTrust, #newSignedByGeoTrust{color:red;}
 </style>
 </head>
 <body>
@@ -86,7 +79,13 @@ th{background:#1e90ff;color:white;}
       </div>
       <div>
         <label>Payment Mode:</label>
-        <input type="text" id="newPaymentMode" value="Online Payment" readonly>
+        <select id="newPaymentMode" required>
+          <option value="Online Payment">Online Payment</option>
+          <option value="Cash on Delivery">Cash on Delivery</option>
+          <option value="Bank Transfer">Bank Transfer</option>
+          <option value="Credit Card">Credit Card</option>
+          <option value="PayPal">PayPal</option>
+        </select>
       </div>
       <div>
         <label>Mode of Transport:</label>
@@ -104,14 +103,7 @@ th{background:#1e90ff;color:white;}
         <label>Official Stamp Date:</label>
         <input type="date" id="newOfficialStampDate" placeholder="Official Stamp Date" required>
       </div>
-      <div>
-        <label>Payment Method:</label>
-        <input type="text" id="newPaymentMethod" value="Visa and PayPal" readonly>
-      </div>
-      <div>
-        <label>Signed by:</label>
-        <input type="text" id="newSignedByGeoTrust" value="GeoTrust" readonly style="color:red;">
-      </div>
+      <!-- Removed Payment Method + Signed By -->
       <div>
         <label>Content:</label>
         <input type="text" id="newShipmentContent" placeholder="Shipment Content" required>
@@ -157,7 +149,6 @@ th{background:#1e90ff;color:white;}
       <h3>Timeline</h3>
       <textarea id="newTimeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"22 Sep 2025 12:33","description":"✅ Item shipped","status":"IN TRANSIT","completed":true}])' required></textarea>
       <button id="generateTrackingCode" onclick="generateTrackingCode()">Generate Tracking Code</button>
-      <p>Send the generated tracking code to the recipient. They can use it on the public page to view details anytime.</p>
     </div>
 
     <h2>Edit Shipments</h2>
@@ -177,7 +168,13 @@ th{background:#1e90ff;color:white;}
       </div>
       <div>
         <label>Payment Mode:</label>
-        <input type="text" id="paymentMode" value="Online Payment" readonly>
+        <select id="paymentMode">
+          <option value="Online Payment">Online Payment</option>
+          <option value="Cash on Delivery">Cash on Delivery</option>
+          <option value="Bank Transfer">Bank Transfer</option>
+          <option value="Credit Card">Credit Card</option>
+          <option value="PayPal">PayPal</option>
+        </select>
       </div>
       <div>
         <label>Mode of Transport:</label>
@@ -195,14 +192,7 @@ th{background:#1e90ff;color:white;}
         <label>Official Stamp Date:</label>
         <input type="date" id="officialStampDate" placeholder="Official Stamp Date">
       </div>
-      <div>
-        <label>Payment Method:</label>
-        <input type="text" id="paymentMethod" value="Visa and PayPal" readonly>
-      </div>
-      <div>
-        <label>Signed by:</label>
-        <input type="text" id="signedByGeoTrust" value="GeoTrust" readonly style="color:red;">
-      </div>
+      <!-- Removed Payment Method + Signed By -->
       <div>
         <label>Content:</label>
         <input type="text" id="shipmentContent" value="Package" placeholder="Shipment Content">
@@ -246,7 +236,7 @@ th{background:#1e90ff;color:white;}
         <input type="number" id="receiverLng" step="0.0001" value="30.3232" placeholder="Receiver Longitude">
       </div>
       <h3>Timeline</h3>
-      <textarea id="timeline" rows="4" placeholder="Enter timeline events as JSON array (e.g., [{&quot;time&quot;:&quot;22 Sep 2025 12:33&quot;,&quot;description&quot;:&quot;✅ Item arrived&quot;,&quot;status&quot;: &quot;ON HOLD&quot;,&quot;completed&quot;:true}])">[
+      <textarea id="timeline" rows="4">[
   {"time":"23 Sep 2025 07:30","description":"✅ Item has arrived at Vnukovo International Airport, Russia","status":"ON HOLD","completed":true},
   {"time":"22 Sep 2025 14:00","description":"☑️ Your item is on its way to Russia, London UK","status":"IN TRANSIT","completed":true}
 ]</textarea>
@@ -298,6 +288,7 @@ function loadData(){
     document.getElementById('shipmentAmount').value = shipment.receipt?.amount || '0.00';
     document.getElementById('orderId').value = shipment.receipt?.orderId || '';
     document.getElementById('estDeliveryDate').value = shipment.receipt?.estDeliveryDate || '';
+    document.getElementById('paymentMode').value = shipment.receipt?.paymentMode || 'Online Payment';
     document.getElementById('modeOfTransport').value = shipment.receipt?.modeOfTransport || '';
     document.getElementById('typeOfShipment').value = shipment.receipt?.typeOfShipment || '';
     document.getElementById('quantity').value = shipment.receipt?.quantity || '';
@@ -347,19 +338,21 @@ function saveSignatureStamp(){
   }
 }
 
-// Save Functions
+// Save Newsletter
 function saveNewsletter(){
   const emails = document.getElementById('newsletterList').value.split('\n').map(e => e.trim()).filter(Boolean);
   localStorage.setItem('newsletterEmails', emails.join(','));
   alert("Newsletter emails saved!");
 }
 
+// Save Reviews
 function saveReviews(){
   const reviews = document.getElementById('reviewsList').value.split('\n').map(e => e.trim()).filter(Boolean);
   localStorage.setItem('customerReviews', reviews.join('|'));
   alert("Customer reviews saved!");
 }
 
+// Save Shipment
 function saveShipment(){
   try {
     const shipment = {
@@ -378,44 +371,35 @@ function saveShipment(){
         lat: parseFloat(document.getElementById('receiverLat').value) || 59.9741,
         lng: parseFloat(document.getElementById('receiverLng').value) || 30.3232
       },
-      timeline: JSON.parse(document.getElementById('timeline').value.trim()),
+      timeline: JSON.parse(document.getElementById('timeline').value),
       receipt: {
-        companyName: COMPANY_NAME,
-        amount: parseFloat(document.getElementById('shipmentAmount').value) || 0.00,
+        amount: parseFloat(document.getElementById('shipmentAmount').value) || 0,
         orderId: document.getElementById('orderId').value.trim(),
-        estDeliveryDate: document.getElementById('estDeliveryDate').value.trim(),
-        paymentMode: document.getElementById('paymentMode').value.trim(),
+        estDeliveryDate: document.getElementById('estDeliveryDate').value,
+        paymentMode: document.getElementById('paymentMode').value,
         modeOfTransport: document.getElementById('modeOfTransport').value.trim(),
         typeOfShipment: document.getElementById('typeOfShipment').value.trim(),
         quantity: document.getElementById('quantity').value.trim(),
-        officialStampDate: document.getElementById('officialStampDate').value.trim(),
-        paymentMethod: document.getElementById('paymentMethod').value.trim(),
-        signedBy: document.getElementById('signedByGeoTrust').value.trim()
+        officialStampDate: document.getElementById('officialStampDate').value
       }
     };
     let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-    const index = shipments.findIndex(s => s.trackingNumber === shipment.trackingNumber);
-    if(index !== -1){
-      shipments[index] = shipment;
-    } else {
-      shipments.push(shipment);
-    }
+    const idx = shipments.findIndex(s => s.trackingNumber === shipment.trackingNumber);
+    if(idx !== -1){ shipments[idx] = shipment; }
+    else { shipments.push(shipment); }
     localStorage.setItem('shipments', JSON.stringify(shipments));
-    alert("Shipment saved! The receiver location map on the public page will update with the new address.");
-  } catch (e) {
-    alert("Invalid data! Please check the timeline JSON or fields.");
+    alert("Shipment saved successfully!");
+  } catch (err){
+    alert("Error saving shipment: " + err.message);
   }
 }
 
-// Generate New Tracking Code
+// Generate Tracking Code
 function generateTrackingCode(){
   try {
-    const letters = String.fromCharCode(...Array(3).fill().map(() => 65 + Math.floor(Math.random() * 26)));
-    const numbers = Math.floor(100000000 + Math.random() * 900000000).toString();
-    const newTracking = `${letters}${numbers}`;
-
-    const shipment = {
-      trackingNumber: newTracking,
+    const trackingNumber = "EXP-" + Math.floor(Math.random()*1000000);
+    const newShipment = {
+      trackingNumber,
       content: document.getElementById('newShipmentContent').value.trim(),
       origin: document.getElementById('newShipmentOrigin').value.trim(),
       destination: document.getElementById('newShipmentDestination').value.trim(),
@@ -427,69 +411,30 @@ function generateTrackingCode(){
         name: document.getElementById('newReceiverName').value.trim(),
         address: document.getElementById('newReceiverAddress').value.trim(),
         mobile: document.getElementById('newReceiverMobile').value.trim(),
-        lat: parseFloat(document.getElementById('newReceiverLat').value),
-        lng: parseFloat(document.getElementById('newReceiverLng').value)
+        lat: parseFloat(document.getElementById('newReceiverLat').value) || 0,
+        lng: parseFloat(document.getElementById('newReceiverLng').value) || 0
       },
-      timeline: JSON.parse(document.getElementById('newTimeline').value.trim()),
+      timeline: JSON.parse(document.getElementById('newTimeline').value),
       receipt: {
-        companyName: COMPANY_NAME,
-        amount: parseFloat(document.getElementById('newShipmentAmount').value) || 0.00,
+        amount: parseFloat(document.getElementById('newShipmentAmount').value) || 0,
         orderId: document.getElementById('newOrderId').value.trim(),
-        estDeliveryDate: document.getElementById('newEstDeliveryDate').value.trim(),
-        paymentMode: document.getElementById('newPaymentMode').value.trim(),
+        estDeliveryDate: document.getElementById('newEstDeliveryDate').value,
+        paymentMode: document.getElementById('newPaymentMode').value,
         modeOfTransport: document.getElementById('newModeOfTransport').value.trim(),
         typeOfShipment: document.getElementById('newTypeOfShipment').value.trim(),
         quantity: document.getElementById('newQuantity').value.trim(),
-        officialStampDate: document.getElementById('newOfficialStampDate').value.trim(),
-        paymentMethod: document.getElementById('newPaymentMethod').value.trim(),
-        signedBy: document.getElementById('newSignedByGeoTrust').value.trim()
+        officialStampDate: document.getElementById('newOfficialStampDate').value
       }
     };
-
-    if(!shipment.content || !shipment.origin || !shipment.destination || !shipment.sender.name || !shipment.sender.address ||
-       !shipment.receiver.name || !shipment.receiver.address || !shipment.receiver.mobile || isNaN(shipment.receiver.lat) ||
-       isNaN(shipment.receiver.lng) || !shipment.timeline || shipment.timeline.length === 0 ||
-       isNaN(shipment.receipt.amount) || !shipment.receipt.orderId || !shipment.receipt.estDeliveryDate ||
-       !shipment.receipt.modeOfTransport || !shipment.receipt.typeOfShipment || !shipment.receipt.quantity ||
-       !shipment.receipt.officialStampDate){
-      throw new Error("All editable fields are required and must be valid.");
-    }
-
     let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
-    if(shipments.some(s => s.trackingNumber === newTracking)){
-      throw new Error("Tracking code already exists. Please try again.");
-    }
-    shipments.push(shipment);
+    shipments.push(newShipment);
     localStorage.setItem('shipments', JSON.stringify(shipments));
-
-    document.getElementById('trackingNumber').value = newTracking;
-    document.getElementById('shipmentAmount').value = shipment.receipt.amount;
-    document.getElementById('orderId').value = shipment.receipt.orderId;
-    document.getElementById('estDeliveryDate').value = shipment.receipt.estDeliveryDate;
-    document.getElementById('modeOfTransport').value = shipment.receipt.modeOfTransport;
-    document.getElementById('typeOfShipment').value = shipment.receipt.typeOfShipment;
-    document.getElementById('quantity').value = shipment.receipt.quantity;
-    document.getElementById('officialStampDate').value = shipment.receipt.officialStampDate;
-    document.getElementById('shipmentContent').value = shipment.content;
-    document.getElementById('shipmentOrigin').value = shipment.origin;
-    document.getElementById('shipmentDestination').value = shipment.destination;
-    document.getElementById('senderName').value = shipment.sender.name;
-    document.getElementById('senderAddress').value = shipment.sender.address;
-    document.getElementById('receiverName').value = shipment.receiver.name;
-    document.getElementById('receiverAddress').value = shipment.receiver.address;
-    document.getElementById('receiverMobile').value = shipment.receiver.mobile;
-    document.getElementById('receiverLat').value = shipment.receiver.lat;
-    document.getElementById('receiverLng').value = shipment.receiver.lng;
-    document.getElementById('timeline').value = JSON.stringify(shipment.timeline, null, 2);
-
-    document.getElementById('newTrackingNumber').value = newTracking;
-    alert(`New tracking code generated: ${newTracking}. Details loaded, and others can use it on the public page anytime without expiration.`);
-  } catch (e) {
-    alert(`Error: ${e.message}`);
+    document.getElementById('newTrackingNumber').value = trackingNumber;
+    alert("New tracking code generated: " + trackingNumber);
+  } catch (err){
+    alert("Error generating tracking code: " + err.message);
   }
 }
-
-document.addEventListener('DOMContentLoaded', loadData);
 </script>
 
 </body>
