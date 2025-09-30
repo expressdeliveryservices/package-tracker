@@ -75,7 +75,6 @@
       <!-- LEFT: form -->
       <div class="card">
         <h3 style="margin:0 0 10px 0;color:var(--primary-dark)">Shipment Details</h3>
-
         <form id="shipmentForm" onsubmit="return false;">
           <div class="form-grid">
             <!-- Sender -->
@@ -207,144 +206,150 @@
     let shipments = [];
     let selectedIndex = "";
     let currentStampData = "";
-    const prefixes = ["AWE", "EXP", "TRK", "DEL"];
+    const prefixes = ["AWE","EXP","TRK","DEL"];
 
+    // Load shipments from localStorage first
     async function loadShipments() {
-      try {
-        const resp = await fetch("https://expressdeliveryservices.github.io/shipments.json");
-        shipments = resp.ok ? await resp.json() : [];
-      } catch (e) { shipments = []; }
+      const saved = localStorage.getItem("shipments");
+      if(saved){
+        try { shipments = JSON.parse(saved); } 
+        catch(e){ shipments=[]; console.warn("Invalid localStorage data, starting empty."); }
+      } else {
+        // fallback: load from server
+        try{
+          const resp = await fetch("https://expressdeliveryservices.github.io/shipments.json");
+          shipments = resp.ok ? await resp.json() : [];
+        } catch(e){ shipments=[]; }
+      }
       refreshShipmentSelect();
     }
 
-    function refreshShipmentSelect(selectTracking = "") {
-      const sel = document.getElementById("shipmentSelect");
-      sel.innerHTML = '<option value="">-- Select a shipment --</option>';
-      shipments.forEach((s, i) => {
+    function saveShipments(){ localStorage.setItem("shipments",JSON.stringify(shipments)); }
+
+    function refreshShipmentSelect(selectTracking=""){
+      const sel=document.getElementById("shipmentSelect");
+      sel.innerHTML='<option value="">-- Select a shipment --</option>';
+      shipments.forEach((s,i)=>{
         const receiverInfo = s.receiver?.name ? s.receiver.name : "No Name";
         const mobileInfo = s.receiver?.mobile ? ` (${s.receiver.mobile})` : "";
-        const opt = document.createElement("option");
-        opt.value = i;
-        opt.textContent = `${s.trackingNumber} — ${receiverInfo}${mobileInfo}`;
+        const opt=document.createElement("option");
+        opt.value=i;
+        opt.textContent=`${s.trackingNumber} — ${receiverInfo}${mobileInfo}`;
         sel.appendChild(opt);
       });
-      if (selectTracking) {
-        const idx = shipments.findIndex(s => s.trackingNumber === selectTracking);
-        if (idx !== -1) sel.value = idx;
-        selectedIndex = sel.value;
+      if(selectTracking){
+        const idx=shipments.findIndex(s=>s.trackingNumber===selectTracking);
+        if(idx!==-1) sel.value=idx;
+        selectedIndex=sel.value;
       }
     }
 
-    function loadShipmentForEdit() {
-      selectedIndex = document.getElementById("shipmentSelect").value;
-      if (selectedIndex === "") { clearForm(); return; }
-      const s = shipments[selectedIndex];
-      document.getElementById("newSender").value = s.sender?.name || "";
-      document.getElementById("newSenderAddress").value = s.sender?.address || "";
-      document.getElementById("newReceiver").value = s.receiver?.name || "";
-      document.getElementById("newReceiverMobile").value = s.receiver?.mobile || "";
-      document.getElementById("newAddress").value = s.receiver?.address || "";
-      document.getElementById("newAmount").value = s.receipt?.amount || "";
-      document.getElementById("newOrderId").value = s.receipt?.orderId || "";
-      document.getElementById("newEstDeliveryDate").value = s.receipt?.estDeliveryDate || "";
-      document.getElementById("newPaymentMode").value = s.receipt?.paymentMode || "";
-      document.getElementById("newModeOfTransport").value = s.receipt?.modeOfTransport || "";
-      document.getElementById("newTypeOfShipment").value = s.receipt?.typeOfShipment || "";
-      document.getElementById("newQuantity").value = s.receipt?.quantity || "";
-      document.getElementById("newOfficialStampDate").value = s.receipt?.officialStampDate || "";
-      document.getElementById("newLat").value = s.receiver?.lat || "";
-      document.getElementById("newLng").value = s.receiver?.lng || "";
-      document.getElementById("newContent").value = s.content || "";
-      document.getElementById("newTimeline").value = JSON.stringify(s.timeline || [], null, 2);
+    function loadShipmentForEdit(){
+      selectedIndex=document.getElementById("shipmentSelect").value;
+      if(selectedIndex===""){ clearForm(); return; }
+      const s=shipments[selectedIndex];
+      document.getElementById("newSender").value=s.sender?.name||"";
+      document.getElementById("newSenderAddress").value=s.sender?.address||"";
+      document.getElementById("newReceiver").value=s.receiver?.name||"";
+      document.getElementById("newReceiverMobile").value=s.receiver?.mobile||"";
+      document.getElementById("newAddress").value=s.receiver?.address||"";
+      document.getElementById("newAmount").value=s.receipt?.amount||"";
+      document.getElementById("newOrderId").value=s.receipt?.orderId||"";
+      document.getElementById("newEstDeliveryDate").value=s.receipt?.estDeliveryDate||"";
+      document.getElementById("newPaymentMode").value=s.receipt?.paymentMode||"";
+      document.getElementById("newModeOfTransport").value=s.receipt?.modeOfTransport||"";
+      document.getElementById("newTypeOfShipment").value=s.receipt?.typeOfShipment||"";
+      document.getElementById("newQuantity").value=s.receipt?.quantity||"";
+      document.getElementById("newOfficialStampDate").value=s.receipt?.officialStampDate||"";
+      document.getElementById("newLat").value=s.receiver?.lat||"";
+      document.getElementById("newLng").value=s.receiver?.lng||"";
+      document.getElementById("newContent").value=s.content||"";
+      document.getElementById("newTimeline").value=JSON.stringify(s.timeline||[],null,2);
 
-      currentStampData = s.officialStamp || "";
-      const img = document.getElementById("stampPreview");
-      if (currentStampData) { img.src = currentStampData; img.style.display = "block"; }
-      else { img.src = ""; img.style.display = "none"; }
+      currentStampData=s.officialStamp||"";
+      const img=document.getElementById("stampPreview");
+      if(currentStampData){ img.src=currentStampData; img.style.display="block"; } 
+      else { img.src=""; img.style.display="none"; }
 
-      showOutput(`Loaded shipment: ${s.trackingNumber}\n\n` + JSON.stringify(s, null, 2));
+      showOutput(`Loaded shipment: ${s.trackingNumber}\n\n`+JSON.stringify(s,null,2));
     }
 
-    function buildShipment(trackingNumber) {
-      let timeline = [];
-      const timelineRaw = document.getElementById("newTimeline").value.trim();
-      if (timelineRaw) {
-        try { timeline = JSON.parse(timelineRaw); if (!Array.isArray(timeline)) { alert("Timeline must be a JSON array."); return null; } }
-        catch (e) { alert("Invalid timeline JSON."); return null; }
+    function buildShipment(trackingNumber){
+      let timeline=[];
+      const timelineRaw=document.getElementById("newTimeline").value.trim();
+      if(timelineRaw){
+        try { timeline=JSON.parse(timelineRaw); if(!Array.isArray(timeline)){ alert("Timeline must be a JSON array."); return null; } }
+        catch(e){ alert("Invalid timeline JSON."); return null; }
       }
-
       return {
         trackingNumber,
-        sender: { name: document.getElementById("newSender").value.trim(), address: document.getElementById("newSenderAddress").value.trim() },
-        receiver: { 
-          name: document.getElementById("newReceiver").value.trim(),
-          mobile: document.getElementById("newReceiverMobile").value.trim(),
-          address: document.getElementById("newAddress").value.trim(),
-          lat: document.getElementById("newLat").value.trim(),
-          lng: document.getElementById("newLng").value.trim()
+        sender:{name:document.getElementById("newSender").value.trim(), address:document.getElementById("newSenderAddress").value.trim()},
+        receiver:{
+          name:document.getElementById("newReceiver").value.trim(),
+          mobile:document.getElementById("newReceiverMobile").value.trim(),
+          address:document.getElementById("newAddress").value.trim(),
+          lat:document.getElementById("newLat").value.trim(),
+          lng:document.getElementById("newLng").value.trim()
         },
-        receipt: {
-          amount: document.getElementById("newAmount").value,
-          orderId: document.getElementById("newOrderId").value.trim(),
-          estDeliveryDate: document.getElementById("newEstDeliveryDate").value,
-          paymentMode: document.getElementById("newPaymentMode").value,
-          modeOfTransport: document.getElementById("newModeOfTransport").value,
-          typeOfShipment: document.getElementById("newTypeOfShipment").value.trim(),
-          quantity: document.getElementById("newQuantity").value,
-          officialStampDate: document.getElementById("newOfficialStampDate").value
+        receipt:{
+          amount:document.getElementById("newAmount").value,
+          orderId:document.getElementById("newOrderId").value.trim(),
+          estDeliveryDate:document.getElementById("newEstDeliveryDate").value,
+          paymentMode:document.getElementById("newPaymentMode").value,
+          modeOfTransport:document.getElementById("newModeOfTransport").value,
+          typeOfShipment:document.getElementById("newTypeOfShipment").value.trim(),
+          quantity:document.getElementById("newQuantity").value,
+          officialStampDate:document.getElementById("newOfficialStampDate").value
         },
         timeline,
-        content: document.getElementById("newContent").value.trim(),
-        officialStamp: currentStampData || ""
+        content:document.getElementById("newContent").value.trim(),
+        officialStamp:currentStampData||""
       };
     }
 
-    function getNextTrackingNumber(prefix) {
-      const numbers = shipments.filter(s => s.trackingNumber.startsWith(prefix + "-")).map(s => parseInt(s.trackingNumber.split("-")[1],10)).filter(n => !isNaN(n));
+    function getNextTrackingNumber(prefix){
+      const numbers=shipments.filter(s=>s.trackingNumber.startsWith(prefix+"-"))
+                               .map(s=>parseInt(s.trackingNumber.split("-")[1],10))
+                               .filter(n=>!isNaN(n));
       const nextNumber = numbers.length ? Math.max(...numbers)+1 : 1;
       return `${prefix}-${String(nextNumber).padStart(6,"0")}`;
     }
 
-    function generateShipment() {
-      const prefix = prefixes[Math.floor(Math.random()*prefixes.length)];
-      const trackingNumber = getNextTrackingNumber(prefix);
-      const s = buildShipment(trackingNumber);
-      if (!s) return;
+    function generateShipment(){
+      const prefix=prefixes[Math.floor(Math.random()*prefixes.length)];
+      const trackingNumber=getNextTrackingNumber(prefix);
+      const s=buildShipment(trackingNumber);
+      if(!s) return;
       shipments.push(s);
+      saveShipments();
       refreshShipmentSelect(trackingNumber);
-      showOutput("Generated new shipment:\n\n" + JSON.stringify(s,null,2));
-      const sel = document.getElementById("shipmentSelect");
-      const idx = shipments.findIndex(x => x.trackingNumber===trackingNumber);
-      if(idx!==-1){ sel.value = idx; selectedIndex = idx; }
+      showOutput("Generated new shipment:\n\n"+JSON.stringify(s,null,2));
+      const sel=document.getElementById("shipmentSelect");
+      const idx=shipments.findIndex(x=>x.trackingNumber===trackingNumber);
+      if(idx!==-1){ sel.value=idx; selectedIndex=idx; }
     }
 
-    function updateShipment() {
-      selectedIndex = document.getElementById("shipmentSelect").value;
+    function updateShipment(){
+      selectedIndex=document.getElementById("shipmentSelect").value;
       if(selectedIndex===""){ alert("Please select a shipment to update."); return; }
-      const trackingNumber = shipments[selectedIndex].trackingNumber;
-      const s = buildShipment(trackingNumber);
+      const trackingNumber=shipments[selectedIndex].trackingNumber;
+      const s=buildShipment(trackingNumber);
       if(!s) return;
       shipments[selectedIndex]=s;
+      saveShipments();
       refreshShipmentSelect(trackingNumber);
-      showOutput("Updated shipment:\n\n" + JSON.stringify(s,null,2));
+      showOutput("Updated shipment:\n\n"+JSON.stringify(s,null,2));
     }
 
-    document.addEventListener("DOMContentLoaded",()=>{
-      const upload=document.getElementById("stampUpload");
-      upload.addEventListener("change",handleStampUpload);
-      document.getElementById("shipmentSelect").addEventListener("change",loadShipmentForEdit);
-      loadShipments();
-    });
-
     function handleStampUpload(evt){
-      const file = evt.target.files && evt.target.files[0];
+      const file=evt.target.files && evt.target.files[0];
       if(!file) return;
       if(!file.type.startsWith("image/")){ alert("Please upload an image file."); return; }
-      const reader = new FileReader();
-      reader.onload = function(e){
-        currentStampData = e.target.result;
-        const img = document.getElementById("stampPreview");
-        img.src = currentStampData; img.style.display="block";
+      const reader=new FileReader();
+      reader.onload=function(e){
+        currentStampData=e.target.result;
+        const img=document.getElementById("stampPreview");
+        img.src=currentStampData; img.style.display="block";
         showOutput("Stamp uploaded (preview shown). It will be saved into the shipment as 'officialStamp'.");
       };
       reader.readAsDataURL(file);
@@ -358,10 +363,14 @@
       const data=JSON.stringify(shipments,null,2);
       const blob=new Blob([data],{type:"application/json"});
       const url=URL.createObjectURL(blob);
-      const a=document.createElement("a");
-      a.href=url; a.download="shipments.json";
-      document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+      const a=document.createElement("a"); a.href=url; a.download="shipments.json"; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
     }
+
+    document.addEventListener("DOMContentLoaded",()=>{
+      document.getElementById("stampUpload").addEventListener("change",handleStampUpload);
+      document.getElementById("shipmentSelect").addEventListener("change",loadShipmentForEdit);
+      loadShipments();
+    });
   </script>
 </body>
 </html>
