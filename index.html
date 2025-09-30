@@ -58,39 +58,14 @@ section{padding:20px;scroll-margin-top:60px;}
 .image-wall video{pointer-events:none;}
 .image-wall .desc{margin-top:8px;font-size:0.85rem;color:#555;line-height:1.4;}
 .testimonial-container{max-width:500px;margin:20px auto;overflow:hidden;}
-.testimonial-wall{display:flex;width:100%;transform:translateX(0);transition:transform 0.5s ease-in-out;}
-.testimonial-wall .testimonial{flex:0 0 100%;min-width:100%;padding:20px;background:#f8f8f8;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.1);border:1px solid #ddd;text-align:center;}
-.testimonial-wall img{width:80px;height:80px;border-radius:50%;object-fit:cover;margin:0 auto 15px;border:2px solid #1e90ff;}
-.testimonial-wall .desc{font-size:0.9rem;color:#333;line-height:201.5;font-style:italic;margin:0 auto 10px;}
-.testimonial-wall .name{font-weight:bold;color:#1e90ff;font-size:1rem;margin-bottom:5px;}
-.testimonial-wall .rating{font-size:0.8rem;color:#ffd700;margin-bottom:10px;}
-.testimonial-wall .rating::before{content:'★★★★★';}
-.testimonial-wall .quote-icon::before{content:'"';font-size:2rem;color:#1e90ff;opacity:0.2;position:absolute;top:10px;left:10px;}
-.business-hours-container{max-width:500px;margin:20px auto;padding:20px;background:#f8f8f8;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.1);border:1px solid #ddd;text-align:center;}
-.business-hours-container .section-title{font-size:1.5rem;margin-bottom:15px;color:#1e90ff;}
-.business-hours-container .hours-list{font-size:0.9rem;color:#333;line-height:1.5;}
-.business-hours-container .hours-list span{display:block;margin:5px 0;}
-.business-hours-container .open-hours{color:#00ff00;animation:blink 1s infinite;font-weight:bold;}
-.about-container{max-width:500px;margin:20px auto;padding:20px;background:#f8f8f8;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.1);border:1px solid #ddd;text-align:center;}
-.about-container .section-title{font-size:1.5rem;margin-bottom:15px;color:#1e90ff;}
-.about-container .desc{font-size:0.9rem;color:#333;line-height:1.5;margin-bottom:10px;}
-.about-container .icon::before{content:'🌐';font-size:2rem;color:#1e90ff;opacity:0.2;display:block;margin-bottom:10px;}
-.services-container{max-width:500px;margin:20px auto;padding:20px;background:#f8f8f8;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.1);border:1px solid #ddd;text-align:center;}
-.services-container .section-title{font-size:1.5rem;margin-bottom:15px;color:#1e90ff;}
-.services-container .services-list{font-size:0.9rem;color:#333;line-height:1.5;margin-bottom:10px;}
-.services-container .desc{font-size:0.9rem;color:#333;line-height:1.5;}
-.services-container .icon::before{content:'🚚';font-size:2rem;color:#1e90ff;opacity:0.2;display:block;margin-bottom:10px;}
-.contact-container{max-width:500px;margin:20px auto;padding:20px;background:#f8f8f8;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.1);border:1px solid #ddd;text-align:center;}
-.contact-container .section-title{font-size:1.5rem;margin-bottom:15px;color:#1e90ff;}
-.contact-container .contact-details{font-size:0.9rem;color:#333;line-height:1.5;margin-bottom:10px;}
-.contact-container .contact-details p{margin:5px 0;}
-.contact-container .icon::before{content:'📞';font-size:2rem;color:#1e90ff;opacity:0.2;display:block;margin-bottom:10px;}
-@media(max-width:500px){
-  .testimonial-container,.business-hours-container,.about-container,.services-container,.contact-container{max-width:90%;}
-  .testimonial-wall .testimonial,.business-hours-container,.about-container,.services-container,.contact-container{padding:15px;}
-  .testimonial-wall img{width:60px;height:60px;}
-  .testimonial-wall .desc,.business-hours-container .hours-list,.about-container .desc,.services-container .desc,.services-container .services-list,.contact-container .contact-details{font-size:0.85rem;}
-}
+.testimonial-wall{display:flex;flex-direction:column;gap:15px;}
+.testimonial-wall .testimonial{display:none;opacity:0;transition:opacity 0.5s ease-in-out;text-align:center;}
+.testimonial-wall .testimonial.active{display:block;opacity:1;}
+.testimonial-wall img{width:100%;max-width:300px;border-radius:5px;margin:0 auto;}
+.testimonial-wall .desc{font-size:0.9rem;color:#555;line-height:1.4;font-style:italic;margin:10px auto;max-width:400px;}
+.testimonial-wall .name{font-weight:bold;color:#1e90ff;margin-top:5px;}
+.business-hours span{color:black;font-weight:bold;}
+.business-hours .open-hours{color:#00ff00;animation:blink 1s infinite;font-weight:bold;}
 @keyframes blink{0%,50%,100%{opacity:1;}25%,75%{opacity:0;}}
 footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-top:1px solid #ddd;}
 </style>
@@ -142,11 +117,11 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
     </div>
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1677.webp" alt="Delivery 2">
-      <p class="desc">Experience fast and reliable delivery across cities and states with our expert logistics network. We provide timely shipments with real time updates, ensuring your packages arrive securely. Our committed team works tirelessly to meet deadlines, offering top notch service for all your shipping requirements.</p>
+      <p class="desc">Experience fast and reliable delivery across cities and states with our expert logistics network. We provide timely shipments with real-time updates, ensuring your packages arrive securely. Our committed team works tirelessly to meet deadlines, offering top-notch service for all your shipping requirements.</p>
     </div>
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1678.jpeg" alt="Delivery 3">
-      <p class="desc">Utilize our real time tracking with cutting edge technology for complete visibility of your shipments. Our system ensures accurate updates, enhancing delivery efficiency. Trust our innovative solutions to keep you informed, providing a seamless and transparent shipping experience with every package we handle.</p>
+      <p class="desc">Utilize our real-time tracking with cutting-edge technology for complete visibility of your shipments. Our system ensures accurate updates, enhancing delivery efficiency. Trust our innovative solutions to keep you informed, providing a seamless and transparent shipping experience with every package we handle.</p>
     </div>
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1680.jpeg" alt="Delivery 4">
@@ -162,7 +137,7 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
     </div>
     <div>
       <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1683.jpeg" alt="Delivery 7">
-      <p class="desc">Stay updated in real time with our advanced tracking technology. We offer detailed insights into your shipment’s journey. Our innovative tools ensure transparency, providing peace of mind. Trust our expertise to deliver your packages efficiently, making us your go-to shipping partner every time.</p>
+      <p class="desc">Stay updated in real-time with our advanced tracking technology. We offer detailed insights into your shipment’s journey. Our innovative tools ensure transparency, providing peace of mind. Trust our expertise to deliver your packages efficiently, making us your go-to shipping partner every time.</p>
     </div>
     <div>
       <video autoplay loop muted playsinline>
@@ -177,79 +152,55 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
   <div class="testimonial-container">
     <div class="testimonial-wall">
       <div class="testimonial">
-        <div class="quote-icon"></div>
         <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1843.jpeg" alt="Testimonial 1">
+        <p class="desc">Express Delivery Service exceeded my expectations! My package arrived two days early, perfectly intact. Their real-time tracking kept me informed every step. The team’s professionalism and care made all the difference. I’ll definitely use them again for reliable, fast shipping across the country!</p>
         <p class="name">Sarah Thompson</p>
-        <p class="rating"></p>
-        <p class="desc">Express Delivery Service exceeded my expectations! My package arrived two days early, perfectly intact. Their real time tracking kept me informed every step. The team’s professionalism and care made all the difference. I’ll definitely use them again for reliable, fast shipping across the country!</p>
       </div>
       <div class="testimonial">
-        <div class="quote-icon"></div>
         <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1844.jpeg" alt="Testimonial 2">
+        <p class="desc">I’m thrilled with Express Delivery! My international shipment was delivered on time with zero issues. The tracking system was spot-on, and their support team was responsive and helpful. Their commitment to customer satisfaction is unmatched. Highly recommend for anyone needing dependable logistics!</p>
         <p class="name">James Rodriguez</p>
-        <p class="rating"></p>
-        <p class="desc">I’m thrilled with Express Delivery! My international shipment was delivered on time with zero issues. The tracking system was spot on, and their support team was responsive and helpful. Their commitment to customer satisfaction is unmatched. Highly recommend for anyone needing dependable logistics!</p>
       </div>
       <div class="testimonial">
-        <div class="quote-icon"></div>
         <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1846.jpeg" alt="Testimonial 3">
-        <p class="name">Emily Chen</p>
-        <p class="rating"></p>
         <p class="desc">Express Delivery made shipping effortless. My fragile package arrived in perfect condition, thanks to their careful handling. The live tracking feature gave me peace of mind throughout. Their efficient service and friendly staff make them my go-to for all future deliveries!</p>
+        <p class="name">Emily Chen</p>
       </div>
       <div class="testimonial">
-        <div class="quote-icon"></div>
         <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1847.jpeg" alt="Testimonial 4">
-        <p class="name">Michael Patel</p>
-        <p class="rating"></p>
         <p class="desc">Outstanding service from Express Delivery! My urgent package reached its destination faster than promised. The tracking updates were detailed and accurate, and their team was proactive in addressing my questions. They truly prioritize customer needs, making them a top choice for logistics!</p>
+        <p class="name">Michael Patel</p>
       </div>
       <div class="testimonial">
-        <div class="quote-icon"></div>
         <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1845.jpeg" alt="Testimonial 5">
-        <p class="name">Laura Bennett</p>
-        <p class="rating"></p>
         <p class="desc">Express Delivery is fantastic! My package was delivered swiftly and securely, with constant updates via their tracking system. Their professionalism and attention to detail were impressive. I felt confident throughout the process and will trust them for all my shipping needs!</p>
+        <p class="name">Laura Bennett</p>
       </div>
     </div>
   </div>
 
   <h2 class="section-title">Business Hours</h2>
-  <div class="business-hours-container">
-    <div class="hours-list">
-      <span>Friday: <span class="open-hours">Open 24 hours</span></span>
-      <span>Saturday: <span class="open-hours">Open 24 hours</span></span>
-      <span>Sunday: <span class="open-hours">Open 24 hours</span></span>
-      <span>Monday: <span class="open-hours">Open 24 hours</span></span>
-      <span>Tuesday: <span class="open-hours">Open 24 hours</span></span>
-      <span>Wednesday: <span class="open-hours">Open 24 hours</span></span>
-      <span>Thursday: <span class="open-hours">Open 24 hours</span></span>
-    </div>
+  <div class="business-hours">
+    <span>Friday: <span class="open-hours">Open 24 hours</span></span><br>
+    <span>Saturday: <span class="open-hours">Open 24 hours</span></span><br>
+    <span>Sunday: <span class="open-hours">Open 24 hours</span></span><br>
+    <span>Monday: <span class="open-hours">Open 24 hours</span></span><br>
+    <span>Tuesday: <span class="open-hours">Open 24 hours</span></span><br>
+    <span>Wednesday: <span class="open-hours">Open 24 hours</span></span><br>
+    <span>Thursday: <span class="open-hours">Open 24 hours</span></span>
   </div>
 </section>
 
 <!-- About Us -->
 <section id="about">
   <h2 class="section-title">About Us</h2>
-  <div class="about-container">
-    <div class="icon"></div>
-    <p class="desc">Express Delivery Service is a global leader in logistics, offering reliable and efficient shipping solutions. With advanced tracking technology and a dedicated team, we ensure timely deliveries worldwide. Our commitment to customer satisfaction and innovative logistics makes us the trusted choice for all your shipping needs.</p>
-  </div>
+  <p>Our mission is to provide seamless and efficient shipping solutions globally.</p>
 </section>
 
 <!-- Services -->
 <section id="services">
   <h2 class="section-title">Our Services</h2>
-  <div class="services-container">
-    <div class="icon"></div>
-    <ul class="services-list">
-      <li>Express Shipping</li>
-      <li>International Delivery</li>
-      <li>Real-Time Tracking</li>
-      <li>Secure Packaging</li>
-    </ul>
-    <p class="desc">Our services include express shipping, international delivery, real-time tracking, and secure packaging. We optimize logistics to ensure fast, safe deliveries globally. With a focus on reliability and customer satisfaction, our expert team provides tailored solutions, making us your go-to partner for all shipping and logistics needs.</p>
-  </div>
+  <p>Partner with us for advanced tracking and logistics expertise.</p>
 </section>
 
 <!-- Track Packages -->
@@ -271,15 +222,11 @@ footer{background:#f8f8f8;text-align:center;padding:15px;color:#1e90ff;border-to
 <!-- Contact -->
 <section id="contact">
   <h2 class="section-title">Contact Us</h2>
-  <div class="contact-container">
-    <div class="icon"></div>
-    <div class="contact-details">
-      <p>Phone: +1 (941) 207-8626</p>
-      <p>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></p>
-      <button style="background-color: #1e90ff; color: white; padding: 8px 15px; border: none; border-radius: 3px; margin: 10px 0;" onclick="openSupport()">Support</button>
-      <div id="google_translate_element" style="margin-top:10px;"></div>
-    </div>
-  </div>
+  <p>Phone: +1 (941) 207-8626</p>
+  <p>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></p>
+  <button style="background-color: #1e90ff; color: white; padding: 8px 15px; border: none; border-radius: 3px;" onclick="openSupport()">Support</button>
+  <div id="google_translate_element" style="margin-top:10px;"></div>
+
   <div class="map-container">
     <div class="map-overlay">HEADQUARTER LOCATION</div>
     <div id="headquarterMap" style="width:100%;height:300px;">
@@ -369,22 +316,25 @@ function initMaps() {
   receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
 }
 
-// Testimonial Slide Animation
+// Testimonial Rotation
 function rotateTestimonials() {
-  const testimonialWall = document.querySelector('.testimonial-wall');
   const testimonials = document.querySelectorAll('.testimonial');
-  const totalTestimonials = testimonials.length;
   let currentIndex = 0;
 
   function showTestimonial(index) {
-    testimonialWall.style.transform = `translateX(-${index * 100}%)`;
+    testimonials.forEach((testimonial, i) => {
+      testimonial.classList.remove('active');
+      if (i === index) {
+        testimonial.classList.add('active');
+      }
+    });
   }
 
   showTestimonial(currentIndex);
   setInterval(() => {
-    currentIndex = (currentIndex + 1) % totalTestimonials;
+    currentIndex = (currentIndex + 1) % testimonials.length;
     showTestimonial(currentIndex);
-  }, 5000); // Slide every 5 seconds
+  }, 5000); // Rotate every 5 seconds
 }
 
 // Tracking
@@ -415,10 +365,10 @@ function trackPackage(){
       receiverMap.innerHTML = `<a href="https://www.google.com/maps?q=${shipment.receiver.lat},${shipment.receiver.lng}" target="_blank"><iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe></a>`;
     } else {
       console.log('No valid receiver coordinates found:', shipment?.receiver);
-      receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2us!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+      receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
     }
   } else {
-    receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2us!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+    receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
   }
 
   // Show tracking details after 5 seconds
