@@ -100,9 +100,6 @@
     .contact-container .contact-details { font-size: 0.9rem; color: #333; line-height: 1.5; margin-bottom: 10px; }
     .contact-container .contact-details p { margin: 5px 0; }
     .contact-container .icon::before { content: '📞'; font-size: 2rem; color: #1e90ff; opacity: 0.2; display: block; margin-bottom: 10px; }
-    table { border-collapse: collapse; width: 100%; max-width: 500px; margin: 20px auto; }
-    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-    th { background-color: #f2f2f2; }
     @media (max-width: 500px) {
       .testimonial-container, .business-hours-container, .about-container, .services-container, .contact-container { max-width: 90%; }
       .testimonial-wall .testimonial, .business-hours-container, .about-container, .services-container, .contact-container { padding: 12px; }
@@ -111,7 +108,6 @@
       .testimonial-wall .name { font-size: 0.9rem; }
       .testimonial-wall .rating { font-size: 0.7rem; }
       .testimonial-wall .quote-icon::before { font-size: 1.2rem; }
-      table { font-size: 0.8rem; }
     }
     @keyframes blink { 0%, 50%, 100% { opacity: 1; } 25%, 75% { opacity: 0; } }
     footer { background: #f8f8f8; text-align: center; padding: 15px; color: #1e90ff; border-top: 1px solid #ddd; }
@@ -207,7 +203,7 @@
         <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1843.jpeg" alt="Testimonial 1">
         <p class="name">David Wilson</p>
         <p class="rating"></p>
-        <p class="desc">Express Delivery exceeded expectations! Package arrived没错 early, intact, with great tracking. Reliable service!</p>
+        <p class="desc">Express Delivery exceeded expectations! Package arrived early, intact, with great tracking. Reliable service!</p>
       </div>
       <div class="testimonial">
         <div class="quote-icon"></div>
@@ -285,18 +281,6 @@
     <input type="text" id="trackingNumber" placeholder="Enter Tracking ID" required>
     <button onclick="trackPackage()">Track Now</button>
   </div>
-  <table id="shipmentTable" style="display:none;">
-    <thead>
-      <tr>
-        <th>Tracking Number</th>
-        <th>Customer Name</th>
-        <th>Status</th>
-        <th>Delivery Date</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody id="shipmentBody"></tbody>
-  </table>
   <div id="shipmentTracking" class="shipment-tracking" style="display:none;"></div>
   <div id="shipmentContent" class="shipment-content" style="display:none;"></div>
   <div class="map-container">
@@ -316,7 +300,6 @@
       <p>Phone: +1 (941) 207-8626</p>
       <p>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></p>
       <button style="background-color:#1e90ff;color:white;padding:8px 15px;border:none;border-radius:3px;margin:10px 0;" onclick="openSupport()">Support</button>
-      <div id="google_translate_element" style="margin-top:10px;"></div>
     </div>
   </div>
   <div class="map-container">
@@ -414,11 +397,6 @@ function subscribeNewsletter() {
 function openSupport() { document.getElementById('supportPopup').style.display = 'block'; }
 function closeSupport() { document.getElementById('supportPopup').style.display = 'none'; }
 
-// Google Translate
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
-}
-
 // Initialize Maps
 function initMaps() {
   const receiverMap = document.getElementById('receiverMap');
@@ -444,8 +422,6 @@ function rotateTestimonials() {
 // Tracking
 function trackPackage() {
   const number = document.getElementById('trackingNumber').value.trim();
-  const table = document.getElementById('shipmentTable');
-  const tbody = document.getElementById('shipmentBody');
   const trackingDiv = document.getElementById('shipmentTracking');
   const contentDiv = document.getElementById('shipmentContent');
   const receiverMap = document.getElementById('receiverMap');
@@ -458,35 +434,18 @@ function trackPackage() {
   // Load shipments from localStorage
   loadShipments();
 
-  // Table-based tracking
-  tbody.innerHTML = '';
   const filtered = shipments.filter(s => s.trackingNumber.toLowerCase() === number.toLowerCase());
   if (filtered.length === 0) {
     alert('No shipment found with this tracking number.');
-    table.style.display = 'none';
     trackingDiv.style.display = 'none';
     contentDiv.style.display = 'none';
     return;
   }
 
-  filtered.forEach(s => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${s.trackingNumber || 'N/A'}</td>
-      <td>${s.customerName || 'Unknown'}</td>
-      <td>${s.status || 'Unknown'}</td>
-      <td>${s.deliveryDate || 'N/A'}</td>
-      <td>${s.description || ''}</td>
-    `;
-    tbody.appendChild(row);
-  });
-  table.style.display = 'table';
-
-  // Detailed tracking
+  const shipment = filtered[0]; // Use the first matching shipment
   trackingDiv.style.display = 'block';
   trackingDiv.innerHTML = '<div class="header">Tracking...</div>';
 
-  const shipment = filtered[0]; // Use the first matching shipment
   if (shipment && shipment.receiver && shipment.receiver.lat && shipment.receiver.lng) {
     const address = encodeURIComponent(shipment.receiver.address || '');
     const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d${(1 / Math.cos(shipment.receiver.lat * Math.PI / 180) * 156543.03392 * Math.cos(shipment.receiver.lat * Math.PI / 180) / Math.pow(2, 15))}!2d${shipment.receiver.lng}!3d${shipment.receiver.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x0!2s${address}!5e0!3m2!1sen!2sus!4v1695296400000&markers=color:red%7C${shipment.receiver.lat},${shipment.receiver.lng}`;
@@ -570,7 +529,7 @@ function trackPackage() {
           <div class="total">Total: $${amount}</div>
           <div class="footer">
             Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
-            Issued: September 30, 2025, 10:38 AM WAT
+            Issued: September 30, 2025, 10:52 AM WAT
           </div>
         </div>
         <button class="print-btn" onclick="printInvoice('${number}')">Print Invoice</button>`;
@@ -659,7 +618,7 @@ function printInvoice(number) {
       <div class="total">Total: $${amount}</div>
       <div class="footer">
         Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
-        Issued: September 30, 2025, 10:38 AM WAT
+        Issued: September 30, 2025, 10:52 AM WAT
       </div>
     </div>
     </body>
@@ -701,6 +660,5 @@ document.addEventListener('DOMContentLoaded', () => {
   rotateTestimonials();
 });
 </script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
