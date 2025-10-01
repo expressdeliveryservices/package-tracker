@@ -35,11 +35,27 @@
     .shipment-content .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 6px; border-bottom: 1px dashed #ccc; }
     .shipment-content .header .company-name { font-size: 14px; font-weight: 700; color: #0b76ff; }
     .shipment-content .header .logo img { height: 30px; }
-    .shipment-content .details { margin: 6px 0; padding: 6px; border: 1px solid #e0e6f8; border-radius: 3px; background: #fafafa; }
-    .shipment-content .details label { display: inline-block; width: 100px; font-weight: 700; color: #0b76ff; }
-    .shipment-content .details span { display: inline-block; margin-left: 4px; color: #111; }
-    .shipment-content .details .section-title { font-size: 11px; font-weight: 700; margin: 6px 0 3px; color: #0b76ff; }
+    .shipment-content .details { margin: 6px 0; }
+    .shipment-content .section { margin: 6px 0; padding: 6px; border-radius: 3px; position: relative; }
+    .shipment-content .section label { display: inline-block; width: 100px; font-weight: 700; color: #0b76ff; }
+    .shipment-content .section span { display: inline-block; margin-left: 4px; color: #111; }
+    .shipment-content .section-title { font-size: 11px; font-weight: 700; margin: 6px 0 3px; color: #0b76ff; display: flex; align-items: center; }
+    .shipment-content .section-title img { width: 14px; height: 14px; margin-right: 4px; }
     .shipment-content .signature-img { max-width: 50px; height: auto; vertical-align: middle; margin-left: 4px; }
+    .shipment-content .section-tracking { background: #f0f3ff; border-left: 2px solid #0b76ff; }
+    .shipment-content .section-delivery { background: #f0f3ff; border-left: 2px solid #0b76ff; }
+    .shipment-content .section-origin { background: #f8f8f8; border-left: 2px solid #1e90ff; }
+    .shipment-content .section-destination { background: #f8f8f8; border-left: 2px solid #1e90ff; }
+    .shipment-content .section-content { background: #f6f6f6; border-left: 2px solid #1e90ff; }
+    .shipment-content .section-order { background: #f6f6f6; border-left: 2px solid #1e90ff; }
+    .shipment-content .section-transport { background: #f6f6f6; border-left: 2px solid #1e90ff; }
+    .shipment-content .section-quantity { background: #f6f6f6; border-left: 2px solid #1e90ff; }
+    .shipment-content .section-shipment { background: #f6f6f6; border-left: 2px solid #1e90ff; }
+    .shipment-content .section-amount { background: #f0faff; border-left: 2px solid #0055cc; }
+    .shipment-content .section-payment { background: #f0faff; border-left: 2px solid #0055cc; }
+    .shipment-content .section-sender { background: #e6f0ff; border-left: 2px solid #0b76ff; }
+    .shipment-content .section-receiver { background: #e6f0ff; border-left: 2px solid #0b76ff; }
+    .shipment-content .section-stamp { background: #f0faff; border-left: 2px solid #0055cc; }
     .shipment-content .footer { font-size: 9px; text-align: center; margin-top: 6px; color: #555; border-top: 1px dashed #ccc; padding-top: 4px; }
     .shipment-content .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); color: #e0e6f8; font-size: 28px; font-weight: 900; opacity: 0.3; z-index: 0; pointer-events: none; }
     .print-btn { margin-top: 8px; padding: 6px 12px; background-color: #0b76ff; color: white; border: none; border-radius: 3px; cursor: pointer; float: right; }
@@ -79,7 +95,7 @@
     footer { background: #f8f8f8; text-align: center; padding: 15px; color: #1e90ff; border-top: 1px solid #ddd; }
     @media (max-width: 600px) {
       .shipment-content { width: 94%; font-size: 10px; }
-      .shipment-content .details label { width: 90px; }
+      .shipment-content .section label { width: 90px; }
     }
   </style>
 </head>
@@ -491,18 +507,66 @@
               <div class="logo"><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo"></div>
             </div>
             <div class="details">
-              <label>Delivery Date:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.estDeliveryDate))}</span><br>
-              <label>Origin Area:</label><span>${escapeHtml(field(shipment.origin))}</span><br>
-              <label>Destination Area:</label><span>${escapeHtml(field(shipment.destination))}</span><br>
-              <div class="section-title">Sender's Details</div>
-              <label>Name:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.name))}</span><br>
-              <label>Address:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.address))}</span><br>
-              <label>Mobile:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.mobile))}</span><br>
-              <div class="section-title">Receiver's Details</div>
-              <label>Name:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.name))}</span><br>
-              <label>Address:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.address))}</span><br>
-              <label>Mobile:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.mobile))}</span><br>
-              <label>Official Stamp:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.officialStampDate))}${signatureStamp ? ` <img src="${signatureStamp}" class="signature-img" alt="Official Stamp">` : ''}</span>
+              <div class="section section-tracking">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/0b76ff/barcode.png" alt="Tracking Icon">Tracking Number</div>
+                <label>Tracking Number:</label><span>${escapeHtml(field(shipment.trackingNumber))}</span>
+              </div>
+              <div class="section section-delivery">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/0b76ff/calendar.png" alt="Calendar Icon">Delivery Date</div>
+                <label>Delivery Date:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.estDeliveryDate))}</span>
+              </div>
+              <div class="section section-origin">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/1e90ff/marker.png" alt="Origin Icon">Origin Area</div>
+                <label>Origin Area:</label><span>${escapeHtml(field(shipment.origin))}</span>
+              </div>
+              <div class="section section-destination">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/1e90ff/marker.png" alt="Destination Icon">Destination Area</div>
+                <label>Destination Area:</label><span>${escapeHtml(field(shipment.destination))}</span>
+              </div>
+              <div class="section section-content">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/1e90ff/package.png" alt="Content Icon">Content</div>
+                <label>Content:</label><span>${escapeHtml(field(shipment.content))}</span>
+              </div>
+              <div class="section section-order">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/1e90ff/order.png" alt="Order Icon">Order ID</div>
+                <label>Order ID:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.orderId))}</span>
+              </div>
+              <div class="section section-transport">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/1e90ff/truck.png" alt="Transport Icon">Transport Mode</div>
+                <label>Transport Mode:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.transportMode))}</span>
+              </div>
+              <div class="section section-quantity">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/1e90ff/quantity.png" alt="Quantity Icon">Quantity</div>
+                <label>Quantity:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.quantity))}</span>
+              </div>
+              <div class="section section-shipment">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/1e90ff/shipment.png" alt="Shipment Icon">Shipment Type</div>
+                <label>Shipment Type:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.shipmentType))}</span>
+              </div>
+              <div class="section section-amount">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/0055cc/money.png" alt="Amount Icon">Amount</div>
+                <label>Amount:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.amount))}</span>
+              </div>
+              <div class="section section-payment">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/0055cc/credit-card.png" alt="Payment Icon">Payment Mode</div>
+                <label>Payment Mode:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.paymentMode))}</span>
+              </div>
+              <div class="section section-sender">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/0b76ff/user.png" alt="Sender Icon">Sender's Details</div>
+                <label>Name:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.name))}</span><br>
+                <label>Address:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.address))}</span><br>
+                <label>Mobile:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.mobile))}</span>
+              </div>
+              <div class="section section-receiver">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/0b76ff/user.png" alt="Receiver Icon">Receiver's Details</div>
+                <label>Name:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.name))}</span><br>
+                <label>Address:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.address))}</span><br>
+                <label>Mobile:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.mobile))}</span>
+              </div>
+              <div class="section section-stamp">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/0055cc/stamp.png" alt="Stamp Icon">Official Stamp</div>
+                <label>Official Stamp:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.officialStampDate))}${signatureStamp ? ` <img src="${signatureStamp}" class="signature-img" alt="Official Stamp">` : ''}</span>
+              </div>
             </div>
             <div class="footer">
               Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
@@ -575,17 +639,21 @@
               }
               .section { 
                 margin: 4px 0; 
-                padding: 4px 0; 
-                border-top: 1px dashed #ccc; 
-              }
-              .section:first-of-type { 
-                border-top: none; 
+                padding: 4px; 
+                border-radius: 2px; 
               }
               .section-title { 
                 font-size: 11px; 
                 font-weight: bold; 
                 color: #0b76ff; 
                 margin: 4px 0 2px; 
+                display: flex; 
+                align-items: center; 
+              }
+              .section-title img { 
+                width: 12px; 
+                height: 12px; 
+                margin-right: 3px; 
               }
               .section label { 
                 display: inline-block; 
@@ -603,6 +671,62 @@
                 height: auto; 
                 vertical-align: middle; 
                 margin-left: 4px; 
+              }
+              .section-tracking { 
+                background: #f0f3ff; 
+                border-left: 2px solid #0b76ff; 
+              }
+              .section-delivery { 
+                background: #f0f3ff; 
+                border-left: 2px solid #0b76ff; 
+              }
+              .section-origin { 
+                background: #f8f8f8; 
+                border-left: 2px solid #1e90ff; 
+              }
+              .section-destination { 
+                background: #f8f8f8; 
+                border-left: 2px solid #1e90ff; 
+              }
+              .section-content { 
+                background: #f6f6f6; 
+                border-left: 2px solid #1e90ff; 
+              }
+              .section-order { 
+                background: #f6f6f6; 
+                border-left: 2px solid #1e90ff; 
+              }
+              .section-transport { 
+                background: #f6f6f6; 
+                border-left: 2px solid #1e90ff; 
+              }
+              .section-quantity { 
+                background: #f6f6f6; 
+                border-left: 2px solid #1e90ff; 
+              }
+              .section-shipment { 
+                background: #f6f6f6; 
+                border-left: 2px solid #1e90ff; 
+              }
+              .section-amount { 
+                background: #f0faff; 
+                border-left: 2px solid #0055cc; 
+              }
+              .section-payment { 
+                background: #f0faff; 
+                border-left: 2px solid #0055cc; 
+              }
+              .section-sender { 
+                background: #e6f0ff; 
+                border-left: 2px solid #0b76ff; 
+              }
+              .section-receiver { 
+                background: #e6f0ff; 
+                border-left: 2px solid #0b76ff; 
+              }
+              .section-stamp { 
+                background: #f0faff; 
+                border-left: 2px solid #0055cc; 
               }
               .barcode { 
                 text-align: center; 
@@ -637,36 +761,72 @@
                 <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo">
                 <div class="company-name">${escapeHtml(field(companyName))}</div>
               </div>
-              <div class="section">
+              <div class="section section-tracking">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/0b76ff/barcode.png" alt="Tracking Icon">Tracking Number</div>
+                <label>Tracking Number:</label><span>${escapeHtml(field(shipment.trackingNumber))}</span>
+              </div>
+              <div class="section section-delivery">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/0b76ff/calendar.png" alt="Calendar Icon">Delivery Date</div>
                 <label>Delivery Date:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.estDeliveryDate))}</span>
               </div>
-              <div class="section">
+              <div class="section section-origin">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/1e90ff/marker.png" alt="Origin Icon">Origin Area</div>
                 <label>Origin Area:</label><span>${escapeHtml(field(shipment.origin))}</span>
               </div>
-              <div class="section">
+              <div class="section section-destination">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/1e90ff/marker.png" alt="Destination Icon">Destination Area</div>
                 <label>Destination Area:</label><span>${escapeHtml(field(shipment.destination))}</span>
               </div>
-              <div class="section">
-                <div class="section-title">Sender's Details</div>
+              <div class="section section-content">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/1e90ff/package.png" alt="Content Icon">Content</div>
+                <label>Content:</label><span>${escapeHtml(field(shipment.content))}</span>
+              </div>
+              <div class="section section-order">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/1e90ff/order.png" alt="Order Icon">Order ID</div>
+                <label>Order ID:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.orderId))}</span>
+              </div>
+              <div class="section section-transport">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/1e90ff/truck.png" alt="Transport Icon">Transport Mode</div>
+                <label>Transport Mode:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.transportMode))}</span>
+              </div>
+              <div class="section section-quantity">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/1e90ff/quantity.png" alt="Quantity Icon">Quantity</div>
+                <label>Quantity:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.quantity))}</span>
+              </div>
+              <div class="section section-shipment">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/1e90ff/shipment.png" alt="Shipment Icon">Shipment Type</div>
+                <label>Shipment Type:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.shipmentType))}</span>
+              </div>
+              <div class="section section-amount">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/0055cc/money.png" alt="Amount Icon">Amount</div>
+                <label>Amount:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.amount))}</span>
+              </div>
+              <div class="section section-payment">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/0055cc/credit-card.png" alt="Payment Icon">Payment Mode</div>
+                <label>Payment Mode:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.paymentMode))}</span>
+              </div>
+              <div class="section section-sender">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/0b76ff/user.png" alt="Sender Icon">Sender's Details</div>
                 <label>Name:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.name))}</span>
               </div>
-              <div class="section">
+              <div class="section section-sender">
                 <label>Address:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.address))}</span>
               </div>
-              <div class="section">
+              <div class="section section-sender">
                 <label>Mobile:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.mobile))}</span>
               </div>
-              <div class="section">
-                <div class="section-title">Receiver's Details</div>
+              <div class="section section-receiver">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/0b76ff/user.png" alt="Receiver Icon">Receiver's Details</div>
                 <label>Name:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.name))}</span>
               </div>
-              <div class="section">
+              <div class="section section-receiver">
                 <label>Address:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.address))}</span>
               </div>
-              <div class="section">
+              <div class="section section-receiver">
                 <label>Mobile:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.mobile))}</span>
               </div>
-              <div class="section">
+              <div class="section section-stamp">
+                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/0055cc/stamp.png" alt="Stamp Icon">Official Stamp</div>
                 <label>Official Stamp:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.officialStampDate))}${signatureStamp ? ` <img src="${signatureStamp}" alt="Official Stamp">` : ''}</span>
               </div>
               <div class="barcode">
@@ -700,7 +860,7 @@
           filename: `Receipt_${shipment.trackingNumber || 'unknown'}.pdf`,
           margin: [3, 3, 3, 3],
           html2canvas: { scale: 2, useCORS: true },
-          jsPDF: { unit: 'mm', format: [80, 150], orientation: 'portrait' }
+          jsPDF: { unit: 'mm', format: [80, 160], orientation: 'portrait' }
         }).from(container).save().then(() => {
           document.body.removeChild(container);
         }).catch(err => {
