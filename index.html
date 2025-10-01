@@ -29,42 +29,28 @@
     .tracking input { flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 3px; background: #fff; color: #1e90ff; font-size: 0.9rem; }
     .tracking input::placeholder { text-transform: uppercase; font-size: 0.8rem; color: #999; }
     .tracking button { padding: 8px 15px; border: none; border-radius: 3px; background-color: #1e90ff; color: white; cursor: pointer; }
-    .shipment-tracking, .shipment-content { max-width: 500px; margin: 10px auto; font-family: 'Times New Roman', Times, serif; }
-    .shipment-tracking .header, .shipment-content .header { font-weight: bold; font-size: 10px; margin-bottom: 2px; text-align: center; }
-    .shipment-content { padding: 10px; font-size: 10px; border: 1px solid #0b76ff; background: #fff; letter-spacing: 0.1px; width: 300px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: relative; }
-    .shipment-content .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 6px; border-bottom: 1px dashed #ccc; }
-    .shipment-content .header .company-name { font-size: 14px; font-weight: 700; color: #0b76ff; }
-    .shipment-content .header .logo img { height: 30px; }
-    .shipment-content .details { margin: 6px 0; }
-    .shipment-content .section { margin: 6px 0; padding: 6px; border-radius: 3px; position: relative; }
-    .shipment-content .section label { display: inline-block; width: 100px; font-weight: 700; color: #0b76ff; }
-    .shipment-content .section span { display: inline-block; margin-left: 4px; color: #111; }
-    .shipment-content .section-title { font-size: 11px; font-weight: 700; margin: 6px 0 3px; color: #0b76ff; display: flex; align-items: center; }
-    .shipment-content .section-title img { width: 14px; height: 14px; margin-right: 4px; }
-    .shipment-content .signature-img { max-width: 50px; height: auto; vertical-align: middle; margin-left: 4px; }
-    .shipment-content .section-tracking { background: #f0f3ff; border-left: 2px solid #0b76ff; }
-    .shipment-content .section-delivery { background: #f0f3ff; border-left: 2px solid #0b76ff; }
-    .shipment-content .section-origin { background: #f8f8f8; border-left: 2px solid #1e90ff; }
-    .shipment-content .section-destination { background: #f8f8f8; border-left: 2px solid #1e90ff; }
-    .shipment-content .section-content { background: #f6f6f6; border-left: 2px solid #1e90ff; }
-    .shipment-content .section-order { background: #f6f6f6; border-left: 2px solid #1e90ff; }
-    .shipment-content .section-transport { background: #f6f6f6; border-left: 2px solid #1e90ff; }
-    .shipment-content .section-quantity { background: #f6f6f6; border-left: 2px solid #1e90ff; }
-    .shipment-content .section-shipment { background: #f6f6f6; border-left: 2px solid #1e90ff; }
-    .shipment-content .section-amount { background: #f0faff; border-left: 2px solid #0055cc; }
-    .shipment-content .section-payment { background: #f0faff; border-left: 2px solid #0055cc; }
-    .shipment-content .section-sender { background: #e6f0ff; border-left: 2px solid #0b76ff; }
-    .shipment-content .section-receiver { background: #e6f0ff; border-left: 2px solid #0b76ff; }
-    .shipment-content .section-stamp { background: #f0faff; border-left: 2px solid #0055cc; }
-    .shipment-content .footer { font-size: 9px; text-align: center; margin-top: 6px; color: #555; border-top: 1px dashed #ccc; padding-top: 4px; }
-    .shipment-content .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); color: #e0e6f8; font-size: 28px; font-weight: 900; opacity: 0.3; z-index: 0; pointer-events: none; }
-    .print-btn { margin-top: 8px; padding: 6px 12px; background-color: #0b76ff; color: white; border: none; border-radius: 3px; cursor: pointer; float: right; }
+    .shipment-tracking, .shipment-content { max-width: 500px; margin: 10px auto; font-family: 'Courier New', Courier, monospace; }
+    .shipment-tracking .header, .shipment-content .header { font-weight: bold; font-size: 9px; margin-bottom: 4px; text-align: center; }
+    .shipment-content { padding: 8px; font-size: 9px; border: 1px solid #000; background: #f5f5f5; width: 300px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: relative; }
+    .shipment-content .header { padding-bottom: 4px; border-bottom: 1px dashed #ccc; }
+    .shipment-content .header .company-name { font-size: 12px; font-weight: bold; color: #000; }
+    .shipment-content .header .logo img { height: 25px; }
+    .shipment-content .details { margin: 4px 0; }
+    .shipment-content .section { margin: 4px 0; padding: 4px 0; border-bottom: 1px dashed #ccc; }
+    .shipment-content .section:last-child { border-bottom: none; }
+    .shipment-content .section label { display: inline-block; width: 80px; font-weight: bold; color: #000; }
+    .shipment-content .section span { display: inline-block; width: calc(100% - 84px); word-wrap: break-word; color: #000; }
+    .shipment-content .signature-img { max-width: 40px; height: auto; vertical-align: middle; margin-left: 4px; }
+    .shipment-content .section-sender, .shipment-content .section-receiver { padding: 4px 0; }
+    .shipment-content .footer { font-size: 8px; text-align: center; margin-top: 4px; color: #333; border-top: 1px dashed #ccc; padding-top: 4px; }
+    .shipment-content .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); color: #d0d0d0; font-size: 20px; font-weight: bold; opacity: 0.2; z-index: 0; pointer-events: none; }
+    .print-btn { margin-top: 6px; padding: 5px 10px; background-color: #1e90ff; color: white; border: none; border-radius: 2px; cursor: pointer; float: right; }
     .timeline { position: relative; margin: 12px 0; }
     .timeline::before { content: ''; position: absolute; left: 18px; top: 0; bottom: 0; width: 3px; background: #eee; }
     .timeline-event { position: relative; margin-bottom: 18px; padding-left: 44px; }
-    .timeline-event .tick { position: absolute; left: 6px; top: 0; width: 14px; height: 14px; border-radius: 50%; border: 3px solid #0b76ff; background: #fff; }
-    .timeline-event.completed .tick { background: #0b76ff; box-shadow: 0 0 6px rgba(11,118,255,0.15); }
-    .timeline-event .time { font-size: 12px; color: #0b76ff; margin-top: 2px; }
+    .timeline-event .tick { position: absolute; left: 6px; top: 0; width: 14px; height: 14px; border-radius: 50%; border: 3px solid #1e90ff; background: #fff; }
+    .timeline-event.completed .tick { background: #1e90ff; box-shadow: 0 0 6px rgba(11,118,255,0.15); }
+    .timeline-event .time { font-size: 12px; color: #1e90ff; margin-top: 2px; }
     .timeline-event .description { margin-top: 6px; background: #fff; padding: 6px; border-radius: 4px; font-size: 13px; border: 1px solid #f0f3ff; }
     .map-container { width: 100%; height: 300px; margin: 20px 0; overflow: hidden; position: relative; }
     .map-overlay { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background-color: rgba(255,255,255,0.9); padding: 6px 10px; border-radius: 4px; font-size: 14px; color: #000; z-index: 10; }
@@ -94,8 +80,9 @@
     }
     footer { background: #f8f8f8; text-align: center; padding: 15px; color: #1e90ff; border-top: 1px solid #ddd; }
     @media (max-width: 600px) {
-      .shipment-content { width: 94%; font-size: 10px; }
-      .shipment-content .section label { width: 90px; }
+      .shipment-content { width: 94%; font-size: 9px; }
+      .shipment-content .section label { width: 70px; }
+      .shipment-content .section span { width: calc(100% - 74px); }
     }
   </style>
 </head>
@@ -463,7 +450,7 @@
             <div class="timeline-event ${event.completed ? 'completed' : ''}">
               <div class="tick"></div>
               <div class="time">${escapeHtml(event.time || '')}</div>
-              <div class="description">${escapeHtml(event.description || '')}${event.status ? `<div style="background:#f0f3ff;padding:4px 6px;border-radius:4px;margin-top:6px;color:#0b76ff;font-weight:700;">${escapeHtml(event.status)}</div>` : ''}</div>
+              <div class="description">${escapeHtml(event.description || '')}${event.status ? `<div style="background:#f0f3ff;padding:4px 6px;border-radius:4px;margin-top:6px;color:#1e90ff;font-weight:700;">${escapeHtml(event.status)}</div>` : ''}</div>
             </div>
           `).join('') + `</div>`;
         } else {
@@ -507,64 +494,50 @@
               <div class="logo"><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo"></div>
             </div>
             <div class="details">
-              <div class="section section-tracking">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/0b76ff/barcode.png" alt="Tracking Icon">Tracking Number</div>
+              <div class="section">
                 <label>Tracking Number:</label><span>${escapeHtml(field(shipment.trackingNumber))}</span>
               </div>
-              <div class="section section-delivery">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/0b76ff/calendar.png" alt="Calendar Icon">Delivery Date</div>
+              <div class="section">
                 <label>Delivery Date:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.estDeliveryDate))}</span>
               </div>
-              <div class="section section-origin">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/1e90ff/marker.png" alt="Origin Icon">Origin Area</div>
+              <div class="section">
                 <label>Origin Area:</label><span>${escapeHtml(field(shipment.origin))}</span>
               </div>
-              <div class="section section-destination">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/1e90ff/marker.png" alt="Destination Icon">Destination Area</div>
+              <div class="section">
                 <label>Destination Area:</label><span>${escapeHtml(field(shipment.destination))}</span>
               </div>
-              <div class="section section-content">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/1e90ff/package.png" alt="Content Icon">Content</div>
+              <div class="section">
                 <label>Content:</label><span>${escapeHtml(field(shipment.content))}</span>
               </div>
-              <div class="section section-order">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/1e90ff/order.png" alt="Order Icon">Order ID</div>
+              <div class="section">
                 <label>Order ID:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.orderId))}</span>
               </div>
-              <div class="section section-transport">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/1e90ff/truck.png" alt="Transport Icon">Transport Mode</div>
+              <div class="section">
                 <label>Transport Mode:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.transportMode))}</span>
               </div>
-              <div class="section section-quantity">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/1e90ff/quantity.png" alt="Quantity Icon">Quantity</div>
+              <div class="section">
                 <label>Quantity:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.quantity))}</span>
               </div>
-              <div class="section section-shipment">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/1e90ff/shipment.png" alt="Shipment Icon">Shipment Type</div>
+              <div class="section">
                 <label>Shipment Type:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.shipmentType))}</span>
               </div>
-              <div class="section section-amount">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/0055cc/money.png" alt="Amount Icon">Amount</div>
+              <div class="section">
                 <label>Amount:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.amount))}</span>
               </div>
-              <div class="section section-payment">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/0055cc/credit-card.png" alt="Payment Icon">Payment Mode</div>
+              <div class="section">
                 <label>Payment Mode:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.paymentMode))}</span>
               </div>
               <div class="section section-sender">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/0b76ff/user.png" alt="Sender Icon">Sender's Details</div>
-                <label>Name:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.name))}</span><br>
-                <label>Address:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.address))}</span><br>
-                <label>Mobile:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.mobile))}</span>
+                <label>Sender Name:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.name))}</span><br>
+                <label>Sender Address:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.address))}</span><br>
+                <label>Sender Mobile:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.mobile))}</span>
               </div>
               <div class="section section-receiver">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/0b76ff/user.png" alt="Receiver Icon">Receiver's Details</div>
-                <label>Name:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.name))}</span><br>
-                <label>Address:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.address))}</span><br>
-                <label>Mobile:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.mobile))}</span>
+                <label>Receiver Name:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.name))}</span><br>
+                <label>Receiver Address:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.address))}</span><br>
+                <label>Receiver Mobile:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.mobile))}</span>
               </div>
-              <div class="section section-stamp">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/14/0055cc/stamp.png" alt="Stamp Icon">Official Stamp</div>
+              <div class="section">
                 <label>Official Stamp:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.officialStampDate))}${signatureStamp ? ` <img src="${signatureStamp}" class="signature-img" alt="Official Stamp">` : ''}</span>
               </div>
             </div>
@@ -596,19 +569,19 @@
             <title>Receipt - ${escapeHtml(field(shipment.trackingNumber))}</title>
             <style>
               body { 
-                font-family: 'Times New Roman', Times, serif; 
+                font-family: 'Courier New', Courier, monospace; 
                 margin: 0; 
                 background: #fff; 
                 color: #000; 
-                font-size: 10px; 
-                line-height: 1.3; 
+                font-size: 8px; 
+                line-height: 1.2; 
               }
               .receipt { 
                 width: 80mm; 
-                margin: 5mm auto; 
-                padding: 5mm; 
+                margin: 3mm auto; 
+                padding: 3mm; 
                 border: 1px solid #000; 
-                background: #fff; 
+                background: #f5f5f5; 
                 position: relative; 
               }
               .watermark { 
@@ -617,132 +590,69 @@
                 left: 50%; 
                 transform: translate(-50%, -50%) rotate(-45deg); 
                 color: #d0d0d0; 
-                font-size: 24px; 
-                font-weight: 900; 
-                opacity: 0.3; 
+                font-size: 16px; 
+                font-weight: bold; 
+                opacity: 0.2; 
                 z-index: 0; 
               }
               .header { 
                 text-align: center; 
                 border-bottom: 1px dashed #000; 
-                padding-bottom: 5px; 
-                margin-bottom: 5px; 
+                padding-bottom: 3mm; 
+                margin-bottom: 3mm; 
               }
               .header img { 
-                width: 50px; 
-                margin: 3px 0; 
+                width: 40px; 
+                margin: 2mm 0; 
               }
               .header .company-name { 
-                font-size: 14px; 
+                font-size: 10px; 
                 font-weight: bold; 
-                color: #0b76ff; 
+                color: #000; 
               }
               .section { 
-                margin: 4px 0; 
-                padding: 4px; 
-                border-radius: 2px; 
+                margin: 3mm 0; 
+                padding: 3mm 0; 
+                border-bottom: 1px dashed #ccc; 
               }
-              .section-title { 
-                font-size: 11px; 
-                font-weight: bold; 
-                color: #0b76ff; 
-                margin: 4px 0 2px; 
-                display: flex; 
-                align-items: center; 
-              }
-              .section-title img { 
-                width: 12px; 
-                height: 12px; 
-                margin-right: 3px; 
+              .section:last-child { 
+                border-bottom: none; 
               }
               .section label { 
                 display: inline-block; 
-                width: 90px; 
+                width: 20mm; 
                 font-weight: bold; 
-                color: #0b76ff; 
+                color: #000; 
               }
               .section span { 
                 display: inline-block; 
-                width: calc(100% - 95px); 
+                width: calc(100% - 21mm); 
                 word-wrap: break-word; 
               }
               .section img { 
-                max-width: 50px; 
+                max-width: 40px; 
                 height: auto; 
                 vertical-align: middle; 
-                margin-left: 4px; 
+                margin-left: 1mm; 
               }
-              .section-tracking { 
-                background: #f0f3ff; 
-                border-left: 2px solid #0b76ff; 
-              }
-              .section-delivery { 
-                background: #f0f3ff; 
-                border-left: 2px solid #0b76ff; 
-              }
-              .section-origin { 
-                background: #f8f8f8; 
-                border-left: 2px solid #1e90ff; 
-              }
-              .section-destination { 
-                background: #f8f8f8; 
-                border-left: 2px solid #1e90ff; 
-              }
-              .section-content { 
-                background: #f6f6f6; 
-                border-left: 2px solid #1e90ff; 
-              }
-              .section-order { 
-                background: #f6f6f6; 
-                border-left: 2px solid #1e90ff; 
-              }
-              .section-transport { 
-                background: #f6f6f6; 
-                border-left: 2px solid #1e90ff; 
-              }
-              .section-quantity { 
-                background: #f6f6f6; 
-                border-left: 2px solid #1e90ff; 
-              }
-              .section-shipment { 
-                background: #f6f6f6; 
-                border-left: 2px solid #1e90ff; 
-              }
-              .section-amount { 
-                background: #f0faff; 
-                border-left: 2px solid #0055cc; 
-              }
-              .section-payment { 
-                background: #f0faff; 
-                border-left: 2px solid #0055cc; 
-              }
-              .section-sender { 
-                background: #e6f0ff; 
-                border-left: 2px solid #0b76ff; 
-              }
-              .section-receiver { 
-                background: #e6f0ff; 
-                border-left: 2px solid #0b76ff; 
-              }
-              .section-stamp { 
-                background: #f0faff; 
-                border-left: 2px solid #0055cc; 
+              .section-sender, .section-receiver { 
+                padding: 3mm 0; 
               }
               .barcode { 
                 text-align: center; 
-                margin: 5px 0; 
+                margin: 3mm 0; 
               }
               .barcode img { 
-                width: 100px; 
-                height: 30px; 
+                width: 80px; 
+                height: 20px; 
               }
               .footer { 
                 text-align: center; 
-                font-size: 8px; 
-                color: #555; 
-                margin-top: 5px; 
+                font-size: 7px; 
+                color: #333; 
+                margin-top: 3mm; 
                 border-top: 1px dashed #ccc; 
-                padding-top: 4px; 
+                padding-top: 3mm; 
               }
               @media print { 
                 body { background: #fff; }
@@ -761,76 +671,54 @@
                 <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo">
                 <div class="company-name">${escapeHtml(field(companyName))}</div>
               </div>
-              <div class="section section-tracking">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/0b76ff/barcode.png" alt="Tracking Icon">Tracking Number</div>
+              <div class="section">
                 <label>Tracking Number:</label><span>${escapeHtml(field(shipment.trackingNumber))}</span>
               </div>
-              <div class="section section-delivery">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/0b76ff/calendar.png" alt="Calendar Icon">Delivery Date</div>
+              <div class="section">
                 <label>Delivery Date:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.estDeliveryDate))}</span>
               </div>
-              <div class="section section-origin">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/1e90ff/marker.png" alt="Origin Icon">Origin Area</div>
+              <div class="section">
                 <label>Origin Area:</label><span>${escapeHtml(field(shipment.origin))}</span>
               </div>
-              <div class="section section-destination">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/1e90ff/marker.png" alt="Destination Icon">Destination Area</div>
+              <div class="section">
                 <label>Destination Area:</label><span>${escapeHtml(field(shipment.destination))}</span>
               </div>
-              <div class="section section-content">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/1e90ff/package.png" alt="Content Icon">Content</div>
+              <div class="section">
                 <label>Content:</label><span>${escapeHtml(field(shipment.content))}</span>
               </div>
-              <div class="section section-order">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/1e90ff/order.png" alt="Order Icon">Order ID</div>
+              <div class="section">
                 <label>Order ID:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.orderId))}</span>
               </div>
-              <div class="section section-transport">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/1e90ff/truck.png" alt="Transport Icon">Transport Mode</div>
+              <div class="section">
                 <label>Transport Mode:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.transportMode))}</span>
               </div>
-              <div class="section section-quantity">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/1e90ff/quantity.png" alt="Quantity Icon">Quantity</div>
+              <div class="section">
                 <label>Quantity:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.quantity))}</span>
               </div>
-              <div class="section section-shipment">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/1e90ff/shipment.png" alt="Shipment Icon">Shipment Type</div>
+              <div class="section">
                 <label>Shipment Type:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.shipmentType))}</span>
               </div>
-              <div class="section section-amount">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/0055cc/money.png" alt="Amount Icon">Amount</div>
+              <div class="section">
                 <label>Amount:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.amount))}</span>
               </div>
-              <div class="section section-payment">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/0055cc/credit-card.png" alt="Payment Icon">Payment Mode</div>
+              <div class="section">
                 <label>Payment Mode:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.paymentMode))}</span>
               </div>
               <div class="section section-sender">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/0b76ff/user.png" alt="Sender Icon">Sender's Details</div>
-                <label>Name:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.name))}</span>
-              </div>
-              <div class="section section-sender">
-                <label>Address:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.address))}</span>
-              </div>
-              <div class="section section-sender">
-                <label>Mobile:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.mobile))}</span>
+                <label>Sender Name:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.name))}</span><br>
+                <label>Sender Address:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.address))}</span><br>
+                <label>Sender Mobile:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.mobile))}</span>
               </div>
               <div class="section section-receiver">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/0b76ff/user.png" alt="Receiver Icon">Receiver's Details</div>
-                <label>Name:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.name))}</span>
+                <label>Receiver Name:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.name))}</span><br>
+                <label>Receiver Address:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.address))}</span><br>
+                <label>Receiver Mobile:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.mobile))}</span>
               </div>
-              <div class="section section-receiver">
-                <label>Address:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.address))}</span>
-              </div>
-              <div class="section section-receiver">
-                <label>Mobile:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.mobile))}</span>
-              </div>
-              <div class="section section-stamp">
-                <div class="section-title"><img src="https://img.icons8.com/ios-filled/12/0055cc/stamp.png" alt="Stamp Icon">Official Stamp</div>
+              <div class="section">
                 <label>Official Stamp:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.officialStampDate))}${signatureStamp ? ` <img src="${signatureStamp}" alt="Official Stamp">` : ''}</span>
               </div>
               <div class="barcode">
-                <img src="https://via.placeholder.com/100x30?text=Barcode" alt="Barcode">
+                <img src="https://via.placeholder.com/80x20?text=Barcode" alt="Barcode">
               </div>
               <div class="footer">
                 Express Delivery Service<br>
@@ -860,7 +748,7 @@
           filename: `Receipt_${shipment.trackingNumber || 'unknown'}.pdf`,
           margin: [3, 3, 3, 3],
           html2canvas: { scale: 2, useCORS: true },
-          jsPDF: { unit: 'mm', format: [80, 160], orientation: 'portrait' }
+          jsPDF: { unit: 'mm', format: [80, 110], orientation: 'portrait' }
         }).from(container).save().then(() => {
           document.body.removeChild(container);
         }).catch(err => {
