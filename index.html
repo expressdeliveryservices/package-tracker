@@ -31,19 +31,19 @@
     .tracking button { padding: 8px 15px; border: none; border-radius: 3px; background-color: #1e90ff; color: white; cursor: pointer; }
     .shipment-tracking, .shipment-content { max-width: 500px; margin: 10px auto; font-family: 'Times New Roman', Times, serif; }
     .shipment-tracking .header, .shipment-content .header { font-weight: bold; font-size: 10px; margin-bottom: 2px; text-align: center; }
-    .shipment-content { padding: 12px; font-size: 11px; border: 2px solid #0b76ff; background: #fff; letter-spacing: 0.1px; width: 360px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: relative; }
-    .shipment-content .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid #eee; }
-    .shipment-content .header .company-name { font-size: 16px; font-weight: 700; color: #0b76ff; }
-    .shipment-content .header .logo img { height: 40px; }
-    .shipment-content .details { margin: 8px 0; padding: 8px; border: 1px solid #e0e6f8; border-radius: 4px; background: #fafafa; }
-    .shipment-content .details label { display: inline-block; width: 120px; font-weight: 700; color: #0b76ff; }
+    .shipment-content { padding: 10px; font-size: 10px; border: 1px solid #0b76ff; background: #fff; letter-spacing: 0.1px; width: 300px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: relative; }
+    .shipment-content .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 6px; border-bottom: 1px dashed #ccc; }
+    .shipment-content .header .company-name { font-size: 14px; font-weight: 700; color: #0b76ff; }
+    .shipment-content .header .logo img { height: 30px; }
+    .shipment-content .details { margin: 6px 0; padding: 6px; border: 1px solid #e0e6f8; border-radius: 3px; background: #fafafa; }
+    .shipment-content .details label { display: inline-block; width: 100px; font-weight: 700; color: #0b76ff; }
     .shipment-content .details span { display: inline-block; margin-left: 4px; color: #111; }
-    .shipment-content .signature-img, .shipment-content .payment-img { max-width: 60px; height: auto; margin-top: 6px; }
-    .shipment-content .section-title { font-size: 12px; font-weight: 700; margin: 10px 0 4px; color: #0b76ff; }
-    .shipment-content .total { font-size: 13px; font-weight: 800; margin-top: 10px; padding-top: 6px; text-align: right; color: #0b76ff; }
-    .shipment-content .footer { font-size: 10px; text-align: center; margin-top: 10px; color: #555; }
-    .shipment-content .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); color: #e0e6f8; font-size: 48px; font-weight: 900; opacity: 0.3; z-index: 0; pointer-events: none; }
-    .print-btn { margin-top: 10px; padding: 8px 16px; background-color: #0b76ff; color: white; border: none; border-radius: 4px; cursor: pointer; float: right; }
+    .shipment-content .signature-img, .shipment-content .payment-img { max-width: 50px; height: auto; margin-top: 4px; }
+    .shipment-content .section-title { font-size: 11px; font-weight: 700; margin: 6px 0 3px; color: #0b76ff; }
+    .shipment-content .total { font-size: 12px; font-weight: 800; margin-top: 6px; padding-top: 4px; text-align: right; color: #0b76ff; border-top: 1px dashed #ccc; }
+    .shipment-content .footer { font-size: 9px; text-align: center; margin-top: 6px; color: #555; border-top: 1px dashed #ccc; padding-top: 4px; }
+    .shipment-content .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); color: #e0e6f8; font-size: 28px; font-weight: 900; opacity: 0.3; z-index: 0; pointer-events: none; }
+    .print-btn { margin-top: 8px; padding: 6px 12px; background-color: #0b76ff; color: white; border: none; border-radius: 3px; cursor: pointer; float: right; }
     .timeline { position: relative; margin: 12px 0; }
     .timeline::before { content: ''; position: absolute; left: 18px; top: 0; bottom: 0; width: 3px; background: #eee; }
     .timeline-event { position: relative; margin-bottom: 18px; padding-left: 44px; }
@@ -79,8 +79,8 @@
     }
     footer { background: #f8f8f8; text-align: center; padding: 15px; color: #1e90ff; border-top: 1px solid #ddd; }
     @media (max-width: 600px) {
-      .shipment-content { width: 94%; font-size: 12px; }
-      .shipment-content .details label { width: 100px; }
+      .shipment-content { width: 94%; font-size: 10px; }
+      .shipment-content .details label { width: 90px; }
     }
   </style>
 </head>
@@ -277,7 +277,7 @@
     <div class="map-container">
       <div class="map-overlay">HEADQUARTER LOCATION</div>
       <div id="headquarterMap" style="width:100%;height:300px;">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d-0.2120214!3d51.4735056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4876052b2e9d3c9f%3A0x2e5f9a3d7a2a9e!2sUniversal%20Drops%2C%2066B%20Oxberry%20Ave%2C%20London%20SW6%203AL%2C%20UK!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d-0.2120214!3d51.4735056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4876052b2e9d3c9f%3A0x2e5f9a3d7a2a9e!2sUniversal%20Drops%2C%2066B%20Oxberry%20Ave%2C%20London%20SW6%203AL%2C%20UK!5e0!3m2!1sen!2us!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
       </div>
     </div>
   </section>
@@ -487,59 +487,33 @@
 
         contentDiv.innerHTML = `
           <div style="position:relative; overflow:visible;">
-            <div class="watermark">CERTIFIED</div>
+            <div class="watermark">Certified True Copy</div>
             <div class="header" style="z-index:2;">
               <div class="company-name">${escapeHtml(field(companyName))}</div>
               <div class="logo"><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo"></div>
             </div>
-
-            <div class="section-title">Shipment</div>
             <div class="details">
-              <label>Tracking #:</label><span>${escapeHtml(field(shipment.trackingNumber))}</span><br>
-              <label>Order ID:</label><span>${escapeHtml(field(shipment.orderId))}</span><br>
-              <label>From Name:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.name))}</span><br>
-              <label>From Address:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.address))}</span><br>
-              <label>To Name:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.name))}</span><br>
-              <label>To Address:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.address))}</span><br>
-              <label>Mobile:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.mobile))}</span><br>
               <label>Origin:</label><span>${escapeHtml(field(shipment.origin))}</span><br>
               <label>Destination:</label><span>${escapeHtml(field(shipment.destination))}</span><br>
               <label>Quantity:</label><span>${escapeHtml(field(shipment.quantity))}</span><br>
               <label>Shipment Type:</label><span>${escapeHtml(field(shipment.shipmentType))}</span><br>
               <label>Transport Mode:</label><span>${escapeHtml(field(shipment.transportMode))}</span><br>
-              <label>Content:</label><span>${escapeHtml(field(shipment.content))}</span><br>
-              <label>Est. Delivery:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.estDeliveryDate))}</span>
+              <label>Order ID:</label><span>${escapeHtml(field(shipment.orderId))}</span><br>
+              <label>Est. Delivery Date:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.estDeliveryDate))}</span><br>
+              <label>Sender:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.name))}</span><br>
+              <label>Address:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.address))}</span><br>
+              <label>Receiver:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.name))}</span><br>
+              <label>Address:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.address))}</span><br>
+              <label>Mobile:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.mobile))}</span><br>
+              <label>Amount:</label><span>$${escapeHtml(field(amount))}</span><br>
+              <label>Payment Mode:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.paymentMode || shipment.paymentMode || ''))}</span><br>
+              <label>Official Stamp:</label><span>${signatureStamp ? `<img src="${signatureStamp}" class="signature-img" alt="Official Stamp">` : ''}</span>
             </div>
-
-            <div class="section-title">Payment</div>
-            <div class="details" style="display:flex;gap:8px;align-items:center;">
-              <div style="flex:1">
-                <label>Amount:</label><span>$${escapeHtml(field(amount))}</span><br>
-                <label>Mode:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.paymentMode || shipment.paymentMode || ''))}</span>
-              </div>
-              <div style="flex:0 0 70px;text-align:right;">
-                <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1860.jpeg" class="payment-img" alt="Payment Icon">
-              </div>
-            </div>
-
-            <div class="section-title">Authorization</div>
-            <div class="details" style="display:flex;gap:8px;align-items:center;">
-              <div style="flex:1">
-                <label>Signed by:</label><span>${escapeHtml(field(shipment.signedBy))}</span><br>
-                <label>Stamp Date:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.officialStampDate || shipment.officialStampDate))}</span>
-              </div>
-              <div style="flex:0 0 80px;text-align:right;">
-                ${signatureStamp ? `<img src="${signatureStamp}" class="signature-img" alt="Signature Stamp">` : ''}
-              </div>
-            </div>
-
             <div class="total">Total: $${escapeHtml(field(amount))}</div>
-
             <div class="footer">
               Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
-              Issued: ${new Date().toLocaleString()}
+              Issued: ${new Date().toLocaleString('en-US', { timeZone: 'Africa/Lagos' })}
             </div>
-
             <button class="print-btn" onclick="printInvoice('${escapeJs(number)}')">Print</button>
           </div>
         `;
@@ -569,16 +543,15 @@
                 margin: 0; 
                 background: #fff; 
                 color: #000; 
-                font-size: 12px; 
-                line-height: 1.4; 
+                font-size: 10px; 
+                line-height: 1.3; 
               }
               .receipt { 
                 width: 80mm; 
-                margin: 10mm auto; 
-                padding: 10mm; 
+                margin: 5mm auto; 
+                padding: 5mm; 
                 border: 1px solid #000; 
-                background: #f8f8f8; 
-                box-shadow: 0 0 5px rgba(0,0,0,0.2); 
+                background: #fff; 
                 position: relative; 
               }
               .watermark { 
@@ -587,7 +560,7 @@
                 left: 50%; 
                 transform: translate(-50%, -50%) rotate(-45deg); 
                 color: #d0d0d0; 
-                font-size: 36px; 
+                font-size: 24px; 
                 font-weight: 900; 
                 opacity: 0.3; 
                 z-index: 0; 
@@ -595,21 +568,21 @@
               .header { 
                 text-align: center; 
                 border-bottom: 1px dashed #000; 
-                padding-bottom: 8px; 
-                margin-bottom: 10px; 
+                padding-bottom: 5px; 
+                margin-bottom: 5px; 
               }
               .header img { 
-                width: 60px; 
-                margin: 5px 0; 
+                width: 50px; 
+                margin: 3px 0; 
               }
               .header .company-name { 
-                font-size: 16px; 
+                font-size: 14px; 
                 font-weight: bold; 
                 color: #0b76ff; 
               }
               .section { 
-                margin: 8px 0; 
-                padding: 5px 0; 
+                margin: 4px 0; 
+                padding: 4px 0; 
                 border-top: 1px dashed #ccc; 
               }
               .section:first-of-type { 
@@ -617,46 +590,44 @@
               }
               .section label { 
                 display: inline-block; 
-                width: 100px; 
+                width: 90px; 
                 font-weight: bold; 
                 color: #0b76ff; 
               }
               .section span { 
                 display: inline-block; 
-                width: calc(100% - 110px); 
+                width: calc(100% - 95px); 
+                word-wrap: break-word; 
+              }
+              .section img { 
+                max-width: 50px; 
+                height: auto; 
+                vertical-align: middle; 
               }
               .barcode { 
                 text-align: center; 
-                margin: 10px 0; 
+                margin: 5px 0; 
               }
               .barcode img { 
-                width: 120px; 
-                height: 40px; 
+                width: 100px; 
+                height: 30px; 
               }
               .total { 
                 text-align: right; 
-                font-size: 14px; 
+                font-size: 12px; 
                 font-weight: bold; 
                 color: #0b76ff; 
-                margin-top: 10px; 
-                padding-top: 5px; 
+                margin-top: 5px; 
+                padding-top: 4px; 
                 border-top: 1px dashed #ccc; 
               }
               .footer { 
                 text-align: center; 
-                font-size: 10px; 
+                font-size: 8px; 
                 color: #555; 
-                margin-top: 10px; 
+                margin-top: 5px; 
                 border-top: 1px dashed #ccc; 
-                padding-top: 5px; 
-              }
-              .signature { 
-                text-align: center; 
-                margin-top: 10px; 
-              }
-              .signature img { 
-                max-width: 80px; 
-                height: auto; 
+                padding-top: 4px; 
               }
               @media print { 
                 body { background: #fff; }
@@ -670,31 +641,10 @@
           </head>
           <body>
             <div class="receipt">
-              <div class="watermark">CERTIFIED</div>
+              <div class="watermark">Certified True Copy</div>
               <div class="header">
                 <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo">
                 <div class="company-name">${escapeHtml(field(companyName))}</div>
-              </div>
-              <div class="section">
-                <label>Tracking #:</label><span>${escapeHtml(field(shipment.trackingNumber))}</span>
-              </div>
-              <div class="section">
-                <label>Order ID:</label><span>${escapeHtml(field(shipment.orderId))}</span>
-              </div>
-              <div class="section">
-                <label>From Name:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.name))}</span>
-              </div>
-              <div class="section">
-                <label>From Address:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.address))}</span>
-              </div>
-              <div class="section">
-                <label>To Name:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.name))}</span>
-              </div>
-              <div class="section">
-                <label>To Address:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.address))}</span>
-              </div>
-              <div class="section">
-                <label>Mobile:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.mobile))}</span>
               </div>
               <div class="section">
                 <label>Origin:</label><span>${escapeHtml(field(shipment.origin))}</span>
@@ -712,10 +662,25 @@
                 <label>Transport Mode:</label><span>${escapeHtml(field(shipment.transportMode))}</span>
               </div>
               <div class="section">
-                <label>Content:</label><span>${escapeHtml(field(shipment.content))}</span>
+                <label>Order ID:</label><span>${escapeHtml(field(shipment.orderId))}</span>
               </div>
               <div class="section">
-                <label>Est. Delivery:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.estDeliveryDate))}</span>
+                <label>Est. Delivery Date:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.estDeliveryDate))}</span>
+              </div>
+              <div class="section">
+                <label>Sender:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.name))}</span>
+              </div>
+              <div class="section">
+                <label>Address:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.address))}</span>
+              </div>
+              <div class="section">
+                <label>Receiver:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.name))}</span>
+              </div>
+              <div class="section">
+                <label>Address:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.address))}</span>
+              </div>
+              <div class="section">
+                <label>Mobile:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.mobile))}</span>
               </div>
               <div class="section">
                 <label>Amount:</label><span>$${escapeHtml(field(amount))}</span>
@@ -724,21 +689,17 @@
                 <label>Payment Mode:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.paymentMode || shipment.paymentMode || ''))}</span>
               </div>
               <div class="section">
-                <label>Signed by:</label><span>${escapeHtml(field(shipment.signedBy))}</span>
-              </div>
-              <div class="section">
-                <label>Stamp Date:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.officialStampDate || shipment.officialStampDate))}</span>
+                <label>Official Stamp:</label><span>${signatureStamp ? `<img src="${signatureStamp}" alt="Official Stamp">` : ''}</span>
               </div>
               <div class="barcode">
-                <img src="https://via.placeholder.com/120x40?text=Barcode" alt="Barcode">
+                <img src="https://via.placeholder.com/100x30?text=Barcode" alt="Barcode">
               </div>
-              ${signatureStamp ? `<div class="signature"><img src="${signatureStamp}" alt="Signature Stamp"></div>` : ''}
               <div class="total">Total: $${escapeHtml(field(amount))}</div>
               <div class="footer">
                 Express Delivery Service<br>
                 Phone: +1 (941) 207-8626<br>
                 Email: Expressdeliveryservice0016@gmail.com<br>
-                Issued: ${new Date().toLocaleString()}
+                Issued: ${new Date().toLocaleString('en-US', { timeZone: 'Africa/Lagos' })}
               </div>
             </div>
           </body>
@@ -760,9 +721,9 @@
         document.body.appendChild(container);
         html2pdf().set({
           filename: `Receipt_${shipment.trackingNumber || 'unknown'}.pdf`,
-          margin: [5, 5, 5, 5],
+          margin: [3, 3, 3, 3],
           html2canvas: { scale: 2, useCORS: true },
-          jsPDF: { unit: 'mm', format: [80, 297], orientation: 'portrait' }
+          jsPDF: { unit: 'mm', format: [80, 150], orientation: 'portrait' }
         }).from(container).save().then(() => {
           document.body.removeChild(container);
         }).catch(err => {
