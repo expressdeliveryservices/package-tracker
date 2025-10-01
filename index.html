@@ -439,8 +439,7 @@
         'estDeliveryDate', 'modeOfTransport', 'typeOfShipment', 'quantity',
         'paymentMode', 'paymentMethod', 'receipt.amount',
         'sender.name', 'sender.address',
-        'receiver.name', 'receiver.address', 'receiver.mobile',
-        'receiver.lat', 'receiver.lng'
+        'receiver.name', 'receiver.address', 'receiver.mobile'
       ];
       for (const field of requiredFields) {
         const keys = field.split('.');
@@ -453,12 +452,14 @@
           return false;
         }
       }
-      // Validate coordinates
-      const lat = parseFloat(shipment.receiver.lat);
-      const lng = parseFloat(shipment.receiver.lng);
-      if (isNaN(lat) || isNaN(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180) {
-        console.warn(`Invalid coordinates: lat=${lat}, lng=${lng}`);
-        return false;
+      // Validate coordinates if they exist
+      if (shipment.receiver.lat !== undefined && shipment.receiver.lng !== undefined) {
+        const lat = parseFloat(shipment.receiver.lat);
+        const lng = parseFloat(shipment.receiver.lng);
+        if (isNaN(lat) || isNaN(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+          console.warn(`Invalid coordinates: lat=${lat}, lng=${lng}`);
+          return false;
+        }
       }
       return true;
     }
@@ -485,6 +486,7 @@
 
       if (!input) {
         console.error('Tracking input element not found.');
+        alert('Tracking input not found. Please refresh the page.');
         return;
       }
       const inputValue = input.value.trim();
@@ -493,6 +495,7 @@
       // Clear details if input is empty
       if (!inputValue) {
         console.log('Empty input, clearing details.');
+        alert('Please enter a tracking number or location name.');
         clearShipmentDetails();
         return;
       }
@@ -505,32 +508,32 @@
       const filtered = shipments.filter(s => (s.trackingNumber || '').toString().toLowerCase() === inputValue.toLowerCase());
       const shipment = filtered.length > 0 ? filtered[0] : null;
 
+      if (trackingDiv) {
+        trackingDiv.style.display = 'block';
+        trackingDiv.innerHTML = '<div class="header">Processing...</div>';
+      }
+
       if (shipment && isValidShipment(shipment)) {
         console.log('Valid shipment found:', shipment);
-        if (trackingDiv) {
-          trackingDiv.style.display = 'block';
-          trackingDiv.innerHTML = '<div class="header">Tracking...</div>';
-        }
-
         // Update map and tracking details after 5 seconds
         setTimeout(() => {
           try {
-            const lat = parseFloat(shipment.receiver.lat);
-            const lng = parseFloat(shipment.receiver.lng);
+            let mapUrl;
             const address = shipment.receiver.address;
-            console.log('Attempting to update map with shipment:', { lat, lng, address });
-
-            if (isNaN(lat) || isNaN(lng) || !address) {
-              console.warn('Invalid coordinates or address:', { lat, lng, address });
-              alert('Invalid receiver location data for shipment.');
-              clearShipmentDetails();
-              return;
+            // Use coordinates if available, otherwise fall back to address
+            if (shipment.receiver.lat !== undefined && shipment.receiver.lng !== undefined) {
+              const lat = parseFloat(shipment.receiver.lat);
+              const lng = parseFloat(shipment.receiver.lng);
+              console.log('Attempting to update map with coordinates:', { lat, lng, address });
+              mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2000!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z${encodeURIComponent(address)}!5e0!3m2!1sen!2us!4v1695296400000`;
+            } else {
+              console.log('No coordinates provided, using address:', address);
+              mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3381440.332163714!2d105.3188!3d61.5240!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z${encodeURIComponent(address)}!5e0!3m2!1sen!2us!4v1695296400000`;
             }
 
             if (receiverMap) {
-              const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2000!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z${encodeURIComponent(address)}!5e0!3m2!1sen!2us!4v1695296400000`;
               receiverMap.innerHTML = `<iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
-              console.log('Map updated to shipment location:', { lat, lng, address, mapUrl });
+              console.log('Map updated to shipment location:', { address, mapUrl });
             }
 
             // Update tracking details
@@ -610,7 +613,7 @@
             }, 10000);
           } catch (err) {
             console.error('Shipment tracking error:', err);
-            alert('Error updating shipment tracking information.');
+            alert('Error processing shipment. Please check tracking number and try again.');
             clearShipmentDetails();
           }
         }, 5000);
@@ -627,7 +630,7 @@
         setTimeout(() => {
           try {
             if (receiverMap) {
-              const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3381440.332163714!2d105.3188!3d61.5240!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z${encodeURIComponent(inputValue)}!5e0!3m2!1sen!2us!4v1695296400000`;
+              const mapUrl = `https://www.google.com/maps/embed?q=${encodeURIComponent(inputValue)}&center=61.5240,105.3188&zoom=4&key=NO_API_KEY&maptype=roadmap`;
               receiverMap.innerHTML = `<iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
               console.log('Map updated to location:', { location: inputValue, mapUrl });
             }
@@ -637,7 +640,7 @@
             }
           } catch (err) {
             console.error('Location map update error:', err);
-            alert('Error displaying location on map.');
+            alert('Error displaying location on map. Please try a different location name.');
             clearShipmentDetails();
           }
         }, 5000);
