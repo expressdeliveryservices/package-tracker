@@ -92,6 +92,10 @@ textarea { min-height: 110px; resize: vertical; }
             <label for="newSenderAddress">Sender Address</label>
             <input id="newSenderAddress" type="text" placeholder="Sender address">
           </div>
+          <div>
+            <label for="newSenderMobile">Sender Mobile</label>
+            <input id="newSenderMobile" type="text" placeholder="e.g. +1 (555) 123-4567">
+          </div>
           <!-- Receiver -->
           <div>
             <label for="newReceiver">Receiver Name</label>
@@ -242,19 +246,20 @@ function loadShipmentForEdit() {
   const s = shipments[selectedIndex];
   document.getElementById("newSender").value = s.sender?.name || "";
   document.getElementById("newSenderAddress").value = s.sender?.address || "";
+  document.getElementById("newSenderMobile").value = s.sender?.mobile || "";
   document.getElementById("newReceiver").value = s.receiver?.name || "";
   document.getElementById("newReceiverMobile").value = s.receiver?.mobile || "";
   document.getElementById("newAddress").value = s.receiver?.address || "";
   document.getElementById("newLat").value = s.receiver?.lat || "";
   document.getElementById("newLng").value = s.receiver?.lng || "";
-  document.getElementById("newAmount").value = s.receipt?.amount || "";
-  document.getElementById("newOrderId").value = s.orderId || "";
+  document.getElementById("newAmount").value = s.receipt?.amount ? parseFloat(s.receipt.amount.replace('$', '')) || "" : "";
+  document.getElementById("newOrderId").value = s.receipt?.orderId || "";
   document.getElementById("newEstDeliveryDate").value = s.receipt?.estDeliveryDate || "";
-  document.getElementById("newPaymentMode").value = s.receipt?.paymentMode || s.paymentMode || "";
-  document.getElementById("newModeOfTransport").value = s.transportMode || "";
-  document.getElementById("newTypeOfShipment").value = s.shipmentType || "";
-  document.getElementById("newQuantity").value = s.quantity || "";
-  document.getElementById("newOfficialStampDate").value = s.receipt?.officialStampDate || s.officialStampDate || "";
+  document.getElementById("newPaymentMode").value = s.receipt?.paymentMode || "";
+  document.getElementById("newModeOfTransport").value = s.receipt?.transportMode || "";
+  document.getElementById("newTypeOfShipment").value = s.receipt?.shipmentType || "";
+  document.getElementById("newQuantity").value = s.receipt?.quantity || "";
+  document.getElementById("newOfficialStampDate").value = s.receipt?.officialStampDate || "";
   document.getElementById("newOrigin").value = s.origin || "";
   document.getElementById("newDestination").value = s.destination || "";
   document.getElementById("newContent").value = s.content || "";
@@ -276,17 +281,17 @@ function buildShipment(trackingNumber) {
       if (!Array.isArray(timeline)) { alert("Timeline must be a JSON array."); return null; }
     } catch (e) { alert("Invalid timeline JSON: " + e.message); return null; }
   }
+  const amountRaw = document.getElementById("newAmount").value.trim();
+  const amount = amountRaw ? `$${parseFloat(amountRaw).toFixed(2)}` : "$0.00";
   return {
     trackingNumber,
-    orderId: document.getElementById("newOrderId").value.trim(),
-    quantity: document.getElementById("newQuantity").value || "1",
-    shipmentType: document.getElementById("newTypeOfShipment").value.trim(),
-    transportMode: document.getElementById("newModeOfTransport").value,
     origin: document.getElementById("newOrigin").value.trim(),
     destination: document.getElementById("newDestination").value.trim(),
+    content: document.getElementById("newContent").value.trim() || "No description",
     sender: {
       name: document.getElementById("newSender").value.trim(),
-      address: document.getElementById("newSenderAddress").value.trim()
+      address: document.getElementById("newSenderAddress").value.trim(),
+      mobile: document.getElementById("newSenderMobile").value.trim()
     },
     receiver: {
       name: document.getElementById("newReceiver").value.trim(),
@@ -297,14 +302,17 @@ function buildShipment(trackingNumber) {
     },
     receipt: {
       companyName: "Express Delivery Service",
-      amount: document.getElementById("newAmount").value || "0",
       estDeliveryDate: document.getElementById("newEstDeliveryDate").value,
+      orderId: document.getElementById("newOrderId").value.trim(),
+      transportMode: document.getElementById("newModeOfTransport").value,
+      quantity: document.getElementById("newQuantity").value || "1",
+      shipmentType: document.getElementById("newTypeOfShipment").value.trim(),
+      amount,
       paymentMode: document.getElementById("newPaymentMode").value || "Not selected",
       officialStampDate: document.getElementById("newOfficialStampDate").value
     },
-    content: document.getElementById("newContent").value.trim() || "No description",
-    timeline,
-    officialStamp: currentStampData || ""
+    officialStamp: currentStampData || "",
+    timeline
   };
 }
 
@@ -341,6 +349,7 @@ function clearForm() {
   document.getElementById("newTimeline").value = "";
   document.getElementById("newContent").value = "";
   document.getElementById("newSenderAddress").value = "";
+  document.getElementById("newSenderMobile").value = "";
   document.getElementById("newReceiverMobile").value = "";
   document.getElementById("newOrigin").value = "";
   document.getElementById("newDestination").value = "";
