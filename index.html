@@ -393,7 +393,7 @@
     function initMaps() {
       const receiverMap = document.getElementById('receiverMap');
       if (!receiverMap) return;
-      receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+      receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2us!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
     }
 
     function rotateTestimonials() {
@@ -478,7 +478,7 @@
           initMaps();
         }
 
-        // Build receipt content
+        // Build on-screen receipt content
         contentDiv.style.display = 'block';
         const companyName = shipment.receipt && shipment.receipt.companyName ? shipment.receipt.companyName : 'Express Delivery Service';
         const amount = shipment.receipt && shipment.receipt.amount ? shipment.receipt.amount : '0.00';
@@ -497,10 +497,18 @@
             <div class="details">
               <label>Tracking #:</label><span>${escapeHtml(field(shipment.trackingNumber))}</span><br>
               <label>Order ID:</label><span>${escapeHtml(field(shipment.orderId))}</span><br>
+              <label>From Name:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.name))}</span><br>
+              <label>From Address:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.address))}</span><br>
+              <label>To Name:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.name))}</span><br>
+              <label>To Address:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.address))}</span><br>
+              <label>Mobile:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.mobile))}</span><br>
+              <label>Origin:</label><span>${escapeHtml(field(shipment.origin))}</span><br>
+              <label>Destination:</label><span>${escapeHtml(field(shipment.destination))}</span><br>
+              <label>Quantity:</label><span>${escapeHtml(field(shipment.quantity))}</span><br>
+              <label>Shipment Type:</label><span>${escapeHtml(field(shipment.shipmentType))}</span><br>
+              <label>Transport Mode:</label><span>${escapeHtml(field(shipment.transportMode))}</span><br>
               <label>Content:</label><span>${escapeHtml(field(shipment.content))}</span><br>
-              <label>From:</label><span>${escapeHtml(field(shipment.origin || (shipment.sender && shipment.sender.address)))}</span><br>
-              <label>To:</label><span>${escapeHtml(field(shipment.destination || (shipment.receiver && shipment.receiver.address)))}</span><br>
-              <label>ETA:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.estDeliveryDate))}</span>
+              <label>Est. Delivery:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.estDeliveryDate))}</span>
             </div>
 
             <div class="section-title">Payment</div>
@@ -514,20 +522,11 @@
               </div>
             </div>
 
-            <div class="section-title">Sender / Receiver</div>
-            <div class="details">
-              <label>Sender:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.name))}</span><br>
-              <label>Sender Addr:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.address))}</span><br>
-              <label>Receiver:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.name))}</span><br>
-              <label>Recv Addr:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.address))}</span><br>
-              <label>Mobile:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.mobile))}</span>
-            </div>
-
             <div class="section-title">Authorization</div>
             <div class="details" style="display:flex;gap:8px;align-items:center;">
               <div style="flex:1">
                 <label>Signed by:</label><span>${escapeHtml(field(shipment.signedBy))}</span><br>
-                <label>Stamp date:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.officialStampDate || shipment.officialStampDate))}</span>
+                <label>Stamp Date:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.officialStampDate || shipment.officialStampDate))}</span>
               </div>
               <div style="flex:0 0 80px;text-align:right;">
                 ${signatureStamp ? `<img src="${signatureStamp}" class="signature-img" alt="Signature Stamp">` : ''}
@@ -559,34 +558,191 @@
       const field = v => (v === undefined || v === null) ? '' : v;
 
       const receiptContent = `
-        <!doctype html><html><head><meta charset="utf-8"><title>Receipt - ${escapeHtml(field(shipment.trackingNumber))}</title>
-        <style>
-          body { font-family: Arial, sans-serif; margin: 8px; }
-          .receipt { width: 320px; margin: 0 auto; padding: 8px; border: 1px solid #000; border-radius:4px; }
-          .header { display:flex;justify-content:space-between;align-items:center;font-weight:700;color:#0b76ff;margin-bottom:8px; }
-          .section { font-size:12px;margin-bottom:6px; }
-          .label { font-weight:700;color:#0b76ff;display:inline-block;width:110px;vertical-align:top; }
-          .footer { font-size:10px;color:#555;text-align:center;margin-top:8px; }
-          .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); color: #e0e6f8; font-size: 48px; font-weight: 900; opacity: 0.3; }
-        </style>
-        </head><body>
-        <div class="receipt" style="position:relative;">
-          <div class="watermark">CERTIFIED</div>
-          <div class="header"><div>${escapeHtml(field(companyName))}</div><div><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" style="height:30px"></div></div>
-          <div class="section"><span class="label">Tracking #:</span>${escapeHtml(field(shipment.trackingNumber))}</div>
-          <div class="section"><span class="label">Order ID:</span>${escapeHtml(field(shipment.orderId))}</div>
-          <div class="section"><span class="label">Content:</span>${escapeHtml(field(shipment.content))}</div>
-          <div class="section"><span class="label">From:</span>${escapeHtml(field(shipment.origin || (shipment.sender && shipment.sender.address)))}</div>
-          <div class="section"><span class="label">To:</span>${escapeHtml(field(shipment.destination || (shipment.receiver && shipment.receiver.address)))}</div>
-          <div class="section"><span class="label">ETA:</span>${escapeHtml(field(shipment.receipt && shipment.receipt.estDeliveryDate))}</div>
-          <div class="section"><span class="label">Amount:</span>$${escapeHtml(field(amount))}</div>
-          <div class="section"><span class="label">Receiver:</span>${escapeHtml(field(shipment.receiver && shipment.receiver.name))}</div>
-          <div class="section"><span class="label">Mobile:</span>${escapeHtml(field(shipment.receiver && shipment.receiver.mobile))}</div>
-          <div class="section"><span class="label">Signed by:</span>${escapeHtml(field(shipment.signedBy))}</div>
-          ${signatureStamp ? `<div style="text-align:center;margin-top:8px;"><img src="${signatureStamp}" style="max-width:100px"></div>` : ''}
-          <div class="footer">Express Delivery Service | Phone: +1 (941) 207-8626<br>Issued: ${new Date().toLocaleString()}</div>
-        </div>
-        </body></html>
+        <!doctype html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <title>Receipt - ${escapeHtml(field(shipment.trackingNumber))}</title>
+            <style>
+              body { 
+                font-family: 'Times New Roman', Times, serif; 
+                margin: 0; 
+                background: #fff; 
+                color: #000; 
+                font-size: 12px; 
+                line-height: 1.4; 
+              }
+              .receipt { 
+                width: 80mm; 
+                margin: 10mm auto; 
+                padding: 10mm; 
+                border: 1px solid #000; 
+                background: #f8f8f8; 
+                box-shadow: 0 0 5px rgba(0,0,0,0.2); 
+                position: relative; 
+              }
+              .watermark { 
+                position: absolute; 
+                top: 50%; 
+                left: 50%; 
+                transform: translate(-50%, -50%) rotate(-45deg); 
+                color: #d0d0d0; 
+                font-size: 36px; 
+                font-weight: 900; 
+                opacity: 0.3; 
+                z-index: 0; 
+              }
+              .header { 
+                text-align: center; 
+                border-bottom: 1px dashed #000; 
+                padding-bottom: 8px; 
+                margin-bottom: 10px; 
+              }
+              .header img { 
+                width: 60px; 
+                margin: 5px 0; 
+              }
+              .header .company-name { 
+                font-size: 16px; 
+                font-weight: bold; 
+                color: #0b76ff; 
+              }
+              .section { 
+                margin: 8px 0; 
+                padding: 5px 0; 
+                border-top: 1px dashed #ccc; 
+              }
+              .section:first-of-type { 
+                border-top: none; 
+              }
+              .section label { 
+                display: inline-block; 
+                width: 100px; 
+                font-weight: bold; 
+                color: #0b76ff; 
+              }
+              .section span { 
+                display: inline-block; 
+                width: calc(100% - 110px); 
+              }
+              .barcode { 
+                text-align: center; 
+                margin: 10px 0; 
+              }
+              .barcode img { 
+                width: 120px; 
+                height: 40px; 
+              }
+              .total { 
+                text-align: right; 
+                font-size: 14px; 
+                font-weight: bold; 
+                color: #0b76ff; 
+                margin-top: 10px; 
+                padding-top: 5px; 
+                border-top: 1px dashed #ccc; 
+              }
+              .footer { 
+                text-align: center; 
+                font-size: 10px; 
+                color: #555; 
+                margin-top: 10px; 
+                border-top: 1px dashed #ccc; 
+                padding-top: 5px; 
+              }
+              .signature { 
+                text-align: center; 
+                margin-top: 10px; 
+              }
+              .signature img { 
+                max-width: 80px; 
+                height: auto; 
+              }
+              @media print { 
+                body { background: #fff; }
+                .receipt { 
+                  box-shadow: none; 
+                  border: 1px solid #000; 
+                  margin: 0 auto; 
+                }
+              }
+            </style>
+          </head>
+          <body>
+            <div class="receipt">
+              <div class="watermark">CERTIFIED</div>
+              <div class="header">
+                <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo">
+                <div class="company-name">${escapeHtml(field(companyName))}</div>
+              </div>
+              <div class="section">
+                <label>Tracking #:</label><span>${escapeHtml(field(shipment.trackingNumber))}</span>
+              </div>
+              <div class="section">
+                <label>Order ID:</label><span>${escapeHtml(field(shipment.orderId))}</span>
+              </div>
+              <div class="section">
+                <label>From Name:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.name))}</span>
+              </div>
+              <div class="section">
+                <label>From Address:</label><span>${escapeHtml(field(shipment.sender && shipment.sender.address))}</span>
+              </div>
+              <div class="section">
+                <label>To Name:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.name))}</span>
+              </div>
+              <div class="section">
+                <label>To Address:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.address))}</span>
+              </div>
+              <div class="section">
+                <label>Mobile:</label><span>${escapeHtml(field(shipment.receiver && shipment.receiver.mobile))}</span>
+              </div>
+              <div class="section">
+                <label>Origin:</label><span>${escapeHtml(field(shipment.origin))}</span>
+              </div>
+              <div class="section">
+                <label>Destination:</label><span>${escapeHtml(field(shipment.destination))}</span>
+              </div>
+              <div class="section">
+                <label>Quantity:</label><span>${escapeHtml(field(shipment.quantity))}</span>
+              </div>
+              <div class="section">
+                <label>Shipment Type:</label><span>${escapeHtml(field(shipment.shipmentType))}</span>
+              </div>
+              <div class="section">
+                <label>Transport Mode:</label><span>${escapeHtml(field(shipment.transportMode))}</span>
+              </div>
+              <div class="section">
+                <label>Content:</label><span>${escapeHtml(field(shipment.content))}</span>
+              </div>
+              <div class="section">
+                <label>Est. Delivery:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.estDeliveryDate))}</span>
+              </div>
+              <div class="section">
+                <label>Amount:</label><span>$${escapeHtml(field(amount))}</span>
+              </div>
+              <div class="section">
+                <label>Payment Mode:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.paymentMode || shipment.paymentMode || ''))}</span>
+              </div>
+              <div class="section">
+                <label>Signed by:</label><span>${escapeHtml(field(shipment.signedBy))}</span>
+              </div>
+              <div class="section">
+                <label>Stamp Date:</label><span>${escapeHtml(field(shipment.receipt && shipment.receipt.officialStampDate || shipment.officialStampDate))}</span>
+              </div>
+              <div class="barcode">
+                <img src="https://via.placeholder.com/120x40?text=Barcode" alt="Barcode">
+              </div>
+              ${signatureStamp ? `<div class="signature"><img src="${signatureStamp}" alt="Signature Stamp"></div>` : ''}
+              <div class="total">Total: $${escapeHtml(field(amount))}</div>
+              <div class="footer">
+                Express Delivery Service<br>
+                Phone: +1 (941) 207-8626<br>
+                Email: Expressdeliveryservice0016@gmail.com<br>
+                Issued: ${new Date().toLocaleString()}
+              </div>
+            </div>
+          </body>
+        </html>
       `;
 
       const win = window.open('', '_blank');
@@ -604,9 +760,9 @@
         document.body.appendChild(container);
         html2pdf().set({
           filename: `Receipt_${shipment.trackingNumber || 'unknown'}.pdf`,
-          margin: [6,6,6,6],
+          margin: [5, 5, 5, 5],
           html2canvas: { scale: 2, useCORS: true },
-          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+          jsPDF: { unit: 'mm', format: [80, 297], orientation: 'portrait' }
         }).from(container).save().then(() => {
           document.body.removeChild(container);
         }).catch(err => {
