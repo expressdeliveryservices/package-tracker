@@ -107,7 +107,7 @@
 <body onload="scrollToTop()">
   <noscript>
     <div style="text-align: center; padding: 20px; background: #ffe6e6; color: #d32f2f;">
-      JavaScript is disabled in your browser. Please enable JavaScript to use features like Google Maps, tracking, and invoice generation.
+      JavaScript is disabled in your browser. Please enable JavaScript to use features like tracking and invoice generation.
     </div>
   </noscript>
 
@@ -276,7 +276,9 @@
     <div id="shipmentContent" class="shipment-content" style="display:none;"></div>
     <div class="map-container">
       <div class="map-overlay">CURRENT LOCATION ON MAP</div>
-      <div id="receiverMap" style="width:100%;height:300px;"></div>
+      <div id="receiverMap" style="width:100%;height:300px;">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1996.8274834049216!2d30.3777516!3d60.0400!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNjDCsDAyJzI0LjAiTiAzMMKwMjInNDguMCJF!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+      </div>
     </div>
   </section>
 
@@ -339,11 +341,9 @@
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBFw0Qbyq9zTFTd0gji4kPUSbX56yqWi8g&callback=initMaps" defer></script>
   <script>
     // Global shipments array
     let shipments = [];
-    let receiverMap, mapInstance;
 
     // Load shipments from localStorage
     function loadShipments() {
@@ -404,27 +404,6 @@
     function openSupport() { document.getElementById('supportPopup').style.display = 'block'; }
     function closeSupport() { document.getElementById('supportPopup').style.display = 'none'; }
 
-    // Initialize Maps
-    function initMaps() {
-      receiverMap = document.getElementById('receiverMap');
-      if (!receiverMap) return;
-
-      // Set default location to 104 Prosveshcheniya Avenue, St. Petersburg
-      const defaultLocation = { lat: 60.0400, lng: 30.3800 };
-      mapInstance = new google.maps.Map(receiverMap, {
-        center: defaultLocation,
-        zoom: 7,
-        mapTypeId: 'roadmap'
-      });
-
-      // Add marker for default location
-      new google.maps.Marker({
-        position: defaultLocation,
-        map: mapInstance,
-        title: '104 Prosveshcheniya Avenue, St. Petersburg'
-      });
-    }
-
     // Escape HTML to prevent XSS
     function escapeHtml(unsafe) {
       if (typeof unsafe !== 'string') return String(unsafe || '');
@@ -470,9 +449,12 @@
     function clearShipmentDetails() {
       const trackingDiv = document.getElementById('shipmentTracking');
       const contentDiv = document.getElementById('shipmentContent');
+      const receiverMap = document.getElementById('receiverMap');
       if (trackingDiv) trackingDiv.style.display = 'none';
       if (contentDiv) contentDiv.style.display = 'none';
-      initMaps();
+      if (receiverMap) {
+        receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1996.8274834049216!2d30.3777516!3d60.0400!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNjDCsDAyJzI0LjAiTiAzMMKwMjInNDguMCJF!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+      }
     }
 
     // Tracking function
@@ -480,6 +462,7 @@
       const input = document.getElementById('trackingNumber');
       const trackingDiv = document.getElementById('shipmentTracking');
       const contentDiv = document.getElementById('shipmentContent');
+      const receiverMap = document.getElementById('receiverMap');
 
       if (!input) return;
       const number = input.value.trim();
@@ -512,42 +495,41 @@
           if (shipment && shipment.receiver && shipment.receiver.lat && shipment.receiver.lng) {
             const lat = parseFloat(shipment.receiver.lat);
             const lng = parseFloat(shipment.receiver.lng);
-            if (mapInstance) {
-              const newLocation = { lat, lng };
-              mapInstance.setCenter(newLocation);
-              mapInstance.setZoom(10);
-              new google.maps.Marker({
-                position: newLocation,
-                map: mapInstance,
-                title: shipment.receiver.address
-              });
-            } else {
-              initMaps();
+            if (isNaN(lat) || isNaN(lng)) {
+              console.warn('Invalid coordinates for shipment:', shipment.receiver);
+              clearShipmentDetails();
+              return;
+            }
+            if (receiverMap) {
+              const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2000!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z${encodeURIComponent(`${lat},${lng}`)}!5e0!3m2!1sen!2sus!4v1695296400000`;
+              receiverMap.innerHTML = `<iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+              console.log('Map updated to shipment location:', { lat, lng });
             }
           } else {
-            initMaps();
+            console.warn('No valid coordinates in shipment data:', shipment);
+            clearShipmentDetails();
+          }
+
+          // Update tracking details
+          if (shipment && trackingDiv) {
+            trackingDiv.innerHTML = '<div class="header">Tracking Shipment: ' + escapeHtml(shipment.trackingNumber) + '</div>';
+            if (shipment.timeline && Array.isArray(shipment.timeline) && shipment.timeline.length > 0) {
+              trackingDiv.innerHTML += `<div class="timeline">
+                ${shipment.timeline.map(event => `
+                  <div class="timeline-event ${event.completed ? 'completed' : ''}">
+                    <div class="tick"></div>
+                    <div class="time">${escapeHtml(event.time || 'Unknown')}</div>
+                    <div class="description">${escapeHtml(event.description || 'No description')} <div style="background:#ccc;padding:2px 5px;border-radius:3px;margin-top:3px;">${escapeHtml(event.status || 'Unknown')}</div></div>
+                  </div>
+                `).join('')}
+              </div>`;
+            } else {
+              trackingDiv.innerHTML += '<div class="timeline"><div class="timeline-event"><div class="tick"></div><div class="description">No tracking status available.</div></div></div>';
+            }
           }
         } catch (err) {
-          console.error('Map render error:', err);
-          initMaps();
-        }
-
-        // Update tracking details
-        if (shipment && trackingDiv) {
-          trackingDiv.innerHTML = '<div class="header">Tracking Shipment: ' + escapeHtml(shipment.trackingNumber) + '</div>';
-          if (shipment.timeline && Array.isArray(shipment.timeline) && shipment.timeline.length > 0) {
-            trackingDiv.innerHTML += `<div class="timeline">
-              ${shipment.timeline.map(event => `
-                <div class="timeline-event ${event.completed ? 'completed' : ''}">
-                  <div class="tick"></div>
-                  <div class="time">${escapeHtml(event.time || 'Unknown')}</div>
-                  <div class="description">${escapeHtml(event.description || 'No description')} <div style="background:#ccc;padding:2px 5px;border-radius:3px;margin-top:3px;">${escapeHtml(event.status || 'Unknown')}</div></div>
-                </div>
-              `).join('')}
-            </div>`;
-          } else {
-            trackingDiv.innerHTML += '<div class="timeline"><div class="timeline-event"><div class="tick"></div><div class="description">No tracking status available.</div></div></div>';
-          }
+          console.error('Map update error:', err);
+          clearShipmentDetails();
         }
       }, 5000);
 
@@ -601,7 +583,7 @@
               <div class="total">Total: $${escapeHtml(amount)}</div>
               <div class="footer">
                 Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
-                Issued: ${new Date().toLocaleString()}
+                Issued: ${new Date().toLocaleString('en-US', { timeZone: 'Africa/Lagos' })}
               </div>
             </div>
             <button class="print-btn" onclick="printInvoice('${escapeJs(number)}')">Print Invoice</button>
@@ -688,7 +670,7 @@
             <div class="total">Total: $${escapeHtml(amount)}</div>
             <div class="footer">
               Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
-              Issued: ${new Date().toLocaleString()}
+              Issued: ${new Date().toLocaleString('en-US', { timeZone: 'Africa/Lagos' })}
             </div>
           </div>
         </body>
