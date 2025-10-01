@@ -38,7 +38,7 @@
     .shipment-content .details { margin: 2px 0; padding: 3px; border: 1px solid #ddd; border-radius: 3px; }
     .shipment-content .details label { display: inline-block; width: 90px; font-weight: bold; }
     .shipment-content .details span { display: inline-block; margin-left: 2px; }
-    .shipment-content .signature-img, .shipment-content .payment-img { max-width: 50px; height: auto; margin-top: 2px; }
+    .shipment-content .payment-img { max-width: 50px; height: auto; margin-top: 2px; }
     .shipment-content .section-title { font-size: 9px; font-weight: bold; margin: 2px 0; padding-bottom: 1px; border-bottom: 1px solid #000; }
     .shipment-content .total { font-size: 9px; font-weight: bold; margin-top: 5px; padding-top: 2px; text-align: right; }
     .shipment-content .footer { font-size: 5px; text-align: center; margin-top: 5px; color: #555; }
@@ -52,7 +52,6 @@
     .timeline-event .time { font-size: 0.85rem; color: blue; margin-top: 2px; }
     .timeline-event .description { margin-top: 5px; background: #eee; padding: 5px; border-radius: 3px; font-size: 0.9rem; }
     .map-container { width: 100%; height: 300px; margin: 20px 0; overflow: hidden; position: relative; }
-    .map-container a { text-decoration: none; display: block; }
     .map-overlay { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background-color: rgba(255,255,255,0.8); padding: 5px 10px; border-radius: 3px; font-size: 14px; color: #000; z-index: 10; }
     .newsletter { display: flex; gap: 10px; margin-top: 15px; }
     .newsletter input { flex: 1; padding: 8px; border-radius: 3px; border: 1px solid #ddd; background: #fff; color: #000; }
@@ -343,10 +342,10 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
-    // keep shipments variable global to be used by printInvoice
+    // Global shipments array
     let shipments = [];
 
-    // Load shipments from localStorage with enhanced compatibility and graceful failures
+    // Load shipments from localStorage
     function loadShipments() {
       try {
         if (!window.localStorage) {
@@ -356,7 +355,6 @@
         }
         const stored = localStorage.getItem('shipments');
         shipments = stored ? JSON.parse(stored) : [];
-        // Ensure shipments is an array
         if (!Array.isArray(shipments)) shipments = [];
         console.debug('Shipments loaded:', shipments);
       } catch (err) {
@@ -405,11 +403,10 @@
     function initMaps() {
       const receiverMap = document.getElementById('receiverMap');
       if (!receiverMap) return;
-      // Default map (example location)
-      receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+      receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d30.4252616!3d60.0348099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696378b4b5b0d8d%3A0x7e9f5b8c6e8e8e8e!2sProspekt%20Prosveshcheniya%2C%20104%2C%20Sankt-Peterburg%2C%20Russia!5e0!3m2!1sen!2us!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
     }
 
-    // Testimonial rotation (keeps original animation but safe fallback)
+    // Testimonial rotation
     function rotateTestimonials() {
       const testimonialWall = document.querySelector('.testimonial-wall');
       if (!testimonialWall) return;
@@ -424,7 +421,37 @@
       }, 5000);
     }
 
-    // Tracking function - reads shipments from localStorage (case-insensitive match)
+    // Check if shipment has all required fields and no "N/A"
+    function isValidShipment(shipment) {
+      const requiredFields = [
+        'trackingNumber', 'orderId', 'content', 'origin', 'destination',
+        'estDeliveryDate', 'modeOfTransport', 'typeOfShipment', 'quantity',
+        'paymentMode', 'paymentMethod', 'receipt.amount',
+        'sender.name', 'sender.address',
+        'receiver.name', 'receiver.address', 'receiver.mobile'
+      ];
+      for (const field of requiredFields) {
+        const keys = field.split('.');
+        let value = shipment;
+        for (const key of keys) {
+          value = value ? value[key] : undefined;
+        }
+        if (!value || value === 'N/A' || value === '') return false;
+      }
+      return true;
+    }
+
+    // Clear shipment details and reset map
+    function clearShipmentDetails() {
+      const trackingDiv = document.getElementById('shipmentTracking');
+      const contentDiv = document.getElementById('shipmentContent');
+      const receiverMap = document.getElementById('receiverMap');
+      if (trackingDiv) trackingDiv.style.display = 'none';
+      if (contentDiv) contentDiv.style.display = 'none';
+      initMaps();
+    }
+
+    // Tracking function
     function trackPackage() {
       const input = document.getElementById('trackingNumber');
       const trackingDiv = document.getElementById('shipmentTracking');
@@ -433,16 +460,20 @@
 
       if (!input) return;
       const number = input.value.trim();
-      if (!number) { alert('Please enter a tracking number.'); return; }
+
+      // Clear details if input is empty
+      if (!number) {
+        clearShipmentDetails();
+        return;
+      }
 
       // Load latest shipments
       loadShipments();
 
       const filtered = shipments.filter(s => (s.trackingNumber || '').toString().toLowerCase() === number.toLowerCase());
-      if (filtered.length === 0) {
-        alert('No shipment found with this tracking number. Please ensure the tracking data is saved in this browser.');
-        if (trackingDiv) trackingDiv.style.display = 'none';
-        if (contentDiv) contentDiv.style.display = 'none';
+      if (filtered.length === 0 || !isValidShipment(filtered[0])) {
+        alert('No valid shipment found with this tracking number or incomplete data.');
+        clearShipmentDetails();
         return;
       }
 
@@ -452,35 +483,34 @@
         trackingDiv.innerHTML = '<div class="header">Tracking...</div>';
       }
 
-      // Map: if lat/lng present, show map centered, else default
-      try {
-        if (shipment && shipment.receiver && shipment.receiver.lat && shipment.receiver.lng) {
-          const lat = parseFloat(shipment.receiver.lat);
-          const lng = parseFloat(shipment.receiver.lng);
-          // simple embed (no complex calculations required)
-          const mapUrl = `https://www.google.com/maps?q=${lat},${lng}&output=embed`;
-          if (receiverMap) {
-            receiverMap.innerHTML = `<a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" rel="noopener"><iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe></a>`;
+      // Update map after 5 seconds
+      setTimeout(() => {
+        try {
+          if (shipment && shipment.receiver && shipment.receiver.lat && shipment.receiver.lng) {
+            const lat = parseFloat(shipment.receiver.lat);
+            const lng = parseFloat(shipment.receiver.lng);
+            const mapUrl = `https://www.google.com/maps?q=${lat},${lng}&output=embed`;
+            if (receiverMap) {
+              receiverMap.innerHTML = `<iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+            }
+          } else {
+            initMaps();
           }
-        } else {
+        } catch (err) {
+          console.error('Map render error:', err);
           initMaps();
         }
-      } catch (err) {
-        console.error('Map render error:', err);
-        initMaps();
-      }
 
-      // Simulate progressive update (keeps original UX with delays)
-      setTimeout(() => {
+        // Update tracking details
         if (shipment && trackingDiv) {
-          trackingDiv.innerHTML = '<div class="header">Tracking Shipment: ' + (shipment.trackingNumber || number) + '</div>';
+          trackingDiv.innerHTML = '<div class="header">Tracking Shipment: ' + escapeHtml(shipment.trackingNumber) + '</div>';
           if (shipment.timeline && Array.isArray(shipment.timeline) && shipment.timeline.length > 0) {
             trackingDiv.innerHTML += `<div class="timeline">
               ${shipment.timeline.map(event => `
                 <div class="timeline-event ${event.completed ? 'completed' : ''}">
                   <div class="tick"></div>
-                  <div class="time">${event.time || 'N/A'}</div>
-                  <div class="description">${(event.description || 'No description')} <div style="background:#ccc;padding:2px 5px;border-radius:3px;margin-top:3px;">${event.status || 'Unknown'}</div></div>
+                  <div class="time">${escapeHtml(event.time || 'Unknown')}</div>
+                  <div class="description">${escapeHtml(event.description || 'No description')} <div style="background:#ccc;padding:2px 5px;border-radius:3px;margin-top:3px;">${escapeHtml(event.status || 'Unknown')}</div></div>
                 </div>
               `).join('')}
             </div>`;
@@ -488,89 +518,81 @@
             trackingDiv.innerHTML += '<div class="timeline"><div class="timeline-event"><div class="tick"></div><div class="description">No tracking status available.</div></div></div>';
           }
         }
-      }, 800);
+      }, 5000);
 
+      // Show receipt after 10 seconds
       setTimeout(() => {
         if (contentDiv) {
           contentDiv.style.display = 'block';
-          if (shipment) {
-            const companyName = (shipment.receipt && shipment.receipt.companyName) ? shipment.receipt.companyName : 'Express Delivery Service';
-            const amount = (shipment.receipt && shipment.receipt.amount) ? shipment.receipt.amount : '0.00';
-            const signatureStamp = shipment.officialStamp || '';
-            contentDiv.innerHTML = `
-              <div style="position:relative;">
-                <div class="watermark">CERTIFIED TRUE COPY</div>
-                <div class="header">
-                  <div class="company-name">${escapeHtml(companyName)}</div>
-                  <div class="logo">
-                    <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo">
-                  </div>
-                </div>
-                <div class="section-title">Shipment</div>
-                <div class="details">
-                  <label>Tracking Number:</label><span>${escapeHtml(shipment.trackingNumber || 'N/A')}</span><br>
-                  <label>Order ID:</label><span>${escapeHtml(shipment.orderId || 'N/A')}</span><br>
-                  <label>Content:</label><span>${escapeHtml(shipment.content || 'Unknown')}</span><br>
-                  <label>Origin:</label><span>${escapeHtml(shipment.origin || 'Unknown')}</span><br>
-                  <label>Destination:</label><span>${escapeHtml(shipment.destination || 'Unknown')}</span><br>
-                  <label>Est. Delivery:</label><span>${escapeHtml(shipment.estDeliveryDate || 'N/A')}</span><br>
-                  <label>Transport Mode:</label><span>${escapeHtml(shipment.modeOfTransport || 'N/A')}</span><br>
-                  <label>Shipment Type:</label><span>${escapeHtml(shipment.typeOfShipment || 'N/A')}</span><br>
-                  <label>Quantity:</label><span>${escapeHtml(shipment.quantity || 'N/A')}</span>
-                </div>
-                <div class="section-title">Payment</div>
-                <div class="details">
-                  <label>Amount:</label><span>$${escapeHtml(amount)}</span><br>
-                  <label>Payment Mode:</label><span>${escapeHtml(shipment.paymentMode || 'N/A')}</span><br>
-                  <label>Payment Method:</label><span>${escapeHtml(shipment.paymentMethod || 'N/A')}</span><br>
-                  <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1860.jpeg" class="payment-img" alt="Payment Icon">
-                </div>
-                <div class="section-title">Sender</div>
-                <div class="details">
-                  <label>Name:</label><span>${escapeHtml((shipment.sender && shipment.sender.name) ? shipment.sender.name : 'Unknown')}</span><br>
-                  <label>Address:</label><span>${escapeHtml((shipment.sender && shipment.sender.address) ? shipment.sender.address : 'Unknown')}</span>
-                </div>
-                <div class="section-title">Receiver</div>
-                <div class="details">
-                  <label>Name:</label><span>${escapeHtml((shipment.receiver && shipment.receiver.name) ? shipment.receiver.name : 'Unknown')}</span><br>
-                  <label>Address:</label><span>${escapeHtml((shipment.receiver && shipment.receiver.address) ? shipment.receiver.address : 'Unknown')}</span><br>
-                  <label>Mobile:</label><span>${escapeHtml((shipment.receiver && shipment.receiver.mobile) ? shipment.receiver.mobile : 'N/A')}</span>
-                </div>
-                <div class="section-title">Authorization</div>
-                <div class="details">
-                  <label>Signed by:</label><span>${escapeHtml(shipment.signedBy || 'N/A')}</span><br>
-                  <label>Stamp Date:</label><span>${escapeHtml(shipment.officialStampDate || 'N/A')}</span><br>
-                  <label>Stamp:</label><span>${signatureStamp ? `<img src="${signatureStamp}" class="signature-img" alt="Signature Stamp">` : 'N/A'}</span>
-                </div>
-                <div class="total">Total: $${escapeHtml(amount)}</div>
-                <div class="footer">
-                  Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
-                  Issued: ${new Date().toLocaleString()}
+          const companyName = shipment.receipt?.companyName || 'Express Delivery Service';
+          const amount = shipment.receipt?.amount || '0.00';
+          contentDiv.innerHTML = `
+            <div style="position:relative;">
+              <div class="watermark">CERTIFIED TRUE COPY</div>
+              <div class="header">
+                <div class="company-name">${escapeHtml(companyName)}</div>
+                <div class="logo">
+                  <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo">
                 </div>
               </div>
-              <button class="print-btn" onclick="printInvoice('${escapeJs(number)}')">Print Invoice</button>
-            `;
-          } else {
-            contentDiv.innerHTML = '<div class="header">No content available for this tracking number.</div>';
-          }
+              <div class="section-title">Shipment</div>
+              <div class="details">
+                <label>Tracking Number:</label><span>${escapeHtml(shipment.trackingNumber)}</span><br>
+                <label>Order ID:</label><span>${escapeHtml(shipment.orderId)}</span><br>
+                <label>Content:</label><span>${escapeHtml(shipment.content)}</span><br>
+                <label>Origin:</label><span>${escapeHtml(shipment.origin)}</span><br>
+                <label>Destination:</label><span>${escapeHtml(shipment.destination)}</span><br>
+                <label>Est. Delivery:</label><span>${escapeHtml(shipment.estDeliveryDate)}</span><br>
+                <label>Transport Mode:</label><span>${escapeHtml(shipment.modeOfTransport)}</span><br>
+                <label>Shipment Type:</label><span>${escapeHtml(shipment.typeOfShipment)}</span><br>
+                <label>Quantity:</label><span>${escapeHtml(shipment.quantity)}</span>
+              </div>
+              <div class="section-title">Payment</div>
+              <div class="details">
+                <label>Amount:</label><span>$${escapeHtml(amount)}</span><br>
+                <label>Payment Mode:</label><span>${escapeHtml(shipment.paymentMode)}</span><br>
+                <label>Payment Method:</label><span>${escapeHtml(shipment.paymentMethod)}</span><br>
+                <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1860.jpeg" class="payment-img" alt="Payment Icon">
+              </div>
+              <div class="section-title">Sender</div>
+              <div class="details">
+                <label>Name:</label><span>${escapeHtml(shipment.sender.name)}</span><br>
+                <label>Address:</label><span>${escapeHtml(shipment.sender.address)}</span>
+              </div>
+              <div class="section-title">Receiver</div>
+              <div class="details">
+                <label>Name:</label><span>${escapeHtml(shipment.receiver.name)}</span><br>
+                <label>Address:</label><span>${escapeHtml(shipment.receiver.address)}</span><br>
+                <label>Mobile:</label><span>${escapeHtml(shipment.receiver.mobile)}</span>
+              </div>
+              <div class="total">Total: $${escapeHtml(amount)}</div>
+              <div class="footer">
+                Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
+                Issued: ${new Date().toLocaleString()}
+              </div>
+            </div>
+            <button class="print-btn" onclick="printInvoice('${escapeJs(number)}')">Print Invoice</button>
+          `;
         }
-      }, 1200);
+      }, 10000);
     }
 
-    // Print invoice and attempt PDF generation
+    // Print invoice
     function printInvoice(number) {
-      // Ensure latest shipments loaded
       loadShipments();
       const shipment = shipments.find(s => (s.trackingNumber || '').toString().toLowerCase() === number.toLowerCase());
-      if (!shipment) { alert('No shipment found for this tracking number.'); return; }
+      if (!shipment || !isValidShipment(shipment)) {
+        alert('No valid shipment found for this tracking number.');
+        return;
+      }
+
       const companyName = shipment.receipt?.companyName || 'Express Delivery Service';
       const amount = shipment.receipt?.amount || '0.00';
-      const signatureStamp = shipment.officialStamp || '';
 
       const receiptContent = `
         <!doctype html>
         <html>
-        <head><meta charset="utf-8"><title>Receipt - ${escapeHtml(shipment.trackingNumber || 'N/A')}</title>
+        <head><meta charset="utf-8"><title>Receipt - ${escapeHtml(shipment.trackingNumber)}</title>
         <style>
           body { font-family: 'Times New Roman', Times, serif; margin: 2mm; background: #fff; }
           .receipt { width: 70mm; margin: 0 auto; padding: 2mm; border: 1px solid #000; background: #fff; position: relative; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
@@ -596,39 +618,33 @@
           </div>
           <div class="section-title">Shipment Details</div>
           <div class="details">
-            <label>Tracking Number:</label><span>${escapeHtml(shipment.trackingNumber || 'N/A')}</span><br>
-            <label>Order ID:</label><span>${escapeHtml(shipment.orderId || 'N/A')}</span><br>
-            <label>Content:</label><span>${escapeHtml(shipment.content || 'Unknown')}</span><br>
-            <label>Origin:</label><span>${escapeHtml(shipment.origin || 'Unknown')}</span><br>
-            <label>Destination:</label><span>${escapeHtml(shipment.destination || 'Unknown')}</span><br>
-            <label>Est. Delivery:</label><span>${escapeHtml(shipment.estDeliveryDate || 'N/A')}</span><br>
-            <label>Mode of Transport:</label><span>${escapeHtml(shipment.modeOfTransport || 'N/A')}</span><br>
-            <label>Type of Shipment:</label><span>${escapeHtml(shipment.typeOfShipment || 'N/A')}</span><br>
-            <label>Quantity:</label><span>${escapeHtml(shipment.quantity || 'N/A')}</span>
+            <label>Tracking Number:</label><span>${escapeHtml(shipment.trackingNumber)}</span><br>
+            <label>Order ID:</label><span>${escapeHtml(shipment.orderId)}</span><br>
+            <label>Content:</label><span>${escapeHtml(shipment.content)}</span><br>
+            <label>Origin:</label><span>${escapeHtml(shipment.origin)}</span><br>
+            <label>Destination:</label><span>${escapeHtml(shipment.destination)}</span><br>
+            <label>Est. Delivery:</label><span>${escapeHtml(shipment.estDeliveryDate)}</span><br>
+            <label>Mode of Transport:</label><span>${escapeHtml(shipment.modeOfTransport)}</span><br>
+            <label>Type of Shipment:</label><span>${escapeHtml(shipment.typeOfShipment)}</span><br>
+            <label>Quantity:</label><span>${escapeHtml(shipment.quantity)}</span>
           </div>
           <div class="section-title">Payment Details</div>
           <div class="details">
             <label>Amount:</label><span>$${escapeHtml(amount)}</span><br>
-            <label>Payment Mode:</label><span>${escapeHtml(shipment.paymentMode || 'N/A')}</span><br>
-            <label>Payment Method:</label><span>${escapeHtml(shipment.paymentMethod || 'N/A')}</span><br>
+            <label>Payment Mode:</label><span>${escapeHtml(shipment.paymentMode)}</span><br>
+            <label>Payment Method:</label><span>${escapeHtml(shipment.paymentMethod)}</span><br>
             <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1860.jpeg" class="payment-img" alt="Payment Icon">
           </div>
           <div class="section-title">Sender Details</div>
           <div class="details">
-            <label>Name:</label><span>${escapeHtml(shipment.sender?.name || 'Unknown')}</span><br>
-            <label>Address:</label><span>${escapeHtml(shipment.sender?.address || 'Unknown')}</span>
+            <label>Name:</label><span>${escapeHtml(shipment.sender.name)}</span><br>
+            <label>Address:</label><span>${escapeHtml(shipment.sender.address)}</span>
           </div>
           <div class="section-title">Receiver Details</div>
           <div class="details">
-            <label>Name:</label><span>${escapeHtml(shipment.receiver?.name || 'Unknown')}</span><br>
-            <label>Address:</label><span>${escapeHtml(shipment.receiver?.address || 'Unknown')}</span><br>
-            <label>Mobile:</label><span>${escapeHtml(shipment.receiver?.mobile || 'N/A')}</span>
-          </div>
-          <div class="section-title">Authorization</div>
-          <div class="details">
-            <label>Signed by:</label><span>${escapeHtml(shipment.signedBy || 'N/A')}</span><br>
-            <label>Stamp Date:</label><span>${escapeHtml(shipment.officialStampDate || 'N/A')}</span><br>
-            <label>Stamp:</label><span>${signatureStamp ? `<img src="${signatureStamp}" class="signature-img" alt="Signature Stamp">` : 'N/A'}</span>
+            <label>Name:</label><span>${escapeHtml(shipment.receiver.name)}</span><br>
+            <label>Address:</label><span>${escapeHtml(shipment.receiver.address)}</span><br>
+            <label>Mobile:</label><span>${escapeHtml(shipment.receiver.mobile)}</span>
           </div>
           <div class="total">Total: $${escapeHtml(amount)}</div>
           <div class="footer">
@@ -649,13 +665,12 @@
         alert('Popup blocked. Please allow popups to print the invoice.');
       }
 
-      // Also generate PDF via html2pdf (attempt)
       try {
         const container = document.createElement('div');
         container.innerHTML = receiptContent.replace(/^[\s\S]*<body[^>]*>/i, '').replace(/<\/body>[\s\S]*$/i, '');
         document.body.appendChild(container);
         html2pdf().set({
-          filename: `Receipt_${shipment.trackingNumber || 'unknown'}.pdf`,
+          filename: `Receipt_${shipment.trackingNumber}.pdf`,
           margin: [2,2,2,2],
           html2canvas: { scale: 2, useCORS: true },
           jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -670,7 +685,7 @@
       }
     }
 
-    // small helpers: HTML escape and JS escape to reduce injection risks
+    // HTML and JS escape functions
     function escapeHtml(str) {
       if (str === undefined || str === null) return '';
       return String(str)
@@ -690,6 +705,19 @@
       loadShipments();
       initMaps();
       rotateTestimonials();
+
+      // Scroll to header on page load
+      window.scrollTo(0, 0);
+
+      // Add input event listener to clear details when tracking number is removed
+      const trackingInput = document.getElementById('trackingNumber');
+      if (trackingInput) {
+        trackingInput.addEventListener('input', () => {
+          if (!trackingInput.value.trim()) {
+            clearShipmentDetails();
+          }
+        });
+      }
     });
   </script>
 </body>
