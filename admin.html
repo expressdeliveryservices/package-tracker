@@ -45,13 +45,18 @@ th { background: #1e90ff; color: white; }
 
   <!-- Dashboard Section -->
   <div class="section" id="dashboardSection" style="display:none;">
-    
-       <h2>Upload Signature Stamp</h2>
+    <h2>Manage Newsletter Subscriptions</h2>
     <div class="section">
-      <label>Signature Stamp Image:</label>
-      <input type="file" id="signatureStamp" accept="image/*">
-      <div id="signaturePreview"></div>
-      <button onclick="saveSignatureStamp()">Save Signature Stamp</button>
+      <label>Newsletter Emails:</label>
+      <textarea id="newsletterList" rows="5" placeholder="Enter one email per line"></textarea>
+      <button onclick="saveNewsletter()">Save Newsletter Emails</button>
+    </div>
+
+    <h2>Manage Customer Reviews</h2>
+    <div class="section">
+      <label>Customer Reviews:</label>
+      <textarea id="reviewsList" rows="5" placeholder="Enter one review per line"></textarea>
+      <button onclick="saveReviews()">Save Reviews</button>
     </div>
 
     <h2>Generate New Tracking Code</h2>
@@ -71,7 +76,11 @@ th { background: #1e90ff; color: white; }
       </div>
       <div>
         <label>Payment Mode:</label>
-        <input type="text" id="newPaymentMode" placeholder="Enter payment mode (e.g., Credit Card, Bank Transfer)" required>
+        <input type="text" id="newPaymentMode" placeholder="Enter payment mode (e.g., Online, Cash)" required>
+      </div>
+      <div>
+        <label>Payment Method:</label>
+        <input type="text" id="newPaymentMethod" placeholder="Enter payment method (e.g., Credit Card, PayPal)" required>
       </div>
       <div>
         <label>Mode of Transport:</label>
@@ -84,10 +93,6 @@ th { background: #1e90ff; color: white; }
       <div>
         <label>Quantity:</label>
         <input type="text" id="newQuantity" placeholder="Enter quantity (e.g., 2 boxes)" required>
-      </div>
-      <div>
-        <label>Official Stamp Date:</label>
-        <input type="date" id="newOfficialStampDate" placeholder="Select official stamp date" required>
       </div>
       <div>
         <label>Content:</label>
@@ -132,7 +137,7 @@ th { background: #1e90ff; color: white; }
         <input type="number" id="newReceiverLng" step="0.0001" placeholder="Enter receiver longitude" required>
       </div>
       <h3>Timeline</h3>
-      <textarea id="newTimeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"23 Sep 2025 07:30","description":"Item arrived","status":"ON HOLD","completed":true}])' required></textarea>
+      <textarea id="newTimeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"2025-10-01 07:30","description":"Item arrived","status":"ON HOLD","completed":true}])' required></textarea>
       <button id="generateTrackingCode" onclick="generateTrackingCode()">Generate Tracking Code</button>
       <p>Send the generated tracking code to the recipient for tracking on the public page.</p>
     </div>
@@ -158,7 +163,11 @@ th { background: #1e90ff; color: white; }
       </div>
       <div>
         <label>Payment Mode:</label>
-        <input type="text" id="paymentMode" placeholder="Enter payment mode (e.g., Credit Card, Bank Transfer)">
+        <input type="text" id="paymentMode" placeholder="Enter payment mode (e.g., Online, Cash)">
+      </div>
+      <div>
+        <label>Payment Method:</label>
+        <input type="text" id="paymentMethod" placeholder="Enter payment method (e.g., Credit Card, PayPal)">
       </div>
       <div>
         <label>Mode of Transport:</label>
@@ -171,10 +180,6 @@ th { background: #1e90ff; color: white; }
       <div>
         <label>Quantity:</label>
         <input type="text" id="quantity" placeholder="Enter quantity">
-      </div>
-      <div>
-        <label>Official Stamp Date:</label>
-        <input type="date" id="officialStampDate" placeholder="Select official stamp date">
       </div>
       <div>
         <label>Content:</label>
@@ -219,7 +224,7 @@ th { background: #1e90ff; color: white; }
         <input type="number" id="receiverLng" step="0.0001" placeholder="Enter receiver longitude">
       </div>
       <h3>Timeline</h3>
-      <textarea id="timeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"23 Sep 2025 07:30","description":"Item arrived","status":"ON HOLD","completed":true}])'></textarea>
+      <textarea id="timeline" rows="4" placeholder='Enter timeline events as JSON array (e.g., [{"time":"2025-10-01 07:30","description":"Item arrived","status":"ON HOLD","completed":true}])'></textarea>
       <button onclick="saveShipment()">Save Shipment</button>
     </div>
 
@@ -273,15 +278,6 @@ function loadData() {
     option.text = `${shipment.trackingNumber} - ${shipment.content}`;
     shipmentSelect.appendChild(option);
   });
-
-  // Load signature stamp preview
-  const signatureStamp = localStorage.getItem('signatureStamp');
-  const preview = document.getElementById('signaturePreview');
-  if (signatureStamp) {
-    preview.innerHTML = `<img src="${signatureStamp}" alt="Signature Stamp"><p>Current signature stamp</p>`;
-  } else {
-    preview.innerHTML = `<p>No signature stamp uploaded</p>`;
-  }
 }
 
 // Load selected shipment data
@@ -293,11 +289,11 @@ function loadShipment() {
     document.getElementById('shipmentAmount').value = '';
     document.getElementById('orderId').value = '';
     document.getElementById('estDeliveryDate').value = '';
+    document.getElementById('paymentMode').value = '';
+    document.getElementById('paymentMethod').value = '';
     document.getElementById('modeOfTransport').value = '';
     document.getElementById('typeOfShipment').value = '';
     document.getElementById('quantity').value = '';
-    document.getElementById('officialStampDate').value = '';
-    document.getElementById('paymentMode').value = '';
     document.getElementById('shipmentContent').value = '';
     document.getElementById('shipmentOrigin').value = '';
     document.getElementById('shipmentDestination').value = '';
@@ -319,11 +315,11 @@ function loadShipment() {
     document.getElementById('shipmentAmount').value = shipment.receipt.amount;
     document.getElementById('orderId').value = shipment.orderId;
     document.getElementById('estDeliveryDate').value = shipment.estDeliveryDate;
+    document.getElementById('paymentMode').value = shipment.paymentMode;
+    document.getElementById('paymentMethod').value = shipment.paymentMethod;
     document.getElementById('modeOfTransport').value = shipment.modeOfTransport;
     document.getElementById('typeOfShipment').value = shipment.typeOfShipment;
     document.getElementById('quantity').value = shipment.quantity;
-    document.getElementById('officialStampDate').value = shipment.officialStampDate;
-    document.getElementById('paymentMode').value = shipment.paymentMode;
     document.getElementById('shipmentContent').value = shipment.content;
     document.getElementById('shipmentOrigin').value = shipment.origin;
     document.getElementById('shipmentDestination').value = shipment.destination;
@@ -338,27 +334,15 @@ function loadShipment() {
   }
 }
 
-// Save Signature Stamp
-function saveSignatureStamp() {
-  const fileInput = document.getElementById('signatureStamp');
-  const preview = document.getElementById('signaturePreview');
-  if (fileInput.files.length > 0) {
-    const file = fileInput.files[0];
-    if (file.type.startsWith('image/') && file.size <= 2 * 1024 * 1024) { // Limit to 2MB
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const base64Image = e.target.result;
-        localStorage.setItem('signatureStamp', base64Image);
-        preview.innerHTML = `<img src="${base64Image}" alt="Signature Stamp"><p>Current signature stamp</p>`;
-        alert("Signature stamp saved successfully!");
-      };
-      reader.readAsDataURL(file);
-    } else {
-      alert("Please upload a valid image file (max 2MB).");
-    }
-  } else {
-    alert("Please select an image to upload.");
-  }
+// Validate timeline JSON
+function validateTimeline(timeline) {
+  if (!Array.isArray(timeline)) return false;
+  return timeline.every(event => 
+    event.time && typeof event.time === 'string' &&
+    event.description && typeof event.description === 'string' &&
+    event.status && typeof event.status === 'string' &&
+    typeof event.completed === 'boolean'
+  );
 }
 
 // Save Functions
@@ -380,6 +364,15 @@ function saveShipment() {
     if (!trackingNumber) {
       throw new Error("Please select a shipment to edit.");
     }
+    let timeline;
+    try {
+      timeline = JSON.parse(document.getElementById('timeline').value.trim() || '[]');
+      if (!validateTimeline(timeline)) {
+        throw new Error("Invalid timeline format. Each event must have time, description, status, and completed fields.");
+      }
+    } catch (e) {
+      throw new Error("Invalid timeline JSON: " + e.message);
+    }
     const shipment = {
       trackingNumber: trackingNumber,
       content: document.getElementById('shipmentContent').value.trim(),
@@ -391,8 +384,7 @@ function saveShipment() {
       typeOfShipment: document.getElementById('typeOfShipment').value.trim(),
       quantity: document.getElementById('quantity').value.trim(),
       paymentMode: document.getElementById('paymentMode').value.trim(),
-      officialStampDate: document.getElementById('officialStampDate').value.trim(),
-      officialStamp: localStorage.getItem('signatureStamp') || '',
+      paymentMethod: document.getElementById('paymentMethod').value.trim(),
       sender: {
         name: document.getElementById('senderName').value.trim(),
         address: document.getElementById('senderAddress').value.trim()
@@ -404,7 +396,7 @@ function saveShipment() {
         lat: parseFloat(document.getElementById('receiverLat').value),
         lng: parseFloat(document.getElementById('receiverLng').value)
       },
-      timeline: JSON.parse(document.getElementById('timeline').value.trim() || '[]'),
+      timeline: timeline,
       receipt: {
         companyName: COMPANY_NAME,
         amount: parseFloat(document.getElementById('shipmentAmount').value)
@@ -416,8 +408,8 @@ function saveShipment() {
         !shipment.sender.address || !shipment.receiver.name || !shipment.receiver.address ||
         !shipment.receiver.mobile || isNaN(shipment.receiver.lat) || isNaN(shipment.receiver.lng) ||
         !shipment.orderId || !shipment.estDeliveryDate || !shipment.modeOfTransport ||
-        !shipment.typeOfShipment || !shipment.quantity || !shipment.officialStampDate ||
-        !shipment.paymentMode || isNaN(shipment.receipt.amount)) {
+        !shipment.typeOfShipment || !shipment.quantity || !shipment.paymentMode ||
+        !shipment.paymentMethod || isNaN(shipment.receipt.amount)) {
       throw new Error("All fields are required and must be valid.");
     }
 
@@ -443,6 +435,16 @@ function generateTrackingCode() {
     const numbers = Math.floor(100000000 + Math.random() * 900000000).toString();
     const newTracking = `${letters}-${numbers}`;
 
+    let timeline;
+    try {
+      timeline = JSON.parse(document.getElementById('newTimeline').value.trim() || '[]');
+      if (!validateTimeline(timeline)) {
+        throw new Error("Invalid timeline format. Each event must have time, description, status, and completed fields.");
+      }
+    } catch (e) {
+      throw new Error("Invalid timeline JSON: " + e.message);
+    }
+
     const shipment = {
       trackingNumber: newTracking,
       content: document.getElementById('newShipmentContent').value.trim(),
@@ -454,8 +456,7 @@ function generateTrackingCode() {
       typeOfShipment: document.getElementById('newTypeOfShipment').value.trim(),
       quantity: document.getElementById('newQuantity').value.trim(),
       paymentMode: document.getElementById('newPaymentMode').value.trim(),
-      officialStampDate: document.getElementById('newOfficialStampDate').value.trim(),
-      officialStamp: localStorage.getItem('signatureStamp') || '',
+      paymentMethod: document.getElementById('newPaymentMethod').value.trim(),
       sender: {
         name: document.getElementById('newSenderName').value.trim(),
         address: document.getElementById('newSenderAddress').value.trim()
@@ -467,7 +468,7 @@ function generateTrackingCode() {
         lat: parseFloat(document.getElementById('newReceiverLat').value),
         lng: parseFloat(document.getElementById('newReceiverLng').value)
       },
-      timeline: JSON.parse(document.getElementById('newTimeline').value.trim() || '[]'),
+      timeline: timeline,
       receipt: {
         companyName: COMPANY_NAME,
         amount: parseFloat(document.getElementById('newShipmentAmount').value)
@@ -479,8 +480,8 @@ function generateTrackingCode() {
         !shipment.sender.address || !shipment.receiver.name || !shipment.receiver.address ||
         !shipment.receiver.mobile || isNaN(shipment.receiver.lat) || isNaN(shipment.receiver.lng) ||
         !shipment.orderId || !shipment.estDeliveryDate || !shipment.modeOfTransport ||
-        !shipment.typeOfShipment || !shipment.quantity || !shipment.officialStampDate ||
-        !shipment.paymentMode || isNaN(shipment.receipt.amount)) {
+        !shipment.typeOfShipment || !shipment.quantity || !shipment.paymentMode ||
+        !shipment.paymentMethod || isNaN(shipment.receipt.amount)) {
       throw new Error("All fields are required and must be valid.");
     }
 
@@ -496,11 +497,11 @@ function generateTrackingCode() {
     document.getElementById('shipmentAmount').value = shipment.receipt.amount;
     document.getElementById('orderId').value = shipment.orderId;
     document.getElementById('estDeliveryDate').value = shipment.estDeliveryDate;
+    document.getElementById('paymentMode').value = shipment.paymentMode;
+    document.getElementById('paymentMethod').value = shipment.paymentMethod;
     document.getElementById('modeOfTransport').value = shipment.modeOfTransport;
     document.getElementById('typeOfShipment').value = shipment.typeOfShipment;
     document.getElementById('quantity').value = shipment.quantity;
-    document.getElementById('officialStampDate').value = shipment.officialStampDate;
-    document.getElementById('paymentMode').value = shipment.paymentMode;
     document.getElementById('shipmentContent').value = shipment.content;
     document.getElementById('shipmentOrigin').value = shipment.origin;
     document.getElementById('shipmentDestination').value = shipment.destination;
