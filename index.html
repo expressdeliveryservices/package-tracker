@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Express Delivery Service</title>
-  <!-- Leaflet CSS for OpenStreetMap -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   <style>
     body { margin: 0; font-family: Arial, sans-serif; background: #fff; color: #000; scroll-behavior: smooth; }
     a { color: #1e90ff; text-decoration: none; }
@@ -54,8 +52,8 @@
     .timeline-event .time { font-size: 0.85rem; color: blue; margin-top: 2px; }
     .timeline-event .description { margin-top: 5px; background: #eee; padding: 5px; border-radius: 3px; font-size: 0.9rem; }
     .map-container { width: 100%; height: 300px; margin: 20px 0; overflow: hidden; position: relative; }
-    .map-overlay { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background-color: rgba(255,255,255,0.8); padding: 5px 10px; border-radius: 3px; font-size: 14px; color: #000; z-index: 1000; }
-    #receiverMap { width: 100%; height: 300px; }
+    .map-overlay { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background-color: rgba(255,255,255,0.8); padding: 5px 10px; border-radius: 3px; font-size: 14px; color: #000; z-index: 10; }
+    #receiverMap, #headquarterMap { width: 100%; height: 300px; }
     .newsletter { display: flex; gap: 10px; margin-top: 15px; }
     .newsletter input { flex: 1; padding: 8px; border-radius: 3px; border: 1px solid #ddd; background: #fff; color: #000; }
     .newsletter button { padding: 8px 15px; border-radius: 3px; border: none; background-color: #1e90ff; color: white; cursor: pointer; }
@@ -110,13 +108,10 @@
 <body onload="scrollToTop()">
   <noscript>
     <div style="text-align: center; padding: 20px; background: #ffe6e6; color: #d32f2f;">
-      JavaScript is disabled in your browser. Some features like tracking and invoice generation are unavailable. The map below links to a default OpenStreetMap world view.
+      JavaScript is disabled in your browser. Some features like tracking and invoice generation are unavailable. The map below shows a default OpenStreetMap world view.
     </div>
-    <div style="width:100%;height:300px;text-align:center;">
-      <a href="https://www.openstreetmap.org/#map=1/0/0" target="_blank">
-        <img src="https://tile.openstreetmap.org/1/0/0.png" alt="OpenStreetMap World View" style="width:100%;height:300px;object-fit:cover;">
-      </a>
-      <p>Click the map to view the world map on OpenStreetMap.</p>
+    <div style="width:100%;height:300px;">
+      <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-180,-90,180,90&layer=mapnik" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
     </div>
   </noscript>
 
@@ -285,16 +280,15 @@
     <div id="shipmentContent" class="shipment-content" style="display:none;"></div>
     <div class="map-container">
       <div class="map-overlay" id="mapOverlay">CURRENT LOCATION: WORLD MAP (DEFAULT)</div>
-      <div id="receiverMap" style="width:100%;height:300px;"></div>
+      <div id="receiverMap" style="width:100%;height:300px;">
+        <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-180,-90,180,90&layer=mapnik" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+      </div>
       <noscript>
         <div style="text-align: center; padding: 10px; background: #ffe6e6; color: #d32f2f;">
-          JavaScript is disabled. The map below links to a default OpenStreetMap world view. Tracking and dynamic location updates are unavailable.
+          JavaScript is disabled. The map below shows a default OpenStreetMap world view. Tracking and dynamic location updates are unavailable.
         </div>
-        <div style="width:100%;height:300px;text-align:center;">
-          <a href="https://www.openstreetmap.org/#map=1/0/0" target="_blank">
-            <img src="https://tile.openstreetmap.org/1/0/0.png" alt="OpenStreetMap World View" style="width:100%;height:300px;object-fit:cover;">
-          </a>
-          <p>Click the map to view the world map on OpenStreetMap.</p>
+        <div style="width:100%;height:300px;">
+          <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-180,-90,180,90&layer=mapnik" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
       </noscript>
     </div>
@@ -314,7 +308,9 @@
 
     <div class="map-container">
       <div class="map-overlay">HEADQUARTER LOCATION</div>
-      <div id="headquarterMap" style="width:100%;height:300px;"></div>
+      <div id="headquarterMap" style="width:100%;height:300px;">
+        <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-0.2220214,51.4635056,-0.2020214,51.4835056&layer=mapnik&marker=51.4735056,-0.2120214" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+      </div>
     </div>
   </section>
 
@@ -356,33 +352,10 @@
     </div>
   </footer>
 
-  <!-- Leaflet JavaScript for OpenStreetMap -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
-    // Global variables
+    // Global shipments array
     let shipments = [];
-    let receiverMap, headquarterMap;
-
-    // Initialize maps
-    function initializeMaps() {
-      // Receiver Map
-      receiverMap = L.map('receiverMap').setView([0, 0], 1);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(receiverMap);
-      console.log('Receiver map initialized with default world view.');
-
-      // Headquarter Map
-      headquarterMap = L.map('headquarterMap').setView([51.4735056, -0.2120214], 13);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(headquarterMap);
-      L.marker([51.4735056, -0.2120214]).addTo(headquarterMap)
-        .bindPopup('Universal Drops, 66B Oxberry Ave, London SW6 3AL, UK')
-        .openPopup();
-      console.log('Headquarter map initialized at London.');
-    }
 
     // Load shipments from localStorage
     function loadShipments() {
@@ -499,14 +472,12 @@
     function clearShipmentDetails() {
       const trackingDiv = document.getElementById('shipmentTracking');
       const contentDiv = document.getElementById('shipmentContent');
+      const receiverMap = document.getElementById('receiverMap');
       const mapOverlay = document.getElementById('mapOverlay');
       if (trackingDiv) trackingDiv.style.display = 'none';
       if (contentDiv) contentDiv.style.display = 'none';
       if (receiverMap) {
-        receiverMap.setView([0, 0], 1);
-        receiverMap.eachLayer(layer => {
-          if (layer instanceof L.Marker) receiverMap.removeLayer(layer);
-        });
+        receiverMap.innerHTML = `<iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-180,-90,180,90&layer=mapnik" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
         console.log('Map reset to default: World Map');
       }
       if (mapOverlay) {
@@ -522,8 +493,17 @@
         const data = await response.json();
         console.log('Nominatim response:', data);
         if (data && data.length > 0) {
-          const { lat, lon } = data[0];
-          return { lat: parseFloat(lat), lng: parseFloat(lon) };
+          const { lat, lon, boundingbox } = data[0];
+          return {
+            lat: parseFloat(lat),
+            lng: parseFloat(lon),
+            bbox: [
+              parseFloat(boundingbox[2]), // min_lon
+              parseFloat(boundingbox[0]), // min_lat
+              parseFloat(boundingbox[3]), // max_lon
+              parseFloat(boundingbox[1])  // max_lat
+            ]
+          };
         } else {
           throw new Error('No results found for address');
         }
@@ -533,28 +513,12 @@
       }
     }
 
-    // Update map with coordinates and marker
-    function updateMap(lat, lng, popupText, zoom = 13) {
-      if (receiverMap) {
-        receiverMap.setView([lat, lng], zoom);
-        receiverMap.eachLayer(layer => {
-          if (layer instanceof L.Marker) receiverMap.removeLayer(layer);
-        });
-        L.marker([lat, lng]).addTo(receiverMap)
-          .bindPopup(escapeHtml(popupText))
-          .openPopup();
-        console.log('Map updated:', { lat, lng, popupText, zoom });
-      } else {
-        console.error('Receiver map not initialized.');
-        alert('Map display error. Please refresh the page.');
-      }
-    }
-
     // Tracking function
     async function trackPackage() {
       const input = document.getElementById('trackingNumber');
       const trackingDiv = document.getElementById('shipmentTracking');
       const contentDiv = document.getElementById('shipmentContent');
+      const receiverMap = document.getElementById('receiverMap');
       const mapOverlay = document.getElementById('mapOverlay');
 
       if (!input) {
@@ -592,20 +556,22 @@
         setTimeout(async () => {
           try {
             const address = shipment.receiver.address || 'Unknown Location';
-            let lat, lng, zoom = 13;
+            let mapUrl, zoom = 13;
 
             // Use coordinates if available, otherwise geocode address
             if (shipment.receiver.lat !== undefined && shipment.receiver.lng !== undefined) {
-              lat = parseFloat(shipment.receiver.lat);
-              lng = parseFloat(shipment.receiver.lng);
+              const lat = parseFloat(shipment.receiver.lat);
+              const lng = parseFloat(shipment.receiver.lng);
               console.log('Using shipment coordinates:', { lat, lng, address });
+              // Create a small bounding box around the coordinates
+              const offset = 0.01; // Approx 1km at equator
+              mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${lng - offset},${lat - offset},${lng + offset},${lat + offset}&layer=mapnik&marker=${lat},${lng}`;
             } else {
               console.log('No coordinates provided, geocoding address:', address);
               try {
-                const coords = await geocodeAddress(address);
-                lat = coords.lat;
-                lng = coords.lng;
+                const { bbox } = await geocodeAddress(address);
                 zoom = 10; // Lower zoom for geocoded addresses
+                mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]}&layer=mapnik&marker=${(bbox[1] + bbox[3]) / 2},${(bbox[0] + bbox[2]) / 2}`;
               } catch (err) {
                 console.error('Failed to geocode address:', address, err);
                 alert('Unable to locate address on map. Showing default world view.');
@@ -614,7 +580,13 @@
               }
             }
 
-            updateMap(lat, lng, address, zoom);
+            if (receiverMap) {
+              receiverMap.innerHTML = `<iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+              console.log('Map updated to shipment location:', { address, mapUrl });
+            } else {
+              console.error('Receiver map element not found.');
+              alert('Map display error. Please refresh the page.');
+            }
             if (mapOverlay) {
               mapOverlay.textContent = `CURRENT LOCATION: ${escapeHtml(address)}`;
             }
@@ -712,8 +684,15 @@
         // Update map to location name after 5 seconds
         setTimeout(async () => {
           try {
-            const coords = await geocodeAddress(inputValue);
-            updateMap(coords.lat, coords.lng, inputValue, 10);
+            const { bbox } = await geocodeAddress(inputValue);
+            if (receiverMap) {
+              const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]}&layer=mapnik&marker=${(bbox[1] + bbox[3]) / 2},${(bbox[0] + bbox[2]) / 2}`;
+              receiverMap.innerHTML = `<iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+              console.log('Map updated to location:', { location: inputValue, mapUrl });
+            } else {
+              console.error('Receiver map element not found.');
+              alert('Map display error. Please refresh the page.');
+            }
             if (mapOverlay) {
               mapOverlay.textContent = `CURRENT LOCATION: ${escapeHtml(inputValue)}`;
             }
@@ -827,7 +806,6 @@
     // Initialize page
     document.addEventListener('DOMContentLoaded', () => {
       loadShipments();
-      initializeMaps();
       rotateTestimonials();
     });
 
