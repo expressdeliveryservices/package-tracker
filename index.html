@@ -500,7 +500,7 @@
       // Clear details if input is empty
       if (!inputValue) {
         console.log('Empty input, clearing details.');
-        alert('Please enter a tracking number.');
+        alert('Please enter a tracking number or location.');
         clearShipmentDetails();
         return;
       }
@@ -533,12 +533,15 @@
               mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2000!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z${encodeURIComponent(address)}!5e0!3m2!1sen!2us!4v1695296400000`;
             } else {
               console.log('No coordinates provided, using address:', address);
-              mapUrl = `https://www.google.com/maps/embed?q=${encodeURIComponent(address)}&center=0,0&zoom=1&maptype=roadmap`;
+              mapUrl = `https://www.google.com/maps/embed?q=${encodeURIComponent(address)}&zoom=10&maptype=roadmap`;
             }
 
             if (receiverMap) {
               receiverMap.innerHTML = `<iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
               console.log('Map updated to shipment location:', { address, mapUrl });
+            } else {
+              console.error('Receiver map element not found.');
+              alert('Map display error. Please refresh the page.');
             }
             if (mapOverlay) {
               mapOverlay.textContent = `CURRENT LOCATION: ${escapeHtml(address)}`;
@@ -546,7 +549,7 @@
 
             // Update tracking details
             if (trackingDiv) {
-              trackingDiv.innerHTML = '<div class="header">Tracking: ' + escapeHtml(shipment.trackingNumber) + ' Not Processing...</div>';
+              trackingDiv.innerHTML = '<div class="header">Tracking: ' + escapeHtml(shipment.trackingNumber) + ' not Processing...</div>';
               if (shipment.timeline && Array.isArray(shipment.timeline) && shipment.timeline.length > 0) {
                 trackingDiv.innerHTML += `<div class="timeline">
                   ${shipment.timeline.map(event => `
@@ -638,9 +641,12 @@
         setTimeout(() => {
           try {
             if (receiverMap) {
-              const mapUrl = `https://www.google.com/maps/embed?q=${encodeURIComponent(inputValue)}&center=0,0&zoom=1&maptype=roadmap`;
+              const mapUrl = `https://www.google.com/maps/embed?q=${encodeURIComponent(inputValue)}&zoom=10&maptype=roadmap`;
               receiverMap.innerHTML = `<iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
               console.log('Map updated to location:', { location: inputValue, mapUrl });
+            } else {
+              console.error('Receiver map element not found.');
+              alert('Map display error. Please refresh the page.');
             }
             if (mapOverlay) {
               mapOverlay.textContent = `CURRENT LOCATION: ${escapeHtml(inputValue)}`;
@@ -651,7 +657,7 @@
             }
           } catch (err) {
             console.error('Location map update error:', err);
-            alert('Error displaying location on map. Please try a different location name.');
+            alert('Error displaying location on map. Please try a different location name or check your input.');
             clearShipmentDetails();
           }
         }, 5000);
