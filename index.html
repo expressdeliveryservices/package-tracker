@@ -38,9 +38,7 @@
     .shipment-content .details { margin: 2px 0; padding: 3px; border: 1px solid #ddd; border-radius: 3px; }
     .shipment-content .details label { display: inline-block; width: 90px; font-weight: bold; }
     .shipment-content .details span { display: inline-block; margin-left: 2px; }
-    .shipment-content .stamp-container { display: flex; align-items: center; gap: 10px; }
-    .shipment-content .stamp-container img { max-width: 50px; height: auto; }
-    .shipment-content .stamp-container span { font-size: 9px; }
+    .shipment-content .payment-img { max-width: 50px; height: auto; margin-top: 2px; }
     .shipment-content .section-title { font-size: 9px; font-weight: bold; margin: 2px 0; padding-bottom: 1px; border-bottom: 1px solid #000; }
     .shipment-content .total { font-size: 9px; font-weight: bold; margin-top: 5px; padding-top: 2px; text-align: right; }
     .shipment-content .footer { font-size: 5px; text-align: center; margin-top: 5px; color: #555; }
@@ -270,9 +268,9 @@
 
   <!-- Track Packages -->
   <section id="track">
-    <h2 class="section-title">Track Your Package or Find a Location</h2>
+    <h2 class="section-title">Track Your Package</h2>
     <div class="tracking">
-      <input type="text" id="trackingNumber" placeholder="TRACKING ID OR ADDRESS" required oninput="clearShipmentDetails()">
+      <input type="text" id="trackingNumber" placeholder="TRACKING ID" required oninput="clearShipmentDetails()">
       <button onclick="trackPackage()">TRACK</button>
     </div>
     <div id="shipmentTracking" class="shipment-tracking" style="display:none;"></div>
@@ -347,9 +345,6 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
-    // Google Maps API Key (replace with your actual API key)
-    const GOOGLE_API_KEY = 'YOUR_API_KEY'; // Replace with your Google Maps API key
-
     // Global shipments array
     let shipments = [];
 
@@ -437,7 +432,8 @@
       const requiredFields = [
         'trackingNumber', 'orderId', 'content', 'origin', 'destination',
         'estDeliveryDate', 'modeOfTransport', 'typeOfShipment', 'quantity',
-        'paymentMode', 'receipt.amount', 'sender.name', 'sender.address',
+        'paymentMode', 'receipt.amount',
+        'sender.name', 'sender.address',
         'receiver.name', 'receiver.address', 'receiver.mobile', 'stampDate'
       ];
       for (const field of requiredFields) {
@@ -486,36 +482,8 @@
       }
     }
 
-    // Geocode address using Google Maps Geocoding API
-    async function geocodeAddress(address) {
-      if (!GOOGLE_API_KEY) {
-        console.error('Google API key is missing.');
-        alert('Geocoding service is unavailable. Please try a tracking number.');
-        return null;
-      }
-      try {
-        const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${GOOGLE_API_KEY}`);
-        const data = await response.json();
-        console.log('Geocoding response:', data);
-        if (data.status === 'OK' && data.results.length > 0) {
-          const result = data.results[0];
-          return {
-            lat: result.geometry.location.lat,
-            lng: result.geometry.location.lng,
-            formattedAddress: result.formatted_address
-          };
-        } else {
-          console.warn('Geocoding failed:', data.status, data.error_message || 'No results');
-          return null;
-        }
-      } catch (err) {
-        console.error('Geocoding error:', err);
-        return null;
-      }
-    }
-
     // Tracking function
-    async function trackPackage() {
+    function trackPackage() {
       const input = document.getElementById('trackingNumber');
       const trackingDiv = document.getElementById('shipmentTracking');
       const contentDiv = document.getElementById('shipmentContent');
@@ -533,7 +501,7 @@
       // Clear details if input is empty
       if (!inputValue) {
         console.log('Empty input, clearing details.');
-        alert('Please enter a tracking number or address.');
+        alert('Please enter a tracking number.');
         clearShipmentDetails();
         return;
       }
@@ -629,11 +597,9 @@
                   <label>Mobile:</label><span>${escapeHtml(shipment.receiver.mobile)}</span>
                 </div>
                 <div class="section-title">Official Stamp</div>
-                <div class="details">
-                  <div class="stamp-container">
-                    ${officialStamp ? `<img src="${escapeHtml(officialStamp)}" alt="Official Stamp">` : '<span>N/A</span>'}
-                    <span>${escapeHtml(stampDate)}</span>
-                  </div>
+                <div class="details" style="display: flex; align-items: center;">
+                  ${officialStamp ? `<img src="${escapeHtml(officialStamp)}" style="max-width:100px;height:auto;" alt="Official Stamp">` : '<span>N/A</span>'}
+                  <label>Stamp Date:</label><span>${escapeHtml(stampDate)}</span>
                 </div>
                 <div class="total">Total: $${escapeHtml(amount)}</div>
                 <div class="footer">
@@ -653,45 +619,35 @@
         }
         if (contentDiv) contentDiv.style.display = 'none';
 
-        // Geocode the address
-        const locationData = await geocodeAddress(inputValue);
+        // Update map to location name after 5 seconds
         setTimeout(() => {
-          if (locationData) {
-            try {
-              if (receiverMap) {
-                const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2000!2d${locationData.lng}!3d${locationData.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z${encodeURIComponent(locationData.formattedAddress)}!5e0!3m2!1sen!2us!4v1695296400000`;
-                receiverMap.innerHTML = `<iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
-                console.log('Map updated to location:', { location: inputValue, mapUrl, lat: locationData.lat, lng: locationData.lng });
-              } else {
-                console.error('Receiver map element not found.');
-                alert('Map display error. Please refresh the page.');
-              }
-              if (mapOverlay) {
-                mapOverlay.textContent = `CURRENT LOCATION: ${escapeHtml(locationData.formattedAddress)}`;
-              }
-              if (trackingDiv) {
-                trackingDiv.innerHTML = `<div class="header">Location: ${escapeHtml(locationData.formattedAddress)}</div>`;
-                trackingDiv.innerHTML += '<div class="timeline"><div class="timeline-event"><div class="tick"></div><div class="description">Displaying location on map. No shipment data available.</div></div></div>';
-              }
-            } catch (err) {
-              console.error('Location map update error:', err);
-              alert('Error displaying location on map. Please try a different location name or check your input.');
-              clearShipmentDetails();
+          try {
+            if (receiverMap) {
+              const mapUrl = `https://www.google.com/maps/embed?q=${encodeURIComponent(inputValue)}&center=0,0&zoom=1&maptype=roadmap`;
+              receiverMap.innerHTML = `<iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+              console.log('Map updated to location:', { location: inputValue, mapUrl });
+            } else {
+              console.error('Receiver map element not found.');
+              alert('Map display error. Please refresh the page.');
             }
-          } else {
-            console.warn('Geocoding failed for address:', inputValue);
+            if (mapOverlay) {
+              mapOverlay.textContent = `CURRENT LOCATION: ${escapeHtml(inputValue)}`;
+            }
             if (trackingDiv) {
               trackingDiv.innerHTML = `<div class="header">Location: ${escapeHtml(inputValue)}</div>`;
-              trackingDiv.innerHTML += '<div class="timeline"><div class="timeline-event"><div class="tick"></div><div class="description">Unable to find location. Please check the address or try a tracking number.</div></div></div>';
+              trackingDiv.innerHTML += '<div class="timeline"><div class="timeline-event"><div class="tick"></div><div class="description">Displaying location on map. No shipment data available.</div></div></div>';
             }
+          } catch (err) {
+            console.error('Location map update error:', err);
+            alert('Error displaying location on map. Please try a different location name or check your input.');
             clearShipmentDetails();
           }
         }, 5000);
       }
     }
 
-    // Print and share invoice
-    async function printInvoice(number) {
+    // Print invoice
+    function printInvoice(number) {
       loadShipments();
       const shipment = shipments.find(s => (s.trackingNumber || '').toString().toLowerCase() === number.toLowerCase());
       if (!shipment || !isValidShipment(shipment)) {
@@ -722,10 +678,10 @@
             .details label { display: inline-block; width: 90px; font-weight: bold; }
             .details span { display: inline-block; margin-left: 2px; }
             .payment-img { max-width: 50px; height: auto; margin-top: 2px; }
+            .section-title { font-size: 9px; font-weight: bold; margin: 2px 0; padding-bottom: 1px; border-bottom: 1px solid #000; }
             .stamp-container { display: flex; align-items: center; gap: 10px; }
             .stamp-container img { max-width: 50px; height: auto; }
             .stamp-container span { font-size: 9px; }
-            .section-title { font-size: 9px; font-weight: bold; margin: 2px 0; padding-bottom: 1px; border-bottom: 1px solid #000; }
             .total { font-size: 9px; font-weight: bold; margin-top: 5px; padding-top: 2px; text-align: right; }
             .footer { font-size: 5px; text-align: center; margin-top: 5px; color: #555; }
           </style>
@@ -771,7 +727,7 @@
             <div class="section-title">Official Stamp</div>
             <div class="details">
               <div class="stamp-container">
-                ${officialStamp ? `<img src="${escapeHtml(officialStamp)}" alt="Official Stamp">` : '<span>N/A</span>'}
+                ${officialStamp ? `<img src="${escapeHtml(officialStamp)}" style="max-width:100px;height:auto;" alt="Official Stamp">` : '<span>N/A</span>'}
                 <span>${escapeHtml(stampDate)}</span>
               </div>
             </div>
@@ -785,60 +741,12 @@
         </html>
       `;
 
-      // Create a temporary element for PDF generation
       const element = document.createElement('div');
       element.innerHTML = receiptContent;
-      const receiptElement = element.querySelector('.receipt');
-
-      // Save as PDF
-      const pdfFilename = `Receipt-${shipment.trackingNumber}.pdf`;
       html2pdf()
-        .set({ margin: [2, 2, 2, 2], filename: pdfFilename })
-        .from(receiptElement)
-        .toPdf()
-        .get('pdf')
-        .then(async (pdf) => {
-          // Save PDF
-          const blob = pdf.output('blob');
-          const url = URL.createObjectURL(blob);
-
-          // Trigger download
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = pdfFilename;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-
-          // Share PDF using Web Share API
-          if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], pdfFilename, { type: 'application/pdf' })] })) {
-            try {
-              await navigator.share({
-                title: `Receipt for Tracking Number ${shipment.trackingNumber}`,
-                text: `Here is the receipt for your shipment with tracking number ${shipment.trackingNumber}.`,
-                files: [new File([blob], pdfFilename, { type: 'application/pdf' })]
-              });
-              console.log('Receipt shared successfully');
-            } catch (err) {
-              console.warn('Sharing failed:', err);
-              alert('Sharing not supported or failed. The receipt has been downloaded.');
-            }
-          } else {
-            console.warn('Web Share API not supported or cannot share files.');
-            alert('Receipt downloaded. Please share the file manually from your downloads folder.');
-          }
-
-          // Open print dialog
-          const printWindow = window.open('', '_blank');
-          printWindow.document.write(receiptContent);
-          printWindow.document.close();
-          printWindow.focus();
-          printWindow.print();
-        })
-        .catch(err => {
-          console.error('PDF generation error:', err);
-          alert('Error generating PDF. Please try again.');
-        });
+        .set({ margin: [2, 2, 2, 2], filename: `Receipt-${shipment.trackingNumber}.pdf` })
+        .from(element.querySelector('.receipt'))
+        .save();
     }
 
     // Initialize page
