@@ -107,7 +107,7 @@
 <body onload="scrollToTop()">
   <noscript>
     <div style="text-align: center; padding: 20px; background: #ffe6e6; color: #d32f2f;">
-      JavaScript is disabled in your browser. Some features like tracking and invoice generation are unavailable. The map below shows the default receiver location (Russia).
+      JavaScript is disabled in your browser. Some features like tracking and invoice generation are unavailable. The map below shows a default world map view.
     </div>
   </noscript>
 
@@ -275,16 +275,16 @@
     <div id="shipmentTracking" class="shipment-tracking" style="display:none;"></div>
     <div id="shipmentContent" class="shipment-content" style="display:none;"></div>
     <div class="map-container">
-      <div class="map-overlay" id="mapOverlay">CURRENT LOCATION: RUSSIA (DEFAULT)</div>
+      <div class="map-overlay" id="mapOverlay">CURRENT LOCATION: WORLD MAP (DEFAULT)</div>
       <div id="receiverMap" style="width:100%;height:300px;">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3381440.332163714!2d105.3188!3d61.5240!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zUnVzc2lh!5e0!3m2!1sen!2us!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14757399.61477361!2d0!3d0!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z!5e0!3m2!1sen!2us!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
       </div>
       <noscript>
         <div style="text-align: center; padding: 10px; background: #ffe6e6; color: #d32f2f;">
-          JavaScript is disabled. The map below shows the default location (Russia). Tracking and dynamic location updates are unavailable.
+          JavaScript is disabled. The map below shows a default world map view. Tracking and dynamic location updates are unavailable.
         </div>
         <div style="width:100%;height:300px;">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3381440.332163714!2d105.3188!3d61.5240!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zUnVzc2lh!5e0!3m2!1sen!2us!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14757399.61477361!2d0!3d0!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z!5e0!3m2!1sen!2us!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
       </noscript>
     </div>
@@ -473,11 +473,11 @@
       if (trackingDiv) trackingDiv.style.display = 'none';
       if (contentDiv) contentDiv.style.display = 'none';
       if (receiverMap) {
-        receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3381440.332163714!2d105.3188!3d61.5240!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zUnVzc2lh!5e0!3m2!1sen!2us!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
-        console.log('Map reset to default: Russia');
+        receiverMap.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14757399.61477361!2d0!3d0!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z!5e0!3m2!1sen!2us!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+        console.log('Map reset to default: World Map');
       }
       if (mapOverlay) {
-        mapOverlay.textContent = 'CURRENT LOCATION: RUSSIA (DEFAULT)';
+        mapOverlay.textContent = 'CURRENT LOCATION: WORLD MAP (DEFAULT)';
       }
     }
 
@@ -533,7 +533,7 @@
               mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2000!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z${encodeURIComponent(address)}!5e0!3m2!1sen!2us!4v1695296400000`;
             } else {
               console.log('No coordinates provided, using address:', address);
-              mapUrl = `https://www.google.com/maps/embed?q=${encodeURIComponent(address)}&center=61.5240,105.3188&zoom=4&maptype=roadmap`;
+              mapUrl = `https://www.google.com/maps/embed?q=${encodeURIComponent(address)}&center=0,0&zoom=1&maptype=roadmap`;
             }
 
             if (receiverMap) {
@@ -638,7 +638,7 @@
         setTimeout(() => {
           try {
             if (receiverMap) {
-              const mapUrl = `https://www.google.com/maps/embed?q=${encodeURIComponent(inputValue)}&center=61.5240,105.3188&zoom=4&maptype=roadmap`;
+              const mapUrl = `https://www.google.com/maps/embed?q=${encodeURIComponent(inputValue)}&center=0,0&zoom=1&maptype=roadmap`;
               receiverMap.innerHTML = `<iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
               console.log('Map updated to location:', { location: inputValue, mapUrl });
             }
