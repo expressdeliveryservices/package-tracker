@@ -269,8 +269,8 @@
   <section id="track">
     <h2 class="section-title">Track Your Package</h2>
     <div class="tracking">
-      <input type="text" id="trackingNumber" placeholder="Enter Tracking ID or Location Name" required oninput="clearShipmentDetails()">
-      <button onclick="trackPackage()">Track Now</button>
+      <input type="text" id="trackingNumber" placeholder="TRACKING ID" required oninput="clearShipmentDetails()">
+      <button onclick="trackPackage()">TRACK</button>
     </div>
     <div id="shipmentTracking" class="shipment-tracking" style="display:none;"></div>
     <div id="shipmentContent" class="shipment-content" style="display:none;"></div>
@@ -500,7 +500,7 @@
       // Clear details if input is empty
       if (!inputValue) {
         console.log('Empty input, clearing details.');
-        alert('Please enter a tracking number or location name.');
+        alert('Please enter a tracking number.');
         clearShipmentDetails();
         return;
       }
@@ -515,7 +515,7 @@
 
       if (trackingDiv) {
         trackingDiv.style.display = 'block';
-        trackingDiv.innerHTML = '<div class="header">Processing...</div>';
+        trackingDiv.innerHTML = '<div class="header">Searching...</div>';
       }
 
       if (shipment && isValidShipment(shipment)) {
@@ -546,7 +546,7 @@
 
             // Update tracking details
             if (trackingDiv) {
-              trackingDiv.innerHTML = '<div class="header">Tracking Shipment: ' + escapeHtml(shipment.trackingNumber) + '</div>';
+              trackingDiv.innerHTML = '<div class="header">Tracking: ' + escapeHtml(shipment.trackingNumber) + ' Not Processing...</div>';
               if (shipment.timeline && Array.isArray(shipment.timeline) && shipment.timeline.length > 0) {
                 trackingDiv.innerHTML += `<div class="timeline">
                   ${shipment.timeline.map(event => `
