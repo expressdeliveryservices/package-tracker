@@ -373,7 +373,7 @@
       } catch (err) {
         console.error('Failed to load shipments from localStorage:', err);
         shipments = [];
-        alert('Error loading shipment data. Please contact support at Expressdeliveryservice0016@gmail.com.');
+        alert('Error loading shipment data. Please contact support.');
       }
     }
 
@@ -585,11 +585,10 @@
           console.warn('No valid coordinates for map update:', shipment.receiver);
         }
 
-        // Update tracking details and receipt after 5 seconds
+        // Update tracking details after 5 seconds
         setTimeout(() => {
-          console.log('Updating tracking details and receipt for:', shipment.trackingNumber);
+          console.log('Updating tracking details for:', shipment.trackingNumber);
           try {
-            // Update tracking details
             trackingDiv.innerHTML = '<div class="header">Tracking Shipment: ' + escapeHtml(shipment.trackingNumber) + '</div>';
             if (shipment.timeline && Array.isArray(shipment.timeline) && shipment.timeline.length > 0) {
               trackingDiv.innerHTML += `<div class="timeline">
@@ -605,72 +604,80 @@
               trackingDiv.innerHTML += '<div class="timeline"><div class="timeline-event"><div class="tick"></div><div class="description">No tracking status available.</div></div></div>';
             }
 
-            // Show receipt
-            const companyName = shipment.receipt?.companyName || 'Express Delivery Service';
-            const amount = shipment.receipt?.amount || '0.00';
-            const officialStamp = shipment.officialStamp || '';
-            const stampDate = shipment.stampDate || '';
-            contentDiv.style.display = 'block';
-            contentDiv.innerHTML = `
-              <div style="position:relative;">
-                <div class="watermark">CERTIFIED TRUE COPY</div>
-                <div class="header">
-                  <div class="company-name">${escapeHtml(companyName)}</div>
-                  <div class="logo">
-                    <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo">
+            // Show receipt after another 5 seconds (total 10 seconds)
+            setTimeout(() => {
+              console.log('Updating receipt for:', shipment.trackingNumber);
+              const companyName = shipment.receipt?.companyName || 'Express Delivery Service';
+              const amount = shipment.receipt?.amount || '0.00';
+              const officialStamp = shipment.officialStamp || '';
+              const stampDate = shipment.stampDate || '';
+              try {
+                contentDiv.style.display = 'block';
+                contentDiv.innerHTML = `
+                  <div style="position:relative;">
+                    <div class="watermark">CERTIFIED TRUE COPY</div>
+                    <div class="header">
+                      <div class="company-name">${escapeHtml(companyName)}</div>
+                      <div class="logo">
+                        <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo">
+                      </div>
+                    </div>
+                    <div class="section-title">Shipment</div>
+                    <div class="details">
+                      <label>Tracking Number:</label><span>${escapeHtml(shipment.trackingNumber)}</span><br>
+                      <label>Order ID:</label><span>${escapeHtml(shipment.orderId)}</span><br>
+                      <label>Content:</label><span>${escapeHtml(shipment.content)}</span><br>
+                      <label>Origin:</label><span>${escapeHtml(shipment.origin)}</span><br>
+                      <label>Destination:</label><span>${escapeHtml(shipment.destination)}</span><br>
+                      <label>Est. Delivery:</label><span>${escapeHtml(shipment.estDeliveryDate)}</span><br>
+                      <label>Transport Mode:</label><span>${escapeHtml(shipment.modeOfTransport)}</span><br>
+                      <label>Shipment Type:</label><span>${escapeHtml(shipment.typeOfShipment)}</span><br>
+                      <label>Quantity:</label><span>${escapeHtml(shipment.quantity)}</span>
+                    </div>
+                    <div class="section-title">Payment</div>
+                    <div class="details">
+                      <label>Amount:</label><span>$${escapeHtml(amount)}</span><br>
+                      <label>Payment Mode:</label><span>${escapeHtml(shipment.paymentMode)}</span><br>
+                      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1860.jpeg" class="payment-img" alt="Payment Icon">
+                    </div>
+                    <div class="section-title">Sender</div>
+                    <div class="details">
+                      <label>Name:</label><span>${escapeHtml(shipment.sender.name)}</span><br>
+                      <label>Address:</label><span>${escapeHtml(shipment.sender.address)}</span>
+                    </div>
+                    <div class="section-title">Receiver</div>
+                    <div class="details">
+                      <label>Name:</label><span>${escapeHtml(shipment.receiver.name)}</span><br>
+                      <label>Address:</label><span>${escapeHtml(shipment.receiver.address)}</span><br>
+                      <label>Mobile:</label><span>${escapeHtml(shipment.receiver.mobile)}</span>
+                    </div>
+                    <div class="section-title">Official Stamp</div>
+                    <div class="details">
+                      <div class="stamp-container">
+                        ${officialStamp ? `<img src="${escapeHtml(officialStamp)}" alt="Official Stamp">` : '<span>N/A</span>'}
+                        <span>${escapeHtml(stampDate)}</span>
+                      </div>
+                    </div>
+                    <div class="total">Total: $${escapeHtml(amount)}</div>
+                    <div class="footer">
+                      Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
+                      Issued: ${new Date().toLocaleString('en-US', { timeZone: 'Africa/Lagos' })}
+                    </div>
                   </div>
-                </div>
-                <div class="section-title">Shipment</div>
-                <div class="details">
-                  <label>Tracking Number:</label><span>${escapeHtml(shipment.trackingNumber)}</span><br>
-                  <label>Order ID:</label><span>${escapeHtml(shipment.orderId)}</span><br>
-                  <label>Content:</label><span>${escapeHtml(shipment.content)}</span><br>
-                  <label>Origin:</label><span>${escapeHtml(shipment.origin)}</span><br>
-                  <label>Destination:</label><span>${escapeHtml(shipment.destination)}</span><br>
-                  <label>Est. Delivery:</label><span>${escapeHtml(shipment.estDeliveryDate)}</span><br>
-                  <label>Transport Mode:</label><span>${escapeHtml(shipment.modeOfTransport)}</span><br>
-                  <label>Shipment Type:</label><span>${escapeHtml(shipment.typeOfShipment)}</span><br>
-                  <label>Quantity:</label><span>${escapeHtml(shipment.quantity)}</span>
-                </div>
-                <div class="section-title">Payment</div>
-                <div class="details">
-                  <label>Amount:</label><span>$${escapeHtml(amount)}</span><br>
-                  <label>Payment Mode:</label><span>${escapeHtml(shipment.paymentMode)}</span><br>
-                  <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1860.jpeg" class="payment-img" alt="Payment Icon">
-                </div>
-                <div class="section-title">Sender</div>
-                <div class="details">
-                  <label>Name:</label><span>${escapeHtml(shipment.sender.name)}</span><br>
-                  <label>Address:</label><span>${escapeHtml(shipment.sender.address)}</span>
-                </div>
-                <div class="section-title">Receiver</div>
-                <div class="details">
-                  <label>Name:</label><span>${escapeHtml(shipment.receiver.name)}</span><br>
-                  <label>Address:</label><span>${escapeHtml(shipment.receiver.address)}</span><br>
-                  <label>Mobile:</label><span>${escapeHtml(shipment.receiver.mobile)}</span>
-                </div>
-                <div class="section-title">Official Stamp</div>
-                <div class="details">
-                  <div class="stamp-container">
-                    ${officialStamp ? `<img src="${escapeHtml(officialStamp)}" alt="Official Stamp">` : '<span>N/A</span>'}
-                    <span>${escapeHtml(stampDate)}</span>
-                  </div>
-                </div>
-                <div class="total">Total: $${escapeHtml(amount)}</div>
-                <div class="footer">
-                  Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
-                  Issued: ${new Date().toLocaleString('en-US', { timeZone: 'Africa/Lagos' })}
-                </div>
-              </div>
-              <button class="print-btn" onclick="printInvoice('${escapeJs(inputValue)}')">Print Invoice</button>
-            `;
+                  <button class="print-btn" onclick="printInvoice('${escapeJs(inputValue)}')">Print Invoice</button>
+                `;
+              } catch (err) {
+                console.error('Error rendering receipt:', err);
+                alert('Error displaying receipt. Please try again or contact support at Expressdeliveryservice0016@gmail.com.');
+                contentDiv.style.display = 'none';
+              }
+            }, 5000); // Additional 5 seconds for receipt
           } catch (err) {
-            console.error('Error rendering tracking details or receipt:', err);
+            console.error('Error rendering tracking details:', err);
             trackingDiv.innerHTML = `<div class="header">Tracking: ${escapeHtml(inputValue)}</div>`;
             trackingDiv.innerHTML += '<div class="timeline"><div class="timeline-event"><div class="tick"></div><div class="description">Error loading tracking details. Please try again or contact support at Expressdeliveryservice0016@gmail.com.</div></div></div>';
-            contentDiv.style.display = 'none';
           }
-        }, 5000); // 5 seconds for tracking details and receipt
+        }, 5000); // 5 seconds for tracking details
       } else {
         console.log('No shipment found for:', inputValue);
         setTimeout(() => {
@@ -703,7 +710,6 @@
       const officialStamp = shipment.officialStamp || '';
       const stampDate = shipment.stampDate || '';
 
-      // Generate receipt HTML
       const receiptContent = `
         <!DOCTYPE html>
         <html>
@@ -723,4 +729,160 @@
             .payment-img { max-width: 50px; height: auto; margin-top: 2px; }
             .stamp-container { display: flex; align-items: center; gap: 10px; }
             .stamp-container img { max-width: 50px; height: auto; }
-            .stamp-container span
+            .stamp-container span { font-size: 9px; }
+            .section-title { font-size: 9px; font-weight: bold; margin: 2px 0; padding-bottom: 1px; border-bottom: 1px solid #000; }
+            .total { font-size: 9px; font-weight: bold; margin-top: 5px; padding-top: 2px; text-align: right; }
+            .footer { font-size: 5px; text-align: center; margin-top: 5px; color: #555; }
+          </style>
+        </head>
+        <body>
+          <div class="receipt">
+            <div class="watermark">CERTIFIED TRUE COPY</div>
+            <div class="header">
+              <div class="company-name">${escapeHtml(companyName)}</div>
+              <div class="logo">
+                <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo">
+              </div>
+            </div>
+            <div class="section-title">Shipment</div>
+            <div class="details">
+              <label>Tracking Number:</label><span>${escapeHtml(shipment.trackingNumber)}</span><br>
+              <label>Order ID:</label><span>${escapeHtml(shipment.orderId)}</span><br>
+              <label>Content:</label><span>${escapeHtml(shipment.content)}</span><br>
+              <label>Origin:</label><span>${escapeHtml(shipment.origin)}</span><br>
+              <label>Destination:</label><span>${escapeHtml(shipment.destination)}</span><br>
+              <label>Est. Delivery:</label><span>${escapeHtml(shipment.estDeliveryDate)}</span><br>
+              <label>Transport Mode:</label><span>${escapeHtml(shipment.modeOfTransport)}</span><br>
+              <label>Shipment Type:</label><span>${escapeHtml(shipment.typeOfShipment)}</span><br>
+              <label>Quantity:</label><span>${escapeHtml(shipment.quantity)}</span>
+            </div>
+            <div class="section-title">Payment</div>
+            <div class="details">
+              <label>Amount:</label><span>$${escapeHtml(amount)}</span><br>
+              <label>Payment Mode:</label><span>${escapeHtml(shipment.paymentMode)}</span><br>
+              <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1860.jpeg" class="payment-img" alt="Payment Icon">
+            </div>
+            <div class="section-title">Sender</div>
+            <div class="details">
+              <label>Name:</label><span>${escapeHtml(shipment.sender.name)}</span><br>
+              <label>Address:</label><span>${escapeHtml(shipment.sender.address)}</span>
+            </div>
+            <div class="section-title">Receiver</div>
+            <div class="details">
+              <label>Name:</label><span>${escapeHtml(shipment.receiver.name)}</span><br>
+              <label>Address:</label><span>${escapeHtml(shipment.receiver.address)}</span><br>
+              <label>Mobile:</label><span>${escapeHtml(shipment.receiver.mobile)}</span>
+            </div>
+            <div class="section-title">Official Stamp</div>
+            <div class="details">
+              <div class="stamp-container">
+                ${officialStamp ? `<img src="${escapeHtml(officialStamp)}" alt="Official Stamp">` : '<span>N/A</span>'}
+                <span>${escapeHtml(stampDate)}</span>
+              </div>
+            </div>
+            <div class="total">Total: $${escapeHtml(amount)}</div>
+            <div class="footer">
+              Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
+              Issued: ${new Date().toLocaleString('en-US', { timeZone: 'Africa/Lagos' })}
+            </div>
+          </div>
+        </body>
+        </html>
+      `;
+
+      try {
+        // Create a temporary element for PDF generation
+        const element = document.createElement('div');
+        element.innerHTML = receiptContent;
+        const receiptElement = element.querySelector('.receipt');
+
+        if (!receiptElement) {
+          console.error('Receipt element not found in generated content.');
+          alert('Error generating receipt. Please try again.');
+          return;
+        }
+
+        // Save as PDF
+        const pdfFilename = `Receipt-${shipment.trackingNumber}.pdf`;
+        html2pdf()
+          .set({ margin: [2, 2, 2, 2], filename: pdfFilename })
+          .from(receiptElement)
+          .toPdf()
+          .get('pdf')
+          .then(async (pdf) => {
+            // Save PDF
+            const blob = pdf.output('blob');
+            const url = URL.createObjectURL(blob);
+
+            // Trigger download
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = pdfFilename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+            // Share PDF using Web Share API
+            if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], pdfFilename, { type: 'application/pdf' })] })) {
+              try {
+                await navigator.share({
+                  title: `Receipt for Tracking Number ${shipment.trackingNumber}`,
+                  text: `Here is the receipt for your shipment with tracking number ${shipment.trackingNumber}.`,
+                  files: [new File([blob], pdfFilename, { type: 'application/pdf' })]
+                });
+                console.log('Receipt shared successfully');
+              } catch (err) {
+                console.warn('Sharing failed:', err);
+                alert('Sharing not supported or failed. The receipt has been downloaded.');
+              }
+            } else {
+              console.warn('Web Share API not supported or cannot share files.');
+              alert('Receipt downloaded. Please share the file manually from your downloads folder.');
+            }
+
+            // Open print dialog
+            const printWindow = window.open('', '_blank');
+            if (printWindow) {
+              printWindow.document.write(receiptContent);
+              printWindow.document.close();
+              printWindow.focus();
+              setTimeout(() => printWindow.print(), 500); // Delay to ensure content loads
+            } else {
+              console.warn('Failed to open print window. Browser may be blocking popups.');
+              alert('Unable to open print dialog. Please allow popups and try again.');
+            }
+          })
+          .catch(err => {
+            console.error('PDF generation error:', err);
+            alert('Error generating PDF. Please try again.');
+          });
+      } catch (err) {
+        console.error('Error in printInvoice:', err);
+        alert('Error processing receipt. Please try again or contact support at Expressdeliveryservice0016@gmail.com.');
+      }
+    }
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', () => {
+      loadShipments();
+      initMaps();
+      rotateTestimonials();
+    });
+
+    // Testimonial rotation
+    function rotateTestimonials() {
+      const testimonialWall = document.querySelector('.testimonial-wall');
+      if (!testimonialWall) return;
+      const totalTestimonials = document.querySelectorAll('.testimonial').length || 1;
+      let currentIndex = 0;
+      function showTestimonial(index) {
+        testimonialWall.style.transform = `translateX(-${index * 100}%)`;
+      }
+      setInterval(() => {
+        currentIndex = (currentIndex + 1) % totalTestimonials;
+        showTestimonial(currentIndex);
+      }, 5000);
+    }
+  </script>
+</body>
+</html>
