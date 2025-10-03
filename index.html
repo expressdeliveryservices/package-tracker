@@ -43,7 +43,7 @@
     .shipment-content .total { font-size: 9px; font-weight: bold; margin-top: 5px; padding-top: 2px; text-align: right; }
     .shipment-content .footer { font-size: 5px; text-align: center; margin-top: 5px; color: #555; }
     .shipment-content .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); color: #a9a9a9; font-size: 16px; font-weight: bold; opacity: 0.4; z-index: 0; }
-    .print-btn { margin-top: 5px; padding: 5px 10px; background-color: #1e90ff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+    .print-btn, .share-btn { margin-top: 5px; margin-right: 5px; padding: 5px 10px; background-color: #1e90ff; color: white; border: none; border-radius: 3px; cursor: pointer; }
     .timeline { position: relative; margin: 20px 0; }
     .timeline::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 4px; background: #ddd; }
     .timeline-event { position: relative; margin-bottom: 30px; padding-left: 50px; }
@@ -303,7 +303,7 @@
     <div class="map-container">
       <div class="map-overlay">HEADQUARTER LOCATION</div>
       <div id="headquarterMap" style="width:100%;height:300px;">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d-0.2120214!3d51.4735056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4876052b2e9d3c9f%3A0x2e5f9a3d7a2a9e!2sUniversal%20Drops%2C%2066B%20Oxberry%20Ave%2C%20London%20SW6%203AL%2C%20UK!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d-0.2120214!3d51.4735056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4876052b2e9d3c9f%3A0x2e5f9a3d7a2a9e!2sUniversal%20Drops%2C%2066B%20Oxberry%20Ave%2C%20London%20SW6%203AL%2C%20UK!5e0!3m2!1sen!2us!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
       </div>
     </div>
   </section>
@@ -585,6 +585,7 @@
                 </div>
               </div>
               <button class="print-btn" onclick="printInvoice('${escapeJs(number)}')">Print Invoice</button>
+              <button class="share-btn" onclick="shareInvoice('${escapeJs(number)}')">Share Invoice</button>
             `;
           } else {
             contentDiv.innerHTML = '<div class="header">No content available for this tracking number.</div>';
@@ -593,25 +594,49 @@
       }, 1200);
     }
 
+    // Function to preload images with timeout
+    async function preloadImage(src, timeout = 5000) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = src;
+        const timer = setTimeout(() => {
+          reject(new Error(`Image loading timed out: ${src}`));
+        }, timeout);
+        img.onload = () => {
+          clearTimeout(timer);
+          resolve();
+        };
+        img.onerror = () => {
+          clearTimeout(timer);
+          reject(new Error(`Failed to load image: ${src}`));
+        };
+      });
+    }
+
     // Print invoice and attempt PDF generation
     async function printInvoice(number) {
+      console.log('Starting printInvoice for tracking number:', number);
       loadShipments();
-      const shipment = shipments.find(s => (s.trackingNumber || '').toString().toLowerCase() === number.toLowerCase());
       const errorMessage = document.getElementById('errorMessage');
+      if (errorMessage) errorMessage.style.display = 'none';
 
+      const shipment = shipments.find(s => (s.trackingNumber || '').toString().toLowerCase() === number.toLowerCase());
       if (!shipment) {
+        console.error('No shipment found for tracking number:', number);
         if (errorMessage) {
           errorMessage.textContent = 'No shipment found for this tracking number.';
           errorMessage.style.display = 'block';
         }
         return;
       }
+      console.log('Shipment found:', shipment);
 
       const companyName = shipment.receipt?.companyName || 'Express Delivery Service';
       const amount = shipment.receipt?.amount || '0.00';
       const signatureStamp = shipment.officialStamp || '';
 
-      const receiptContent = `
+      // Full receipt with images
+      let receiptContent = `
         <!doctype html>
         <html>
         <head>
@@ -686,35 +711,108 @@
         </html>
       `;
 
+      // Fallback text-only receipt if images fail
+      const fallbackReceiptContent = `
+        <!doctype html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <title>Receipt - ${escapeHtml(shipment.trackingNumber || 'N/A')}</title>
+          <style>
+            body { font-family: 'Times New Roman', Times, serif; margin: 2mm; background: #fff; }
+            .receipt { width: 70mm; margin: 0 auto; padding: 2mm; border: 1px solid #000; background: #fff; position: relative; }
+            .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); color: #a9a9a9; font-size: 16px; font-weight: bold; opacity: 0.4; }
+            .header { font-size: 10px; font-weight: bold; margin-bottom: 2px; text-align: center; }
+            .section-title { font-size: 9px; font-weight: bold; margin: 2px 0; padding-bottom: 1px; border-bottom: 1px solid #000; }
+            .details { font-size: 7px; margin: 2px 0; line-height: 1.2; letter-spacing: 0.5px; padding: 3px; border: 1px solid #ddd; }
+            .details label { font-weight: bold; width: 90px; display: inline-block; }
+            .total { font-size: 9px; font-weight: bold; margin-top: 5px; padding-top: 2px; text-align: right; }
+            .footer { font-size: 5px; text-align: center; margin-top: 5px; color: #555; }
+            @media print { body { margin: 0; } .receipt { border: 1px solid #000; } }
+          </style>
+        </head>
+        <body>
+        <div class="receipt">
+          <div class="watermark">CERTIFIED TRUE COPY</div>
+          <div class="header">${escapeHtml(companyName)}</div>
+          <div class="section-title">Shipment Details</div>
+          <div class="details">
+            <label>Tracking Number:</label><span>${escapeHtml(shipment.trackingNumber || 'N/A')}</span><br>
+            <label>Order ID:</label><span>${escapeHtml(shipment.orderId || 'N/A')}</span><br>
+            <label>Content:</label><span>${escapeHtml(shipment.content || 'Unknown')}</span><br>
+            <label>Origin:</label><span>${escapeHtml(shipment.origin || 'Unknown')}</span><br>
+            <label>Destination:</label><span>${escapeHtml(shipment.destination || 'Unknown')}</span><br>
+            <label>Est. Delivery:</label><span>${escapeHtml(shipment.estDeliveryDate || 'N/A')}</span><br>
+            <label>Mode of Transport:</label><span>${escapeHtml(shipment.modeOfTransport || 'N/A')}</span><br>
+            <label>Type of Shipment:</label><span>${escapeHtml(shipment.typeOfShipment || 'N/A')}</span><br>
+            <label>Quantity:</label><span>${escapeHtml(shipment.quantity || 'N/A')}</span>
+          </div>
+          <div class="section-title">Payment Details</div>
+          <div class="details">
+            <label>Amount:</label><span>$${escapeHtml(amount)}</span><br>
+            <label>Payment Mode:</label><span>${escapeHtml(shipment.paymentMode || 'N/A')}</span><br>
+            <label>Payment Method:</label><span>${escapeHtml(shipment.paymentMethod || 'N/A')}</span>
+          </div>
+          <div class="section-title">Sender Details</div>
+          <div class="details">
+            <label>Name:</label><span>${escapeHtml(shipment.sender?.name || 'Unknown')}</span><br>
+            <label>Address:</label><span>${escapeHtml(shipment.sender?.address || 'Unknown')}</span>
+          </div>
+          <div class="section-title">Receiver Details</div>
+          <div class="details">
+            <label>Name:</label><span>${escapeHtml(shipment.receiver?.name || 'Unknown')}</span><br>
+            <label>Address:</label><span>${escapeHtml(shipment.receiver?.address || 'Unknown')}</span><br>
+            <label>Mobile:</label><span>${escapeHtml(shipment.receiver?.mobile || 'N/A')}</span>
+          </div>
+          <div class="section-title">Authorization</div>
+          <div class="details">
+            <label>Signed by:</label><span>${escapeHtml(shipment.signedBy || 'N/A')}</span><br>
+            <label>Stamp Date:</label><span>${escapeHtml(shipment.officialStampDate || 'N/A')}</span><br>
+            <label>Stamp:</label><span>Not Available</span>
+          </div>
+          <div class="total">Total: $${escapeHtml(amount)}</div>
+          <div class="footer">
+            Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
+            Issued: ${new Date().toLocaleString()}
+          </div>
+        </div>
+        </body>
+        </html>
+      `;
+
       try {
+        console.log('Attempting to preload images');
+        const imageUrls = [
+          'https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg',
+          'https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1860.jpeg',
+          signatureStamp
+        ].filter(url => url && typeof url === 'string');
+
+        let useFallback = false;
+        if (imageUrls.length > 0) {
+          try {
+            await Promise.all(imageUrls.map(url => preloadImage(url, 5000)));
+            console.log('All images loaded successfully');
+          } catch (err) {
+            console.warn('Image loading failed:', err.message);
+            useFallback = true;
+            if (errorMessage) {
+              errorMessage.textContent = 'Some images could not be loaded; generating text-only receipt.';
+              errorMessage.style.display = 'block';
+            }
+          }
+        }
+
         // Create temporary element for PDF
         const container = document.createElement('div');
-        container.innerHTML = receiptContent;
+        container.innerHTML = useFallback ? fallbackReceiptContent : receiptContent;
         const receiptElement = container.querySelector('.receipt');
 
         if (!receiptElement) {
-          throw new Error('Receipt element not found.');
+          throw new Error('Receipt element not found in content');
         }
 
-        // Ensure images are loaded
-        const images = receiptElement.querySelectorAll('img');
-        const imagePromises = Array.from(images).map(img => {
-          return new Promise((resolve, reject) => {
-            if (img.complete) {
-              resolve();
-            } else {
-              img.onload = resolve;
-              img.onerror = () => reject(new Error(`Failed to load image: ${img.src}`));
-            }
-          });
-        });
-
-        await Promise.all(imagePromises).catch(err => {
-          console.error('Image loading error:', err);
-          throw new Error('Failed to load receipt images.');
-        });
-
-        // Generate PDF
+        console.log('Generating PDF for receipt');
         const pdfFilename = `Receipt_${shipment.trackingNumber || 'unknown'}.pdf`;
         const pdf = await html2pdf()
           .set({
@@ -727,7 +825,7 @@
           .toPdf()
           .output('blob');
 
-        // Trigger download
+        console.log('PDF generated, triggering download');
         const url = URL.createObjectURL(pdf);
         const a = document.createElement('a');
         a.href = url;
@@ -736,24 +834,174 @@
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+        console.log('Download triggered successfully');
 
         // Open print dialog
+        console.log('Opening print dialog');
         const win = window.open('', '_blank');
         if (win) {
-          win.document.write(receiptContent);
+          win.document.write(useFallback ? fallbackReceiptContent : receiptContent);
           win.document.close();
           setTimeout(() => {
             win.print();
             win.close();
+            console.log('Print dialog opened and closed');
           }, 500);
         } else {
+          console.warn('Print popup blocked');
           if (errorMessage) {
             errorMessage.textContent = 'Popup blocked. Please allow popups to print the invoice.';
             errorMessage.style.display = 'block';
           }
         }
+      } catch (err) {
+        console.error('Error in printInvoice:', err);
+        if (errorMessage) {
+          errorMessage.textContent = `Failed to generate receipt: ${err.message}. Please try again or contact support.`;
+          errorMessage.style.display = 'block';
+        }
+      }
+    }
 
-        // Attempt to share PDF
+    // Share invoice
+    async function shareInvoice(number) {
+      console.log('Starting shareInvoice for tracking number:', number);
+      loadShipments();
+      const errorMessage = document.getElementById('errorMessage');
+      if (errorMessage) errorMessage.style.display = 'none';
+
+      const shipment = shipments.find(s => (s.trackingNumber || '').toString().toLowerCase() === number.toLowerCase());
+      if (!shipment) {
+        console.error('No shipment found for sharing:', number);
+        if (errorMessage) {
+          errorMessage.textContent = 'No shipment found for this tracking number.';
+          errorMessage.style.display = 'block';
+        }
+        return;
+      }
+
+      const companyName = shipment.receipt?.companyName || 'Express Delivery Service';
+      const amount = shipment.receipt?.amount || '0.00';
+      const signatureStamp = shipment.officialStamp || '';
+
+      const receiptContent = `
+        <!doctype html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <title>Receipt - ${escapeHtml(shipment.trackingNumber || 'N/A')}</title>
+          <style>
+            body { font-family: 'Times New Roman', Times, serif; margin: 2mm; background: #fff; }
+            .receipt { width: 70mm; margin: 0 auto; padding: 2mm; border: 1px solid #000; background: #fff; position: relative; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+            .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); color: #a9a9a9; font-size: 16px; font-weight: bold; opacity: 0.4; z-index: 0; }
+            .header { font-size: 10px; font-weight: bold; margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; }
+            .company-name { font-size: 10px; font-weight: bold; }
+            .logo img { height: 25px; }
+            .section-title { font-size: 9px; font-weight: bold; margin: 2px 0; padding-bottom: 1px; border-bottom: 1px solid #000; }
+            .details { font-size: 7px; margin: 2px 0; line-height: 1.2; letter-spacing: 0.5px; padding: 3px; border: 1px solid #ddd; border-radius: 3px; }
+            .details label { font-weight: bold; width: 90px; display: inline-block; vertical-align: top; }
+            .details img { max-width: 50px; height: auto; margin-top: 2px; }
+            .total { font-size: 9px; font-weight: bold; margin-top: 5px; padding-top: 2px; text-align: right; }
+            .footer { font-size: 5px; text-align: center; margin-top: 5px; color: #555; }
+          </style>
+        </head>
+        <body>
+        <div class="receipt">
+          <div class="watermark">CERTIFIED TRUE COPY</div>
+          <div class="header">
+            <div class="company-name">${escapeHtml(companyName)}</div>
+            <div class="logo"><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo"></div>
+          </div>
+          <div class="section-title">Shipment Details</div>
+          <div class="details">
+            <label>Tracking Number:</label><span>${escapeHtml(shipment.trackingNumber || 'N/A')}</span><br>
+            <label>Order ID:</label><span>${escapeHtml(shipment.orderId || 'N/A')}</span><br>
+            <label>Content:</label><span>${escapeHtml(shipment.content || 'Unknown')}</span><br>
+            <label>Origin:</label><span>${escapeHtml(shipment.origin || 'Unknown')}</span><br>
+            <label>Destination:</label><span>${escapeHtml(shipment.destination || 'Unknown')}</span><br>
+            <label>Est. Delivery:</label><span>${escapeHtml(shipment.estDeliveryDate || 'N/A')}</span><br>
+            <label>Mode of Transport:</label><span>${escapeHtml(shipment.modeOfTransport || 'N/A')}</span><br>
+            <label>Type of Shipment:</label><span>${escapeHtml(shipment.typeOfShipment || 'N/A')}</span><br>
+            <label>Quantity:</label><span>${escapeHtml(shipment.quantity || 'N/A')}</span>
+          </div>
+          <div class="section-title">Payment Details</div>
+          <div class="details">
+            <label>Amount:</label><span>$${escapeHtml(amount)}</span><br>
+            <label>Payment Mode:</label><span>${escapeHtml(shipment.paymentMode || 'N/A')}</span><br>
+            <label>Payment Method:</label><span>${escapeHtml(shipment.paymentMethod || 'N/A')}</span><br>
+            <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1860.jpeg" class="payment-img" alt="Payment Icon">
+          </div>
+          <div class="section-title">Sender Details</div>
+          <div class="details">
+            <label>Name:</label><span>${escapeHtml(shipment.sender?.name || 'Unknown')}</span><br>
+            <label>Address:</label><span>${escapeHtml(shipment.sender?.address || 'Unknown')}</span>
+          </div>
+          <div class="section-title">Receiver Details</div>
+          <div class="details">
+            <label>Name:</label><span>${escapeHtml(shipment.receiver?.name || 'Unknown')}</span><br>
+            <label>Address:</label><span>${escapeHtml(shipment.receiver?.address || 'Unknown')}</span><br>
+            <label>Mobile:</label><span>${escapeHtml(shipment.receiver?.mobile || 'N/A')}</span>
+          </div>
+          <div class="section-title">Authorization</div>
+          <div class="details">
+            <label>Signed by:</label><span>${escapeHtml(shipment.signedBy || 'N/A')}</span><br>
+            <label>Stamp Date:</label><span>${escapeHtml(shipment.officialStampDate || 'N/A')}</span><br>
+            <label>Stamp:</label><span>${signatureStamp ? `<img src="${escapeHtml(signatureStamp)}" class="signature-img" alt="Signature Stamp">` : 'N/A'}</span>
+          </div>
+          <div class="total">Total: $${escapeHtml(amount)}</div>
+          <div class="footer">
+            Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
+            Issued: ${new Date().toLocaleString()}
+          </div>
+        </div>
+        </body>
+        </html>
+      `;
+
+      try {
+        console.log('Attempting to generate PDF for sharing');
+        const container = document.createElement('div');
+        container.innerHTML = receiptContent;
+        const receiptElement = container.querySelector('.receipt');
+
+        if (!receiptElement) {
+          throw new Error('Receipt element not found for sharing');
+        }
+
+        // Preload images for sharing
+        const imageUrls = [
+          'https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg',
+          'https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1860.jpeg',
+          signatureStamp
+        ].filter(url => url && typeof url === 'string');
+
+        if (imageUrls.length > 0) {
+          try {
+            await Promise.all(imageUrls.map(url => preloadImage(url, 5000)));
+            console.log('Images loaded for sharing');
+          } catch (err) {
+            console.warn('Image loading failed for sharing:', err.message);
+            if (errorMessage) {
+              errorMessage.textContent = 'Some images could not be loaded for sharing.';
+              errorMessage.style.display = 'block';
+            }
+            return;
+          }
+        }
+
+        const pdfFilename = `Receipt_${shipment.trackingNumber || 'unknown'}.pdf`;
+        const pdf = await html2pdf()
+          .set({
+            margin: [2, 2, 2, 2],
+            filename: pdfFilename,
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+          })
+          .from(receiptElement)
+          .toPdf()
+          .output('blob');
+
+        console.log('PDF generated for sharing');
         if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([pdf], pdfFilename, { type: 'application/pdf' })] })) {
           try {
             await navigator.share({
@@ -765,21 +1013,21 @@
           } catch (err) {
             console.warn('Sharing failed:', err);
             if (errorMessage) {
-              errorMessage.textContent = 'Sharing not supported. Receipt downloaded.';
+              errorMessage.textContent = 'Sharing failed. Please download the receipt instead.';
               errorMessage.style.display = 'block';
             }
           }
         } else {
-          console.warn('Web Share API not supported or cannot share files.');
+          console.warn('Web Share API not supported or cannot share files');
           if (errorMessage) {
-            errorMessage.textContent = 'Sharing not supported. Receipt downloaded.';
+            errorMessage.textContent = 'Sharing not supported. Please download the receipt instead.';
             errorMessage.style.display = 'block';
           }
         }
       } catch (err) {
-        console.error('PDF generation error:', err);
+        console.error('Error in shareInvoice:', err);
         if (errorMessage) {
-          errorMessage.textContent = 'Failed to generate receipt PDF. Please try again or contact support.';
+          errorMessage.textContent = `Failed to share receipt: ${err.message}. Please try downloading instead.`;
           errorMessage.style.display = 'block';
         }
       }
@@ -789,23 +1037,4 @@
     function escapeHtml(str) {
       if (str === undefined || str === null) return '';
       return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    }
-    function escapeJs(str) {
-      if (str === undefined || str === null) return '';
-      return String(str).replace(/'/g, "\\'");
-    }
-
-    // DOM ready
-    document.addEventListener('DOMContentLoaded', () => {
-      loadShipments();
-      initMaps();
-      rotateTestimonials();
-    });
-  </script>
-</body>
-</html>
+        .replace
