@@ -280,6 +280,9 @@
     </div>
     <div id="shipmentTracking" class="shipment-tracking" style="display:none;"></div>
     <div id="shipmentContent" class="shipment-content" style="display:none;"></div>
+    <div id="shipmentError" style="display:none; text-align: center; padding: 10px; background: #ffe6e6; color: #d32f2f;">
+      Unable to display receipt. Please check the tracking number or contact support.
+    </div>
     <div class="map-container">
       <div class="map-overlay" id="mapOverlay">CURRENT LOCATION: WORLD MAP (DEFAULT)</div>
       <div id="receiverMap" style="width:100%;height:300px;">
@@ -358,19 +361,18 @@
     function loadShipments() {
       try {
         if (!window.localStorage) {
-          console.warn('localStorage not supported in this environment.');
+          console.warn('localStorage not supported.');
           shipments = [];
           return;
         }
         const stored = localStorage.getItem('shipments');
         shipments = stored ? JSON.parse(stored) : [];
         if (!Array.isArray(shipments)) {
-          console.warn('Shipments data is not an array, resetting to empty array.');
+          console.warn('Shipments data is not an array, resetting.');
           shipments = [];
         }
-        console.debug('Shipments loaded:', shipments);
       } catch (err) {
-        console.error('Failed to load shipments from localStorage:', err);
+        console.error('Failed to load shipments:', err);
         shipments = [];
       }
     }
@@ -433,13 +435,13 @@
       return unsafe.replace(/'/g, "\\'").replace(/"/g, '\\"');
     }
 
-    // Check if shipment has all required fields
+    // Check if shipment has required fields
     function isValidShipment(shipment) {
       const requiredFields = [
         'trackingNumber', 'orderId', 'content', 'origin', 'destination',
         'estDeliveryDate', 'modeOfTransport', 'typeOfShipment', 'quantity',
         'paymentMode', 'receipt.amount', 'sender.name', 'sender.address',
-        'receiver.name', 'receiver.address', 'receiver.mobile', 'stampDate'
+        'receiver.name', 'receiver.address', 'receiver.mobile'
       ];
       const missingFields = [];
       for (const field of requiredFields) {
@@ -453,10 +455,10 @@
         }
       }
       if (missingFields.length > 0) {
-        console.warn(`Validation failed for shipment: Missing or invalid fields: ${missingFields.join(', ')}`);
+        console.warn(`Validation failed for shipment: Missing fields: ${missingFields.join(', ')}`);
         return false;
       }
-      // Validate coordinates if they exist
+      // Validate coordinates if provided
       if (shipment.receiver.lat !== undefined && shipment.receiver.lng !== undefined) {
         const lat = parseFloat(shipment.receiver.lat);
         const lng = parseFloat(shipment.receiver.lng);
@@ -468,7 +470,7 @@
       return true;
     }
 
-    // Initialize Maps with Google Maps Embed
+    // Initialize Maps
     function initMaps() {
       const receiverMap = document.getElementById('receiverMap');
       receiverMap.innerHTML = `
@@ -483,14 +485,16 @@
       `;
     }
 
-    // Clear shipment details and reset map
+    // Clear shipment details
     function clearShipmentDetails() {
       const trackingDiv = document.getElementById('shipmentTracking');
       const contentDiv = document.getElementById('shipmentContent');
+      const errorDiv = document.getElementById('shipmentError');
       const receiverMap = document.getElementById('receiverMap');
       const mapOverlay = document.getElementById('mapOverlay');
       if (trackingDiv) trackingDiv.style.display = 'none';
       if (contentDiv) contentDiv.style.display = 'none';
+      if (errorDiv) errorDiv.style.display = 'none';
       if (receiverMap) {
         receiverMap.innerHTML = `
           <a href="https://www.google.com/maps?q=60.0348099,30.4252616" target="_blank">
@@ -502,73 +506,60 @@
             </div>
           </noscript>
         `;
-        console.log('Map reset to default: Prospekt Prosveshcheniya, Sankt-Peterburg');
       }
-      if (mapOverlay) {
-        mapOverlay.textContent = 'CURRENT LOCATION: WORLD MAP (DEFAULT)';
-      }
+      if (mapOverlay) mapOverlay.textContent = 'CURRENT LOCATION: WORLD MAP (DEFAULT)';
     }
 
-    // Tracking function
+    // Track package
     function trackPackage() {
       const input = document.getElementById('trackingNumber');
       const trackingDiv = document.getElementById('shipmentTracking');
       const contentDiv = document.getElementById('shipmentContent');
+      const errorDiv = document.getElementById('shipmentError');
       const receiverMap = document.getElementById('receiverMap');
       const mapOverlay = document.getElementById('mapOverlay');
 
       if (!input) {
-        console.error('Tracking input element not found.');
+        console.error('Tracking input not found.');
         alert('Tracking input not found. Please refresh the page.');
         return;
       }
       const inputValue = input.value.trim();
-      console.log('Input value entered:', inputValue);
-
-      // Clear details if input is empty
       if (!inputValue) {
-        console.log('Empty input, clearing details.');
         alert('Please enter a tracking number.');
         clearShipmentDetails();
         return;
       }
 
-      // Load latest shipments
       loadShipments();
-      console.log('Available shipments:', shipments);
-
-      // Check if input matches a tracking number
-      const filtered = shipments.filter(s => (s.trackingNumber || '').toString().toLowerCase() === inputValue.toLowerCase());
-      const shipment = filtered.length > 0 ? filtered[0] : null;
+      const shipment = shipments.find(s => (s.trackingNumber || '').toString().toLowerCase() === inputValue.toLowerCase());
 
       if (trackingDiv) {
         trackingDiv.style.display = 'block';
         trackingDiv.innerHTML = '<div class="header">Tracking…</div>';
       }
+      if (errorDiv) errorDiv.style.display = 'none';
+      if (contentDiv) contentDiv.style.display = 'none';
 
       if (shipment) {
         if (!isValidShipment(shipment)) {
-          console.warn('Invalid shipment data:', shipment);
           setTimeout(() => {
             if (trackingDiv) {
               trackingDiv.innerHTML = `<div class="header">Tracking: ${escapeHtml(inputValue)}</div>`;
               trackingDiv.innerHTML += '<div class="timeline"><div class="timeline-event"><div class="tick"></div><div class="description">Invalid shipment data. Please check the tracking number or contact support.</div></div></div>';
             }
-            if (contentDiv) contentDiv.style.display = 'none';
-          }, 5000);
+            if (errorDiv) errorDiv.style.display = 'block';
+          }, 2000);
           return;
         }
 
-        console.log('Valid shipment found:', shipment);
-        // Update map immediately
+        // Update map
         if (receiverMap && shipment.receiver && shipment.receiver.lat && shipment.receiver.lng) {
-          console.log('Updating map with lat:', shipment.receiver.lat, 'lng:', shipment.receiver.lng);
           const address = encodeURIComponent(shipment.receiver.address || '');
           const zoomLevel = (1 / Math.cos(shipment.receiver.lat * Math.PI / 180) * 156543.03392 * Math.cos(shipment.receiver.lat * Math.PI / 180) / Math.pow(2, 15)).toFixed(2);
-          const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d${zoomLevel}!2d${shipment.receiver.lng}!3d${shipment.receiver.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x0!2s${address}!5e0!3m2!1sen!2sus!4v1695296400000&markers=color:red%7C${shipment.receiver.lat},${shipment.receiver.lng}`;
           receiverMap.innerHTML = `
             <a href="https://www.google.com/maps?q=${shipment.receiver.lat},${shipment.receiver.lng}" target="_blank">
-              <iframe src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d${zoomLevel}!2d${shipment.receiver.lng}!3d${shipment.receiver.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x0!2s${address}!5e0!3m2!1sen!2sus!4v1695296400000&markers=color:red%7C${shipment.receiver.lat},${shipment.receiver.lng}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
             </a>
             <noscript>
               <div style="text-align: center; padding: 10px; background: #ffe6e6; color: #d32f2f;">
@@ -576,14 +567,11 @@
               </div>
             </noscript>
           `;
-          if (mapOverlay) {
-            mapOverlay.textContent = `CURRENT LOCATION: ${escapeHtml(shipment.receiver.address || 'Unknown')}`;
-          }
+          if (mapOverlay) mapOverlay.textContent = `CURRENT LOCATION: ${escapeHtml(shipment.receiver.address || 'Unknown')}`;
         }
 
-        // Update tracking details after 5 seconds
+        // Update tracking details
         setTimeout(() => {
-          console.log('Updating tracking details for:', shipment.trackingNumber);
           trackingDiv.innerHTML = '<div class="header">Tracking Shipment: ' + escapeHtml(shipment.trackingNumber) + '</div>';
           if (shipment.timeline && Array.isArray(shipment.timeline) && shipment.timeline.length > 0) {
             trackingDiv.innerHTML += `<div class="timeline">
@@ -599,84 +587,78 @@
             trackingDiv.innerHTML += '<div class="timeline"><div class="timeline-event"><div class="tick"></div><div class="description">No tracking status available.</div></div></div>';
           }
 
-          // Show receipt after another 5 seconds (total 10 seconds)
-          setTimeout(() => {
-            console.log('Updating receipt for:', shipment.trackingNumber);
-            const companyName = shipment.receipt?.companyName || 'Express Delivery Service';
-            const amount = shipment.receipt?.amount || '0.00';
-            const officialStamp = shipment.officialStamp || '';
-            const stampDate = shipment.stampDate || '';
-            try {
-              contentDiv.style.display = 'block';
-              contentDiv.innerHTML = `
-                <div style="position:relative;">
-                  <div class="watermark">CERTIFIED TRUE COPY</div>
-                  <div class="header">
-                    <div class="company-name">${escapeHtml(companyName)}</div>
-                    <div class="logo">
-                      <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo">
-                    </div>
-                  </div>
-                  <div class="section-title">Shipment</div>
-                  <div class="details">
-                    <label>Tracking Number:</label><span>${escapeHtml(shipment.trackingNumber)}</span><br>
-                    <label>Order ID:</label><span>${escapeHtml(shipment.orderId)}</span><br>
-                    <label>Content:</label><span>${escapeHtml(shipment.content)}</span><br>
-                    <label>Origin:</label><span>${escapeHtml(shipment.origin)}</span><br>
-                    <label>Destination:</label><span>${escapeHtml(shipment.destination)}</span><br>
-                    <label>Est. Delivery:</label><span>${escapeHtml(shipment.estDeliveryDate)}</span><br>
-                    <label>Transport Mode:</label><span>${escapeHtml(shipment.modeOfTransport)}</span><br>
-                    <label>Shipment Type:</label><span>${escapeHtml(shipment.typeOfShipment)}</span><br>
-                    <label>Quantity:</label><span>${escapeHtml(shipment.quantity)}</span>
-                  </div>
-                  <div class="section-title">Payment</div>
-                  <div class="details">
-                    <label>Amount:</label><span>$${escapeHtml(amount)}</span><br>
-                    <label>Payment Mode:</label><span>${escapeHtml(shipment.paymentMode)}</span><br>
-                    <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1860.jpeg" class="payment-img" alt="Payment Icon">
-                  </div>
-                  <div class="section-title">Sender</div>
-                  <div class="details">
-                    <label>Name:</label><span>${escapeHtml(shipment.sender.name)}</span><br>
-                    <label>Address:</label><span>${escapeHtml(shipment.sender.address)}</span>
-                  </div>
-                  <div class="section-title">Receiver</div>
-                  <div class="details">
-                    <label>Name:</label><span>${escapeHtml(shipment.receiver.name)}</span><br>
-                    <label>Address:</label><span>${escapeHtml(shipment.receiver.address)}</span><br>
-                    <label>Mobile:</label><span>${escapeHtml(shipment.receiver.mobile)}</span>
-                  </div>
-                  <div class="section-title">Official Stamp</div>
-                  <div class="details">
-                    <div class="stamp-container">
-                      ${officialStamp ? `<img src="${escapeHtml(officialStamp)}" alt="Official Stamp">` : '<span>N/A</span>'}
-                      <span>${escapeHtml(stampDate)}</span>
-                    </div>
-                  </div>
-                  <div class="total">Total: $${escapeHtml(amount)}</div>
-                  <div class="footer">
-                    Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
-                    Issued: ${new Date().toLocaleString('en-US', { timeZone: 'Africa/Lagos' })}
+          // Display receipt immediately
+          const companyName = shipment.receipt?.companyName || 'Express Delivery Service';
+          const amount = shipment.receipt?.amount || '0.00';
+          const officialStamp = shipment.officialStamp || '';
+          const stampDate = shipment.stampDate || '';
+          try {
+            contentDiv.style.display = 'block';
+            contentDiv.innerHTML = `
+              <div style="position:relative;">
+                <div class="watermark">CERTIFIED TRUE COPY</div>
+                <div class="header">
+                  <div class="company-name">${escapeHtml(companyName)}</div>
+                  <div class="logo">
+                    <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo">
                   </div>
                 </div>
-                <button class="print-btn" onclick="printInvoice('${escapeJs(inputValue)}')">Print Invoice</button>
-              `;
-            } catch (err) {
-              console.error('Error rendering receipt:', err);
-              alert('Error displaying receipt. Please try again or contact support.');
-              contentDiv.style.display = 'none';
-            }
-          }, 5000); // Additional 5 seconds for receipt
-        }, 5000); // 5 seconds for tracking details
-      } else {
-        console.log('No shipment found for:', inputValue);
-        setTimeout(() => {
-          if (trackingDiv) {
-            trackingDiv.innerHTML = `<div class="header">Tracking: ${escapeHtml(inputValue)}</div>`;
-            trackingDiv.innerHTML += '<div class="timeline"><div class="timeline-event"><div class="tick"></div><div class="description">No shipment found for this tracking number.</div></div></div>';
+                <div class="section-title">Shipment</div>
+                <div class="details">
+                  <label>Tracking Number:</label><span>${escapeHtml(shipment.trackingNumber)}</span><br>
+                  <label>Order ID:</label><span>${escapeHtml(shipment.orderId)}</span><br>
+                  <label>Content:</label><span>${escapeHtml(shipment.content)}</span><br>
+                  <label>Origin:</label><span>${escapeHtml(shipment.origin)}</span><br>
+                  <label>Destination:</label><span>${escapeHtml(shipment.destination)}</span><br>
+                  <label>Est. Delivery:</label><span>${escapeHtml(shipment.estDeliveryDate)}</span><br>
+                  <label>Transport Mode:</label><span>${escapeHtml(shipment.modeOfTransport)}</span><br>
+                  <label>Shipment Type:</label><span>${escapeHtml(shipment.typeOfShipment)}</span><br>
+                  <label>Quantity:</label><span>${escapeHtml(shipment.quantity)}</span>
+                </div>
+                <div class="section-title">Payment</div>
+                <div class="details">
+                  <label>Amount:</label><span>$${escapeHtml(amount)}</span><br>
+                  <label>Payment Mode:</label><span>${escapeHtml(shipment.paymentMode)}</span><br>
+                  <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1860.jpeg" class="payment-img" alt="Payment Icon">
+                </div>
+                <div class="section-title">Sender</div>
+                <div class="details">
+                  <label>Name:</label><span>${escapeHtml(shipment.sender.name)}</span><br>
+                  <label>Address:</label><span>${escapeHtml(shipment.sender.address)}</span>
+                </div>
+                <div class="section-title">Receiver</div>
+                <div class="details">
+                  <label>Name:</label><span>${escapeHtml(shipment.receiver.name)}</span><br>
+                  <label>Address:</label><span>${escapeHtml(shipment.receiver.address)}</span><br>
+                  <label>Mobile:</label><span>${escapeHtml(shipment.receiver.mobile)}</span>
+                </div>
+                <div class="section-title">Official Stamp</div>
+                <div class="details">
+                  <div class="stamp-container">
+                    ${officialStamp ? `<img src="${escapeHtml(officialStamp)}" alt="Official Stamp">` : '<span>N/A</span>'}
+                    <span>${escapeHtml(stampDate)}</span>
+                  </div>
+                </div>
+                <div class="total">Total: $${escapeHtml(amount)}</div>
+                <div class="footer">
+                  Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
+                  Issued: ${new Date().toLocaleString('en-US', { timeZone: 'Africa/Lagos' })}
+                </div>
+              </div>
+              <button class="print-btn" onclick="printInvoice('${escapeJs(inputValue)}')">Print Invoice</button>
+            `;
+          } catch (err) {
+            console.error('Error rendering receipt:', err);
+            contentDiv.style.display = 'none';
+            errorDiv.style.display = 'block';
           }
-          if (contentDiv) contentDiv.style.display = 'none';
-        }, 5000);
+        }, 2000);
+      } else {
+        setTimeout(() => {
+          trackingDiv.innerHTML = `<div class="header">Tracking: ${escapeHtml(inputValue)}</div>`;
+          trackingDiv.innerHTML += '<div class="timeline"><div class="timeline-event"><div class="tick"></div><div class="description">No shipment found for this tracking number.</div></div></div>';
+          errorDiv.style.display = 'block';
+        }, 2000);
       }
     }
 
@@ -685,12 +667,10 @@
       loadShipments();
       const shipment = shipments.find(s => (s.trackingNumber || '').toString().toLowerCase() === number.toLowerCase());
       if (!shipment) {
-        console.warn('No shipment found for tracking number:', number);
-        alert('No shipment found for this tracking number. Please try tracking again.');
+        alert('No shipment found for this tracking number.');
         return;
       }
       if (!isValidShipment(shipment)) {
-        console.warn('Invalid shipment data for printing invoice:', shipment);
         alert('Invalid shipment data. Please check the tracking number or contact support.');
         return;
       }
@@ -781,38 +761,51 @@
       `;
 
       try {
-        // Create a temporary element for PDF generation
-        const element = document.createElement('div');
-        element.innerHTML = receiptContent;
-        const receiptElement = element.querySelector('.receipt');
+        // Append receipt to DOM temporarily for PDF generation
+        const tempContainer = document.createElement('div');
+        tempContainer.style.display = 'none';
+        tempContainer.innerHTML = receiptContent;
+        document.body.appendChild(tempContainer);
+        const receiptElement = tempContainer.querySelector('.receipt');
 
         if (!receiptElement) {
-          console.error('Receipt element not found in generated content.');
-          alert('Error generating receipt. Please try again.');
+          console.error('Receipt element not found.');
+          alert('Error generating receipt.');
+          document.body.removeChild(tempContainer);
           return;
         }
 
         // Save as PDF
         const pdfFilename = `Receipt-${shipment.trackingNumber}.pdf`;
+        const opt = {
+          margin: [2, 2, 2, 2],
+          filename: pdfFilename,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
         html2pdf()
-          .set({ margin: [2, 2, 2, 2], filename: pdfFilename })
+          .set(opt)
           .from(receiptElement)
           .toPdf()
           .get('pdf')
           .then(async (pdf) => {
+            // Clean up
+            document.body.removeChild(tempContainer);
+
             // Save PDF
             const blob = pdf.output('blob');
             const url = URL.createObjectURL(blob);
-
-            // Trigger download
             const a = document.createElement('a');
             a.href = url;
             a.download = pdfFilename;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+            URL.revokeObjectURL(url);
 
-            // Share PDF using Web Share API
+            // Share PDF
             if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], pdfFilename, { type: 'application/pdf' })] })) {
               try {
                 await navigator.share({
@@ -823,10 +816,10 @@
                 console.log('Receipt shared successfully');
               } catch (err) {
                 console.warn('Sharing failed:', err);
-                alert('Sharing not supported or failed. The receipt has been downloaded.');
+                alert('Receipt downloaded. Sharing not supported; please share the file manually.');
               }
             } else {
-              console.warn('Web Share API not supported or cannot share files.');
+              console.log('Web Share API not supported.');
               alert('Receipt downloaded. Please share the file manually from your downloads folder.');
             }
 
@@ -836,15 +829,16 @@
               printWindow.document.write(receiptContent);
               printWindow.document.close();
               printWindow.focus();
-              printWindow.print();
+              setTimeout(() => printWindow.print(), 500);
             } else {
-              console.warn('Failed to open print window. Browser may be blocking popups.');
+              console.warn('Failed to open print window.');
               alert('Unable to open print dialog. Please allow popups and try again.');
             }
           })
           .catch(err => {
             console.error('PDF generation error:', err);
-            alert('Error generating PDF. Please try again.');
+            alert('Error generating PDF.');
+            document.body.removeChild(tempContainer);
           });
       } catch (err) {
         console.error('Error in printInvoice:', err);
