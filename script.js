@@ -1,146 +1,153 @@
-// Hamburger Menu
-function toggleMenu() {
-  document.getElementById('navLinks').classList.toggle('active');
-}
-
-// Shipments array
-let shipments = [];
-
-// Load shipments from JSON
-async function loadShipments() {
-  try {
-    const response = await fetch('https://expressdeliveryservices.github.io/shipments.json');
-    if (!response.ok) throw new Error('Failed to fetch shipment data');
-    shipments = await response.json();
-    console.log('Shipments loaded:', shipments);
-  } catch (err) {
-    console.error(err);
-    shipments = [];
-  }
-}
-
-// Track Package (updated version)
-async function trackPackage() {
-  const input = document.getElementById('trackingNumber');
-  const trackingDiv = document.getElementById('shipmentTracking');
-  const contentDiv = document.getElementById('shipmentContent');
-
-  if (!input) return;
-  const number = input.value.trim();
-  if (!number) { alert('Please enter a tracking number.'); return; }
-
-  await loadShipments();
-
-  const shipment = shipments.find(s => (s.trackingNumber || '').toLowerCase() === number.toLowerCase());
-  if (!shipment) {
-    alert('No shipment found for this tracking number.');
-    trackingDiv.style.display = 'none';
-    contentDiv.style.display = 'none';
-    return;
-  }
-
-  trackingDiv.style.display = 'block';
-  trackingDiv.innerHTML = '<div class="header">Tracking...</div>';
-  contentDiv.style.display = 'none';
-
-  setTimeout(() => {
-    trackingDiv.innerHTML = '<div class="header">Tracking Shipment...</div>';
-
-    setTimeout(() => {
-      const safe = val => val || 'Unknown';
-      trackingDiv.style.display = 'none';
-      contentDiv.style.display = 'block';
-      contentDiv.innerHTML = `
-        <div style="position:relative;">
-          <div class="watermark">CERTIFIED TRUE COPY</div>
-          <div class="header">
-            <div class="company-name">${safe(shipment.receipt?.companyName)}</div>
-            <div class="logo"><img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1855.jpeg" alt="Company Logo"></div>
-          </div>
-          <div class="section-title">Shipment</div>
-          <div class="details">
-            <label>Tracking Number:</label><span>${safe(shipment.trackingNumber)}</span><br>
-            <label>Order ID:</label><span>${safe(shipment.orderId)}</span><br>
-            <label>Content:</label><span>${safe(shipment.content)}</span><br>
-            <label>Origin:</label><span>${safe(shipment.origin)}</span><br>
-            <label>Destination:</label><span>${safe(shipment.destination)}</span><br>
-            <label>Est. Delivery:</label><span>${safe(shipment.estDeliveryDate)}</span><br>
-            <label>Transport Mode:</label><span>${safe(shipment.modeOfTransport)}</span><br>
-            <label>Shipment Type:</label><span>${safe(shipment.typeOfShipment)}</span><br>
-            <label>Quantity:</label><span>${safe(shipment.quantity)}</span>
-          </div>
-          <div class="section-title">Payment</div>
-          <div class="details">
-            <label>Amount:</label><span>$${safe(shipment.receipt?.amount)}</span><br>
-            <label>Payment Mode:</label><span>${safe(shipment.paymentMode)}</span><br>
-            <label>Payment Method:</label><span>${safe(shipment.paymentMethod)}</span><br>
-            <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1860.jpeg" class="payment-img" alt="Payment Icon">
-          </div>
-          <div class="section-title">Sender</div>
-          <div class="details">
-            <label>Name:</label><span>${safe(shipment.sender?.name)}</span><br>
-            <label>Address:</label><span>${safe(shipment.sender?.address)}</span>
-          </div>
-          <div class="section-title">Receiver</div>
-          <div class="details">
-            <label>Name:</label><span>${safe(shipment.receiver?.name)}</span><br>
-            <label>Address:</label><span>${safe(shipment.receiver?.address)}</span><br>
-            <label>Mobile:</label><span>${safe(shipment.receiver?.mobile)}</span>
-          </div>
-          <div class="section-title">Authorization</div>
-          <div class="details">
-            <label>Signed by:</label><span>${safe(shipment.signedBy)}</span><br>
-            <label>Stamp Date:</label><span>${safe(shipment.officialStampDate)}</span><br>
-            <label>Stamp:</label><span>${shipment.officialStamp ? `<img src="${shipment.officialStamp}" class="signature-img" alt="Signature Stamp">` : 'Not provided'}</span>
-          </div>
-          <div class="total">Total: $${safe(shipment.receipt?.amount)}</div>
-          <div class="footer">Issued: ${new Date().toLocaleString()}</div>
+// tracking.js (or script.js)
+function generateReceiptContent(shipment) {
+  const issueDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  return `
+    <style>
+      body {
+        font-family: 'Times New Roman', Times, serif;
+        margin: 2mm;
+        background: #ffffff;
+      }
+      .receipt {
+        width: 70mm;
+        margin: 0 auto;
+        padding: 2mm;
+        border: 1px solid #000;
+        background: #ffffff;
+        position: relative;
+      }
+      .watermark {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-45deg);
+        color: #a9a9a9;
+        font-size: 16px;
+        font-weight: bold;
+        opacity: 0.4;
+        z-index: 0;
+      }
+      .header {
+        font-size: 10px;
+        font-weight: bold;
+        margin-bottom: 2px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .company-name {
+        font-size: 10px;
+        font-weight: bold;
+      }
+      .logo img {
+        height: 25px;
+        width: auto;
+      }
+      .section-title {
+        font-size: 9px;
+        font-weight: bold;
+        margin: 2px 0;
+        padding-bottom: 1px;
+        border-bottom: 1px solid #000;
+      }
+      .details {
+        font-size: 7px;
+        margin: 2px 0;
+        line-height: 1.2;
+        letter-spacing: 0.5px;
+        padding: 3px;
+        border: 1px solid #ddd;
+      }
+      .details label {
+        font-weight: bold;
+        width: 90px;
+        display: inline-block;
+        vertical-align: top;
+      }
+      .details img {
+        max-width: 50px;
+        height: auto;
+        margin-top: 2px;
+      }
+      .total {
+        font-size: 9px;
+        font-weight: bold;
+        margin-top: 5px;
+        padding-top: 2px;
+        text-align: right;
+      }
+      .footer {
+        font-size: 5px;
+        text-align: center;
+        margin-top: 5px;
+        color: #555;
+      }
+      @media print {
+        body {
+          margin: 0;
+        }
+        .receipt {
+          border: 1px solid #000;
+        }
+      }
+    </style>
+    <div class="receipt">
+      <div class="watermark">CERTIFIED TRUE COPY</div>
+      <div class="header">
+        <div class="company-name">Express Delivery Service</div>
+        <div class="logo">
+          <img src="/assets/IMG_1855.jpeg" alt="Company Logo">
         </div>
-      `;
-    }, 5000);
-  }, 5000);
+      </div>
+      <div class="section-title">Shipment Details</div>
+      <div class="details">
+        <div><label>Tracking Number:</label> <span>${escapeHtml(shipment.trackingNumber)}</span></div>
+        <div><label>Order ID:</label> <span>${escapeHtml(shipment.orderId)}</span></div>
+        <div><label>Content:</label> <span>${escapeHtml(shipment.content)}</span></div>
+        <div><label>Origin:</label> <span>${escapeHtml(shipment.origin)}</span></div>
+        <div><label>Destination:</label> <span>${escapeHtml(shipment.destination)}</span></div>
+        <div><label>Est. Delivery:</label> <span>${escapeHtml(shipment.estDeliveryDate)}</span></div>
+        <div><label>Transport Mode:</label> <span>${escapeHtml(shipment.modeOfTransport)}</span></div>
+        <div><label>Shipment Type:</label> <span>${escapeHtml(shipment.typeOfShipment)}</span></div>
+        <div><label>Quantity:</label> <span>${escapeHtml(shipment.quantity)}</span></div>
+      </div>
+      <div class="section-title">Payment Details</div>
+      <div class="details">
+        <div><label>Payment Mode:</label> <span>${escapeHtml(shipment.paymentMode)}</span></div>
+        <div><label>Amount:</label> <span>$${parseFloat(shipment.receipt.amount).toFixed(2)}</span></div>
+        ${shipment.paymentMode === 'Online' ? `<div><label>Payment Receipt:</label> <img src="/assets/IMG_1860.jpeg" alt="Payment Icon" class="payment-img"></div>` : ''}
+      </div>
+      <div class="section-title">Sender Details</div>
+      <div class="details">
+        <div><label>Name:</label> <span>${escapeHtml(shipment.sender.name)}</span></div>
+        <div><label>Address:</label> <span>${escapeHtml(shipment.sender.address)}</span></div>
+      </div>
+      <div class="section-title">Receiver Details</div>
+      <div class="details">
+        <div><label>Name:</label> <span>${escapeHtml(shipment.receiver.name)}</span></div>
+        <div><label>Address:</label> <span>${escapeHtml(shipment.receiver.address)}</span></div>
+        <div><label>Mobile:</label> <span>${escapeHtml(shipment.receiver.mobile)}</span></div>
+      </div>
+      <div class="section-title">Authorization</div>
+      <div class="details">
+        ${shipment.officialStamp ? `<div><label>Official Stamp:</label> <img src="${escapeHtml(shipment.officialStamp)}" alt="Official Stamp" class="signature-img"></div>` : '<div><label>Official Stamp:</label> <span>Not Available</span></div>'}
+      </div>
+      <div class="total">Total: $${parseFloat(shipment.receipt.amount).toFixed(2)}</div>
+      <div class="footer">
+        Express Delivery Service | Phone: +1 (941) 207-8626 | Email: Expressdeliveryservice0016@gmail.com<br>
+        Issued: ${issueDate}
+      </div>
+    </div>
+  `;
 }
 
-// Newsletter
-function subscribeNewsletter() {
-  const email = document.getElementById('newsletterEmail').value;
-  if(email) {
-    alert("Thank you! Updates will be sent to " + email);
-  } else alert("Please enter your email.");
-}
-
-// Support Popup
-function openSupport() { document.getElementById('supportPopup').style.display='block'; }
-function closeSupport() { document.getElementById('supportPopup').style.display='none'; }
-function sendSupport() {
-  const name = document.getElementById('supportName').value;
-  const email = document.getElementById('supportEmail').value;
-  const msg = document.getElementById('supportMessage').value;
-  if(name && email && msg) {
-    alert("Message sent! We'll contact you at " + email);
-    closeSupport();
-  } else alert("Please fill in all fields.");
-}
-
-// Customer Reviews
-const reviews = [
-  {name:'Alice Johnson', text:'Excellent delivery service! Fast and reliable.'},
-  {name:'Michael Smith', text:'My package arrived ahead of time, very professional.'},
-  {name:'Samantha Lee', text:'Customer support was very helpful and responsive.'},
-  {name:'David Brown', text:'Tracking system is accurate and easy to use.'},
-  {name:'Linda White', text:'Highly recommend Express Delivery Service for all shipments.'},
-  {name:'John Doe', text:'Packages arrived safely every time. Great experience!'}
-];
-let reviewIndex = 0;
-function showReview() {
-  const board = document.getElementById('reviewsBoard');
-  board.innerHTML = `<div class="review"><strong>${reviews[reviewIndex].name}:</strong> ${reviews[reviewIndex].text}</div>`;
-  reviewIndex = (reviewIndex + 1) % reviews.length;
-}
-showReview();
-setInterval(showReview, 5000);
-
-// Google Translate
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({pageLanguage:'en'},'google_translate_element');
+// Escape HTML to prevent XSS
+function escapeHtml(unsafe) {
+  if (typeof unsafe !== 'string') return String(unsafe || '');
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
