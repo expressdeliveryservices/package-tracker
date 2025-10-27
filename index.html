@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Express Delivery Service</title>
   <style>
+    /* Your existing CSS remains unchanged */
     body { margin: 0; font-family: Arial, sans-serif; background: #fff; color: #000; scroll-behavior: smooth; }
     a { color: #1e90ff; text-decoration: none; }
     h1, h2, h3, h4, h5, h6 { color: #1e90ff; margin: 0; }
@@ -37,7 +38,7 @@
     .shipment-content .header .logo img { height: 25px; }
     .shipment-content .details { margin: 2px 0; padding: 3px; border: 1px solid #ddd; border-radius: 3px; }
     .shipment-content .details label { display: inline-block; width: 90px; font-weight: bold; }
-    . shipment-content .details span { display: inline-block; margin-left: 2px; }
+    .shipment-content .details span { display: inline-block; margin-left: 2px; }
     .shipment-content .payment-img, .shipment-content .signature-img { max-width: 50px; height: auto; margin-top: 2px; }
     .shipment-content .stamp-container { display: flex; align-items: center; gap: 10px; }
     .shipment-content .stamp-container img { max-width: 50px; height: auto; }
@@ -62,6 +63,15 @@
     .newsletter { display: flex; gap: 10px; margin-top: 15px; }
     .newsletter input { flex: 1; padding: 8px; border-radius: 3px; border: 1px solid #ddd; background: #fff; color: #000; }
     .newsletter button { padding: 8px 15px; border-radius: 3px; border: none; background-color: #1e90ff; color: white; cursor: pointer; }
+    #supportPopup { display: none; position: fixed; bottom: 20px; right: 20px; background: #f8f8f8; padding: 15px; border-radius: 8px; box-shadow: 0 0 10px #1e90ff; z-index: 10000; color: #000; }
+    #supportPopup input, #supportPopup textarea { width: 100%; margin-bottom: 8px; padding: 6px; border-radius: 3px; border: 1px solid #ddd; background: #{\rtf1\ansi\ansicpg1252\cocoartf2761
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0     .newsletter button { padding: 8px 15px; border-radius: 3px; border: none; background-color: #1e90ff; color: white; cursor: pointer; }
     #supportPopup { display: none; position: fixed; bottom: 20px; right: 20px; background: #f8f8f8; padding: 15px; border-radius: 8px; box-shadow: 0 0 10px #1e90ff; z-index: 10000; color: #000; }
     #supportPopup input, #supportPopup textarea { width: 100%; margin-bottom: 8px; padding: 6px; border-radius: 3px; border: 1px solid #ddd; background: #fff; color: #000; }
     #supportPopup button { padding: 6px 12px; background-color: #1e90ff; color: white; border: none; border-radius: 3px; cursor: pointer; }
@@ -339,7 +349,39 @@
     <div class="map-container">
       <div class="map-overlay">HEADQUARTER LOCATION</div>
       <div id="headquarterMap" style="width:100%;height:300px;">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d-0.2120214!3d51.4735056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4876052b2e9d3c9f%3A0x2e5f9a3d7a2a9e!2sUniversal%20Drops%2C%2066B%20Oxberry%20Ave%2C%20London%20SW6%203AL%2C%20UK!5e0!3m2!1sen!2sus!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d-0.2120214!3d51.4735056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4876052b2e9d3c9f%3A0x2e5f9a3d7a2a9e!2sUniversal%20Drops%2C%2066B%20Oxberry%20Ave%2C%20London%20SW6%203AL%2C%20UK!5e0!3m2!1sen!2us!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- Support Popup -->
+  <div id="supportPopup">
+    <h3>Welcome to Express Delivery Service!</h3>
+    <p>How can we help you?</p>
+    <form method="POST" action="send_support.php" id="supportForm">
+      <input type="text" name="name" placeholder="Your Name" required>
+     _you have eliminated the JavaScript, whatever remains must be an empty page. Enable JavaScript to see Google Maps.
+          </div>
+        </noscript>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <h2 class="section-title">Contact Us</h2>
+    <div class="contact-container">
+      <div class="icon"></div>
+      <div class="contact-details">
+        <p>Phone: +1 (941) 207-8626</p>
+        <p>Email: <a href="mailto:Expressdeliveryservice0016@gmail.com">Expressdeliveryservice0016@gmail.com</a></p>
+        <button style="background-color:#1e90ff;color:white;padding:8px 15px;border:none;border-radius:3px;margin:10px 0;" onclick="openSupport()">Support</button>
+      </div>
+    </div>
+    <div class="map-container">
+      <div class="map-overlay">HEADQUARTER LOCATION</div>
+      <div id="headquarterMap" style="width:100%;height:300px;">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.614141570908!2d-0.2120214!3d51.4735056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4876052b2e9d3c9f%3A0x2e5f9a3d7a2a9e!2sUniversal%20Drops%2C%2066B%20Oxberry%20Ave%2C%20London%20SW6%203AL%2C%20UK!5e0!3m2!1sen!2us!4v1695296400000" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
       </div>
     </div>
   </section>
@@ -384,28 +426,8 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
-    // Global shipments array
-    let shipments = [];
-
-    // Load shipments from localStorage
-    function loadShipments() {
-      try {
-        if (!window.localStorage) {
-          console.warn('localStorage not supported.');
-          shipments = [];
-          return;
-        }
-        const stored = localStorage.getItem('shipments');
-        shipments = stored ? JSON.parse(stored) : [];
-        if (!Array.isArray(shipments)) {
-          console.warn('Shipments data is not an array, resetting.');
-          shipments = [];
-        }
-      } catch (err) {
-        console.error('Failed to load shipments:', err);
-        shipments = [];
-      }
-    }
+    // Backend API endpoint (replace with your actual backend URL)
+    const API_BASE_URL = 'https://your-backend-api.com/api';
 
     // Scroll to top on page load
     function scrollToTop() {
@@ -421,22 +443,26 @@
     }
 
     // Newsletter
-    function subscribeNewsletter() {
+    async function subscribeNewsletter() {
       const emailEl = document.getElementById('newsletterEmail');
       if (!emailEl) return;
       const email = emailEl.value.trim();
       if (!email) { alert('Please enter a valid email address.'); return; }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert('Please enter a valid email format.'); return; }
       try {
-        let list = localStorage.getItem('newsletterEmails');
-        let arr = list ? list.split(',') : [];
-        if (!arr.includes(email)) {
-          arr.push(email);
-          localStorage.setItem('newsletterEmails', arr.join(','));
+        // Send email to backend API
+        const response = await fetch(`${API_BASE_URL}/newsletter`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        if (!response.ok) throw new Error('Failed to subscribe.');
+        const result = await response.json();
+        if (result.success) {
           alert('Thank you! Updates will be sent to ' + email);
           emailEl.value = '';
         } else {
-          alert('This email is already subscribed.');
+          alert(result.message || 'This email is already subscribed.');
         }
       } catch (e) {
         console.error('Newsletter subscribe error:', e);
@@ -457,12 +483,6 @@
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
-    }
-
-    // Escape JavaScript string
-    function escapeJs(unsafe) {
-      if (typeof unsafe !== 'string') return String(unsafe || '');
-      return unsafe.replace(/'/g, "\\'").replace(/"/g, '\\"');
     }
 
     // Check if shipment has required fields
@@ -541,7 +561,7 @@
     }
 
     // Track package
-    function trackPackage() {
+    async function trackPackage() {
       const input = document.getElementById('trackingNumber');
       const trackingDiv = document.getElementById('shipmentTracking');
       const contentDiv = document.getElementById('shipmentContent');
@@ -561,9 +581,6 @@
         return;
       }
 
-      loadShipments();
-      const shipment = shipments.find(s => (s.trackingNumber || '').toString().toLowerCase() === inputValue.toLowerCase());
-
       if (trackingDiv) {
         trackingDiv.style.display = 'block';
         trackingDiv.innerHTML = '<div class="header">Tracking…</div>';
@@ -571,7 +588,17 @@
       if (errorDiv) errorDiv.style.display = 'none';
       if (contentDiv) contentDiv.style.display = 'none';
 
-      if (shipment) {
+      try {
+        // Fetch shipment from backend API
+        const response = await fetch(`${API_BASE_URL}/shipments/${encodeURIComponent(inputValue)}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        if (!response.ok) {
+          throw new Error('No shipment found for this tracking number.');
+        }
+        const shipment = await response.json();
+
         if (!isValidShipment(shipment)) {
           setTimeout(() => {
             if (trackingDiv) {
@@ -637,7 +664,6 @@
             document.getElementById('paymentDetails').innerHTML = `
               <label>Amount:</label><span>$${escapeHtml(amount)}</span><br>
               <label>Payment Mode:</label><span>${escapeHtml(shipment.paymentMode || 'N/A')}</span><br>
-              <label>Payment Method:</label><span>${escapeHtml(shipment.paymentMethod || 'N/A')}</span><br>
               <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1860.jpeg" class="payment-img" alt="Payment Icon">
             `;
             document.getElementById('senderDetails').innerHTML = `
@@ -650,8 +676,7 @@
               <label>Mobile:</label><span>${escapeHtml(shipment.receiver?.mobile || 'N/A')}</span>
             `;
             document.getElementById('authorizationDetails').innerHTML = `
-              <label>Signed by:</label><span>${escapeHtml(shipment.signedBy || 'N/A')}</span><br>
-              <label>Stamp Date:</label><span>${escapeHtml(shipment.officialStampDate || 'N/A')}</span><br>
+              <label>Stamp Date:</label><span>${escapeHtml(shipment.stampDate || 'N/A')}</span><br>
               <label>Stamp:</label><span>${signatureStamp ? `<img src="${escapeHtml(signatureStamp)}" class="signature-img" alt="Signature Stamp">` : 'N/A'}</span>
             `;
             document.getElementById('totalAmount').innerHTML = `Total: $${escapeHtml(amount)}`;
@@ -662,7 +687,8 @@
             errorDiv.style.display = 'block';
           }
         }, 2000);
-      } else {
+      } catch (e) {
+        console.error('Error fetching shipment:', e);
         setTimeout(() => {
           trackingDiv.innerHTML = `<div class="header">Tracking: ${escapeHtml(inputValue)}</div>`;
           trackingDiv.innerHTML += '<div class="timeline"><div class="timeline-event"><div class="tick"></div><div class="description">No shipment found for this tracking number.</div></div></div>';
@@ -724,7 +750,6 @@
             <div class="details">
               <label>Amount:</label><span>$${escapeHtml(amount)}</span><br>
               <label>Payment Mode:</label><span>${escapeHtml(shipment.paymentMode || 'N/A')}</span><br>
-              <label>Payment Method:</label><span>${escapeHtml(shipment.paymentMethod || 'N/A')}</span><br>
               <img src="https://raw.githubusercontent.com/expressdeliveryservices/package-tracker/refs/heads/main/IMG_1860.jpeg" class="payment-img" alt="Payment Icon">
             </div>
             <div class="section-title">Sender Details</div>
@@ -740,8 +765,7 @@
             </div>
             <div class="section-title">Authorization</div>
             <div class="details">
-              <label>Signed by:</label><span>${escapeHtml(shipment.signedBy || 'N/A')}</span><br>
-              <label>Stamp Date:</label><span>${escapeHtml(shipment.officialStampDate || 'N/A')}</span><br>
+              <label>Stamp Date:</label><span>${escapeHtml(shipment.stampDate || 'N/A')}</span><br>
               <label>Stamp:</label><span>${signatureStamp ? `<img src="${escapeHtml(signatureStamp)}" class="signature-img" alt="Signature Stamp">` : 'N/A'}</span>
             </div>
             <div class="total">Total: $${escapeHtml(amount)}</div>
@@ -757,49 +781,60 @@
 
     // Print invoice
     async function printInvoice(number) {
-      loadShipments();
-      const shipment = shipments.find(s => (s.trackingNumber || '').toString().toLowerCase() === number.toLowerCase());
-      if (!shipment) {
-        alert('No shipment found for this tracking number.');
-        return;
-      }
-      if (!isValidShipment(shipment)) {
-        alert('Invalid shipment data. Please check the tracking number or contact support.');
-        return;
-      }
-
-      const receiptContent = generateReceiptContent(shipment);
       try {
-        const printWindow = window.open('', '_blank');
-        if (printWindow) {
-          printWindow.document.write(receiptContent);
-          printWindow.document.close();
-          printWindow.focus();
-          setTimeout(() => printWindow.print(), 500);
-        } else {
-          console.warn('Failed to open print window.');
-          alert('Unable to open print dialog. Please allow popups and try again.');
+        const response = await fetch(`${API_BASE_URL}/shipments/${encodeURIComponent(number)}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        if (!response.ok) {
+          alert('No shipment found for this tracking number.');
+          return;
+        }
+        const shipment = await response.json();
+        if (!isValidShipment(shipment)) {
+          alert('Invalid shipment data. Please check the tracking number or contact support.');
+          return;
+        }
+
+        const receiptContent = generateReceiptContent(shipment);
+        try {
+          const printWindow = window.open('', '_blank');
+          if (printWindow) {
+            printWindow.document.write(receiptContent);
+            printWindow.document.close();
+            printWindow.focus();
+            setTimeout(() => printWindow.print(), 500);
+          } else {
+            console.warn('Failed to open print window.');
+            alert('Unable to open print dialog. Please allow popups and try again.');
+          }
+        } catch (err) {
+          console.error('Error in printInvoice:', err);
+          alert('Error processing receipt. Please try again or contact support.');
         }
       } catch (err) {
-        console.error('Error in printInvoice:', err);
+        console.error('Error fetching shipment for print:', err);
         alert('Error processing receipt. Please try again or contact support.');
       }
     }
 
     // Download invoice as PDF
     async function downloadInvoice(number) {
-      loadShipments();
-      const shipment = shipments.find(s => (s.trackingNumber || '').toString().toLowerCase() === number.toLowerCase());
-      if (!shipment) {
-        alert('No shipment found for this tracking number.');
-        return;
-      }
-      if (!isValidShipment(shipment)) {
-        alert('Invalid shipment data. Please check the tracking number or contact support.');
-        return;
-      }
-
       try {
+        const response = await fetch(`${API_BASE_URL}/shipments/${encodeURIComponent(number)}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        if (!response.ok) {
+          alert('No shipment found for this tracking number.');
+          return;
+        }
+        const shipment = await response.json();
+        if (!isValidShipment(shipment)) {
+          alert('Invalid shipment data. Please check the tracking number or contact support.');
+          return;
+        }
+
         const tempContainer = document.createElement('div');
         tempContainer.style.display = 'none';
         tempContainer.innerHTML = generateReceiptContent(shipment);
@@ -839,7 +874,6 @@
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
 
-            // Attempt to share PDF
             if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], pdfFilename, { type: 'application/pdf' })] })) {
               try {
                 await navigator.share({
@@ -870,7 +904,6 @@
 
     // Initialize page
     document.addEventListener('DOMContentLoaded', () => {
-      loadShipments();
       initMaps();
       rotateTestimonials();
     });
