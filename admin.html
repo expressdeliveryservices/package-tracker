@@ -177,5 +177,41 @@
       <button style="background:red;margin-top:15px;" onclick="logout()">Logout</button>
     </div>
   </div>
+
+  <script>
+    // Simple login system
+    function login() {
+      const email = document.getElementById('adminEmail').value.trim();
+      const password = document.getElementById('adminPassword').value.trim();
+      const message = document.getElementById('loginMessage');
+
+      // Replace with your own credentials
+      const adminEmail = "admin@example.com";
+      const adminPassword = "12345";
+
+      if (email === adminEmail && password === adminPassword) {
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('dashboardSection').style.display = 'block';
+        message.textContent = "";
+        localStorage.setItem("loggedIn", "true");
+      } else {
+        message.textContent = "Invalid email or password!";
+      }
+    }
+
+    function logout() {
+      document.getElementById('loginSection').style.display = 'block';
+      document.getElementById('dashboardSection').style.display = 'none';
+      localStorage.removeItem("loggedIn");
+    }
+
+    // Auto-login check
+    window.onload = function() {
+      if (localStorage.getItem("loggedIn") === "true") {
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('dashboardSection').style.display = 'block';
+      }
+    };
+  </script>
 </body>
 </html>
